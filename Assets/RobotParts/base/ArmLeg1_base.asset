@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d350274f14ed4c8c80177021f89772f9, type: 3}
+  m_Name: ArmLeg1_base
+  m_EditorClassIdentifier: 
+  meshes:
+  - {fileID: 11400000, guid: afd9b1d55fb8d4e4f8acaf647de82fa9, type: 2}
+  - {fileID: 11400000, guid: f41a2e322383ad8408aa3f3b4a8bb6ec, type: 2}
+  - {fileID: 11400000, guid: b41dc1439a0dc6b44943427abeeda72b, type: 2}

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88441d3aedfc4777a780dd08da9d08dc, type: 3}
+  m_Name: gunn
+  m_EditorClassIdentifier: 
+  Rarity: 0
+  Name: GUNMAAN
+  Description: '-'
+  Icon: {fileID: 21300004, guid: 477e2337b7ed9d548bc38afd251711f1, type: 3}
+  DroppedSprite: {fileID: 0}
+  MaxCondition: 0
+  prefab: {fileID: 114253923833575574, guid: f6e318aa910b03a47b362962426ae318, type: 2}
+  maxAmmo: 10
+  AmmoType: 0
+  fireRate: 0
+  reloadingDelay: 0
