@@ -33,7 +33,6 @@ namespace MaximovInk
         Glass,
         Microschemes,
         Wires,
-        Ceramic,
         Rubber,
         RadioElectricity,
         ElectoComponents,

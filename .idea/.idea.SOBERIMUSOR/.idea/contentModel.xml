@@ -244,6 +244,7 @@
           </e>
           <e p="RobotPartEditor.cs" t="Include" />
           <e p="Trash.cs" t="Include" />
+          <e p="TrashGenerator.cs" t="Include" />
         </e>
       </e>
       <e p="Library" t="ExcludeRecursive" />
