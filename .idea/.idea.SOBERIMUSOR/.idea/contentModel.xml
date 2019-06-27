@@ -8,6 +8,41 @@
       <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="2D-Light-of-Sight" t="Include">
+          <e p="Core" t="Include">
+            <e p="Event" t="Include">
+              <e p="LOSEventManager.cs" t="Include" />
+              <e p="LOSEventSource.cs" t="Include" />
+              <e p="LOSEventTrigger.cs" t="Include" />
+            </e>
+            <e p="LOSCamera.cs" t="Include" />
+            <e p="LOSFullScreenLight.cs" t="Include" />
+            <e p="LOSLightBase.cs" t="Include" />
+            <e p="LOSManager.cs" t="Include" />
+            <e p="LOSObjectBase.cs" t="Include" />
+            <e p="LOSObstacle.cs" t="Include" />
+            <e p="LOSRadialLight.cs" t="Include" />
+          </e>
+          <e p="Editor" t="Include">
+            <e p="LOSFullScreenLightEditor.cs" t="Include" />
+            <e p="LOSLightBaseEditor.cs" t="Include" />
+            <e p="LOSMenu.cs" t="Include" />
+            <e p="LOSRadialLightEditor.cs" t="Include" />
+          </e>
+          <e p="Resources" t="Include">
+            <e p="Shaders" t="Include">
+              <e p="Basic.shader" t="Include" />
+              <e p="GreyscaleBackground.shader" t="Include" />
+              <e p="GreyscaleForeground.shader" t="Include" />
+              <e p="RadialLight.shader" t="Include" />
+              <e p="RadialLightPlus.shader" t="Include" />
+            </e>
+          </e>
+          <e p="Utilities" t="Include">
+            <e p="SHelper.cs" t="Include" />
+            <e p="SMath.cs" t="Include" />
+          </e>
+        </e>
         <e p="Anima2D" t="Include">
           <e p="Examples" t="Include">
             <e p="Scripts" t="Include">
@@ -209,42 +244,159 @@
           </e>
           <e p="Version.txt" t="Include" />
         </e>
-        <e p="Scripts" t="Include">
-          <e p="CameraFollow.cs" t="Include" />
-          <e p="Creature.cs" t="Include" />
-          <e p="Entity.cs" t="Include" />
-          <e p="GameManager.cs" t="Include" />
-          <e p="Inventory" t="Include">
-            <e p="AmmoItem.cs" t="Include" />
-            <e p="Bullet.cs" t="Include" />
-            <e p="DroppedItem.cs" t="Include" />
-            <e p="Inventory.cs" t="Include" />
-            <e p="Item.cs" t="Include" />
-            <e p="MeleeWeapon.cs" t="Include" />
-            <e p="MeleeWeaponItem.cs" t="Include" />
-            <e p="PlayerInventory.cs" t="Include" />
-            <e p="RobotPartItem.cs" t="Include" />
-            <e p="ShootingWeapon.cs" t="Include" />
-            <e p="ShootingWeaponItem.cs" t="Include" />
-            <e p="Tooltip.cs" t="Include" />
-            <e p="Weapon.cs" t="Include" />
-            <e p="WeaponItem.cs" t="Include" />
+        <e p="CreativeSpore" t="Include">
+          <e p="SuperTilemapEditor" t="Include">
+            <e p="changelog.txt" t="Include" />
+            <e p="Scripts" t="Include">
+              <e p="Data" t="Include">
+                <e p="ParameterContainer.cs" t="Include" />
+              </e>
+              <e p="Editor" t="Include">
+                <e p="STEEditorSymbols.cs" t="Include" />
+              </e>
+              <e p="MapPathFinding" t="Include">
+                <e p="MapPathFinding.cs" t="Include" />
+                <e p="PathFinding.cs" t="Include" />
+                <e p="PathfindingBehaviour.cs" t="Include" />
+              </e>
+              <e p="TiledImporter" t="Include">
+                <e p="Editor" t="Include">
+                  <e p="TmxImage.cs" t="Include" />
+                  <e p="TmxImporter.cs" t="Include" />
+                  <e p="TmxLayer.cs" t="Include" />
+                  <e p="TmxLayerTile.cs" t="Include" />
+                  <e p="TmxMap.cs" t="Include" />
+                  <e p="TmxPostProcessor.cs" t="Include" />
+                  <e p="TmxTile.cs" t="Include" />
+                  <e p="TmxTilemap.cs" t="Include" />
+                  <e p="TmxTileProperty.cs" t="Include" />
+                  <e p="TmxTileset.cs" t="Include" />
+                  <e p="XMLSerializable.cs" t="Include" />
+                </e>
+              </e>
+              <e p="Tilemap" t="Include">
+                <e p="Brush" t="Include">
+                  <e p="A2X2Brush.cs" t="Include" />
+                  <e p="AnimBrush.cs" t="Include" />
+                  <e p="BrushBehaviour.cs" t="Include" />
+                  <e p="BrushFortySeven.cs" t="Include" />
+                  <e p="BrushUtil.cs" t="Include" />
+                  <e p="CarpetBrush.cs" t="Include" />
+                  <e p="Editor" t="Include">
+                    <e p="A2X2BrushEditor.cs" t="Include" />
+                    <e p="AnimBrushEditor.cs" t="Include" />
+                    <e p="BrushBehaviourEditor.cs" t="Include" />
+                    <e p="BrushFortySevenEditor.cs" t="Include" />
+                    <e p="CarpetBrushEditor.cs" t="Include" />
+                    <e p="RandomBrushEditor.cs" t="Include" />
+                    <e p="RoadBrushEditor.cs" t="Include" />
+                    <e p="TileGridControl.cs" t="Include" />
+                    <e p="TilesetBrushEditor.cs" t="Include" />
+                  </e>
+                  <e p="IBrush.cs" t="Include" />
+                  <e p="RandomBrush.cs" t="Include" />
+                  <e p="RoadBrush.cs" t="Include" />
+                  <e p="TilesetBrush.cs" t="Include" />
+                </e>
+                <e p="Editor" t="Include">
+                  <e p="AtlasCreatorEditorWindow.cs" t="Include" />
+                  <e p="AtlasEditorWindow.cs" t="Include" />
+                  <e p="BrushTileGridControl.cs" t="Include" />
+                  <e p="ShortcutKeys.cs" t="Include" />
+                  <e p="SortingLayerPropertyDrawer.cs" t="Include" />
+                  <e p="STEditorStyles.cs" t="Include" />
+                  <e p="STEditorToolbars.cs" t="Include" />
+                  <e p="TileDataPropertyDrawer.cs" t="Include" />
+                  <e p="TilemapEditor.cs" t="Include" />
+                  <e p="TilemapEditor_Color.cs" t="Include" />
+                  <e p="TilemapGroupEditor.cs" t="Include" />
+                  <e p="TilePropertiesControl.cs" t="Include" />
+                  <e p="TilePropertiesWindow.cs" t="Include" />
+                  <e p="TileSelectionWindow.cs" t="Include" />
+                  <e p="TilesetControl.cs" t="Include" />
+                  <e p="TilesetEditor.cs" t="Include" />
+                  <e p="ToolbarControl.cs" t="Include" />
+                  <e p="ToolIcons.cs" t="Include" />
+                </e>
+                <e p="EditorGlobalSettings.cs" t="Include" />
+                <e p="SortingLayerAttribute.cs" t="Include" />
+                <e p="STETilemap.cs" t="Include" />
+                <e p="TileDataAttribute.cs" t="Include" />
+                <e p="TilemapChunk.cs" t="Include" />
+                <e p="TilemapChunk_Collider.cs" t="Include" />
+                <e p="TilemapChunk_Renderer.cs" t="Include" />
+                <e p="TilemapChunk_TileObjFactory.cs" t="Include" />
+                <e p="TilemapGroup.cs" t="Include" />
+                <e p="TileObjectBehaviour.cs" t="Include" />
+                <e p="TileObjMesh.cs" t="Include" />
+                <e p="Tileset.cs" t="Include" />
+              </e>
+              <e p="Utils" t="Include">
+                <e p="Editor" t="Include">
+                  <e p="TilemapUtilsEditor.cs" t="Include" />
+                </e>
+                <e p="EditorCompatibilityUtils.cs" t="Include" />
+                <e p="EditorUtils.cs" t="Include" />
+                <e p="GizmosEx.cs" t="Include" />
+                <e p="HandlesEx.cs" t="Include" />
+                <e p="TilemapDrawingUtils.cs" t="Include" />
+                <e p="TilemapUtils.cs" t="Include" />
+                <e p="TilemapVertexPaintUtils.cs" t="Include" />
+              </e>
+            </e>
           </e>
-          <e p="Player.cs" t="Include" />
-          <e p="RoboticParts" t="Include">
-            <e p="ArmLeg_RP.cs" t="Include" />
-            <e p="Body_RP.cs" t="Include" />
-            <e p="Camera_RP.cs" t="Include" />
-            <e p="Claw_RP.cs" t="Include" />
-            <e p="Hand_RP.cs" t="Include" />
-            <e p="Head_RP.cs" t="Include" />
-            <e p="Leg_RP.cs" t="Include" />
-            <e p="RobotPart.cs" t="Include" />
-            <e p="Tool_RP.cs" t="Include" />
+        </e>
+        <e p="Maximovink" t="Include">
+          <e p="Scripts" t="Include">
+            <e p="CameraFollow.cs" t="Include" />
+            <e p="ChunkManager.cs" t="Include" />
+            <e p="Creature.cs" t="Include" />
+            <e p="Editor" t="Include">
+              <e p="FieldOfViewEditor.cs" t="Include" />
+            </e>
+            <e p="Entity.cs" t="Include" />
+            <e p="Extenshions.cs" t="Include" />
+            <e p="FieldOfView.cs" t="Include" />
+            <e p="GameManager.cs" t="Include" />
+            <e p="Inventory" t="Include">
+              <e p="AmmoItem.cs" t="Include" />
+              <e p="Bullet.cs" t="Include" />
+              <e p="DroppedItem.cs" t="Include" />
+              <e p="Inventory.cs" t="Include" />
+              <e p="Item.cs" t="Include" />
+              <e p="MeleeWeapon.cs" t="Include" />
+              <e p="MeleeWeaponItem.cs" t="Include" />
+              <e p="PlayerInventory.cs" t="Include" />
+              <e p="RecipeDatabase.cs" t="Include" />
+              <e p="RobotPartItem.cs" t="Include" />
+              <e p="ShootingWeapon.cs" t="Include" />
+              <e p="ShootingWeaponItem.cs" t="Include" />
+              <e p="Tooltip.cs" t="Include" />
+              <e p="Weapon.cs" t="Include" />
+              <e p="WeaponItem.cs" t="Include" />
+              <e p="Workbench.cs" t="Include" />
+            </e>
+            <e p="Player.cs" t="Include" />
+            <e p="RoboticParts" t="Include">
+              <e p="ArmLeg_RP.cs" t="Include" />
+              <e p="Body_RP.cs" t="Include" />
+              <e p="Camera_RP.cs" t="Include" />
+              <e p="Claw_RP.cs" t="Include" />
+              <e p="Hand_RP.cs" t="Include" />
+              <e p="Head_RP.cs" t="Include" />
+              <e p="Leg_RP.cs" t="Include" />
+              <e p="RobotPart.cs" t="Include" />
+              <e p="Tool_RP.cs" t="Include" />
+            </e>
+            <e p="RobotPartEditor.cs" t="Include" />
+            <e p="SavedPrefabBehaviour.cs" t="Include" />
+            <e p="SelectableObject.cs" t="Include" />
+            <e p="Trash.cs" t="Include" />
+            <e p="WorkbenchStation.cs" t="Include" />
           </e>
-          <e p="RobotPartEditor.cs" t="Include" />
-          <e p="Trash.cs" t="Include" />
-          <e p="TrashGenerator.cs" t="Include" />
+          <e p="Shaders" t="Include">
+            <e p="Overlay.shader" t="Include" />
+          </e>
         </e>
       </e>
       <e p="Library" t="ExcludeRecursive" />
