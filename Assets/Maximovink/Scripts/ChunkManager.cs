@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace MaximovInk
 {
@@ -30,7 +32,7 @@ namespace MaximovInk
 
         private List<LoadedChunk> _loadedChunks;
 
-        public SavedPrefabBehaviour[] prefabs;
+        public PrefabForPool[] prefabs;
 
         private const string path = "saves/null/map.json";
         
@@ -159,18 +161,39 @@ namespace MaximovInk
                 from.isFree = false;
                 for (int i = 0; i < from.target.childCount; i++)
                 {
-                    Destroy(from.target.GetChild(i).gameObject);
+                    //Destroy(from.target.GetChild(i).gameObject);
+                    from.target.GetChild(i).gameObject.SetActive(false);
                 }
 
                 var objs = GetChunkData(x, y).objects;
                 for (int i = 0; i < objs.Length; i++)
                 {
-                    Instantiate(
-                        prefabs[objs[i].prefab] ,
-                        (Vector2)from.target.position + objs[i].position,
-                        Quaternion.identity,
-                        from.target);
+
+                    var freePrefab = prefabs[objs[i].prefab].instantiated.FirstOrDefault(n => n.gameObject.activeSelf == false);
                     
+                    if (freePrefab != null)
+                    {
+                        freePrefab.gameObject.SetActive(true);
+                        freePrefab.transform.SetParent(from.target);
+                        freePrefab.transform.localPosition = objs[i].position;
+                    }
+                    else
+                    {
+                        var newobj = Instantiate(
+                            prefabs[objs[i].prefab].prefab ,
+                            (Vector2)from.target.position + objs[i].position,
+                            Quaternion.identity,
+                            from.target);
+
+                        prefabs[objs[i].prefab].instantiated = prefabs[objs[i].prefab].instantiated.Add(newobj);
+                    }
+
+                    /* Instantiate(
+                         prefabs[objs[i].prefab].prefab ,
+                         (Vector2)from.target.position + objs[i].position,
+                         Quaternion.identity,
+                         from.target);*/
+
                 }
             }
         }
@@ -192,8 +215,6 @@ namespace MaximovInk
         {
             return Vector2Int.FloorToInt(new Vector2(pos.x/ChunkSize+_chunkVisibality/2, pos.y/ChunkSize+_chunkVisibality/2));
         }
-
-        
         
         private void Update()
         {
@@ -241,6 +262,13 @@ namespace MaximovInk
             public uint data;
             public byte prefab;
             public Vector2 position;
+        }
+        [Serializable]
+        public class PrefabForPool
+        {
+            public SavedPrefabBehaviour prefab;
+            [HideInInspector]
+            public SavedPrefabBehaviour[] instantiated;
         }
 
     }

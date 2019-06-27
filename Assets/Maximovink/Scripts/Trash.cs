@@ -12,15 +12,22 @@ namespace MaximovInk
        public TextMesh textCondition;
 
 
-       private void Start()
+       /*private void Start()
        {
            var ht = Physics2D.OverlapBoxAll(transform.position, Vector2.one *10, 0);
            var hts = ht.Where(n => n.GetComponentInParent<Trash>() && n.GetComponentInParent<Trash>().gameObject != gameObject).ToList();
            if (hts.Count > 0)
            {
+               Debug.Log("Destroy");
+              
                Destroy(gameObject);
            }
            
+          
+       }*/
+
+       private void OnEnable()
+       {
            GetComponent<Entity>().Sort();
        }
 
@@ -51,7 +58,8 @@ namespace MaximovInk
                     GameManager.Instance.mainInventory.AddItem(item);
                 }
                 
-                Destroy(gameObject);
+                //Destroy(gameObject);
+                gameObject.SetActive(false);
             }
             
         }
