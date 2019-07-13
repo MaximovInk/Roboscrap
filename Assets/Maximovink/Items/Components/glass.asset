@@ -16,4 +16,5 @@ MonoBehaviour:
   Description: 
   Icon: {fileID: 0}
   DroppedSprite: {fileID: 0}
-  MaxCondition: 100
+  Unbreakable: 1
+  MaxCondition: 1

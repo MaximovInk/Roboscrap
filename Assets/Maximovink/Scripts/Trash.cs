@@ -5,12 +5,19 @@ namespace MaximovInk
 {
     public class Trash : SavedPrefabBehaviour
     {
-        public byte hp = 100;
+        private int hp = 255;
 
        public Item[] Resources;
 
        public TextMesh textCondition;
 
+
+       private Entity entity;
+
+       private void Awake()
+       {
+           entity = GetComponent<Entity>();
+       }
 
        /*private void Start()
        {
@@ -26,14 +33,9 @@ namespace MaximovInk
           
        }*/
 
-       private void OnEnable()
-       {
-           GetComponent<Entity>().Sort();
-       }
-
-       public void Attack(float amount)
+       public void Attack(int amount)
         {
-            hp -= (byte)amount;
+            hp -= amount;
             
             textCondition.gameObject.SetActive(true);
 
@@ -41,11 +43,7 @@ namespace MaximovInk
             
             if (hp <= 0)
             {
-                /* Добыть мусор */
-                
-                
-                var generate = (int) Random.Range(10, 450);
-                var trash = GetComponent<Trash>();
+                var generate = Random.Range(10, 450);
 
 
                 for (int i = 0; i < generate; i++)
@@ -54,24 +52,37 @@ namespace MaximovInk
                     
                     var item = new ItemInstance { item = Resources[id] };
                     item.count += 1;
-                    item.condition = Random.Range(item.item.MaxCondition/100,item.item.MaxCondition);
+                    item.condition = item.item.Unbreakable ? item.item.MaxCondition : Random.Range(item.item.MaxCondition/100,item.item.MaxCondition);
                     GameManager.Instance.mainInventory.AddItem(item);
                 }
                 
-                //Destroy(gameObject);
                 gameObject.SetActive(false);
             }
-            
         }
 
-       public override uint OnSave()
+       public void UpdateInfo()
        {
-           return hp;
+           textCondition.gameObject.SetActive(hp < 255 && hp > 0);
+
+           textCondition.text = hp + " hp";
+
+           if (hp <= 0)
+           {
+               gameObject.SetActive(false);
+           }
        }
 
-       public override void OnLoaded(uint data)
+       protected override uint OnSave()
        {
-           hp = (byte)data;
+           return (uint)Mathf.Clamp(hp,0,255);
+       }
+
+       protected override void OnLoad(uint data)
+       {
+           hp = Mathf.Clamp((int)data,0,255);
+           UpdateInfo();
+           entity.Sort();
+           
        }
     }
 }

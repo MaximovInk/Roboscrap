@@ -52,7 +52,7 @@ namespace MaximovInk
             Name.text = "<color=#" + Extenshions.GetColorFrom(slot.item.item.Rarity) + ">" + slot.item.item.Name + "(" + slot.item.count + ")</color>";
             Descritption.text = slot.item.item.Description;
             Rarity.text = "<color=#" + Extenshions.GetColorFrom(slot.item.item.Rarity) + ">Rarity: " + slot.item.item.Rarity + "</color>";
-            Condition.text = "Condition: " + slot.item.condition + "/" + slot.item.item.MaxCondition;
+            Condition.text = "Condition: " + (slot.item.item.Unbreakable ? "unbreakable" : slot.item.condition + "/" + slot.item.item.MaxCondition);
         }
     }
 }

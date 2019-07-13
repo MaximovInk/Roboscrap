@@ -81,8 +81,6 @@ namespace MaximovInk
                 {
                     map.chunks[x,y] = new Chunk();
 
-                    int generate = Random.Range(TrashPerChunkMin, TrashPerChunkMax);
-
                     for (int i = 0; i < ChunkSize; i++)
                     {
                         for (int j = 0; j < ChunkSize; j++)
@@ -92,7 +90,7 @@ namespace MaximovInk
                             {
                                 
                                 if(!TrashNearInChunk(i,j,map.chunks[x,y]))
-                                    map.chunks[x,y].objects = map.chunks[x,y].objects.Add(new DataObject{prefab = 0, position = new Vector2(i,j)});
+                                    map.chunks[x,y].objects = map.chunks[x,y].objects.Add(new DataObject{data = 255,prefab = 0, position = new Vector2(i,j)});
                                 
                             }
                         }
@@ -165,34 +163,35 @@ namespace MaximovInk
                     from.target.GetChild(i).gameObject.SetActive(false);
                 }
 
-                var objs = GetChunkData(x, y).objects;
-                for (int i = 0; i < objs.Length; i++)
+                var chunk = GetChunkData(x, y);
+                for (int i = 0; i < chunk.objects.Length; i++)
                 {
 
-                    var freePrefab = prefabs[objs[i].prefab].instantiated.FirstOrDefault(n => n.gameObject.activeSelf == false);
+                    var freePrefab = prefabs[chunk.objects[i].prefab].instantiated.FirstOrDefault(n => n.gameObject.activeSelf == false);
                     
                     if (freePrefab != null)
                     {
+                        freePrefab.Save();
                         freePrefab.gameObject.SetActive(true);
                         freePrefab.transform.SetParent(from.target);
-                        freePrefab.transform.localPosition = objs[i].position;
+                        freePrefab.transform.localPosition = chunk.objects[i].position;
+                        freePrefab.Chunk = chunk;
+                        freePrefab.ObjectId = i;
+                        freePrefab.Load();
                     }
                     else
                     {
                         var newobj = Instantiate(
-                            prefabs[objs[i].prefab].prefab ,
-                            (Vector2)from.target.position + objs[i].position,
+                            prefabs[chunk.objects[i].prefab].prefab ,
+                            (Vector2)from.target.position + chunk.objects[i].position,
                             Quaternion.identity,
                             from.target);
 
-                        prefabs[objs[i].prefab].instantiated = prefabs[objs[i].prefab].instantiated.Add(newobj);
+                        prefabs[chunk.objects[i].prefab].instantiated = prefabs[chunk.objects[i].prefab].instantiated.Add(newobj);
+                        newobj.Chunk = chunk;
+                        newobj.ObjectId = i;
+                        newobj.Load();
                     }
-
-                    /* Instantiate(
-                         prefabs[objs[i].prefab].prefab ,
-                         (Vector2)from.target.position + objs[i].position,
-                         Quaternion.identity,
-                         from.target);*/
 
                 }
             }

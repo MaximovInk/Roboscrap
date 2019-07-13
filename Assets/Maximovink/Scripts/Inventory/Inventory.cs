@@ -16,6 +16,13 @@ namespace MaximovInk
         {
             public ItemInstance item;
             public Button selectButton;
+
+            public void Update()
+            {
+                selectButton.GetComponentInChildren<Text>().text =
+                    "<color=#" + Extenshions.GetColorFrom(item.item.Rarity) + ">" + item.item.Name + "(" +
+                    item.count + ")</color>";
+            }
         }
 
         public bool AddItem(ItemInstance item)
@@ -28,6 +35,7 @@ namespace MaximovInk
                 if (slots[i].item.item == item.item && slots[i].item.condition == item.condition)
                 {
                     slots[i].item.count += item.count;
+                    slots[i].Update();
                     return true;
                 }
                 
@@ -58,6 +66,7 @@ namespace MaximovInk
             else
             {
                 slot.item.count -= count;
+                slot.Update();
                 if (slot.item.count > 0)
                     return true;
                 Destroy(slot.selectButton.gameObject);

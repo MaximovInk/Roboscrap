@@ -27,8 +27,8 @@
 
             public GameObject InventoryPanel, RobotPartsPanel,WorkbenchPanel,OpenWorkbenchButton;
 
-            public bool MouseIsFree => !EventSystem.current.IsPointerOverGameObject() &&
-            EventSystem.current.currentSelectedGameObject == null;
+            public bool MouseIsFree => !EventSystem.current.IsPointerOverGameObject() /*&&
+            EventSystem.current.currentSelectedGameObject == null*/;
             
             private void Awake()
             {

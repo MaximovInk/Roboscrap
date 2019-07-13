@@ -8,6 +8,7 @@ namespace MaximovInk
         public Rarity Rarity;
         public string Name,Description;
         public Sprite Icon, DroppedSprite;
+        public bool Unbreakable = false;
         
         public int MaxCondition;
 

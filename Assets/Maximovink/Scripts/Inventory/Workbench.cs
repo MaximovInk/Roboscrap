@@ -132,7 +132,7 @@ namespace MaximovInk
             }
 
             GameManager.Instance.mainInventory.AddItem(new ItemInstance{ item = selectedSlot.item, condition = selectedSlot.item.MaxCondition, count = 1});
-            DisplayInfo(null);
+            DisplayInfo(selectedSlot);
         }
     }
 }

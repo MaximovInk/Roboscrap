@@ -14,9 +14,12 @@ namespace MaximovInk
         private float m_spriteHalfWidth;
         private readonly float m_tan30 = Mathf.Tan(Mathf.PI / 5);
 
-       
+        private void OnEnable()
+        {
+            Sort();
+        }
 
-        private void Start()
+        private void Awake()
         {
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
             if (spriteRenderer != null)
@@ -30,7 +33,7 @@ namespace MaximovInk
                 m_spriteHalfWidth = 0.5f;
             }
 
-
+Sort();
         }
 
 // Use this condition for objects that don�t move in the scene.
