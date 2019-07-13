@@ -10,15 +10,6 @@ namespace MaximovInk
        public Item[] Resources;
 
        public TextMesh textCondition;
-
-
-       private Entity entity;
-
-       private void Awake()
-       {
-           entity = GetComponent<Entity>();
-       }
-
        /*private void Start()
        {
            var ht = Physics2D.OverlapBoxAll(transform.position, Vector2.one *10, 0);
@@ -72,17 +63,22 @@ namespace MaximovInk
            }
        }
 
-       protected override uint OnSave()
+       protected override int OnSave()
        {
-           return (uint)Mathf.Clamp(hp,0,255);
+           return Mathf.Clamp(hp,0,255);
        }
 
-       protected override void OnLoad(uint data)
+       protected override void OnLoad(int data)
        {
-           hp = Mathf.Clamp((int)data,0,255);
-           UpdateInfo();
-           entity.Sort();
            
+           
+           hp = Mathf.Clamp((int)data,0,255);
+           if (data == -1)
+           {
+               hp = 255;
+           }
+
+           UpdateInfo(); 
        }
     }
 }

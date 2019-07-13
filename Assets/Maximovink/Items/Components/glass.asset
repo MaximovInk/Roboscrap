@@ -14,7 +14,7 @@ MonoBehaviour:
   Rarity: 0
   Name: Glass
   Description: 
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300022, guid: aef786bc815ed8c48b2b8f0cbf5fc83d, type: 3}
   DroppedSprite: {fileID: 0}
   Unbreakable: 1
   MaxCondition: 1

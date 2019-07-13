@@ -376,6 +376,7 @@
               <e p="WeaponItem.cs" t="Include" />
               <e p="Workbench.cs" t="Include" />
             </e>
+            <e p="PerlinTestPrefab.cs" t="Include" />
             <e p="Player.cs" t="Include" />
             <e p="RoboticParts" t="Include">
               <e p="ArmLeg_RP.cs" t="Include" />

@@ -6,6 +6,8 @@ namespace MaximovInk
     {
         public ChunkManager.Chunk Chunk;
         public int ObjectId;
+
+        protected int loadedData;
         
         public void Load()
         {
@@ -17,14 +19,14 @@ namespace MaximovInk
             Chunk.objects[ObjectId].data = OnSave();
         }
 
-        protected virtual uint OnSave()
+        protected virtual int OnSave()
         {
-            return 0;
+            return loadedData;
         }
 
-        protected virtual void OnLoad(uint data)
+        protected virtual void OnLoad(int data)
         {
-            
+            loadedData = data;
         }
     }
 }

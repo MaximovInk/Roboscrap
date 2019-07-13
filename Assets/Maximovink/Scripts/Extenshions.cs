@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace MaximovInk
@@ -57,5 +58,23 @@ namespace MaximovInk
                     return "000";
             }
         }
+        
+        [StructLayout(LayoutKind.Explicit)]
+        struct UIntFloat
+        {       
+            [FieldOffset(0)]
+            public float FloatValue;
+
+            [FieldOffset(0)]
+            public uint IntValue;        
+        }
+        
+        public static float ToSingle(uint value)
+        {
+            UIntFloat uf = new UIntFloat();
+            uf.IntValue = value;
+            return uf.FloatValue;
+        }
     }
+    
 }
