@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212435685282653432}
   - component: {fileID: 114840274644186346}
   - component: {fileID: 58311344755112404}
+  - component: {fileID: 114687380979179740}
   m_Layer: 2
   m_Name: enviroment_3
   m_TagString: Untagged
@@ -36,7 +37,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1610832420381804}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -22.9, y: -8.5, z: -6.211939}
+  m_LocalPosition: {x: -3.2062497, y: 3.5037613, z: -6.1728787}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -54,9 +55,21 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.15, y: 1.4}
+  m_Offset: {x: 0, y: -10.78}
   serializedVersion: 2
   m_Radius: 1.18
+--- !u!114 &114687380979179740
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1610832420381804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca227a6a840af6c43a343d562c32faed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectId: 0
 --- !u!114 &114840274644186346
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -69,7 +82,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dynamic: 0
-  floorHeight: 11.95
+  floorHeight: 0
 --- !u!212 &212435685282653432
 SpriteRenderer:
   m_ObjectHideFlags: 1

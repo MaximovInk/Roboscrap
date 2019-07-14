@@ -13,8 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Rarity: 0
   Name: Glass
-  Description: 
-  Icon: {fileID: 21300022, guid: aef786bc815ed8c48b2b8f0cbf5fc83d, type: 3}
+  Description: Sharp shit
+  Icon: {fileID: 21300024, guid: aef786bc815ed8c48b2b8f0cbf5fc83d, type: 3}
   DroppedSprite: {fileID: 0}
   Unbreakable: 1
-  MaxCondition: 1
+  MaxCondition: 0

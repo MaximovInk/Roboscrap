@@ -13,8 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Rarity: 2
   Name: Radio microschemes
-  Description: 
-  Icon: {fileID: 21300012, guid: aef786bc815ed8c48b2b8f0cbf5fc83d, type: 3}
+  Description: Radio card used in advanced craft, rare shit
+  Icon: {fileID: 21300016, guid: aef786bc815ed8c48b2b8f0cbf5fc83d, type: 3}
   DroppedSprite: {fileID: 0}
   Unbreakable: 1
-  MaxCondition: 1
+  MaxCondition: 0

@@ -85,7 +85,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1180662513156452}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.52, y: 2.12, z: 0}
+  m_LocalPosition: {x: -0.18, y: 1.58, z: 0}
   m_LocalScale: {x: 0.861, y: 0.861, z: 0.861}
   m_Children: []
   m_Father: {fileID: 4112849216004754}
@@ -98,7 +98,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1136188138522840}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.58, y: 18.87, z: 13.346587}
+  m_LocalPosition: {x: 0.11595154, y: 0.7394953, z: 0.17400351}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4100537770524954}
@@ -282,7 +282,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2a48a5d8d1b39744f9eb824411cd254d, type: 2}
   - {fileID: 11400000, guid: ed235943447b5bd4587417ef4e945772, type: 2}
   - {fileID: 11400000, guid: aad224a273d75af45b9d0f9882ca2c89, type: 2}
-  textCondition: {fileID: 102595767604374074}
+  min: 10
+  max: 450
+  maxHp: 255
 --- !u!212 &212918778439590228
 SpriteRenderer:
   m_ObjectHideFlags: 1

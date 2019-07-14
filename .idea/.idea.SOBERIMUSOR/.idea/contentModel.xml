@@ -348,6 +348,8 @@
         </e>
         <e p="Maximovink" t="Include">
           <e p="Scripts" t="Include">
+            <e p="BackgroundScroller.cs" t="Include" />
+            <e p="Breakable.cs" t="Include" />
             <e p="CameraFollow.cs" t="Include" />
             <e p="ChunkManager.cs" t="Include" />
             <e p="Creature.cs" t="Include" />
@@ -392,7 +394,6 @@
             <e p="RobotPartEditor.cs" t="Include" />
             <e p="SavedPrefabBehaviour.cs" t="Include" />
             <e p="SelectableObject.cs" t="Include" />
-            <e p="Trash.cs" t="Include" />
             <e p="WorkbenchStation.cs" t="Include" />
           </e>
           <e p="Shaders" t="Include">

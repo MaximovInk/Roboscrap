@@ -13,8 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Rarity: 1
   Name: Gear
-  Description: Metal shit..
-  Icon: {fileID: 21300002, guid: aef786bc815ed8c48b2b8f0cbf5fc83d, type: 3}
+  Description: Spin shit
+  Icon: {fileID: 21300000, guid: aef786bc815ed8c48b2b8f0cbf5fc83d, type: 3}
   DroppedSprite: {fileID: 0}
   Unbreakable: 1
-  MaxCondition: 1
+  MaxCondition: 0

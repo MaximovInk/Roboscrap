@@ -14,16 +14,16 @@ namespace MaximovInk
         private void OnTriggerEnter2D(Collider2D other)
         {
             var creature = other.GetComponent<Creature>();
-            var trash = other.GetComponentInParent<Trash>();
+            var breakable = other.GetComponentInParent<Breakable>();
             
             if (creature != null)
             {
                 creature.Health -= value;
             }
 
-            if (trash != null)
+            if (breakable != null)
             {
-                trash.Attack(value/4);
+                breakable.Attack(value/4);
                 
             }
             GameManager.Instance.MakeParticleAt(other.gameObject, transform.position);

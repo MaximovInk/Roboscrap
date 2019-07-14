@@ -239,11 +239,11 @@ namespace MaximovInk
             Animator.SetTrigger("attack_right");
             if (hit)
             {
-                var trash = hit.collider.GetComponentInParent<Trash>();
+                var breakable = hit.collider.GetComponentInParent<Breakable>();
 
-                if (trash != null)
+                if (breakable != null)
                 {
-                    trash.Attack(5);
+                    breakable.Attack(5);
                 }
                 GameManager.Instance.MakeParticleAt(hit.collider.gameObject,hit.point);
             }
@@ -257,11 +257,11 @@ namespace MaximovInk
                 Animator.SetTrigger("attack_left");
             if (hit)
             {
-                var trash = hit.collider.GetComponentInParent<Trash>();
+                var breakable = hit.collider.GetComponentInParent<Breakable>();
 
-                if (trash != null)
+                if (breakable != null)
                 {
-                    trash.Attack(amount);
+                    breakable.Attack(amount);
                 }
                 GameManager.Instance.MakeParticleAt(hit.collider.gameObject,hit.point);
             }

@@ -37,7 +37,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1814947563014660}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.2, y: 13.2, z: 11.112468}
+  m_LocalPosition: {x: -1.5561657, y: -6.2867336, z: -7.346605}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -55,11 +55,11 @@ PolygonCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -3.62}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 6.5, y: 7.15}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 6.5, y: 7.65}
     newSize: {x: 6.5, y: 7.2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -87,6 +87,9 @@ MonoBehaviour:
   ObjectId: 0
   Resources: []
   textCondition: {fileID: 0}
+  min: 2
+  max: 20
+  maxHp: 50
 --- !u!114 &114556270938163772
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -99,7 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dynamic: 0
-  floorHeight: 5.67
+  floorHeight: 0
 --- !u!212 &212172750418084518
 SpriteRenderer:
   m_ObjectHideFlags: 1

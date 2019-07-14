@@ -14,6 +14,8 @@ TextureImporter:
     21300018: trashGenarator_9
     21300020: trashGenarator_10
     21300022: trashGenerator_0
+    21300024: trashGenerator_3
+    21300026: trashGenerator_1
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -127,31 +129,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: trashGenarator_1
-      rect:
-        serializedVersion: 2
-        x: 89
-        y: 178
-        width: 82
-        height: 86
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1b417f4c664818640b6c1e2f802a1bfa
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: trashGenarator_2
       rect:
         serializedVersion: 2
-        x: 187
-        y: 162
+        x: 7
+        y: 0
         width: 44
         height: 95
       alignment: 0
@@ -167,51 +149,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: trashGenarator_3
-      rect:
-        serializedVersion: 2
-        x: 263
-        y: 164
-        width: 67
-        height: 76
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4b6e8d6572a12e548b956288efa954ae
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: trashGenarator_4
-      rect:
-        serializedVersion: 2
-        x: 362
-        y: 192
-        width: 65
-        height: 58
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 432dceb3518d42946bd1eda978838548
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: trashGenarator_5
       rect:
         serializedVersion: 2
         x: 0
-        y: 100
+        y: 108
         width: 65
         height: 69
       alignment: 0
@@ -227,32 +169,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: trashGenarator_6
-      rect:
-        serializedVersion: 2
-        x: 81
-        y: 94
-        width: 89
-        height: 74
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6283bb079689d9d4f8ef16f3f44b5439
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: trashGenarator_7
       rect:
         serializedVersion: 2
-        x: 189
-        y: 91
-        width: 66
+        x: 81
+        y: 128
+        width: 65
         height: 59
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -270,10 +192,10 @@ TextureImporter:
       name: trashGenarator_8
       rect:
         serializedVersion: 2
-        x: 338
-        y: 21
-        width: 75
-        height: 125
+        x: 178
+        y: 125
+        width: 77
+        height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -287,32 +209,12 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: trashGenarator_9
-      rect:
-        serializedVersion: 2
-        x: 4
-        y: 0
-        width: 68
-        height: 97
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d124e38f39a3c4f4c9473c152d03f8c0
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: trashGenarator_10
       rect:
         serializedVersion: 2
-        x: 97
-        y: 3
-        width: 57
+        x: 63
+        y: 7
+        width: 56
         height: 77
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -330,10 +232,30 @@ TextureImporter:
       name: trashGenerator_0
       rect:
         serializedVersion: 2
-        x: 194
-        y: 12
+        x: 86
+        y: 196
+        width: 88
+        height: 68
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5055d1fff0d3aea4d94a74d92dc8e192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trashGenerator_3
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 0
         width: 89
-        height: 64
+        height: 57
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -341,7 +263,27 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5055d1fff0d3aea4d94a74d92dc8e192
+      spriteID: 782e16e19a3ef264dac564c68321860e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trashGenerator_1
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 68
+        width: 87
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b725b441f28613f4198bc64e7c845c89
       vertices: []
       indices: 
       edges: []

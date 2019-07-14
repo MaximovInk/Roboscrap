@@ -23,9 +23,23 @@
             public Bullet bullet;
             public Text ammoText;
 
+            public TextMesh TextMesh;
+
+            private string lastText = string.Empty;
+
+            private float TextCheckerTimer;
+            
             public Text Fps;
 
             public GameObject InventoryPanel, RobotPartsPanel,WorkbenchPanel,OpenWorkbenchButton;
+
+            
+            public void SetTextMesh(string text)
+            {
+                if(!TextMesh.gameObject.activeSelf)
+                    TextMesh.gameObject.SetActive(true);
+                TextMesh.text = text;
+            }
 
             public bool MouseIsFree => !EventSystem.current.IsPointerOverGameObject() /*&&
             EventSystem.current.currentSelectedGameObject == null*/;
@@ -87,6 +101,21 @@
             }
 
 
+            private void LateUpdate()
+            {
+                if (TextMesh.gameObject.activeSelf)
+                {
+                    TextCheckerTimer += Time.deltaTime;
+
+                    if (TextCheckerTimer > 10)
+                    {
+                        TextMesh.gameObject.SetActive(false);
+                        
+                        TextCheckerTimer = 0;
+                    }
+                }
+            }
+
             public void DropItem(Inventory.Slot slot)
             {
                 var d = Instantiate(DroppedItemPrefab);
@@ -98,9 +127,9 @@
             public void MakeParticleAt(GameObject go, Vector3 position)
             {
                 ParticleSystem ps = null;
-                switch (go.tag)
+                switch (go.tag.ToLower())
                 {
-                    case "Trash":
+                    case "trash":
                         ps = Instantiate(Instance.Trash, position,
                             Quaternion.identity);
                         break;

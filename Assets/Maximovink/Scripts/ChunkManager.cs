@@ -1,6 +1,7 @@
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
+using Boo.Lang;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -13,9 +14,7 @@ namespace MaximovInk
         
         public int TrashPerChunkMax = 10;
         public int TrashPerChunkMin = 0;
-
-        //public Chunk[,] chunks;
-
+        
         public PrefabRandomizeGroup[] RandomGroups;
         
         public int ChunkSize = 32;
@@ -34,7 +33,7 @@ namespace MaximovInk
         private Vector3 lastPos;
         private Vector2Int lastChunk;
 
-        private List<LoadedChunk> _loadedChunks;
+        private System.Collections.Generic.List<LoadedChunk> _loadedChunks;
 
         public PrefabForPool[] prefabs;
 
@@ -43,28 +42,12 @@ namespace MaximovInk
         private float offset => _chunkVisibality / 2 * ChunkSize * TileScale;
 
         private Map map;
+
+        public bool isLoaded = false;
         
         public Chunk GetChunkData(int x, int y)
         {
            return map.chunks[x + map.chunks.GetLength(0) / 2, y + map.chunks.GetLength(1) / 2];
-        }
-
-        //public int seed = 0;
-
-        private bool TrashNearInChunk(int x , int y,Chunk chunk)
-        {
-            for (int i = 0; i < chunk.objects.Length; i++)
-            {
-                if (x > chunk.objects[i].position.x - 10 && x < chunk.objects[i].position.x + 10)
-                {
-                    if (y > chunk.objects[i].position.y - 10 && y < chunk.objects[i].position.y + 10)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
 
         private void Awake()
@@ -82,8 +65,6 @@ namespace MaximovInk
 
         private void Start()
         {
-            //chunks = new Transform[worldSize,worldSize];
-
             map = new Map {seed = Random.Range(0, 10000), chunks = new Chunk[worldSize, worldSize]};
 
             for (int x = 0; x < worldSize; x++)
@@ -96,10 +77,7 @@ namespace MaximovInk
                     {
                         for (int j = 0; j < ChunkSize; j++)
                         {
-                            //float value = Mathf.PerlinNoise((x*(float)ChunkSize+i)/NoiseScale+map.seed,(y*(float)ChunkSize+j)/NoiseScale+map.seed);
-
-                            //map.chunks[x,y].objects = map.chunks[x,y].objects.Add(new DataObject{data = BitConverter.ToUInt32(BitConverter.GetBytes(value), 0),prefab = 0, position = new Vector2(i,j)});
-
+                            
                             float obj = Mathf.PerlinNoise((x * (float) ChunkSize + i) / NoiseScale + map.seed,
                                 (y * (float) ChunkSize + j) / NoiseScale + map.seed);
 
@@ -109,47 +87,22 @@ namespace MaximovInk
                                     (obj < RandomGroups[k].thresoult && !RandomGroups[k].greatherThan))
                                 {
 
-                                    var prefabIndex = (byte)Random.Range(0, map.chunks.Length);
+                                    var prefabIndex =  (byte)RandomGroups[k].index[Random.Range(0, RandomGroups[k].index.Length)];
 
                                     //if(!TrashNearInChunk(i,j,map.chunks[x,y]))
                                     map.chunks[x, y].objects = map.chunks[x, y].objects.Add(new DataObject
-                                        {data = -1, prefab = prefabIndex, position = new Vector2(i, j)});
+                                        {data = -1, prefab = prefabIndex, position = new Vector2(i+Random.Range(TileScale/-2,TileScale/2), j+Random.Range(TileScale/-2,TileScale/2))});
                                     break;
 
                                 }
                             }
                             
-                            /*
-
-                            for (byte k = 0; k < prefabs.Length; k++)
-                            {
-                                if ((obj > prefabs[k].thresoult && prefabs[k].greatherThan) ||
-                                    (obj < prefabs[k].thresoult && !prefabs[k].greatherThan))
-                                {
-
-                                    //if(!TrashNearInChunk(i,j,map.chunks[x,y]))
-                                    map.chunks[x, y].objects = map.chunks[x, y].objects.Add(new DataObject
-                                        {data = -1, prefab = k, position = new Vector2(i, j)});
-                                    break;
-
-                                }
-                            }
-*/
-                            /* 
-                             
-                             if (obj > threshold)
-                             {
-                                 
-                                 if(!TrashNearInChunk(i,j,map.chunks[x,y]))
-                                     map.chunks[x,y].objects = map.chunks[x,y].objects.Add(new DataObject{data = 255,prefab = 0, position = new Vector2(i,j)});
-                                 
-                             }*/
                         }
                     }
                 }
             }
 
-            _loadedChunks = new List<LoadedChunk>(_chunkVisibality ^ 2);
+            _loadedChunks = new System.Collections.Generic.List<LoadedChunk>(_chunkVisibality ^ 2);
 
             for (int x = 0; x < _chunkVisibality; x++)
             {
@@ -167,10 +120,8 @@ namespace MaximovInk
 
                 }
             }
-
-
-
             UpdateChunksPos();
+            isLoaded = true;
         }
 
         private void UpdateChunksPos()
@@ -269,6 +220,9 @@ namespace MaximovInk
         
         private void Update()
         {
+            if(!isLoaded)
+                return;
+            
             timer += Time.deltaTime;
 
             if (iterationsDelay < timer)
@@ -288,7 +242,6 @@ namespace MaximovInk
 
         
         }
-
 
         public class LoadedChunk
         {

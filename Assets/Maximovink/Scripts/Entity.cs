@@ -22,7 +22,7 @@ namespace MaximovInk
         private void Awake()
         {
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-            if (spriteRenderer != null)
+            if (spriteRenderer != null && spriteRenderer.sprite != null)
             {
                 m_spriteLowerBound = spriteRenderer.bounds.size.y * 0.5f;
                 m_spriteHalfWidth = spriteRenderer.bounds.size.x * 0.5f;

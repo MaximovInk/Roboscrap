@@ -27,7 +27,7 @@ namespace MaximovInk
 
         public bool AddItem(ItemInstance item)
         {
-            if (item.item == null || item.count == 0 || item.condition == 0)
+            if (item.item == null || item.ItBreak() || item.count == 0)
                 return false;
             
             for (int i = 0; i < slots.Count; i++)
@@ -85,6 +85,11 @@ namespace MaximovInk
         public Item item = null;
         public int count = 0;
         public float condition = 0;
+
+        public bool ItBreak()
+        {
+            return !(item != null && (item.Unbreakable || condition > 0));
+        }
 
         public ItemInstance Clone()
         {

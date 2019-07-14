@@ -37,6 +37,7 @@ GameObject:
   - component: {fileID: 212737600827968410}
   - component: {fileID: 114417811050053664}
   - component: {fileID: 60866210761651072}
+  - component: {fileID: 114311411862523306}
   m_Layer: 2
   m_Name: enviroment_0
   m_TagString: Untagged
@@ -64,7 +65,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1917020115872898}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.29, y: 0.11, z: 1.7437019}
+  m_LocalPosition: {x: -8.12, y: 27.68, z: 18.446915}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4497846846062482}
@@ -83,10 +84,10 @@ PolygonCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -2.88}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
+    pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 12.5, y: 5.9}
     newSize: {x: 12.5, y: 5.4}
     adaptiveTilingThreshold: 0.5
@@ -102,6 +103,18 @@ PolygonCollider2D:
       - {x: 5.9414396, y: 0.976398}
       - {x: 4.8934164, y: 2.338838}
       - {x: 1.5240865, y: 3.1177635}
+--- !u!114 &114311411862523306
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1917020115872898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca227a6a840af6c43a343d562c32faed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectId: 0
 --- !u!114 &114417811050053664
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -114,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dynamic: 0
-  floorHeight: 5.24
+  floorHeight: 0.66
 --- !u!212 &212737600827968410
 SpriteRenderer:
   m_ObjectHideFlags: 1
