@@ -1,7 +1,6 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
-using Boo.Lang;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -33,17 +32,17 @@ namespace MaximovInk
         private Vector3 lastPos;
         private Vector2Int lastChunk;
 
-        private System.Collections.Generic.List<LoadedChunk> _loadedChunks;
+        private List<LoadedChunk> _loadedChunks;
 
         public PrefabForPool[] prefabs;
+        
+        
 
         private const string path = "saves/null/map.json";
         
         private float offset => _chunkVisibality / 2 * ChunkSize * TileScale;
 
         private Map map;
-
-        public bool isLoaded = false;
         
         public Chunk GetChunkData(int x, int y)
         {
@@ -66,22 +65,23 @@ namespace MaximovInk
         private void Start()
         {
             map = new Map {seed = Random.Range(0, 10000), chunks = new Chunk[worldSize, worldSize]};
-
-            for (int x = 0; x < worldSize; x++)
+            for (var x = 0; x < worldSize; x++)
             {
-                for (int y = 0; y < worldSize; y++)
+                for (var y = 0; y < worldSize; y++)
                 {
                     map.chunks[x, y] = new Chunk();
-
-                    for (int i = 0; i < ChunkSize; i++)
+                    map.chunks[x,y].objects = new DataObject[0];
+                    for (var i = 0; i < ChunkSize; i++)
                     {
-                        for (int j = 0; j < ChunkSize; j++)
+                        for (var j = 0; j < ChunkSize; j++)
                         {
                             
-                            float obj = Mathf.PerlinNoise((x * (float) ChunkSize + i) / NoiseScale + map.seed,
+                            var obj = Mathf.PerlinNoise((x * (float) ChunkSize + i) / NoiseScale + map.seed,
                                 (y * (float) ChunkSize + j) / NoiseScale + map.seed);
 
-                            for (int k = 0; k < RandomGroups.Length; k++)
+                           
+                            
+                            for (var k = 0; k < RandomGroups.Length; k++)
                             {
                                 if ((obj > RandomGroups[k].thresoult && RandomGroups[k].greatherThan) ||
                                     (obj < RandomGroups[k].thresoult && !RandomGroups[k].greatherThan))
@@ -91,7 +91,7 @@ namespace MaximovInk
 
                                     //if(!TrashNearInChunk(i,j,map.chunks[x,y]))
                                     map.chunks[x, y].objects = map.chunks[x, y].objects.Add(new DataObject
-                                        {data = -1, prefab = prefabIndex, position = new Vector2(i+Random.Range(TileScale/-2,TileScale/2), j+Random.Range(TileScale/-2,TileScale/2))});
+                                        {data = -1, prefab = prefabIndex, position = new Vector2(i*TileScale+Random.Range(-TileScale / 2.0f, TileScale / 2), j*TileScale+Random.Range(-TileScale / 2.0f, TileScale / 2))});
                                     break;
 
                                 }
@@ -102,32 +102,31 @@ namespace MaximovInk
                 }
             }
 
-            _loadedChunks = new System.Collections.Generic.List<LoadedChunk>(_chunkVisibality ^ 2);
+            _loadedChunks = new List<LoadedChunk>(_chunkVisibality ^ 2);
 
-            for (int x = 0; x < _chunkVisibality; x++)
+            for (var x = 0; x < _chunkVisibality; x++)
             {
-                for (int y = 0; y < _chunkVisibality; y++)
+                for (var y = 0; y < _chunkVisibality; y++)
                 {
                     var go = new GameObject();
                     go.transform.SetParent(transform);
 
 
-                    go.transform.localPosition = new Vector3(x * ChunkSize * TileScale - offset,
-                        y * ChunkSize * TileScale - offset);
+                   /* go.transform.localPosition = new Vector3(x * ChunkSize * TileScale - offset,
+                        y * ChunkSize * TileScale - offset);*/
 
-                    _loadedChunks.Add(new LoadedChunk {target = go.transform, x = -1, y = -1});
+                    _loadedChunks.Add(new LoadedChunk {target = go.transform, x = -1, y = -1,isFree = true});
                     go.name = "chunk";
 
                 }
             }
             UpdateChunksPos();
-            isLoaded = true;
         }
 
         private void UpdateChunksPos()
         {
             var chunk = WorldToChunk(target.position);
-            for (int i = 0; i < _loadedChunks.Count; i++)
+            for (var i = 0; i < _loadedChunks.Count; i++)
             {
                 _loadedChunks[i].isFree = IsFree(_loadedChunks[i], chunk);
                 
@@ -160,42 +159,47 @@ namespace MaximovInk
                 from.x = x;
                 from.y = y;
                 from.isFree = false;
-                for (int i = 0; i < from.target.childCount; i++)
+                for (var i = 0; i < from.target.childCount; i++)
                 {
-                    //Destroy(from.target.GetChild(i).gameObject);
+                    //from.target.GetChild(i).GetComponent<SavedPrefabBehaviour>().Save();
                     from.target.GetChild(i).gameObject.SetActive(false);
                 }
 
                 var chunk = GetChunkData(x, y);
-                for (int i = 0; i < chunk.objects.Length; i++)
+                if (chunk.objects != null)
                 {
-
-                    var freePrefab = prefabs[chunk.objects[i].prefab].instantiated.FirstOrDefault(n => n.gameObject.activeSelf == false);
-                    
-                    if (freePrefab != null)
+                    for (var i = 0; i < chunk.objects.Length; i++)
                     {
-                        freePrefab.Save();
-                        freePrefab.gameObject.SetActive(true);
-                        freePrefab.transform.SetParent(from.target);
-                        freePrefab.transform.localPosition = chunk.objects[i].position*TileScale;
-                        freePrefab.Chunk = chunk;
-                        freePrefab.ObjectId = i;
-                        freePrefab.Load();
-                    }
-                    else
-                    {
-                        var newobj = Instantiate(
-                            prefabs[chunk.objects[i].prefab].prefab ,
-                            (Vector2)from.target.position + chunk.objects[i].position*TileScale,
-                            Quaternion.identity,
-                            from.target);
 
-                        prefabs[chunk.objects[i].prefab].instantiated = prefabs[chunk.objects[i].prefab].instantiated.Add(newobj);
-                        newobj.Chunk = chunk;
-                        newobj.ObjectId = i;
-                        newobj.Load();
-                    }
+                        var freePrefab = prefabs[chunk.objects[i].prefab].instantiated
+                            .FirstOrDefault(n => n.gameObject.activeSelf == false);
 
+                        if (freePrefab != null)
+                        {
+                            freePrefab.Save();
+                            freePrefab.gameObject.SetActive(true);
+                            freePrefab.transform.SetParent(from.target);
+                            freePrefab.transform.localPosition = chunk.objects[i].position;
+                            freePrefab.Chunk = chunk;
+                            freePrefab.ObjectId = i;
+                            freePrefab.Load();
+                        }
+                        else
+                        {
+                            var newobj = Instantiate(
+                                prefabs[chunk.objects[i].prefab].prefab,
+                                (Vector2) from.target.position + chunk.objects[i].position,
+                                Quaternion.identity,
+                                from.target);
+
+                            prefabs[chunk.objects[i].prefab].instantiated =
+                                prefabs[chunk.objects[i].prefab].instantiated.Add(newobj);
+                            newobj.Chunk = chunk;
+                            newobj.ObjectId = i;
+                            newobj.Load();
+                        }
+
+                    }
                 }
             }
         }
@@ -220,9 +224,6 @@ namespace MaximovInk
         
         private void Update()
         {
-            if(!isLoaded)
-                return;
-            
             timer += Time.deltaTime;
 
             if (iterationsDelay < timer)
@@ -235,6 +236,7 @@ namespace MaximovInk
                     var chunk = WorldToChunk(lastPos);
                     if (lastChunk != chunk)
                     {
+                        lastChunk = chunk;
                         UpdateChunksPos();
                     }
                 }
@@ -250,15 +252,15 @@ namespace MaximovInk
             public bool isFree;
         }
 
-        public class Map
+        public struct Map
         {
             public float seed;
             public Chunk[,] chunks;
         }
 
-        public class Chunk
+        public struct Chunk
         {
-            public DataObject[] objects = new DataObject[0];
+            public DataObject[] objects;
         }
 
         public struct DataObject

@@ -182,13 +182,13 @@ namespace CreativeSpore.SuperTilemapEditor
 
             if (m_animatedTiles.Count > 0) //TODO: add fps attribute to update animated tiles when necessary
             {
-                for (int i = 0; i < m_animatedTiles.Count; ++i)
+                for (var i = 0; i < m_animatedTiles.Count; ++i)
                 {
-                    AnimTileData animTileData = m_animatedTiles[i];
-                    Vector2[] uvs = animTileData.Brush.GetAnimUVWithFlags(InnerPadding);
+                    var animTileData = m_animatedTiles[i];
+                    var uvs = animTileData.Brush.GetAnimUVWithFlags(InnerPadding);
                     if (animTileData.SubTileIdx >= 0)
                     {
-                        for (int j = 0; j < 4; ++j)
+                        for (var j = 0; j < 4; ++j)
                         {
                             if (j == animTileData.SubTileIdx)
                                 m_uv[animTileData.VertexIdx + j] = uvs[j];
@@ -226,7 +226,7 @@ namespace CreativeSpore.SuperTilemapEditor
 #if UNITY_EDITOR
         void OnValidate()
         {
-            Event e = Event.current;
+            var e = Event.current;
             if (e != null && e.type == EventType.ExecuteCommand && (e.commandName == "Duplicate" || e.commandName == "Paste"))
             {
                 _DoDuplicate();
@@ -398,13 +398,13 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 Gizmos.color = EditorGlobalSettings.TilemapColliderColor;
                 Gizmos.matrix = gameObject.transform.localToWorldMatrix;
-                Collider2D[] edgeColliders = GetComponents<Collider2D>();
-                for(int i = 0; i < edgeColliders.Length; ++i)
+                var edgeColliders = GetComponents<Collider2D>();
+                for(var i = 0; i < edgeColliders.Length; ++i)
                 {
-                    Collider2D collider2D = edgeColliders[i];
+                    var collider2D = edgeColliders[i];
                     if (collider2D.enabled)
                     {
-                        int size = 0;
+                        var size = 0;
                         Vector2[] points = null;
                         if (collider2D is EdgeCollider2D)
                         {
@@ -416,17 +416,17 @@ namespace CreativeSpore.SuperTilemapEditor
                             points = ((PolygonCollider2D)collider2D).points;
                             size = points.Length;
                         }
-                        for (int j = 0; j < size; ++j)
+                        for (var j = 0; j < size; ++j)
                         {
-                            int nextIdx = j + 1;
+                            var nextIdx = j + 1;
                             if (nextIdx == points.Length)
                                 nextIdx = 0;
                             Gizmos.DrawLine(points[j], points[nextIdx]);
                             //Draw normals
                             if(ParentTilemap.ShowColliderNormals)
                             {
-                                Vector2 s0 = points[j];
-                                Vector2 s1 = points[nextIdx];
+                                var s0 = points[j];
+                                var s1 = points[nextIdx];
                                 Vector3 normPos = (s0 + s1) / 2f;
                                 Gizmos.DrawLine(normPos, normPos + Vector3.Cross(s1 - s0, -Vector3.forward).normalized * ParentTilemap.CellSize.y * 0.05f);
                             }
@@ -440,19 +440,19 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public Bounds GetBounds()
         {
-            Bounds bounds = MeshFilter.sharedMesh? MeshFilter.sharedMesh.bounds : default(Bounds);
+            var bounds = MeshFilter.sharedMesh? MeshFilter.sharedMesh.bounds : default(Bounds);
             if (bounds == default(Bounds))
             {
                 Vector3 vMinMax = Vector2.Scale(new Vector2(GridPosX < 0? GridWidth : 0f, GridPosY < 0? GridHeight : 0f), CellSize);
                 bounds.SetMinMax( vMinMax, vMinMax);
             }
-            for (int i = 0; i < m_tileObjList.Count; ++i )
+            for (var i = 0; i < m_tileObjList.Count; ++i )
             {
-                int locGx = m_tileObjList[i].tilePos % GridWidth;
+                var locGx = m_tileObjList[i].tilePos % GridWidth;
                 if (GridPosX >= 0) locGx++;
-                int locGy = m_tileObjList[i].tilePos / GridWidth;
+                var locGy = m_tileObjList[i].tilePos / GridWidth;
                 if (GridPosY >= 0) locGy++;
-                Vector2 gridPos = Vector2.Scale( new Vector2(locGx, locGy), CellSize);
+                var gridPos = Vector2.Scale( new Vector2(locGx, locGy), CellSize);
                 bounds.Encapsulate(gridPos);
             }
             return bounds;
@@ -460,7 +460,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void SetDimensions(int width, int height)
         {
-            int size = width * height;
+            var size = width * height;
             if (size > 0 && size * 4 < 65000) //NOTE: 65000 is the current maximum vertex allowed per mesh and each tile has 4 vertex
             {
                 m_width = width;
@@ -482,16 +482,16 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (locGridX >= 0 && locGridX < m_width && locGridY >= 0 && locGridY < m_height)
             {
-                int tileIdx = locGridY * m_width + locGridX;
+                var tileIdx = locGridY * m_width + locGridX;
 
-                int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
-                Tile tile = Tileset.GetTile(tileId);
+                var tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
+                var tile = Tileset.GetTile(tileId);
 
-                int prevTileId = (int)(m_tileDataList[tileIdx] & Tileset.k_TileDataMask_TileId);
-                Tile prevTile = Tileset.GetTile(prevTileId);                             
+                var prevTileId = (int)(m_tileDataList[tileIdx] & Tileset.k_TileDataMask_TileId);
+                var prevTile = Tileset.GetTile(prevTileId);                             
 
-                int brushId = Tileset.GetBrushIdFromTileData(tileData);
-                int prevBrushId = Tileset.GetBrushIdFromTileData(m_tileDataList[tileIdx]);
+                var brushId = Tileset.GetBrushIdFromTileData(tileData);
+                var prevBrushId = Tileset.GetBrushIdFromTileData(m_tileDataList[tileIdx]);
 
                 if (brushId != prevBrushId
                     || brushId == 0) //NOTE: because of the autotiling mode, neighbour tiles could be affected by this change, even if the tile is not a brush
@@ -499,9 +499,9 @@ namespace CreativeSpore.SuperTilemapEditor
                     if (!s_currUpdatedTilechunk) // avoid this is chunks is being Updated from FillMeshData
                     { 
                         // Refresh Neighbors ( and itself if needed )
-                        for (int yf = -1; yf <= 1; ++yf)
+                        for (var yf = -1; yf <= 1; ++yf)
                         {
-                            for (int xf = -1; xf <= 1; ++xf)
+                            for (var xf = -1; xf <= 1; ++xf)
                             {
                                 if ((xf | yf) == 0)
                                 {
@@ -513,13 +513,13 @@ namespace CreativeSpore.SuperTilemapEditor
                                 }
                                 else
                                 {
-                                    int gx = (locGridX + xf);
-                                    int gy = (locGridY + yf);
-                                    int idx = gy * m_width + gx;
-                                    bool isInsideChunk = (gx >= 0 && gx < m_width && gy >= 0 && gy < m_height);
-                                    uint neighborTileData = isInsideChunk ? m_tileDataList[idx] : ParentTilemap.GetTileData(GridPosX + locGridX + xf, GridPosY + locGridY + yf);
-                                    int neighborBrushId = (int)((neighborTileData & Tileset.k_TileDataMask_BrushId) >> 16);
-                                    TilesetBrush neighborBrush = ParentTilemap.Tileset.FindBrush(neighborBrushId);
+                                    var gx = (locGridX + xf);
+                                    var gy = (locGridY + yf);
+                                    var idx = gy * m_width + gx;
+                                    var isInsideChunk = (gx >= 0 && gx < m_width && gy >= 0 && gy < m_height);
+                                    var neighborTileData = isInsideChunk ? m_tileDataList[idx] : ParentTilemap.GetTileData(GridPosX + locGridX + xf, GridPosY + locGridY + yf);
+                                    var neighborBrushId = (int)((neighborTileData & Tileset.k_TileDataMask_BrushId) >> 16);
+                                    var neighborBrush = ParentTilemap.Tileset.FindBrush(neighborBrushId);
                                     if (neighborBrush != null &&
                                         (neighborBrush.AutotileWith(ParentTilemap.Tileset, neighborBrushId, tileData) || neighborBrush.AutotileWith(ParentTilemap.Tileset, neighborBrushId, m_tileDataList[tileIdx])))
                                     {
@@ -555,15 +555,15 @@ namespace CreativeSpore.SuperTilemapEditor
                 {
                     // Refresh Neighbors tilechunk colliders, to make the collider autotiling
                     // Only if neighbor is outside this tilechunk
-                    for (int yf = -1; yf <= 1; ++yf)
+                    for (var yf = -1; yf <= 1; ++yf)
                     {
-                        for (int xf = -1; xf <= 1; ++xf)
+                        for (var xf = -1; xf <= 1; ++xf)
                         {
                             if ((xf | yf) != 0) // skip this tile position xf = yf = 0
                             {
-                                int gx = (locGridX + xf);
-                                int gy = (locGridY + yf);
-                                bool isInsideChunk = (gx >= 0 && gx < m_width && gy >= 0 && gy < m_height);
+                                var gx = (locGridX + xf);
+                                var gy = (locGridY + yf);
+                                var isInsideChunk = (gx >= 0 && gx < m_width && gy >= 0 && gy < m_height);
                                 if (!isInsideChunk)
                                 {
                                     ParentTilemap.InvalidateChunkAt(GridPosX + gx, GridPosY + gy, false, true);
@@ -585,10 +585,10 @@ namespace CreativeSpore.SuperTilemapEditor
                         DestroyTileObject(tileIdx);
                 }
 
-                TilesetBrush brush = ParentTilemap.Tileset.FindBrush(brushId);
+                var brush = ParentTilemap.Tileset.FindBrush(brushId);
                 if (brushId != prevBrushId)
                 {
-                    TilesetBrush prevBrush = ParentTilemap.Tileset.FindBrush(prevBrushId);
+                    var prevBrush = ParentTilemap.Tileset.FindBrush(prevBrushId);
                     if (prevBrush != null)
                     {
                         prevBrush.OnErase(this, locGridX, locGridY, tileData, prevBrushId);
@@ -610,7 +610,7 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (locGridX >= 0 && locGridX < m_width && locGridY >= 0 && locGridY < m_height)
             {
-                int tileIdx = locGridY * m_width + locGridX;
+                var tileIdx = locGridY * m_width + locGridX;
                 return m_tileDataList[tileIdx];
             }
             else
@@ -623,7 +623,7 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (locGridX >= 0 && locGridX < m_width && locGridY >= 0 && locGridY < m_height)
             {
-                int tileIdx = locGridY * m_width + locGridX;
+                var tileIdx = locGridY * m_width + locGridX;
                 m_tileDataList[tileIdx] &= ~Tileset.k_TileFlag_Updated;
             }            
         }
@@ -633,7 +633,7 @@ namespace CreativeSpore.SuperTilemapEditor
             TileObjData tileObjData = null;
             if (locGridX >= 0 && locGridX < m_width && locGridY >= 0 && locGridY < m_height)
             {
-                int tileIdx = locGridY * m_width + locGridX;
+                var tileIdx = locGridY * m_width + locGridX;
                 tileObjData = FindTileObjDataByTileIdx(tileIdx);
             }
             return tileObjData != null ? tileObjData.obj : null;
@@ -707,40 +707,40 @@ namespace CreativeSpore.SuperTilemapEditor
                         colorA.a = (byte)outA;
                         return colorA;
                         */
-                        int invAlpha = 255 - colorB.a;
-                        byte r = (byte)((colorA.r * invAlpha + colorB.r * colorB.a) / 255);
-                        byte g = (byte)((colorA.g * invAlpha + colorB.g * colorB.a) / 255);
-                        byte b = (byte)((colorA.b * invAlpha + colorB.b * colorB.a) / 255);
+                        var invAlpha = 255 - colorB.a;
+                        var r = (byte)((colorA.r * invAlpha + colorB.r * colorB.a) / 255);
+                        var g = (byte)((colorA.g * invAlpha + colorB.g * colorB.a) / 255);
+                        var b = (byte)((colorA.b * invAlpha + colorB.b * colorB.a) / 255);
                         return new Color32(r, g, b, colorA.a);
                     }
                 case eBlendMode.Additive:
                     {
-                        byte r = (byte)Mathf.Min(255, colorA.r + colorB.r * colorB.a / 255);
-                        byte g = (byte)Mathf.Min(255, colorA.g + colorB.g * colorB.a / 255);
-                        byte b = (byte)Mathf.Min(255, colorA.b + colorB.b * colorB.a / 255);
+                        var r = (byte)Mathf.Min(255, colorA.r + colorB.r * colorB.a / 255);
+                        var g = (byte)Mathf.Min(255, colorA.g + colorB.g * colorB.a / 255);
+                        var b = (byte)Mathf.Min(255, colorA.b + colorB.b * colorB.a / 255);
                         return new Color32(r, g, b, colorA.a);
                     }
                 case eBlendMode.Subtractive:
                     {
-                        byte r = (byte)Mathf.Max(0, colorA.r - colorB.r * colorB.a / 255);
-                        byte g = (byte)Mathf.Max(0, colorA.g - colorB.g * colorB.a / 255);
-                        byte b = (byte)Mathf.Max(0, colorA.b - colorB.b * colorB.a / 255);
+                        var r = (byte)Mathf.Max(0, colorA.r - colorB.r * colorB.a / 255);
+                        var g = (byte)Mathf.Max(0, colorA.g - colorB.g * colorB.a / 255);
+                        var b = (byte)Mathf.Max(0, colorA.b - colorB.b * colorB.a / 255);
                         return new Color32(r, g, b, colorA.a);
                     }
                 case eBlendMode.Multiply:
                     {
-                        int invAlpha = 255 - colorB.a;
-                        byte r = (byte)(colorA.r * invAlpha / 255 + colorA.r * colorB.r * colorB.a / 65025); //65025 = 255 * 255
-                        byte g = (byte)(colorA.g * invAlpha / 255 + colorA.g * colorB.g * colorB.a / 65025); //65025 = 255 * 255
-                        byte b = (byte)(colorA.b * invAlpha / 255 + colorA.b * colorB.b * colorB.a / 65025); //65025 = 255 * 255
+                        var invAlpha = 255 - colorB.a;
+                        var r = (byte)(colorA.r * invAlpha / 255 + colorA.r * colorB.r * colorB.a / 65025); //65025 = 255 * 255
+                        var g = (byte)(colorA.g * invAlpha / 255 + colorA.g * colorB.g * colorB.a / 65025); //65025 = 255 * 255
+                        var b = (byte)(colorA.b * invAlpha / 255 + colorA.b * colorB.b * colorB.a / 65025); //65025 = 255 * 255
                         return new Color32(r, g, b, colorA.a);
                     }
                 case eBlendMode.Divide:
                     {
-                        int invAlpha = 255 - colorB.a;
-                        byte r = (byte)(colorA.r * invAlpha / 255 + (colorA.r > colorB.r? colorB.a : colorA.r * colorB.a / (colorB.r + 1)));
-                        byte g = (byte)(colorA.g * invAlpha / 255 + (colorA.g > colorB.g ? colorB.a : colorA.g * colorB.a / (colorB.g + 1)));
-                        byte b = (byte)(colorA.b * invAlpha / 255 + (colorA.b > colorB.b ? colorB.a : colorA.b * colorB.a / (colorB.b + 1)));
+                        var invAlpha = 255 - colorB.a;
+                        var r = (byte)(colorA.r * invAlpha / 255 + (colorA.r > colorB.r? colorB.a : colorA.r * colorB.a / (colorB.r + 1)));
+                        var g = (byte)(colorA.g * invAlpha / 255 + (colorA.g > colorB.g ? colorB.a : colorA.g * colorB.a / (colorB.g + 1)));
+                        var b = (byte)(colorA.b * invAlpha / 255 + (colorA.b > colorB.b ? colorB.a : colorA.b * colorB.a / (colorB.b + 1)));
                         return new Color32(r, g, b, colorA.a);
                     }
                 default:

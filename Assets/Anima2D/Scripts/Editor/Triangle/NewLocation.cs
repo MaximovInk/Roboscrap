@@ -69,7 +69,7 @@ namespace TriangleNet
         private Point FindNewLocationWithoutMaxAngle(Vertex torg, Vertex tdest, Vertex tapex,
             ref double xi, ref double eta, bool offcenter, Otri badotri)
         {
-            double offconstant = behavior.offconstant;
+            var offconstant = behavior.offconstant;
 
             // for calculating the distances of the edges
             double xdo, ydo, xao, yao, xda, yda;
@@ -89,12 +89,12 @@ namespace TriangleNet
             Point smallestAngleCorner, middleAngleCorner, largestAngleCorner;
 
             // keeps the type of orientation if the triangle
-            int orientation = 0;
+            var orientation = 0;
             // keeps the coordinates of circumcenter of itself and neighbor triangle circumcenter	
             Point myCircumcenter, neighborCircumcenter;
 
             // keeps if bad triangle is almost good or not
-            int almostGood = 0;
+            var almostGood = 0;
             // keeps the cosine of the largest angle
             double cosMaxAngle;
             bool isObtuse; // 1: obtuse 0: nonobtuse
@@ -104,8 +104,8 @@ namespace TriangleNet
             double xPetalCtr_1, yPetalCtr_1, xPetalCtr_2, yPetalCtr_2, xPetalCtr, yPetalCtr, xMidOfShortestEdge, yMidOfShortestEdge;
             double dxcenter1, dycenter1, dxcenter2, dycenter2;
             // for finding neighbor
-            Otri neighborotri = default(Otri);
-            double[] thirdPoint = new double[2];
+            var neighborotri = default(Otri);
+            var thirdPoint = new double[2];
             //int neighborNotFound = -1;
             bool neighborNotFound;
             // for keeping the vertices of the neighbor triangle
@@ -122,13 +122,13 @@ namespace TriangleNet
 
             // for vector calculations in perturbation
             double ax, ay, d;
-            double pertConst = 0.06; // perturbation constant
+            var pertConst = 0.06; // perturbation constant
 
             double lengthConst = 1; // used at comparing circumcenter's distance to proposed point's distance
             double justAcute = 1; // used for making the program working for one direction only
             // for smoothing
-            int relocated = 0;// used to differentiate between calling the deletevertex and just proposing a steiner point
-            double[] newloc = new double[2];   // new location suggested by smoothing
+            var relocated = 0;// used to differentiate between calling the deletevertex and just proposing a steiner point
+            var newloc = new double[2];   // new location suggested by smoothing
             double origin_x = 0, origin_y = 0; // for keeping torg safe
             Otri delotri; // keeping the original orientation for relocation process
             // keeps the first and second direction suggested points
@@ -736,7 +736,7 @@ namespace TriangleNet
                 }// end of relocation				 
             }// end of almostGood	
 
-            Point circumcenter = new Point();
+            var circumcenter = new Point();
 
             if (relocated <= 0)
             {
@@ -769,7 +769,7 @@ namespace TriangleNet
         private Point FindNewLocation(Vertex torg, Vertex tdest, Vertex tapex,
             ref double xi, ref double eta, bool offcenter, Otri badotri)
         {
-            double offconstant = behavior.offconstant;
+            var offconstant = behavior.offconstant;
 
             // for calculating the distances of the edges
             double xdo, ydo, xao, yao, xda, yda;
@@ -789,12 +789,12 @@ namespace TriangleNet
             Point smallestAngleCorner, middleAngleCorner, largestAngleCorner;
 
             // keeps the type of orientation if the triangle
-            int orientation = 0;
+            var orientation = 0;
             // keeps the coordinates of circumcenter of itself and neighbor triangle circumcenter	
             Point myCircumcenter, neighborCircumcenter;
 
             // keeps if bad triangle is almost good or not
-            int almostGood = 0;
+            var almostGood = 0;
             // keeps the cosine of the largest angle
             double cosMaxAngle;
             bool isObtuse; // 1: obtuse 0: nonobtuse
@@ -804,8 +804,8 @@ namespace TriangleNet
             double xPetalCtr_1, yPetalCtr_1, xPetalCtr_2, yPetalCtr_2, xPetalCtr, yPetalCtr, xMidOfShortestEdge, yMidOfShortestEdge;
             double dxcenter1, dycenter1, dxcenter2, dycenter2;
             // for finding neighbor
-            Otri neighborotri = default(Otri);
-            double[] thirdPoint = new double[2];
+            var neighborotri = default(Otri);
+            var thirdPoint = new double[2];
             //int neighborNotFound = -1;
             // for keeping the vertices of the neighbor triangle
             Vertex neighborvertex_1;
@@ -821,13 +821,13 @@ namespace TriangleNet
 
             // for vector calculations in perturbation
             double ax, ay, d;
-            double pertConst = 0.06; // perturbation constant
+            var pertConst = 0.06; // perturbation constant
 
             double lengthConst = 1; // used at comparing circumcenter's distance to proposed point's distance
             double justAcute = 1; // used for making the program working for one direction only
             // for smoothing
-            int relocated = 0;// used to differentiate between calling the deletevertex and just proposing a steiner point
-            double[] newloc = new double[2];   // new location suggested by smoothing
+            var relocated = 0;// used to differentiate between calling the deletevertex and just proposing a steiner point
+            var newloc = new double[2];   // new location suggested by smoothing
             double origin_x = 0, origin_y = 0; // for keeping torg safe
             Otri delotri; // keeping the original orientation for relocation process
             // keeps the first and second direction suggested points
@@ -840,8 +840,8 @@ namespace TriangleNet
             double linepnt1_x, linepnt1_y, linepnt2_x, linepnt2_y;	// two points of the line
             double line_inter_x = 0, line_inter_y = 0;
             double line_vector_x, line_vector_y;
-            double[] line_p = new double[3]; // used for getting the return values of functions related to line intersection
-            double[] line_result = new double[4];
+            var line_p = new double[3]; // used for getting the return values of functions related to line intersection
+            var line_result = new double[4];
             // intersection of slab and the petal
             double petal_slab_inter_x_first, petal_slab_inter_y_first, petal_slab_inter_x_second, petal_slab_inter_y_second, x_1, y_1, x_2, y_2;
             double petal_bisector_x, petal_bisector_y, dist;
@@ -1939,7 +1939,7 @@ namespace TriangleNet
                 }// end of relocation				 
             }// end of almostGood	
 
-            Point circumcenter = new Point();
+            var circumcenter = new Point();
 
             if (relocated <= 0)
             {
@@ -2035,18 +2035,18 @@ namespace TriangleNet
             ref double[] newloc)
         {
 
-            int numpoints_p = 0;// keeps the number of points in a star of point p, q, r
-            int numpoints_q = 0;
-            int numpoints_r = 0;
+            var numpoints_p = 0;// keeps the number of points in a star of point p, q, r
+            var numpoints_q = 0;
+            var numpoints_r = 0;
             //int i;	
-            double[] possibilities = new double[6];//there can be more than one possibilities
-            int num_pos = 0; // number of possibilities
+            var possibilities = new double[6];//there can be more than one possibilities
+            var num_pos = 0; // number of possibilities
             int flag1 = 0, flag2 = 0, flag3 = 0;
-            bool newLocFound = false;
+            var newLocFound = false;
 
-            double[] points_p = new double[500];// keeps the points in a star of point p, q, r
-            double[] points_q = new double[500];
-            double[] points_r = new double[500];
+            var points_p = new double[500];// keeps the points in a star of point p, q, r
+            var points_q = new double[500];
+            var points_r = new double[500];
 
             //vertex v1, v2, v3;	// for ccw test
             //double p1[2], p2[2], p3[2];
@@ -2241,13 +2241,13 @@ namespace TriangleNet
                     int whichPoint, ref double[] points)
         {
 
-            Otri neighotri = default(Otri);  // for return value of the function
+            var neighotri = default(Otri);  // for return value of the function
             Otri tempotri;   // for temporary usage
             double first_x = 0, first_y = 0;	  // keeps the first point to be considered
             double second_x = 0, second_y = 0;  // for determining the edge we will begin
             double third_x = 0, third_y = 0;	  // termination
-            double[] returnPoint = new double[2];	  // for keeping the returned point	
-            int numvertices = 0;	  // for keeping number of surrounding vertices
+            var returnPoint = new double[2];	  // for keeping the returned point	
+            var numvertices = 0;	  // for keeping number of surrounding vertices
 
             // first determine which point to be used to find its neighbor triangles
             switch (whichPoint)
@@ -2331,8 +2331,8 @@ namespace TriangleNet
                         ref double[] thirdpoint, ref Otri neighotri)
         {
 
-            Otri neighbor = default(Otri); // keeps the neighbor triangles
-            bool notFound = false;	// boolean variable if we can find that neighbor or not
+            var neighbor = default(Otri); // keeps the neighbor triangles
+            var notFound = false;	// boolean variable if we can find that neighbor or not
 
             // for keeping the vertices of the neighbor triangle
             Vertex neighborvertex_1 = null;
@@ -2500,19 +2500,19 @@ namespace TriangleNet
 
             //double p[5];
 
-            double[] petalx = new double[2 * numpoints];
-            double[] petaly = new double[2 * numpoints];
-            double[] petalr = new double[2 * numpoints];
+            var petalx = new double[2 * numpoints];
+            var petaly = new double[2 * numpoints];
+            var petalr = new double[2 * numpoints];
 
-            double[] wedges = new double[2000];
+            var wedges = new double[2000];
             double xmid, ymid, dist, x3, y3;
             double x_1, y_1, x_2, y_2, x_3, y_3, x_4, y_4, tempx, tempy;
             double ux, uy;
             double alpha;
-            double[] p1 = new double[3];
-            double[] initialConvexPoly = new double[500];
+            var p1 = new double[3];
+            var initialConvexPoly = new double[500];
             //double poly_points;
-            int numpolypoints = 0;
+            var numpolypoints = 0;
 
             //int numBadTriangle;
 
@@ -2758,19 +2758,19 @@ namespace TriangleNet
 
             //double p[5];
 
-            double[] petalx = new double[2 * numpoints];
-            double[] petaly = new double[2 * numpoints];
-            double[] petalr = new double[2 * numpoints];
+            var petalx = new double[2 * numpoints];
+            var petaly = new double[2 * numpoints];
+            var petalr = new double[2 * numpoints];
 
-            double[] wedges = new double[2000];
+            var wedges = new double[2000];
             double xmid, ymid, dist, x3, y3;
             double x_1, y_1, x_2, y_2, x_3, y_3, x_4, y_4, tempx, tempy, x_5, y_5, x_6, y_6;
             double ux, uy;
             double[] p1 = new double[3], p2 = new double[3], p3 = new double[3], p4 = new double[3];
-            double[] initialConvexPoly = new double[500];
+            var initialConvexPoly = new double[500];
             //double poly_points;
-            int numpolypoints = 0;
-            int howManyPoints = 0;	// keeps the number of points used for representing the wedge
+            var numpolypoints = 0;
+            var howManyPoints = 0;	// keeps the number of points used for representing the wedge
             double line345 = 4.0, line789 = 4.0; // flag keeping which line to skip or construct
 
             int numBadTriangle;
@@ -3378,15 +3378,15 @@ namespace TriangleNet
             double z, min, max;
             int i, j;
 
-            double[][] polys = new double[3][];
+            var polys = new double[3][];
             polys[0] = new double[2];
             polys[1] = new double[2];
             polys[2] = new double[2];
 
             int numpolys;
             double[] res = null;
-            int count = 0;
-            int intFound = 0;
+            var count = 0;
+            var intFound = 0;
             dx = x2 - x1;
             dy = y2 - y1;
             numpolys = SplitConvexPolygon(numvertices, convexPoly, x1, y1, x2, y2, ref polys);
@@ -3456,23 +3456,23 @@ namespace TriangleNet
             // state = 1: after the first intersection (with the line)
             // state = 2: after the second intersection (with the line)
 
-            int state = 0;
-            double[] p = new double[3];
+            var state = 0;
+            var p = new double[3];
             // poly1 is constructed in states 0 and 2
-            double[] poly1 = new double[100];
-            int poly1counter = 0;
+            var poly1 = new double[100];
+            var poly1counter = 0;
             // poly2 is constructed in state 1
-            double[] poly2 = new double[100];
-            int poly2counter = 0;
+            var poly2 = new double[100];
+            var poly2counter = 0;
             int numpolys;
             int i;
-            double compConst = 0.000000000001;
+            var compConst = 0.000000000001;
             // for debugging 
             int case1 = 0, case2 = 0, case3 = 0, case31 = 0, case32 = 0, case33 = 0, case311 = 0, case3111 = 0;
             // intersect all edges of poly with line
             for (i = 0; i < 2 * numvertices; i = i + 2)
             {
-                int j = (i + 2 >= 2 * numvertices) ? 0 : i + 2;
+                var j = (i + 2 >= 2 * numvertices) ? 0 : i + 2;
                 LineLineSegmentIntersection(x1, y1, x2, y2, convexPoly[i], convexPoly[i + 1], convexPoly[j], convexPoly[j + 1], ref p);
                 // if this edge does not intersect with line
                 if (Math.Abs(p[0] - 0.0) <= compConst)
@@ -3536,8 +3536,8 @@ namespace TriangleNet
                             // or the line only touches the polygon
                             if (i + 4 < 2 * numvertices)
                             {
-                                int s1 = LinePointLocation(x1, y1, x2, y2, convexPoly[i], convexPoly[i + 1]);
-                                int s2 = LinePointLocation(x1, y1, x2, y2, convexPoly[i + 4], convexPoly[i + 5]);
+                                var s1 = LinePointLocation(x1, y1, x2, y2, convexPoly[i], convexPoly[i + 1]);
+                                var s2 = LinePointLocation(x1, y1, x2, y2, convexPoly[i + 4], convexPoly[i + 5]);
                                 // the line only splits the polygon
                                 // when the previous and next vertex lie
                                 // on different sides of the line
@@ -3700,7 +3700,7 @@ namespace TriangleNet
             // weather they intersect on one point or not, followed by coordinate pairs.
 
             double u_a, u_b, denom;
-            double compConst = 0.0000000000001;
+            var compConst = 0.0000000000001;
             // calculate denominator first
             denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
             u_a = (x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3);
@@ -4036,13 +4036,13 @@ namespace TriangleNet
         /// <returns></returns>
         private double MinDistanceToNeighbor(double newlocX, double newlocY, ref Otri searchtri)
         {
-            Otri horiz = default(Otri);	// for search operation
-            LocateResult intersect = LocateResult.Outside;
+            var horiz = default(Otri);	// for search operation
+            var intersect = LocateResult.Outside;
             Vertex v1, v2, v3, torg, tdest;
             double d1, d2, d3, ahead;
             //triangle ptr;                         // Temporary variable used by sym().
 
-            Point newvertex = new Point(newlocX, newlocY);
+            var newvertex = new Point(newlocX, newlocY);
 
             // 	printf("newvertex %f,%f\n", newvertex[0], newvertex[1]);
             // Find the location of the vertex to be inserted.  Check if a good

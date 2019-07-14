@@ -118,7 +118,7 @@ namespace TriangleNet.Geometry
                 return false;
             }
 
-            Point p = obj as Point;
+            var p = obj as Point;
 
             if ((object)p == null)
             {

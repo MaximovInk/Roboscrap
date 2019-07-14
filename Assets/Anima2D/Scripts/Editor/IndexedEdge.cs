@@ -21,7 +21,7 @@ namespace Anima2D
 			if (obj == null || GetType() != obj.GetType()) 
 				return false;
 			
-			IndexedEdge p = (IndexedEdge)obj;
+			var p = (IndexedEdge)obj;
 			
 			return (index1 == p.index1) && (index2 == p.index2) || (index1 == p.index2) && (index2 == p.index1);
 		}

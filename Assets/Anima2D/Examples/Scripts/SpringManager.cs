@@ -50,7 +50,7 @@ namespace UnityChan
 		{
 			//Kobayashi
 			if (dynamicRatio != 0.0f) {
-				for (int i = 0; i < springBones.Length; i++) {
+				for (var i = 0; i < springBones.Length; i++) {
 					if (dynamicRatio > springBones [i].threshold) {
 						if(springBones [i])
 						{
@@ -76,7 +76,7 @@ namespace UnityChan
 		
 			var prop = springBones [0].GetType ().GetField (fieldName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
 		
-			for (int i = 0; i < springBones.Length; i++) {
+			for (var i = 0; i < springBones.Length; i++) {
 				//Kobayashi
 				if (!springBones [i].isUseEachBoneForceSettings) {
 					var scale = curve.Evaluate (start + (end - start) * i / (springBones.Length - 1));

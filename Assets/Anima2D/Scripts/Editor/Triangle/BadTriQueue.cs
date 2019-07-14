@@ -154,7 +154,7 @@ namespace TriangleNet
         public void Enqueue(ref Otri enqtri, double minedge, Vertex enqapex, Vertex enqorg, Vertex enqdest)
         {
             // Allocate space for the bad triangle.
-            BadTriangle newbad = new BadTriangle();
+            var newbad = new BadTriangle();
 
             newbad.poortri = enqtri;
             newbad.key = minedge;
@@ -180,7 +180,7 @@ namespace TriangleNet
             this.count--;
 
             // Find the first triangle of the highest-priority queue.
-            BadTriangle result = queuefront[firstnonemptyq];
+            var result = queuefront[firstnonemptyq];
             // Remove the triangle from the queue.
             queuefront[firstnonemptyq] = result.nexttriang;
             // If this queue is now empty, note the new highest-priority

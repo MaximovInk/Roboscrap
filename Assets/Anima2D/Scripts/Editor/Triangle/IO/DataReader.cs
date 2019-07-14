@@ -48,14 +48,14 @@ namespace TriangleNet.IO
         /// </remarks>
         public static int Reconstruct(Mesh mesh, InputGeometry input, ITriangle[] triangles)
         {
-            int hullsize = 0;
+            var hullsize = 0;
 
-            Otri tri = default(Otri);
-            Otri triangleleft = default(Otri);
-            Otri checktri = default(Otri);
-            Otri checkleft = default(Otri);
-            Otri checkneighbor = default(Otri);
-            Osub subseg = default(Osub);
+            var tri = default(Otri);
+            var triangleleft = default(Otri);
+            var checktri = default(Otri);
+            var checkleft = default(Otri);
+            var checkneighbor = default(Otri);
+            var subseg = default(Osub);
             List<Otri>[] vertexarray; // Triangle
             Otri prevlink; // Triangle
             Otri nexttri; // Triangle
@@ -63,16 +63,16 @@ namespace TriangleNet.IO
             Vertex checkdest, checkapex;
             Vertex shorg;
             Vertex segmentorg, segmentdest;
-            int[] corner = new int[3];
-            int[] end = new int[2];
+            var corner = new int[3];
+            var end = new int[2];
             //bool segmentmarkers = false;
             int boundmarker;
             int aroundvertex;
             bool notfound;
-            int i = 0;
+            var i = 0;
 
-            int elements = triangles == null ? 0 : triangles.Length;
-            int numberofsegments = input.segments.Count;
+            var elements = triangles == null ? 0 : triangles.Length;
+            var numberofsegments = input.segments.Count;
 
             mesh.inelements = elements;
             mesh.regions.AddRange(input.regions);
@@ -105,7 +105,7 @@ namespace TriangleNet.IO
             // Each vertex is initially unrepresented.
             for (i = 0; i < mesh.vertices.Count; i++)
             {
-                Otri tmp = default(Otri);
+                var tmp = default(Otri);
                 tmp.triangle = Mesh.dummytri;
                 vertexarray[i] = new List<Otri>(3);
                 vertexarray[i].Add(tmp);
@@ -124,7 +124,7 @@ namespace TriangleNet.IO
                 corner[2] = triangles[i].P2;
 
                 // Copy the triangle's three corners.
-                for (int j = 0; j < 3; j++)
+                for (var j = 0; j < 3; j++)
                 {
                     if ((corner[j] < 0) || (corner[j] >= mesh.invertices))
                     {
@@ -153,7 +153,7 @@ namespace TriangleNet.IO
                 {
                     // Take the number for the origin of triangleloop.
                     aroundvertex = corner[tri.orient];
-                    int index = vertexarray[aroundvertex].Count - 1;
+                    var index = vertexarray[aroundvertex].Count - 1;
                     // Look for other triangles having this vertex.
                     nexttri = vertexarray[aroundvertex][index];
                     // Link the current triangle to the next one in the stack.
@@ -214,7 +214,7 @@ namespace TriangleNet.IO
                     end[1] = input.segments[i].P1;
                     boundmarker = input.segments[i].Boundary;
 
-                    for (int j = 0; j < 2; j++)
+                    for (var j = 0; j < 2; j++)
                     {
                         if ((end[j] < 0) || (end[j] >= mesh.invertices))
                         {
@@ -237,7 +237,7 @@ namespace TriangleNet.IO
                     {
                         // Take the number for the destination of subsegloop.
                         aroundvertex = end[1 - subseg.orient];
-                        int index = vertexarray[aroundvertex].Count - 1;
+                        var index = vertexarray[aroundvertex].Count - 1;
                         // Look for triangles having this vertex.
                         prevlink = vertexarray[aroundvertex][index];
                         nexttri = vertexarray[aroundvertex][index];
@@ -293,7 +293,7 @@ namespace TriangleNet.IO
             for (i = 0; i < mesh.vertices.Count; i++)
             {
                 // Search the stack of triangles adjacent to a vertex.
-                int index = vertexarray[i].Count - 1;
+                var index = vertexarray[i].Count - 1;
                 nexttri = vertexarray[i][index];
                 checktri = nexttri;
 

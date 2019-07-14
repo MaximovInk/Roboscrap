@@ -37,16 +37,16 @@ namespace Anima2D
 
 				m_TransformTrackers.Add( new TransformTracker(m_SpriteMeshInstance.transform) );
 
-				foreach(Bone2D bone in m_SpriteMeshInstance.bones)
+				foreach(var bone in m_SpriteMeshInstance.bones)
 				{
 					m_TransformTrackers.Add( new TransformTracker(bone.transform) );
 				}
 
 				if(m_SpriteMeshInstance.cachedSkinnedRenderer)
 				{
-					int blendShapeCount = m_SpriteMeshInstance.sharedMesh.blendShapeCount;
+					var blendShapeCount = m_SpriteMeshInstance.sharedMesh.blendShapeCount;
 
-					for(int i = 0; i < blendShapeCount; ++i)
+					for(var i = 0; i < blendShapeCount; ++i)
 					{
 						m_BlendShapeWeightTracker.Add( i, m_SpriteMeshInstance.cachedSkinnedRenderer.GetBlendShapeWeight(i) );
 					}
@@ -77,16 +77,16 @@ namespace Anima2D
 				{
 					if(m_SpriteMesh && m_SpriteMeshInstance.cachedSkinnedRenderer)
 					{
-						int blendShapeCount = m_SpriteMeshInstance.sharedMesh.blendShapeCount;
+						var blendShapeCount = m_SpriteMeshInstance.sharedMesh.blendShapeCount;
 
 						if(blendShapeCount != m_BlendShapeWeightTracker.Count)
 						{
 							return true;
 						}
 
-						for(int i = 0; i < blendShapeCount; ++i)
+						for(var i = 0; i < blendShapeCount; ++i)
 						{
-							float weight = 0f;
+							var weight = 0f;
 
 							if(m_BlendShapeWeightTracker.TryGetValue(i, out weight))
 							{
@@ -97,7 +97,7 @@ namespace Anima2D
 							}
 						}
 
-						foreach(TransformTracker tracker in m_TransformTrackers)
+						foreach(var tracker in m_TransformTrackers)
 						{
 							if(tracker.changed)
 							{

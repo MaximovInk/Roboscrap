@@ -60,7 +60,7 @@ namespace Anima2D
 
 			EditorGUI.BeginChangeCheck();
 
-			int blendshapeIndex = spriteMeshCache.blendshapes.IndexOf(spriteMeshCache.selectedBlendshape);
+			var blendshapeIndex = spriteMeshCache.blendshapes.IndexOf(spriteMeshCache.selectedBlendshape);
 
 			blendshapeIndex = EditorGUILayout.Popup(blendshapeIndex,GetBlendshapeNames(),GUILayout.Width(100f));
 
@@ -118,7 +118,7 @@ namespace Anima2D
 		{
 			if(spriteMeshCache)
 			{
-				BlendShape blendShape = spriteMeshCache.CreateBlendshape("New BlendShape", "Create BlendShape");
+				var blendShape = spriteMeshCache.CreateBlendshape("New BlendShape", "Create BlendShape");
 
 				spriteMeshCache.selectedBlendshape = blendShape;
 
@@ -163,7 +163,7 @@ namespace Anima2D
 		{
 			if(spriteMeshCache && spriteMeshCache.blendshapes != null)
 			{
-				int i = 0;
+				var i = 0;
 
 				return spriteMeshCache.blendshapes.ConvertAll( b => (i++) + "  " + b.name).ToArray();
 			}

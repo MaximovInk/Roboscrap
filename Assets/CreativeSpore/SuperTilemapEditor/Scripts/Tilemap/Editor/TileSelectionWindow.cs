@@ -77,7 +77,7 @@ namespace CreativeSpore.SuperTilemapEditor
         private static Vector2 s_scrollPos;
         void OnGUI()
         {
-            Event e = Event.current;
+            var e = Event.current;
             if (e.type == EventType.Repaint)
             {
                 if (m_pingFramesLeft > 0)
@@ -88,7 +88,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
             if (m_pingFramesLeft > 0)
             {
-                float alpha = 1f - Mathf.Abs(2f * ((float)m_pingFramesLeft / s_pingFrameNb) - 1f);
+                var alpha = 1f - Mathf.Abs(2f * ((float)m_pingFramesLeft / s_pingFrameNb) - 1f);
                 GUI.color = new Color(1f, 1f, 0f, alpha);
                 GUI.DrawTexture(new Rect(0, 0, maxSize.x, maxSize.y), EditorGUIUtility.whiteTexture, ScaleMode.ScaleToFit, true);
                 GUI.color = Color.white;
@@ -104,7 +104,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 Repaint();
                 return;
             }
-            STETilemap selectedTilemap = Selection.activeGameObject? Selection.activeGameObject.GetComponent<STETilemap>() : null;
+            var selectedTilemap = Selection.activeGameObject? Selection.activeGameObject.GetComponent<STETilemap>() : null;
             if (selectedTilemap && selectedTilemap.Tileset != m_tilesetControl.Tileset)
             {
                 Refresh();

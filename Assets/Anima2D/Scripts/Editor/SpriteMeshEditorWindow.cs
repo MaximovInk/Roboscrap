@@ -150,7 +150,7 @@ namespace Anima2D
 
 		override protected void OnGUI()
 		{
-			Matrix4x4 matrix = Handles.matrix;
+			var matrix = Handles.matrix;
 			
 			textureColor = Color.gray;
 			
@@ -280,7 +280,7 @@ namespace Anima2D
 				}
 			}
 			
-			bool disableEditGeometry = m_SpriteMeshCache.mode == Mode.Mesh && meshToolEditor.sliceToggle;
+			var disableEditGeometry = m_SpriteMeshCache.mode == Mode.Mesh && meshToolEditor.sliceToggle;
 
 			EdgesGUI(disableEditGeometry);
 			VerticesGUI(disableEditGeometry);
@@ -311,17 +311,17 @@ namespace Anima2D
 		{
 			if(m_SpriteMeshCache.spriteMeshInstance && DragAndDrop.objectReferences.Length > 0)
 			{
-				EventType eventType = Event.current.GetTypeForControl(0);
+				var eventType = Event.current.GetTypeForControl(0);
 				
-				List<GameObject> dragAndDropGameObjects = DragAndDrop.objectReferences.ToList().ConvertAll( o => o as GameObject);
-				List<Bone2D> dragAndDropBones = dragAndDropGameObjects.ConvertAll( go => go ? go.GetComponent<Bone2D>() : null );
+				var dragAndDropGameObjects = DragAndDrop.objectReferences.ToList().ConvertAll( o => o as GameObject);
+				var dragAndDropBones = dragAndDropGameObjects.ConvertAll( go => go ? go.GetComponent<Bone2D>() : null );
 				
 				if(eventType == EventType.DragPerform)
 				{
-					bool performAutoWeights = m_SpriteMeshCache.bindPoses.Count == 0;
+					var performAutoWeights = m_SpriteMeshCache.bindPoses.Count == 0;
 					
 					m_SpriteMeshCache.RegisterUndo("add bind pose");
-					foreach(Bone2D bone in dragAndDropBones)
+					foreach(var bone in dragAndDropBones)
 					{
 						m_SpriteMeshCache.BindBone(bone);
 					}
@@ -342,7 +342,7 @@ namespace Anima2D
 		
 		void HandleDeleteBone()
 		{
-			EventType eventType = Event.current.GetTypeForControl(0);
+			var eventType = Event.current.GetTypeForControl(0);
 			
 			if(eventType == EventType.KeyDown &&
 			   (Event.current.keyCode == KeyCode.Backspace || Event.current.keyCode == KeyCode.Delete) &&
@@ -360,7 +360,7 @@ namespace Anima2D
 		
 		void HandleDeleteBindPose()
 		{
-			EventType eventType = Event.current.GetTypeForControl(0);
+			var eventType = Event.current.GetTypeForControl(0);
 			
 			if(eventType == EventType.KeyDown &&
 			   (Event.current.keyCode == KeyCode.Backspace || Event.current.keyCode == KeyCode.Delete) &&
@@ -405,7 +405,7 @@ namespace Anima2D
 			   Event.current.GetTypeForControl(m_selectionControlID) == EventType.MouseUp &&
 			   Event.current.button == 0)
 			{
-				int numSelectedBeforeSelection = m_SpriteMeshCache.selection.Count;
+				var numSelectedBeforeSelection = m_SpriteMeshCache.selection.Count;
 
 				m_SpriteMeshCache.RegisterUndo("selection");
 
@@ -420,7 +420,7 @@ namespace Anima2D
 
 			EditorGUI.BeginChangeCheck();
 
-			Rect rect = SelectionRectTool.Do(m_selectionControlID);
+			var rect = SelectionRectTool.Do(m_selectionControlID);
 
 			if(EditorGUI.EndChangeCheck())
 			{
@@ -428,7 +428,7 @@ namespace Anima2D
 
 				if(m_Points != null)
 				{
-					for (int i = 0; i < m_Points.Count; i++)
+					for (var i = 0; i < m_Points.Count; i++)
 					{
 						Vector2 p = m_Points [i];
 						if(rect.Contains(p,true))
@@ -444,21 +444,21 @@ namespace Anima2D
 		{
 			if(!m_SpriteMeshCache.spriteMeshInstance) return;
 			
-			Matrix4x4 old = Handles.matrix;
+			var old = Handles.matrix;
 			Handles.matrix = m_SpriteMeshMatrix;
-			float radius = 7.5f / m_TextureImporter.spritePixelsPerUnit / m_Zoom;
+			var radius = 7.5f / m_TextureImporter.spritePixelsPerUnit / m_Zoom;
 			
-			for (int i = 0; i < m_SpriteMeshCache.spriteMeshInstance.bones.Count; i++)
+			for (var i = 0; i < m_SpriteMeshCache.spriteMeshInstance.bones.Count; i++)
 			{
-				int controlID = GUIUtility.GetControlID ("BonesHandle".GetHashCode(), FocusType.Passive);
-				EventType eventType = Event.current.GetTypeForControl(controlID);
+				var controlID = GUIUtility.GetControlID ("BonesHandle".GetHashCode(), FocusType.Passive);
+				var eventType = Event.current.GetTypeForControl(controlID);
 				
-				Bone2D bone = m_SpriteMeshCache.spriteMeshInstance.bones[i];
+				var bone = m_SpriteMeshCache.spriteMeshInstance.bones[i];
 				
 				if(bone)
 				{
-					Vector3 position = m_SpriteMeshCache.spriteMeshInstance.transform.InverseTransformPoint(bone.transform.position);
-					Vector3 endPoint = m_SpriteMeshCache.spriteMeshInstance.transform.InverseTransformPoint(bone.endPosition);
+					var position = m_SpriteMeshCache.spriteMeshInstance.transform.InverseTransformPoint(bone.transform.position);
+					var endPoint = m_SpriteMeshCache.spriteMeshInstance.transform.InverseTransformPoint(bone.endPosition);
 					
 					if(!disable)
 					{
@@ -496,7 +496,7 @@ namespace Anima2D
 							BoneUtils.DrawBoneOutline(position,endPoint,radius,radius*0.25f,Color.yellow);
 						}
 						
-						Color color = bone.color;
+						var color = bone.color;
 						color.a = 1f;
 						BoneUtils.DrawBoneBody(position,endPoint,radius,color);
 						color = bone.color * 0.25f;
@@ -511,16 +511,16 @@ namespace Anima2D
 		
 		void BindPosesGUI(bool disable)
 		{
-			Matrix4x4 old = Handles.matrix;
+			var old = Handles.matrix;
 			Handles.matrix = m_SpriteMeshMatrix;
-			float radius = 7.5f / m_TextureImporter.spritePixelsPerUnit / m_Zoom;
+			var radius = 7.5f / m_TextureImporter.spritePixelsPerUnit / m_Zoom;
 			
-			for (int i = 0; i < m_SpriteMeshCache.bindPoses.Count; i++)
+			for (var i = 0; i < m_SpriteMeshCache.bindPoses.Count; i++)
 			{
-				int controlID = GUIUtility.GetControlID ("BindPoseHandle".GetHashCode(), FocusType.Passive);
-				EventType eventType = Event.current.GetTypeForControl(controlID);
+				var controlID = GUIUtility.GetControlID ("BindPoseHandle".GetHashCode(), FocusType.Passive);
+				var eventType = Event.current.GetTypeForControl(controlID);
 				
-				BindInfo bindPose = m_SpriteMeshCache.bindPoses[i];
+				var bindPose = m_SpriteMeshCache.bindPoses[i];
 				
 				if(!disable)
 				{
@@ -552,7 +552,7 @@ namespace Anima2D
 				
 				if(eventType == EventType.Repaint)
 				{
-					Color innerColor = m_BindPoseColors[i] * 0.25f;
+					var innerColor = m_BindPoseColors[i] * 0.25f;
 					innerColor.a = 1f;
 					
 					if((GUIUtility.hotControl == 0 && HandleUtility.nearestControl == controlID) ||
@@ -561,14 +561,14 @@ namespace Anima2D
 						BoneUtils.DrawBoneOutline(bindPose.position,bindPose.endPoint,radius,radius*0.25f,Color.white);
 					}else if(m_SpriteMeshCache.mode == Mode.Mesh && weightEditor.overlayColors)
 					{
-						Color c = m_BindPoseColors[i] * 0.5f;
+						var c = m_BindPoseColors[i] * 0.5f;
 						c.a = 1f;
 						
 						BoneUtils.DrawBoneOutline(bindPose.position,bindPose.endPoint,radius,radius*0.25f,c);
 					}
 					
 					BoneUtils.DrawBoneBody(bindPose.position, bindPose.endPoint, radius, m_BindPoseColors[i]);
-					Color color = m_BindPoseColors[i] * 0.25f;
+					var color = m_BindPoseColors[i] * 0.25f;
 					color.a = 1f;
 					BoneUtils.DrawBoneCap(bindPose.position, radius,color);
 				}
@@ -581,13 +581,13 @@ namespace Anima2D
 		{
 			GUI.color = Color.white;
 			
-			for (int i = 0; i < m_SpriteMeshCache.holes.Count; i++)
+			for (var i = 0; i < m_SpriteMeshCache.holes.Count; i++)
 			{
-				Hole hole = m_SpriteMeshCache.holes[i];
-				Vector2 position = hole.vertex;
+				var hole = m_SpriteMeshCache.holes[i];
+				var position = hole.vertex;
 				
-				int controlID = GUIUtility.GetControlID ("HoleHandle".GetHashCode(), FocusType.Passive);
-				EventType eventType = Event.current.GetTypeForControl(controlID);
+				var controlID = GUIUtility.GetControlID ("HoleHandle".GetHashCode(), FocusType.Passive);
+				var eventType = Event.current.GetTypeForControl(controlID);
 				
 				if(!disable)
 				{
@@ -610,11 +610,11 @@ namespace Anima2D
 					
 					EditorGUI.BeginChangeCheck();
 					
-					Vector2 newPosition = HandlesExtra.Slider2D(controlID, position, null);
+					var newPosition = HandlesExtra.Slider2D(controlID, position, null);
 					
 					if (EditorGUI.EndChangeCheck())
 					{
-						Vector2 delta = newPosition - position;
+						var delta = newPosition - position;
 						m_SpriteMeshCache.RegisterUndo("move hole");
 						hole.vertex += delta;
 						m_SpriteMeshCache.Triangulate();
@@ -628,7 +628,7 @@ namespace Anima2D
 				
 				if(eventType == EventType.Repaint)
 				{
-					bool highlight = false;
+					var highlight = false;
 					
 					if((HandleUtility.nearestControl == controlID && GUIUtility.hotControl == 0) ||
 					   m_SpriteMeshCache.selectedHole == hole)
@@ -648,13 +648,13 @@ namespace Anima2D
 		
 		void EdgesGUI(bool disable)
 		{
-			for (int i = 0; i < m_SpriteMeshCache.edges.Count; i++)
+			for (var i = 0; i < m_SpriteMeshCache.edges.Count; i++)
 			{
-				int controlID = GUIUtility.GetControlID ("EdgeHandle".GetHashCode(), FocusType.Passive);
-				EventType eventType = Event.current.GetTypeForControl(controlID);
+				var controlID = GUIUtility.GetControlID ("EdgeHandle".GetHashCode(), FocusType.Passive);
+				var eventType = Event.current.GetTypeForControl(controlID);
 				
-				Edge edge = m_SpriteMeshCache.edges[i];
-				Vector2 position = m_SpriteMeshCache.GetVertex(edge.node1);
+				var edge = m_SpriteMeshCache.edges[i];
+				var position = m_SpriteMeshCache.GetVertex(edge.node1);
 				
 				if(!disable)
 				{
@@ -680,26 +680,26 @@ namespace Anima2D
 					{
 						EditorGUI.BeginChangeCheck();
 						
-						Vector2 newPosition = HandlesExtra.Slider2D(controlID, position, null);
+						var newPosition = HandlesExtra.Slider2D(controlID, position, null);
 						
 						if(EditorGUI.EndChangeCheck())
 						{
 							m_SpriteMeshCache.RegisterUndo("move edge");
 
-							Vector2 delta = newPosition - position;
+							var delta = newPosition - position;
 							
 							if(m_SpriteMeshCache.IsSelected(edge.node1) && m_SpriteMeshCache.IsSelected(edge.node2))
 							{
-								List<Node> selectedNodes = m_SpriteMeshCache.selectedNodes;
+								var selectedNodes = m_SpriteMeshCache.selectedNodes;
 
-								foreach(Node node in selectedNodes)
+								foreach(var node in selectedNodes)
 								{
-									Vector2 texcoord = m_SpriteMeshCache.GetVertex(node);
+									var texcoord = m_SpriteMeshCache.GetVertex(node);
 									m_SpriteMeshCache.SetVertex(node,texcoord + delta);
 								}
 							}else{
-								Vector2 texcoord1 = m_SpriteMeshCache.GetVertex(edge.node1);
-								Vector2 texcoord2 = m_SpriteMeshCache.GetVertex(edge.node2);
+								var texcoord1 = m_SpriteMeshCache.GetVertex(edge.node1);
+								var texcoord2 = m_SpriteMeshCache.GetVertex(edge.node2);
 								m_SpriteMeshCache.SetVertex(edge.node1,texcoord1 + delta);
 								m_SpriteMeshCache.SetVertex(edge.node2,texcoord2 + delta);
 							}
@@ -710,15 +710,15 @@ namespace Anima2D
 					
 					if (eventType == EventType.Layout)
 					{
-						Vector2 texcoord1 = m_SpriteMeshCache.GetVertex(edge.node1);
-						Vector2 texcoord2 = m_SpriteMeshCache.GetVertex(edge.node2);
+						var texcoord1 = m_SpriteMeshCache.GetVertex(edge.node1);
+						var texcoord2 = m_SpriteMeshCache.GetVertex(edge.node2);
 						HandleUtility.AddControl(controlID, HandleUtility.DistanceToLine(texcoord1,texcoord2));
 					}
 				}
 				
 				if(eventType == EventType.Repaint)
 				{
-					bool drawEdge = true;
+					var drawEdge = true;
 					
 					if((HandleUtility.nearestControl == m_selectionControlID || HandleUtility.nearestControl == controlID) &&
 					   Event.current.shift &&
@@ -760,12 +760,12 @@ namespace Anima2D
 		{
 			GUI.color = Color.white;
 			
-			foreach(Node node in m_SpriteMeshCache.nodes)
+			foreach(var node in m_SpriteMeshCache.nodes)
 			{
-				Vector2 position = m_SpriteMeshCache.GetVertex(node);
+				var position = m_SpriteMeshCache.GetVertex(node);
 				
-				int controlID = GUIUtility.GetControlID ("VertexHandle".GetHashCode(), FocusType.Passive);
-				EventType eventType = Event.current.GetTypeForControl(controlID);
+				var controlID = GUIUtility.GetControlID ("VertexHandle".GetHashCode(), FocusType.Passive);
+				var eventType = Event.current.GetTypeForControl(controlID);
 				
 				if(!disable)
 				{
@@ -783,7 +783,7 @@ namespace Anima2D
 							
 							if(!m_SpriteMeshCache.IsSelected(node))
 							{
-								int numSelectedBeforeSelection = m_SpriteMeshCache.selection.Count;
+								var numSelectedBeforeSelection = m_SpriteMeshCache.selection.Count;
 
 								m_SpriteMeshCache.Select(node,EditorGUI.actionKey);
 
@@ -811,19 +811,19 @@ namespace Anima2D
 					{
 						EditorGUI.BeginChangeCheck();
 						
-						Vector2 newPosition = HandlesExtra.Slider2D(controlID, position, null);
+						var newPosition = HandlesExtra.Slider2D(controlID, position, null);
 						
 						if(EditorGUI.EndChangeCheck())
 						{
-							Vector2 delta = newPosition - position;
+							var delta = newPosition - position;
 							
 							m_SpriteMeshCache.RegisterUndo("move vertices");
 
-							List<Node> selectedNodes = m_SpriteMeshCache.selectedNodes;
+							var selectedNodes = m_SpriteMeshCache.selectedNodes;
 
-							foreach(Node selectedNode in selectedNodes)
+							foreach(var selectedNode in selectedNodes)
 							{
-								Vector2 l_position = m_SpriteMeshCache.GetVertex(selectedNode);
+								var l_position = m_SpriteMeshCache.GetVertex(selectedNode);
 								m_SpriteMeshCache.SetVertex(selectedNode,l_position + delta);
 							}
 							
@@ -839,7 +839,7 @@ namespace Anima2D
 				
 				if(eventType == EventType.Repaint)
 				{
-					bool highlight = false;
+					var highlight = false;
 					
 					if((HandleUtility.nearestControl == controlID && GUIUtility.hotControl == 0) || 
 					   m_SpriteMeshCache.IsSelected(node))
@@ -859,7 +859,7 @@ namespace Anima2D
 					
 					if(weightEditor.isShown && weightEditor.showPie)
 					{
-						BoneWeight boneWeigth = m_SpriteMeshCache.GetBoneWeight(node);
+						var boneWeigth = m_SpriteMeshCache.GetBoneWeight(node);
 						DrawPie(position,boneWeigth,10f / m_Zoom, highlight);
 
 					}else{
@@ -885,14 +885,14 @@ namespace Anima2D
 		{
 			GUI.color = Color.white;
 			
-			int controlID = GUIUtility.GetControlID("PivotHandle".GetHashCode(), FocusType.Passive);
-			EventType eventType = Event.current.GetTypeForControl(controlID);
+			var controlID = GUIUtility.GetControlID("PivotHandle".GetHashCode(), FocusType.Passive);
+			var eventType = Event.current.GetTypeForControl(controlID);
 			
 			if(!disable)
 			{
 				EditorGUI.BeginChangeCheck();
 				
-				Vector2 newPivotPoint = HandlesExtra.Slider2D(controlID, m_SpriteMeshCache.pivotPoint, null);
+				var newPivotPoint = HandlesExtra.Slider2D(controlID, m_SpriteMeshCache.pivotPoint, null);
 				
 				if (EditorGUI.EndChangeCheck())
 				{
@@ -920,7 +920,7 @@ namespace Anima2D
 			if(meshToolEditor.tool != MeshToolEditor.MeshTool.Hole ||
 			   HandleUtility.nearestControl != m_selectionControlID) return;
 			
-			EventType eventType = Event.current.GetTypeForControl(0);
+			var eventType = Event.current.GetTypeForControl(0);
 			
 			if(eventType == EventType.MouseDown &&
 			   Event.current.button == 0 &&
@@ -939,7 +939,7 @@ namespace Anima2D
 			if(meshToolEditor.tool != MeshToolEditor.MeshTool.None ||
 			   (HandleUtility.nearestControl != m_selectionControlID && !hoveredEdge)) return;
 			
-			EventType eventType = Event.current.GetTypeForControl(0);
+			var eventType = Event.current.GetTypeForControl(0);
 			
 			if(eventType == EventType.MouseDown &&
 			   Event.current.button == 0 &&
@@ -992,9 +992,9 @@ namespace Anima2D
 			{
 				m_SpriteMeshCache.RegisterUndo("delete vertex");
 
-				List<Node> selectedNodes = m_SpriteMeshCache.selectedNodes;
+				var selectedNodes = m_SpriteMeshCache.selectedNodes;
 
-				foreach(Node node in selectedNodes)
+				foreach(var node in selectedNodes)
 				{
 					m_SpriteMeshCache.DeleteNode(node,false);
 				}
@@ -1038,7 +1038,7 @@ namespace Anima2D
 					{
 						m_SpriteMeshCache.RegisterUndo("add edge");
 						
-						Node targetVertex = hoveredNode;
+						var targetVertex = hoveredNode;
 						
 						if(!targetVertex)
 						{
@@ -1102,9 +1102,9 @@ namespace Anima2D
 		{
 			if(numSelectedBeforeSelection <= 2)
 			{
-				RectManipulatorParams rectParams = m_SpriteMeshCache.rectManipulatorParams;
+				var rectParams = m_SpriteMeshCache.rectManipulatorParams;
 
-				Rect rect = GetSelectedVerticesRect(Vector3.zero, Quaternion.identity);
+				var rect = GetSelectedVerticesRect(Vector3.zero, Quaternion.identity);
 
 				rectParams.rotation = Quaternion.identity;
 				rectParams.position = rect.center;
@@ -1139,16 +1139,16 @@ namespace Anima2D
 
 		Rect GetSelectedVerticesRect(Vector2 position, Quaternion rotation)
 		{
-			Rect rect = new Rect();
+			var rect = new Rect();
 
-			Vector2 min = new Vector2(float.MaxValue,float.MaxValue);
-			Vector2 max = new Vector2(float.MinValue,float.MinValue);
+			var min = new Vector2(float.MaxValue,float.MaxValue);
+			var max = new Vector2(float.MinValue,float.MinValue);
 
-			List<Node> selectedNodes = m_SpriteMeshCache.selectedNodes;
+			var selectedNodes = m_SpriteMeshCache.selectedNodes;
 
-			foreach(Node node in selectedNodes)
+			foreach(var node in selectedNodes)
 			{
-				Vector2 v = (Vector2) (Quaternion.Inverse(rotation) * (m_SpriteMeshCache.GetVertex(node) - position));
+				var v = (Vector2) (Quaternion.Inverse(rotation) * (m_SpriteMeshCache.GetVertex(node) - position));
 
 				if(v.x < min.x) min.x = v.x;
 				if(v.y < min.y) min.y = v.y;
@@ -1156,7 +1156,7 @@ namespace Anima2D
 				if(v.y > max.y) max.y = v.y;
 			}
 
-			Vector2 offset = Vector2.one * 5f;
+			var offset = Vector2.one * 5f;
 			rect.min = min - offset;
 			rect.max = max + offset;
 
@@ -1192,15 +1192,15 @@ namespace Anima2D
 		
 		Edge GetClosestEdge(Vector2 position)
 		{
-			float minSqrtDistance = float.MaxValue;
+			var minSqrtDistance = float.MaxValue;
 			Edge closestEdge = null;
 			
-			for(int i = 0; i < m_SpriteMeshCache.edges.Count; ++i)
+			for(var i = 0; i < m_SpriteMeshCache.edges.Count; ++i)
 			{
-				Edge edge = m_SpriteMeshCache.edges[i];
+				var edge = m_SpriteMeshCache.edges[i];
 				if(edge && edge.node1 && edge.node2)
 				{
-					float sqrtDistance = MathUtils.SegmentSqrtDistance((Vector3)position,
+					var sqrtDistance = MathUtils.SegmentSqrtDistance((Vector3)position,
 					                                                   m_SpriteMeshCache.GetVertex(edge.node1),
 					                                                   m_SpriteMeshCache.GetVertex(edge.node2));
 					if(sqrtDistance < minSqrtDistance)
@@ -1234,8 +1234,8 @@ namespace Anima2D
 		
 		void DoRevert()
 		{
-			SpriteMesh spriteMesh = m_SpriteMeshCache.spriteMesh;
-			SpriteMeshInstance spriteMeshInstance = m_SpriteMeshCache.spriteMeshInstance;
+			var spriteMesh = m_SpriteMeshCache.spriteMesh;
+			var spriteMeshInstance = m_SpriteMeshCache.spriteMeshInstance;
 
 			InvalidateCache();
 
@@ -1299,10 +1299,10 @@ namespace Anima2D
 		
 		void SetupSpriteMeshMatrix()
 		{
-			Rect textureRect = m_TextureRect;
+			var textureRect = m_TextureRect;
 			textureRect.position -= m_ScrollPosition;
 			
-			Vector3 invertY = new Vector3(1f, -1f, 0f);
+			var invertY = new Vector3(1f, -1f, 0f);
 			
 			m_SpriteMeshMatrix.SetTRS(
 				new Vector3(textureRect.x, textureRect.y + textureRect.height, 0f) +
@@ -1313,7 +1313,7 @@ namespace Anima2D
 		
 		void DrawMesh(Vector3[] vertices, Vector2[] uvs, Color[] colors, int[] triangles, Material material)
 		{
-			Mesh mesh = new Mesh();
+			var mesh = new Mesh();
 			
 			mesh.vertices = vertices;
 			mesh.uv = uvs;
@@ -1333,25 +1333,25 @@ namespace Anima2D
 			{
 				Texture mainTexture = m_Texture;
 				
-				List<Color> colors = new List<Color>(m_SpriteMeshCache.nodes.Count);
+				var colors = new List<Color>(m_SpriteMeshCache.nodes.Count);
 				
 				if(m_SpriteMeshCache.mode == Mode.Mesh &&
 				   m_SpriteMeshCache.isBound &&
 				   weightEditor.overlayColors)
 				{
-					foreach(Node node in m_SpriteMeshCache.nodes)
+					foreach(var node in m_SpriteMeshCache.nodes)
 					{
-						BoneWeight boneWeight = m_SpriteMeshCache.GetBoneWeight(node);
-						int boneIndex0 = boneWeight.boneIndex0;
-						int boneIndex1 = boneWeight.boneIndex1;
-						int boneIndex2 = boneWeight.boneIndex2;
-						int boneIndex3 = boneWeight.boneIndex3;
-						float weight0 = boneIndex0 < 0 ? 0f : boneWeight.weight0;
-						float weight1 = boneIndex1 < 0 ? 0f : boneWeight.weight1;
-						float weight2 = boneIndex2 < 0 ? 0f : boneWeight.weight2;
-						float weight3 = boneIndex3 < 0 ? 0f : boneWeight.weight3;
+						var boneWeight = m_SpriteMeshCache.GetBoneWeight(node);
+						var boneIndex0 = boneWeight.boneIndex0;
+						var boneIndex1 = boneWeight.boneIndex1;
+						var boneIndex2 = boneWeight.boneIndex2;
+						var boneIndex3 = boneWeight.boneIndex3;
+						var weight0 = boneIndex0 < 0 ? 0f : boneWeight.weight0;
+						var weight1 = boneIndex1 < 0 ? 0f : boneWeight.weight1;
+						var weight2 = boneIndex2 < 0 ? 0f : boneWeight.weight2;
+						var weight3 = boneIndex3 < 0 ? 0f : boneWeight.weight3;
 						
-						Color vertexColor = m_BindPoseColors[Mathf.Max(0,boneIndex0)] * weight0 +
+						var vertexColor = m_BindPoseColors[Mathf.Max(0,boneIndex0)] * weight0 +
 							m_BindPoseColors[Mathf.Max(0,boneIndex1)] * weight1 +
 								m_BindPoseColors[Mathf.Max(0,boneIndex2)] * weight2 +
 								m_BindPoseColors[Mathf.Max(0,boneIndex3)] * weight3;
@@ -1376,14 +1376,14 @@ namespace Anima2D
 		{
 			Handles.color = Color.white * new Color (1f, 1f, 1f, 0.25f);
 			
-			for (int i = 0; i < m_SpriteMeshCache.indices.Count; i+=3)
+			for (var i = 0; i < m_SpriteMeshCache.indices.Count; i+=3)
 			{
-				int index = m_SpriteMeshCache.indices[i];
-				int index1 = m_SpriteMeshCache.indices[i+1];
-				int index2 = m_SpriteMeshCache.indices[i+2];
-				Vector3 v1 = m_Points[index];
-				Vector3 v2 = m_Points[index1];
-				Vector3 v3 = m_Points[index2];
+				var index = m_SpriteMeshCache.indices[i];
+				var index1 = m_SpriteMeshCache.indices[i+1];
+				var index2 = m_SpriteMeshCache.indices[i+2];
+				var v1 = m_Points[index];
+				var v2 = m_Points[index1];
+				var v3 = m_Points[index2];
 				
 				Handles.DrawLine(v1,v2);
 				Handles.DrawLine(v2,v3);
@@ -1413,9 +1413,9 @@ namespace Anima2D
 		
 		void DrawPie(Vector3 position, BoneWeight boneWeight, float pieSize, bool selected = false)
 		{
-			int boneIndex = boneWeight.boneIndex0;
-			float angleStart = 0f;
-			float angle = 0f;
+			var boneIndex = boneWeight.boneIndex0;
+			var angleStart = 0f;
+			var angle = 0f;
 
 			if(selected)
 			{
@@ -1535,14 +1535,14 @@ namespace Anima2D
 				return;
 			}
 			
-			float newZoom = Mathf.Min(this.m_TextureViewRect.width / (float)m_SpriteMeshCache.rect.width, this.m_TextureViewRect.height / (float)m_SpriteMeshCache.rect.height) * 0.9f;
+			var newZoom = Mathf.Min(this.m_TextureViewRect.width / (float)m_SpriteMeshCache.rect.width, this.m_TextureViewRect.height / (float)m_SpriteMeshCache.rect.height) * 0.9f;
 			if(m_Zoom > newZoom)
 			{
 				m_Zoom = newZoom;
 			}
 			
-			int width = 1;
-			int height = 1;
+			var width = 1;
+			var height = 1;
 			
 			SpriteMeshUtils.GetWidthAndHeight(m_TextureImporter,ref width,ref height);
 			
@@ -1556,7 +1556,7 @@ namespace Anima2D
 				return;
 			}
 			
-			Texture2D spriteTexture = SpriteUtility.GetSpriteTexture(m_SpriteMeshCache.spriteMesh.sprite,false);
+			var spriteTexture = SpriteUtility.GetSpriteTexture(m_SpriteMeshCache.spriteMesh.sprite,false);
 			
 			if(force || spriteTexture != m_OriginalTexture)
 			{
@@ -1570,8 +1570,8 @@ namespace Anima2D
 				
 				if(m_OriginalTexture)
 				{
-					int width = 0;
-					int height = 0;
+					var width = 0;
+					var height = 0;
 					
 					SpriteMeshUtils.GetWidthAndHeight(m_TextureImporter,ref width, ref height);
 					
@@ -1589,15 +1589,15 @@ namespace Anima2D
 				return null;
 			}
 			
-			RenderTexture active = RenderTexture.active;
-			bool flag1 = !GetLinearSampled(original);
-			RenderTexture temporary = RenderTexture.GetTemporary(width, height, 0, RenderTextureFormat.Default, !flag1 ? RenderTextureReadWrite.Linear : RenderTextureReadWrite.sRGB);
+			var active = RenderTexture.active;
+			var flag1 = !GetLinearSampled(original);
+			var temporary = RenderTexture.GetTemporary(width, height, 0, RenderTextureFormat.Default, !flag1 ? RenderTextureReadWrite.Linear : RenderTextureReadWrite.sRGB);
 			GL.sRGBWrite = flag1 && QualitySettings.activeColorSpace == ColorSpace.Linear;
 			Graphics.Blit((Texture) original, temporary);
 			GL.sRGBWrite = false;
 			RenderTexture.active = temporary;
-			bool flag2 = width >= SystemInfo.maxTextureSize || height >= SystemInfo.maxTextureSize;
-			Texture2D texture2D = new Texture2D(width, height, TextureFormat.ARGB32, original.mipmapCount > 1 || flag2);
+			var flag2 = width >= SystemInfo.maxTextureSize || height >= SystemInfo.maxTextureSize;
+			var texture2D = new Texture2D(width, height, TextureFormat.ARGB32, original.mipmapCount > 1 || flag2);
 			texture2D.ReadPixels(new Rect(0.0f, 0.0f, (float) width, (float) height), 0, 0);
 			texture2D.Apply();
 			RenderTexture.ReleaseTemporary(temporary);
@@ -1608,13 +1608,13 @@ namespace Anima2D
 		
 		bool GetLinearSampled(Texture2D texture)
 		{
-			bool result = false;
+			var result = false;
 			
-			MethodInfo methodInfo = typeof(Editor).Assembly.GetType("UnityEditor.TextureUtil").GetMethod("GetLinearSampled", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+			var methodInfo = typeof(Editor).Assembly.GetType("UnityEditor.TextureUtil").GetMethod("GetLinearSampled", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
 			
 			if(methodInfo != null)
 			{
-				object[] parameters = new object[] { texture };
+				var parameters = new object[] { texture };
 				result = (bool)methodInfo.Invoke(null,parameters);
 			}
 			
@@ -1623,11 +1623,11 @@ namespace Anima2D
 		
 		void SetRenderTextureNoViewport(RenderTexture rt)
 		{
-			MethodInfo methodInfo = typeof(EditorGUIUtility).GetMethod("SetRenderTextureNoViewport", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+			var methodInfo = typeof(EditorGUIUtility).GetMethod("SetRenderTextureNoViewport", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
 			
 			if(methodInfo != null)
 			{
-				object[] parameters = new object[] { rt };
+				var parameters = new object[] { rt };
 				methodInfo.Invoke(null,parameters);
 			}
 		}

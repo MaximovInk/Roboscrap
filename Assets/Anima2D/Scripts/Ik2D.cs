@@ -50,7 +50,7 @@ namespace Anima2D
 		{
 			get { return ValidateNumBones(m_NumBones); }
 			set {
-				int l_numBones = ValidateNumBones(value);
+				var l_numBones = ValidateNumBones(value);
 
 				if(l_numBones != m_NumBones)
 				{
@@ -116,9 +116,9 @@ namespace Anima2D
 
 		void SetAttachedIK(Ik2D ik2D)
 		{
-			for (int i = 0; i < solver.solverPoses.Count; i++)
+			for (var i = 0; i < solver.solverPoses.Count; i++)
 			{
-				IkSolver2D.SolverPose pose = solver.solverPoses[i];
+				var pose = solver.solverPoses[i];
 				
 				if(pose.bone)
 				{
@@ -150,7 +150,7 @@ namespace Anima2D
 
 		void InitializeSolver()
 		{
-			Bone2D rootBone = Bone2D.GetChainBoneByIndex(target, numBones-1);
+			var rootBone = Bone2D.GetChainBoneByIndex(target, numBones-1);
 
 			SetAttachedIK(null);
 

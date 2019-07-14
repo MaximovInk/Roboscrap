@@ -8,41 +8,6 @@
       <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
-        <e p="2D-Light-of-Sight" t="Include">
-          <e p="Core" t="Include">
-            <e p="Event" t="Include">
-              <e p="LOSEventManager.cs" t="Include" />
-              <e p="LOSEventSource.cs" t="Include" />
-              <e p="LOSEventTrigger.cs" t="Include" />
-            </e>
-            <e p="LOSCamera.cs" t="Include" />
-            <e p="LOSFullScreenLight.cs" t="Include" />
-            <e p="LOSLightBase.cs" t="Include" />
-            <e p="LOSManager.cs" t="Include" />
-            <e p="LOSObjectBase.cs" t="Include" />
-            <e p="LOSObstacle.cs" t="Include" />
-            <e p="LOSRadialLight.cs" t="Include" />
-          </e>
-          <e p="Editor" t="Include">
-            <e p="LOSFullScreenLightEditor.cs" t="Include" />
-            <e p="LOSLightBaseEditor.cs" t="Include" />
-            <e p="LOSMenu.cs" t="Include" />
-            <e p="LOSRadialLightEditor.cs" t="Include" />
-          </e>
-          <e p="Resources" t="Include">
-            <e p="Shaders" t="Include">
-              <e p="Basic.shader" t="Include" />
-              <e p="GreyscaleBackground.shader" t="Include" />
-              <e p="GreyscaleForeground.shader" t="Include" />
-              <e p="RadialLight.shader" t="Include" />
-              <e p="RadialLightPlus.shader" t="Include" />
-            </e>
-          </e>
-          <e p="Utilities" t="Include">
-            <e p="SHelper.cs" t="Include" />
-            <e p="SMath.cs" t="Include" />
-          </e>
-        </e>
         <e p="Anima2D" t="Include">
           <e p="Examples" t="Include">
             <e p="Scripts" t="Include">
@@ -378,6 +343,7 @@
               <e p="WeaponItem.cs" t="Include" />
               <e p="Workbench.cs" t="Include" />
             </e>
+            <e p="LanguageManager.cs" t="Include" />
             <e p="PerlinTestPrefab.cs" t="Include" />
             <e p="Player.cs" t="Include" />
             <e p="RoboticParts" t="Include">
@@ -394,6 +360,8 @@
             <e p="RobotPartEditor.cs" t="Include" />
             <e p="SavedPrefabBehaviour.cs" t="Include" />
             <e p="SelectableObject.cs" t="Include" />
+            <e p="SettingsManager.cs" t="Include" />
+            <e p="TranslatableText.cs" t="Include" />
             <e p="WorkbenchStation.cs" t="Include" />
           </e>
           <e p="Shaders" t="Include">

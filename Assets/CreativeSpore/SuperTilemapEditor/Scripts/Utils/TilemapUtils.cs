@@ -111,8 +111,8 @@ namespace CreativeSpore.SuperTilemapEditor
         /// <returns></returns>
         static public Vector2 GetTileCenterPosition(STETilemap tilemap, Vector2 locPosition)
         {
-            int gridX = GetGridX(tilemap, locPosition);
-            int gridY = GetGridY(tilemap, locPosition);
+            var gridX = GetGridX(tilemap, locPosition);
+            var gridY = GetGridY(tilemap, locPosition);
             return GetTileCenterPosition(tilemap, gridX, gridY);
         }
 
@@ -159,8 +159,8 @@ namespace CreativeSpore.SuperTilemapEditor
         /// <returns></returns>
         static public int GetMouseGridX(STETilemap tilemap, Camera camera)
         {            
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-            Plane plane = new Plane(-tilemap.transform.forward, tilemap.transform.position);
+            var ray = camera.ScreenPointToRay(Input.mousePosition);
+            var plane = new Plane(-tilemap.transform.forward, tilemap.transform.position);
             float dist;
             plane.Raycast(ray, out dist);
             return GetGridX(tilemap, tilemap.transform.InverseTransformPoint(ray.GetPoint(dist)));
@@ -174,8 +174,8 @@ namespace CreativeSpore.SuperTilemapEditor
         /// <returns></returns>
         static public int GetMouseGridY(STETilemap tilemap, Camera camera)
         {
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-            Plane plane = new Plane(-tilemap.transform.forward, tilemap.transform.position);
+            var ray = camera.ScreenPointToRay(Input.mousePosition);
+            var plane = new Plane(-tilemap.transform.forward, tilemap.transform.position);
             float dist;
             plane.Raycast(ray, out dist);
             return GetGridY(tilemap, tilemap.transform.InverseTransformPoint(ray.GetPoint(dist)));
@@ -194,16 +194,16 @@ namespace CreativeSpore.SuperTilemapEditor
         /// </summary>
         static public ParameterContainer GetParamsFromTileData(Tileset tileset, uint tileData)
         {
-            int brushId = Tileset.GetBrushIdFromTileData(tileData);
-            TilesetBrush brush = tileset.FindBrush(brushId);
+            var brushId = Tileset.GetBrushIdFromTileData(tileData);
+            var brush = tileset.FindBrush(brushId);
             if(brush)
             {
                 return brush.Params;
             }
             else
             {
-                int tileId = Tileset.GetTileIdFromTileData(tileData);
-                Tile tile = tileset.GetTile(tileId);
+                var tileId = Tileset.GetTileIdFromTileData(tileData);
+                var tile = tileset.GetTile(tileId);
                 if(tile != null)
                 {
                     return tile.paramContainer;
@@ -220,8 +220,8 @@ namespace CreativeSpore.SuperTilemapEditor
         static public void IterateTilemapWithAction( STETilemap tilemap, System.Action<STETilemap, int, int> action )
         {
             if (tilemap)
-            for(int gy = tilemap.MinGridY; gy <= tilemap.MaxGridY; ++gy)
-                for(int gx = tilemap.MinGridX; gx <= tilemap.MaxGridX; ++gx)
+            for(var gy = tilemap.MinGridY; gy <= tilemap.MaxGridY; ++gy)
+                for(var gx = tilemap.MinGridX; gx <= tilemap.MaxGridX; ++gx)
                     if (action != null) action(tilemap, gx, gy);
         }
 
@@ -242,8 +242,8 @@ namespace CreativeSpore.SuperTilemapEditor
         static public void IterateTilemapWithAction(STETilemap tilemap, System.Action<STETilemap, int, int, uint> action)
         {
             if (tilemap)
-                for (int gy = tilemap.MinGridY; gy <= tilemap.MaxGridY; ++gy)
-                    for (int gx = tilemap.MinGridX; gx <= tilemap.MaxGridX; ++gx)
+                for (var gy = tilemap.MinGridY; gy <= tilemap.MaxGridY; ++gy)
+                    for (var gx = tilemap.MinGridX; gx <= tilemap.MaxGridX; ++gx)
                         if (action != null) action(tilemap, gx, gy, tilemap.GetTileData(gx, gy));
         }
 
@@ -253,15 +253,15 @@ namespace CreativeSpore.SuperTilemapEditor
         /// <returns></returns>
         static public bool OverlapRect(STETilemap tilemap, Rect rect)
         {
-            int gridX0 = GetGridX(tilemap, rect.min);
-            int gridY0 = GetGridY(tilemap, rect.min);
-            int gridX1 = GetGridX(tilemap, rect.max);
-            int gridY1 = GetGridY(tilemap, rect.max);
-            for(int x = gridX0; x <= gridX1; ++x)
+            var gridX0 = GetGridX(tilemap, rect.min);
+            var gridY0 = GetGridY(tilemap, rect.min);
+            var gridX1 = GetGridX(tilemap, rect.max);
+            var gridY1 = GetGridY(tilemap, rect.max);
+            for(var x = gridX0; x <= gridX1; ++x)
             {
-                for(int y = gridY0; y <= gridY1; ++y)
+                for(var y = gridY0; y <= gridY1; ++y)
                 {
-                    Tile tile = tilemap.GetTile(x, y);
+                    var tile = tilemap.GetTile(x, y);
                     if (tile != null && tile.collData.type != eTileCollider.None)
                         return true;
                 }
@@ -281,26 +281,26 @@ namespace CreativeSpore.SuperTilemapEditor
         /// <returns></returns>
         public static Texture2D CreateTilemapGroupPreviewTexture(STETilemap tilemap, TilemapGroup tilemapGroup = null)
         {
-            float pixelToUnits = tilemap.Tileset.TilePxSize.x / tilemap.CellSize.x;
-            Bounds tilemapGroupBounds = tilemap.MapBounds;
+            var pixelToUnits = tilemap.Tileset.TilePxSize.x / tilemap.CellSize.x;
+            var tilemapGroupBounds = tilemap.MapBounds;
             if (tilemapGroup)
                 tilemapGroup.IterateTilemapWithAction((STETilemap tmap) => tilemapGroupBounds.Encapsulate(tmap.MapBounds));
             Vector2 size = tilemapGroupBounds.size * pixelToUnits;
 
-            Camera previewCamera = Camera.main ? Camera.main : Object.FindObjectOfType<Camera>();
+            var previewCamera = Camera.main ? Camera.main : Object.FindObjectOfType<Camera>();
             previewCamera = GameObject.Instantiate(previewCamera);
             s_previewCamera = previewCamera;
-            RenderTexture rendTextr = new RenderTexture((int)size.x, (int)size.y, 32, RenderTextureFormat.ARGB32);
+            var rendTextr = new RenderTexture((int)size.x, (int)size.y, 32, RenderTextureFormat.ARGB32);
             rendTextr.Create();
             previewCamera.transform.position = tilemap.transform.TransformPoint(new Vector3(tilemapGroupBounds.center.x, tilemapGroupBounds.center.y, -10));
 
-            RenderTexture savedActiveRT = RenderTexture.active;
-            RenderTexture savedCamTargetTexture = previewCamera.targetTexture;
+            var savedActiveRT = RenderTexture.active;
+            var savedCamTargetTexture = previewCamera.targetTexture;
             RenderTexture.active = rendTextr;
             previewCamera.targetTexture = rendTextr;
             previewCamera.orthographicSize = (previewCamera.pixelRect.height) / (2f * pixelToUnits);
             previewCamera.Render();
-            Texture2D outputTexture = new Texture2D((int)size.x, (int)size.y, TextureFormat.ARGB32, false);
+            var outputTexture = new Texture2D((int)size.x, (int)size.y, TextureFormat.ARGB32, false);
             outputTexture.ReadPixels(new Rect(0, 0, (int)size.x, (int)size.y), 0, 0);
             outputTexture.Apply();
             previewCamera.targetTexture = savedCamTargetTexture;
@@ -322,12 +322,12 @@ namespace CreativeSpore.SuperTilemapEditor
             Sprite sprite = null;
             if(pixelsPerUnit <= 0)
                 pixelsPerUnit = tileset.PixelsPerUnit;
-            Tile tile = tileset.GetTile(tileId);
+            var tile = tileset.GetTile(tileId);
             if (tile != null)
             {
-                Vector2 atlasSize = new Vector2(tileset.AtlasTexture.width, tileset.AtlasTexture.height);
-                Rect spriteUV = new Rect(Vector2.Scale(tile.uv.position, atlasSize), Vector2.Scale(tile.uv.size, atlasSize));
-                string spriteName = tileset.name + "_" + tileId + "_" + pixelsPerUnit;
+                var atlasSize = new Vector2(tileset.AtlasTexture.width, tileset.AtlasTexture.height);
+                var spriteUV = new Rect(Vector2.Scale(tile.uv.position, atlasSize), Vector2.Scale(tile.uv.size, atlasSize));
+                var spriteName = tileset.name + "_" + tileId + "_" + pixelsPerUnit;
                 if (!s_spriteCache.TryGetValue(spriteName, out sprite) || !sprite)
                 {
                     sprite = Sprite.Create(tileset.AtlasTexture, spriteUV, new Vector2(.5f, .5f), pixelsPerUnit);

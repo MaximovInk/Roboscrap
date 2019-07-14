@@ -9,23 +9,23 @@ namespace Anima2D
 	{
 		public static void SavePose(Pose pose, Transform root)
 		{
-			List<Bone2D> bones = new List<Bone2D>(50);
+			var bones = new List<Bone2D>(50);
 
 			root.GetComponentsInChildren<Bone2D>(true,bones);
 
-			SerializedObject poseSO = new SerializedObject(pose);
-			SerializedProperty entriesProp = poseSO.FindProperty("m_PoseEntries");
+			var poseSO = new SerializedObject(pose);
+			var entriesProp = poseSO.FindProperty("m_PoseEntries");
 
 			poseSO.Update();
 			entriesProp.arraySize = bones.Count;
 
-			for (int i = 0; i < bones.Count; i++)
+			for (var i = 0; i < bones.Count; i++)
 			{
-				Bone2D bone = bones [i];
+				var bone = bones [i];
 
 				if(bone)
 				{
-					SerializedProperty element = entriesProp.GetArrayElementAtIndex(i);
+					var element = entriesProp.GetArrayElementAtIndex(i);
 					element.FindPropertyRelative("path").stringValue = BoneUtils.GetBonePath(root,bone);
 					element.FindPropertyRelative("localPosition").vector3Value = bone.transform.localPosition;
 					element.FindPropertyRelative("localRotation").quaternionValue = bone.transform.localRotation;
@@ -38,20 +38,20 @@ namespace Anima2D
 
 		public static void LoadPose(Pose pose, Transform root)
 		{
-			SerializedObject poseSO = new SerializedObject(pose);
-			SerializedProperty entriesProp = poseSO.FindProperty("m_PoseEntries");
+			var poseSO = new SerializedObject(pose);
+			var entriesProp = poseSO.FindProperty("m_PoseEntries");
 
-			List<Ik2D> iks = new List<Ik2D>();
+			var iks = new List<Ik2D>();
 
-			for (int i = 0; i < entriesProp.arraySize; i++)
+			for (var i = 0; i < entriesProp.arraySize; i++)
 			{
-				SerializedProperty element = entriesProp.GetArrayElementAtIndex(i);
+				var element = entriesProp.GetArrayElementAtIndex(i);
 
-				Transform boneTransform = root.Find(element.FindPropertyRelative("path").stringValue);
+				var boneTransform = root.Find(element.FindPropertyRelative("path").stringValue);
 
 				if(boneTransform)
 				{
-					Bone2D boneComponent = boneTransform.GetComponent<Bone2D>();
+					var boneComponent = boneTransform.GetComponent<Bone2D>();
 
 					if(boneComponent && boneComponent.attachedIK && !iks.Contains(boneComponent.attachedIK))
 					{
@@ -67,9 +67,9 @@ namespace Anima2D
 				}
 			}
 
-			for (int i = 0; i < iks.Count; i++)
+			for (var i = 0; i < iks.Count; i++)
 			{
-				Ik2D ik = iks[i];
+				var ik = iks[i];
 
 				if(ik && ik.target)
 				{

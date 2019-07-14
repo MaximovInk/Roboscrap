@@ -18,7 +18,7 @@ namespace Anima2D
 		{
 			AnimationUtility.onCurveWasModified -= OnCurveWasModified;
 
-			bool flag = Event.current == null || 
+			var flag = Event.current == null || 
 						(Event.current != null && Event.current.type != EventType.ExecuteCommand);
 
 			var rootGameOject = AnimationWindowExtra.rootGameObject;
@@ -29,18 +29,18 @@ namespace Anima2D
 			   binding.type == typeof(Transform) &&
 			   binding.propertyName.Contains("localEulerAnglesRaw")) 
 			{
-				Transform transform = AnimationWindowExtra.rootGameObject.transform.Find(binding.path);
-				Vector3 eulerAngles = BoneUtils.GetLocalEulerAngles(transform);
+				var transform = AnimationWindowExtra.rootGameObject.transform.Find(binding.path);
+				var eulerAngles = BoneUtils.GetLocalEulerAngles(transform);
 
-				int frame = AnimationWindowExtra.frame;
+				var frame = AnimationWindowExtra.frame;
 
-				AnimationCurve curve = AnimationUtility.GetEditorCurve(clip,binding);
+				var curve = AnimationUtility.GetEditorCurve(clip,binding);
 
-				for (int i = 0; i < curve.length; i++)
+				for (var i = 0; i < curve.length; i++)
 				{
-					Keyframe keyframe = curve[i];
+					var keyframe = curve[i];
 
-					int keyframeFrame = (int)AnimationWindowExtra.TimeToFrame(keyframe.time);
+					var keyframeFrame = (int)AnimationWindowExtra.TimeToFrame(keyframe.time);
 
 					if(frame == keyframeFrame)
 					{

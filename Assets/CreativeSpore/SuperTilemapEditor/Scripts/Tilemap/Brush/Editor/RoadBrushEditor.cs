@@ -12,7 +12,7 @@ namespace CreativeSpore.SuperTilemapEditor
         [MenuItem("Assets/Create/SuperTilemapEditor/Brush/RoadBrush", priority = 50)]
         public static RoadBrush CreateAsset()
         {
-            RoadBrush brush = EditorUtils.CreateAssetInSelectedDirectory<RoadBrush>();
+            var brush = EditorUtils.CreateAssetInSelectedDirectory<RoadBrush>();
             return brush;
         }
 

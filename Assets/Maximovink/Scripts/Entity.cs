@@ -21,7 +21,7 @@ namespace MaximovInk
 
         private void Awake()
         {
-            SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+            var spriteRenderer = GetComponent<SpriteRenderer>();
             if (spriteRenderer != null && spriteRenderer.sprite != null)
             {
                 m_spriteLowerBound = spriteRenderer.bounds.size.y * 0.5f;
@@ -66,7 +66,7 @@ Sort();
 
         void OnDrawGizmos()
         {
-            Vector3 floorHeightPos = new Vector3
+            var floorHeightPos = new Vector3
             (
                 transform.position.x,
                 transform.position.y - m_spriteLowerBound + floorHeight,

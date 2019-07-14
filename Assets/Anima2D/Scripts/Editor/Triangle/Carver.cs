@@ -34,10 +34,10 @@ namespace TriangleNet
         /// </summary>
         private void InfectHull()
         {
-            Otri hulltri = default(Otri);
-            Otri nexttri = default(Otri);
-            Otri starttri = default(Otri);
-            Osub hullsubseg = default(Osub);
+            var hulltri = default(Otri);
+            var nexttri = default(Otri);
+            var starttri = default(Otri);
+            var hullsubseg = default(Osub);
             Vertex horg, hdest;
 
             // Find a triangle handle on the hull.
@@ -111,9 +111,9 @@ namespace TriangleNet
         /// </remarks>
         void Plague()
         {
-            Otri testtri = default(Otri);
-            Otri neighbor = default(Otri);
-            Osub neighborsubseg = default(Osub);
+            var testtri = default(Otri);
+            var neighbor = default(Otri);
+            var neighborsubseg = default(Osub);
             Vertex testvertex;
             Vertex norg, ndest;
 
@@ -121,7 +121,7 @@ namespace TriangleNet
 
             // Loop through all the infected triangles, spreading the virus to
             // their neighbors, then to their neighbors' neighbors.
-            for (int i = 0; i < viri.Count; i++)
+            for (var i = 0; i < viri.Count; i++)
             {
                 // WARNING: Don't use foreach, mesh.viri list may get modified.
 
@@ -299,7 +299,7 @@ namespace TriangleNet
         /// </summary>
         public void CarveHoles()
         {
-            Otri searchtri = default(Otri);
+            var searchtri = default(Otri);
             Vertex searchorg, searchdest;
             LocateResult intersect;
 
@@ -351,7 +351,7 @@ namespace TriangleNet
             // which might not be convex; they can only be used with a freshly triangulated PSLG.)
             if (mesh.regions.Count > 0)
             {
-                int i = 0;
+                var i = 0;
 
                 regionTris = new Triangle[mesh.regions.Count];
 
@@ -399,7 +399,7 @@ namespace TriangleNet
             {
                 var iterator = new RegionIterator(mesh);
 
-                for (int i = 0; i < regionTris.Length; i++)
+                for (var i = 0; i < regionTris.Length; i++)
                 {
                     if (regionTris[i] != Mesh.dummytri)
                     {

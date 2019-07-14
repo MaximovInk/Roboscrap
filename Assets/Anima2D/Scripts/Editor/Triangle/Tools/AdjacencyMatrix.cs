@@ -116,7 +116,7 @@ namespace TriangleNet.Tools
             int tri_id;
             int neigh_id;
 
-            int[] adj_rows = new int[node_num + 1];
+            var adj_rows = new int[node_num + 1];
 
             // Set every node to be adjacent to itself.
             for (node = 0; node < node_num; node++)
@@ -193,7 +193,7 @@ namespace TriangleNet.Tools
             int[] list;
 
             // Copy of the adjacency rows input.
-            int[] rowsCopy = new int[node_num];
+            var rowsCopy = new int[node_num];
             Array.Copy(rows, rowsCopy, node_num);
 
             int i, n = rows[node_num] - 1;

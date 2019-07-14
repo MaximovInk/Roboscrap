@@ -365,8 +365,8 @@ namespace TriangleNet.Algorithm
             double ccwabc;
             double xac, yac, xbc, ybc;
             double aclen2, bclen2;
-            Point searchpoint = new Point(); // TODO: mesh.nextras
-            Otri dummytri = default(Otri);
+            var searchpoint = new Point(); // TODO: mesh.nextras
+            var dummytri = default(Otri);
 
             ccwabc = Primitives.CounterClockwise(pa, pb, pc);
             xac = pa.x - pc.x;
@@ -435,7 +435,7 @@ namespace TriangleNet.Algorithm
         {
             SweepEvent deadevent;
             SweepEventVertex eventvertex;
-            int eventnum = -1;
+            var eventnum = -1;
 
             eventvertex = checktri.Org() as SweepEventVertex;
             if (eventvertex != null)
@@ -474,13 +474,13 @@ namespace TriangleNet.Algorithm
         /// <returns>Number of vertices on the hull.</returns>
         int RemoveGhosts(ref Otri startghost)
         {
-            Otri searchedge = default(Otri);
-            Otri dissolveedge = default(Otri);
-            Otri deadtriangle = default(Otri);
+            var searchedge = default(Otri);
+            var dissolveedge = default(Otri);
+            var deadtriangle = default(Otri);
             Vertex markorg;
             int hullsize;
 
-            bool noPoly = !mesh.behavior.Poly;
+            var noPoly = !mesh.behavior.Poly;
 
             // Find an edge on the convex hull to start point location from.
             startghost.Lprev(ref searchedge);
@@ -535,14 +535,14 @@ namespace TriangleNet.Algorithm
             SweepEvent nextevent;
             SweepEvent newevent;
             SplayNode splayroot;
-            Otri bottommost = default(Otri);
-            Otri searchtri = default(Otri);
+            var bottommost = default(Otri);
+            var searchtri = default(Otri);
             Otri fliptri;
-            Otri lefttri = default(Otri);
-            Otri righttri = default(Otri);
-            Otri farlefttri = default(Otri);
-            Otri farrighttri = default(Otri);
-            Otri inserttri = default(Otri);
+            var lefttri = default(Otri);
+            var righttri = default(Otri);
+            var farlefttri = default(Otri);
+            var farrighttri = default(Otri);
+            var inserttri = default(Otri);
             Vertex firstvertex, secondvertex;
             Vertex nextvertex, lastvertex;
             Vertex connectvertex;

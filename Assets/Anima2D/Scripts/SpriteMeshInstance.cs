@@ -94,7 +94,7 @@ namespace Anima2D
 				{
 					m_CachedBones = new List<Bone2D>(m_BoneTransforms.Length);
 
-					for (int i = 0; i < m_BoneTransforms.Length; i++)
+					for (var i = 0; i < m_BoneTransforms.Length; i++)
 					{
 						Bone2D l_Bone = null;
 
@@ -107,7 +107,7 @@ namespace Anima2D
 					}
 				}
 
-				for (int i = 0; i < m_CachedBones.Count; i++)
+				for (var i = 0; i < m_CachedBones.Count; i++)
 				{
 					if(m_CachedBones[i] && m_BoneTransforms[i] != m_CachedBones[i].transform)
 					{
@@ -127,9 +127,9 @@ namespace Anima2D
 				m_CachedBones = new List<Bone2D>(value);
 				m_BoneTransforms = new Transform[m_CachedBones.Count];
 
-				for (int i = 0; i < m_CachedBones.Count; i++)
+				for (var i = 0; i < m_CachedBones.Count; i++)
 				{
-					Bone2D bone = m_CachedBones[i];
+					var bone = m_CachedBones[i];
 					if(bone)
 					{
 						m_BoneTransforms[i] = bone.transform;
@@ -301,7 +301,7 @@ namespace Anima2D
 				m_CurrentMesh.bounds = m_InitialMesh.bounds;
 				m_CurrentMesh.colors = m_InitialMesh.colors;
 
-				for(int i = 0; i < m_InitialMesh.subMeshCount; ++i)
+				for(var i = 0; i < m_InitialMesh.subMeshCount; ++i)
 				{
 					m_CurrentMesh.SetTriangles(m_InitialMesh.GetTriangles(i),i);
 				}
@@ -311,15 +311,15 @@ namespace Anima2D
 
 				m_CurrentMesh.ClearBlendShapes();
 
-				for(int i = 0; i < m_InitialMesh.blendShapeCount; ++i)
+				for(var i = 0; i < m_InitialMesh.blendShapeCount; ++i)
 				{
-					string blendshapeName = m_InitialMesh.GetBlendShapeName(i);
+					var blendshapeName = m_InitialMesh.GetBlendShapeName(i);
 
-					for(int j = 0; j < m_InitialMesh.GetBlendShapeFrameCount(i); ++j)
+					for(var j = 0; j < m_InitialMesh.GetBlendShapeFrameCount(i); ++j)
 					{
-						float weight = m_InitialMesh.GetBlendShapeFrameWeight(i,j);
+						var weight = m_InitialMesh.GetBlendShapeFrameWeight(i,j);
 
-						Vector3[] vertices = new Vector3[m_InitialMesh.vertexCount];
+						var vertices = new Vector3[m_InitialMesh.vertexCount];
 
 						m_InitialMesh.GetBlendShapeFrameVertices(i,j,vertices,null,null);
 
@@ -357,7 +357,7 @@ namespace Anima2D
 
 		void SetSpriteUVs(Mesh mesh, Sprite sprite)
 		{
-			Vector2[] spriteUVs = sprite.uv;
+			var spriteUVs = sprite.uv;
 
 			if(mesh.vertexCount == spriteUVs.Length)
 			{
@@ -393,7 +393,7 @@ namespace Anima2D
 #if UNITY_EDITOR
 			if(!Application.isPlaying && spriteMesh)
 			{
-				ulong l_AssetTimeStamp = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(spriteMesh)).assetTimeStamp;
+				var l_AssetTimeStamp = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(spriteMesh)).assetTimeStamp;
 
 				if(m_AssetTimeStamp != l_AssetTimeStamp)
 				{

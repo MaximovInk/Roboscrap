@@ -33,12 +33,12 @@ namespace CreativeSpore.SuperTilemapEditor
         public void RefreshTileObjects()
         {
             // Destroy tile objects where tile prefab is now null
-            for (int i = 0; i < m_tileObjList.Count; ++i)
+            for (var i = 0; i < m_tileObjList.Count; ++i)
             {
-                TileObjData tileObjData = m_tileObjList[i];
-                uint tileData = m_tileDataList[tileObjData.tilePos];
-                int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
-                Tile tile = Tileset.GetTile( tileId );
+                var tileObjData = m_tileObjList[i];
+                var tileData = m_tileDataList[tileObjData.tilePos];
+                var tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
+                var tile = Tileset.GetTile( tileId );
                 if (tile == null || tile.prefabData.prefab == null)
                 {
                     DestroyTileObject(tileObjData.tilePos);
@@ -46,11 +46,11 @@ namespace CreativeSpore.SuperTilemapEditor
             }
 
             // Recreate or update all tile objects
-            for (int tileIdx = 0; tileIdx < m_tileDataList.Count; ++tileIdx)
+            for (var tileIdx = 0; tileIdx < m_tileDataList.Count; ++tileIdx)
             {
-                uint tileData = m_tileDataList[tileIdx];
-                int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
-                Tile tile = Tileset.GetTile(tileId);
+                var tileData = m_tileDataList[tileIdx];
+                var tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
+                var tile = Tileset.GetTile(tileId);
                 if (tile != null && tile.prefabData.prefab != null)
                 {
                     CreateTileObject(tileIdx, tile.prefabData);
@@ -60,9 +60,9 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private TileObjData FindTileObjDataByTileIdx(int tileIdx)
         {
-            for(int i = 0; i < m_tileObjList.Count; ++i)
+            for(var i = 0; i < m_tileObjList.Count; ++i)
             {
-                TileObjData data = m_tileObjList[i];
+                var data = m_tileObjList[i];
                 if( data.tilePos == tileIdx ) return data;
             }
             return null;
@@ -72,7 +72,7 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (locGridX >= 0 && locGridX < m_width && locGridY >= 0 && locGridY < m_height)
             {
-                int tileIdx = locGridY * m_width + locGridX;
+                var tileIdx = locGridY * m_width + locGridX;
                 return CreateTileObject(tileIdx, tilePrefabData);
             }
             else
@@ -85,10 +85,10 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (tilePrefabData.prefab != null)
             {
-                TileObjData tileObjData = FindTileObjDataByTileIdx(tileIdx);
+                var tileObjData = FindTileObjDataByTileIdx(tileIdx);
                 GameObject tileObj = null;
-                int gx = tileIdx % m_width;
-                int gy = tileIdx / m_width;
+                var gx = tileIdx % m_width;
+                var gy = tileIdx / m_width;
                 if (tileObjData == null || tileObjData.tilePrefabData != tilePrefabData || tileObjData.obj == null)
                 {                    
 #if UNITY_EDITOR
@@ -124,7 +124,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 {
 #if UNITY_EDITOR && !UNITY_2018_3_OR_NEWER
                     //+++ Break tilemap prefab and restore tile prefab link
-                    GameObject parentPrefab = UnityEditor.PrefabUtility.FindRootGameObjectWithSameParentPrefab(tileObjData.obj);
+                    var parentPrefab = UnityEditor.PrefabUtility.FindRootGameObjectWithSameParentPrefab(tileObjData.obj);
                     if (parentPrefab != tileObjData.obj)
                     {
                         DestroyImmediate(tileObjData.obj);
@@ -148,17 +148,17 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private void _SetTileObjTransform(GameObject tileObj, int gx, int gy, TilePrefabData tilePrefabData, uint tileData)
         {
-            Vector3 chunkLocPos = new Vector3((gx + .5f) * CellSize.x, (gy + .5f) * CellSize.y, tilePrefabData.prefab.transform.position.z);
+            var chunkLocPos = new Vector3((gx + .5f) * CellSize.x, (gy + .5f) * CellSize.y, tilePrefabData.prefab.transform.position.z);
             if (tilePrefabData.offsetMode == TilePrefabData.eOffsetMode.Pixels)
             {
-                float ppu = Tileset.TilePxSize.x / CellSize.x;
+                var ppu = Tileset.TilePxSize.x / CellSize.x;
                 chunkLocPos += tilePrefabData.offset / ppu;
             }
             else //if (tilePrefabData.offsetMode == TilePrefabData.eOffsetMode.Units)
             {
                 chunkLocPos += tilePrefabData.offset;
             }
-            Vector3 worldPos = transform.TransformPoint(chunkLocPos);
+            var worldPos = transform.TransformPoint(chunkLocPos);
 
             tileObj.transform.position = worldPos;
             tileObj.transform.rotation = tilePrefabData.prefab.transform.rotation;
@@ -166,7 +166,7 @@ namespace CreativeSpore.SuperTilemapEditor
             tileObj.transform.localRotation = tilePrefabData.prefab.transform.localRotation * Quaternion.Euler(tilePrefabData.rotation);
             tileObj.transform.localScale = tilePrefabData.prefab.transform.localScale;
             //+++ Apply tile flags
-            Vector3 localScale = tileObj.transform.localScale;
+            var localScale = tileObj.transform.localScale;
             if ((tileData & Tileset.k_TileFlag_Rot90) != 0)
                 tileObj.transform.localRotation *= Quaternion.AngleAxis(-90, transform.forward);
             //For Rot180 and Rot270 avoid changing the scale
@@ -187,14 +187,14 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (locGridX >= 0 && locGridX < m_width && locGridY >= 0 && locGridY < m_height)
             {
-                int tileIdx = locGridY * m_width + locGridX;
+                var tileIdx = locGridY * m_width + locGridX;
                 DestroyTileObject(tileIdx);
             }
         }
 
         private void DestroyTileObject(int tileIdx)
         {
-            TileObjData tileObjData = FindTileObjDataByTileIdx(tileIdx);
+            var tileObjData = FindTileObjDataByTileIdx(tileIdx);
             if (tileObjData != null)
             {
                 m_tileObjToBeRemoved.Add(tileObjData.obj);

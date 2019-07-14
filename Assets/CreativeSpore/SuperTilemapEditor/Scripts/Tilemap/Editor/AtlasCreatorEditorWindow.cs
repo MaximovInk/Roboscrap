@@ -32,7 +32,7 @@ namespace CreativeSpore.SuperTilemapEditor
         [MenuItem("SuperTilemapEditor/Window/Atlas Creator Window")]
         public static void Display()
         {
-            AtlasCreatorEditorWindow wnd = (AtlasCreatorEditorWindow)EditorWindow.GetWindow(typeof(AtlasCreatorEditorWindow), false, "Atlas Creator", true);
+            var wnd = (AtlasCreatorEditorWindow)EditorWindow.GetWindow(typeof(AtlasCreatorEditorWindow), false, "Atlas Creator", true);
             wnd.minSize = new Vector2(337f, 314f);
         }
 
@@ -89,22 +89,22 @@ namespace CreativeSpore.SuperTilemapEditor
                     {
                         if (!m_atlasTexture)
                             m_atlasTexture = new Texture2D((int)m_maxTextureSize, (int)m_maxTextureSize, TextureFormat.ARGB32, false);
-                        foreach (Texture2D tileTexture in m_tileTextures)
+                        foreach (var tileTexture in m_tileTextures)
                             TilemapUtilsEditor.MakeTextureReadable(tileTexture);
                         TilemapUtilsEditor.MakeTextureReadable(m_atlasTexture);
-                        Rect[] tileRects = m_atlasTexture.PackTextures(m_tileTextures, m_padding, (int)m_maxTextureSize, false);
+                        var tileRects = m_atlasTexture.PackTextures(m_tileTextures, m_padding, (int)m_maxTextureSize, false);
                         //EncodeToPNG doesn't work if texture is compressed and this happens if any tile texture is compressed
                         if (m_atlasTexture.format != TextureFormat.ARGB32)
                         {
-                            Texture2D tempAtlas = new Texture2D(m_atlasTexture.width, m_atlasTexture.height, TextureFormat.ARGB32, false);
+                            var tempAtlas = new Texture2D(m_atlasTexture.width, m_atlasTexture.height, TextureFormat.ARGB32, false);
                             tempAtlas.SetPixels32(m_atlasTexture.GetPixels32());
                             tempAtlas.Apply();
                             m_atlasTexture = tempAtlas;
                         }
-                        string atlasAssetPath = AssetDatabase.GetAssetPath(m_atlasTexture);
+                        var atlasAssetPath = AssetDatabase.GetAssetPath(m_atlasTexture);
                         if(string.IsNullOrEmpty(atlasAssetPath))
                         {
-                            string name = m_tileset ? m_tileset.name : "New ";
+                            var name = m_tileset ? m_tileset.name : "New ";
                             atlasAssetPath = EditorUtility.SaveFilePanelInProject("Save atlas texture", name + "Atlas", "png", "Save the atlas texture");
                         }
                         if (!string.IsNullOrEmpty(atlasAssetPath))
@@ -121,7 +121,7 @@ namespace CreativeSpore.SuperTilemapEditor
                                 int idx;
                                 for (idx = 0; idx < tileRects.Length; ++idx)
                                 {
-                                    Rect uv = tileRects[idx];
+                                    var uv = tileRects[idx];
                                     if (idx < m_tileset.Tiles.Count)
                                         m_tileset.Tiles[idx].uv = uv;
                                     else

@@ -54,7 +54,7 @@ namespace TriangleNet
         /// <param name="mesh">Current mesh.</param>
         public void Update(Mesh mesh, bool forceUpdate)
         {
-            int count = mesh.triangles.Count;
+            var count = mesh.triangles.Count;
 
             // TODO: Is checking the triangle count a good way to monitor mesh changes?
             if (triangleCount != count || forceUpdate)
@@ -82,12 +82,12 @@ namespace TriangleNet
         public int[] GetSamples(Mesh mesh)
         {
             // TODO: Using currKeys to check key availability?
-            List<int> randSamples = new List<int>(samples);
+            var randSamples = new List<int>(samples);
 
-            int range = triangleCount / samples;
+            var range = triangleCount / samples;
             int key;
 
-            for (int i = 0; i < samples; i++)
+            for (var i = 0; i < samples; i++)
             {
                 // Yeah, rand should be equally distributed, but just to make
                 // sure, use a range variable...

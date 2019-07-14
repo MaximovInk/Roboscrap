@@ -205,11 +205,11 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (textArr[idx] == null)
             {
-                Texture2D iconTexture = new Texture2D(8, 8);
+                var iconTexture = new Texture2D(8, 8);
                 iconTexture.hideFlags = HideFlags.DontSave;
                 iconTexture.wrapMode = TextureWrapMode.Clamp;
-                Color[] colors = new Color[dataArr[idx].Length];
-                for (int i = 0; i < colors.Length; ++i)
+                var colors = new Color[dataArr[idx].Length];
+                for (var i = 0; i < colors.Length; ++i)
                 {
                     colors[(8 - 1 - (i / 8)) * 8 + i % 8] = new Color(1f, 1f, 1f, dataArr[idx][i]);
                 }

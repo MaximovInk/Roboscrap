@@ -27,7 +27,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public override uint Refresh(STETilemap tilemap, int gridX, int gridY, uint tileData)
         {
-            int brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
+            var brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
             //NOTE: Now, taking TileIds[0] by default, it means the tile collider will be taken from TileIds[0]
             return (tileData & Tileset.k_TileDataMask_Flags) | ((uint)(brushId << 16) | (TileIds[0] & Tileset.k_TileDataMask_TileId));
         }
@@ -39,19 +39,19 @@ namespace CreativeSpore.SuperTilemapEditor
                 return null;
             }
 
-            int brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
-            bool autotiling_N = AutotileWith(tilemap, brushId, gridX, gridY + 1);
-            bool autotiling_E = AutotileWith(tilemap, brushId, gridX + 1, gridY);
-            bool autotiling_S = AutotileWith(tilemap, brushId, gridX, gridY - 1);
-            bool autotiling_W = AutotileWith(tilemap, brushId, gridX - 1, gridY);
+            var brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
+            var autotiling_N = AutotileWith(tilemap, brushId, gridX, gridY + 1);
+            var autotiling_E = AutotileWith(tilemap, brushId, gridX + 1, gridY);
+            var autotiling_S = AutotileWith(tilemap, brushId, gridX, gridY - 1);
+            var autotiling_W = AutotileWith(tilemap, brushId, gridX - 1, gridY);
 
             // diagonals
-            bool autotiling_NE = AutotileWith(tilemap, brushId, gridX + 1, gridY + 1);
-            bool autotiling_SE = AutotileWith(tilemap, brushId, gridX + 1, gridY - 1);
-            bool autotiling_SW = AutotileWith(tilemap, brushId, gridX - 1, gridY - 1);
-            bool autotiling_NW = AutotileWith(tilemap, brushId, gridX - 1, gridY + 1);
+            var autotiling_NE = AutotileWith(tilemap, brushId, gridX + 1, gridY + 1);
+            var autotiling_SE = AutotileWith(tilemap, brushId, gridX + 1, gridY - 1);
+            var autotiling_SW = AutotileWith(tilemap, brushId, gridX - 1, gridY - 1);
+            var autotiling_NW = AutotileWith(tilemap, brushId, gridX - 1, gridY + 1);
 
-            uint[] subTileData = new uint[4];
+            var subTileData = new uint[4];
             subTileData[0] = (autotiling_SW && autotiling_S && autotiling_W) ? TileIds[3] : TileIds[0];
             subTileData[1] = (autotiling_SE && autotiling_S && autotiling_E) ? TileIds[2] : TileIds[1];
             subTileData[2] = (autotiling_NW && autotiling_N && autotiling_W) ? TileIds[1] : TileIds[2];

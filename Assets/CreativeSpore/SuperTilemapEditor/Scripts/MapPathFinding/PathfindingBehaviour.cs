@@ -65,7 +65,7 @@ namespace CreativeSpore.SuperTilemapEditor
             if (m_curNode != null)
             {
                 Vector2 position = transform.position;
-                Vector2 dest = m_curNode.Next == null ? m_targetPosition : (Vector2)m_curNode.Value.Position;
+                var dest = m_curNode.Next == null ? m_targetPosition : (Vector2)m_curNode.Value.Position;
 
                 Vector3 dir = dest - position;
                 if (dir.magnitude <= ReachNodeDistance)
@@ -84,8 +84,8 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 if (m_pathNodes != null && m_pathNodes.First != null)
                 {
-                    Color color = Color.red;
-                    LinkedListNode<IPathNode> node = m_pathNodes.First;
+                    var color = Color.red;
+                    var node = m_pathNodes.First;
                     while (node.Next != null)
                     {
                         Debug.DrawLine((node.Value as MapTileNode).Position, (node.Next.Value as MapTileNode).Position, color);
@@ -106,11 +106,11 @@ namespace CreativeSpore.SuperTilemapEditor
         IEnumerator UpdatePathAsync(Vector2 startPos, Vector2 endPos, int stepIterations)
         {
             m_isComputingPath = true;
-            IEnumerator coroutine = PathFinding.GetRouteFromToAsync(startPos, endPos);
-            bool isFinished = false;
+            var coroutine = PathFinding.GetRouteFromToAsync(startPos, endPos);
+            var isFinished = false;
             do
             {
-                for (int i = 0; i < stepIterations && !isFinished; ++i)
+                for (var i = 0; i < stepIterations && !isFinished; ++i)
                 {
                     if(coroutine.Current is IEnumerator)
                     {
@@ -145,10 +145,10 @@ namespace CreativeSpore.SuperTilemapEditor
                 Vector2 vPos = transform.position;
                 while (m_curNode != null && m_curNode.Next != null)
                 {
-                    MapTileNode n0 = m_curNode.Value as MapTileNode;
-                    MapTileNode n1 = m_curNode.Next.Value as MapTileNode;
-                    float distSqr = (vPos - (Vector2)n0.Position).sqrMagnitude;
-                    float distSqr2 = (vPos - (Vector2)n1.Position).sqrMagnitude;
+                    var n0 = m_curNode.Value as MapTileNode;
+                    var n1 = m_curNode.Next.Value as MapTileNode;
+                    var distSqr = (vPos - (Vector2)n0.Position).sqrMagnitude;
+                    var distSqr2 = (vPos - (Vector2)n1.Position).sqrMagnitude;
                     if (distSqr2 < distSqr)
                         m_curNode = m_curNode.Next;
                     else

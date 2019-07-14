@@ -32,7 +32,7 @@ namespace Anima2D
 
 			if(DragAndDrop.objectReferences.Length > 0)
 			{
-				Object obj = DragAndDrop.objectReferences[0];
+				var obj = DragAndDrop.objectReferences[0];
 
 				l_spriteMesh = obj as SpriteMesh;
 			}
@@ -52,11 +52,11 @@ namespace Anima2D
 
 		static Vector3 GetMouseWorldPosition()
 		{
-			Ray mouseRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
-			Plane rootPlane = new Plane(Vector3.forward,Vector3.zero);
+			var mouseRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+			var rootPlane = new Plane(Vector3.forward,Vector3.zero);
 			
-			float distance = 0f;
-			Vector3 mouseWorldPos = Vector3.zero;
+			var distance = 0f;
+			var mouseWorldPos = Vector3.zero;
 			
 			if(rootPlane.Raycast(mouseRay, out distance))
 			{
@@ -115,21 +115,21 @@ namespace Anima2D
 
 		static SpriteMeshInstance GetClosestBindeableIntersectingSpriteMeshInstance()
 		{
-			float minDistance = float.MaxValue;
+			var minDistance = float.MaxValue;
 			SpriteMeshInstance closestSpriteMeshInstance = null;
 
-			foreach(SpriteMeshInstance spriteMeshInstance in s_SpriteMeshInstances)
+			foreach(var spriteMeshInstance in s_SpriteMeshInstances)
 			{
 				if(spriteMeshInstance && spriteMeshInstance != instance && spriteMeshInstance.spriteMesh && spriteMeshInstance.cachedRenderer)
 				{
-					Ray guiRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+					var guiRay = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
 
 					if(spriteMeshInstance.cachedRenderer.bounds.IntersectRay(guiRay))
 					{
 						if(Bindeable(instance,spriteMeshInstance))
 						{
-							Vector2 guiCenter = HandleUtility.WorldToGUIPoint(spriteMeshInstance.cachedRenderer.bounds.center);
-							float distance = (Event.current.mousePosition - guiCenter).sqrMagnitude;
+							var guiCenter = HandleUtility.WorldToGUIPoint(spriteMeshInstance.cachedRenderer.bounds.center);
+							var distance = (Event.current.mousePosition - guiCenter).sqrMagnitude;
 							if(distance < minDistance)
 							{
 								closestSpriteMeshInstance = spriteMeshInstance;
@@ -157,9 +157,9 @@ namespace Anima2D
 		{
 			if(bindInfo && spriteMeshData)
 			{
-				for(int i = 0; i < spriteMeshData.bindPoses.Length; ++i)
+				for(var i = 0; i < spriteMeshData.bindPoses.Length; ++i)
 				{
-					BindInfo l_bindInfo = spriteMeshData.bindPoses[i];
+					var l_bindInfo = spriteMeshData.bindPoses[i];
 					
 					if(bindInfo.name == l_bindInfo.name /*&& Mathf.Approximately(bindInfo.boneLength,l_bindInfo.boneLength)*/)
 					{
@@ -173,7 +173,7 @@ namespace Anima2D
 
 		static bool Bindeable(SpriteMeshInstance targetSpriteMeshInstance, SpriteMeshInstance destinationSpriteMeshInstance)
 		{
-			bool bindeable = false;
+			var bindeable = false;
 
 			if(targetSpriteMeshInstance &&
 			   destinationSpriteMeshInstance &&
@@ -182,18 +182,18 @@ namespace Anima2D
 			   targetSpriteMeshInstance.spriteMesh != destinationSpriteMeshInstance.spriteMesh &&
 			   destinationSpriteMeshInstance.cachedSkinnedRenderer)
 			{
-				SpriteMeshData targetData = SpriteMeshUtils.LoadSpriteMeshData(targetSpriteMeshInstance.spriteMesh);
-				SpriteMeshData destinationData = SpriteMeshUtils.LoadSpriteMeshData(destinationSpriteMeshInstance.spriteMesh);
+				var targetData = SpriteMeshUtils.LoadSpriteMeshData(targetSpriteMeshInstance.spriteMesh);
+				var destinationData = SpriteMeshUtils.LoadSpriteMeshData(destinationSpriteMeshInstance.spriteMesh);
 
 				bindeable = true;
 
 				if(destinationData.bindPoses.Length >= targetData.bindPoses.Length)
 				{
-					for(int i = 0; i < targetData.bindPoses.Length; ++i)
+					for(var i = 0; i < targetData.bindPoses.Length; ++i)
 					{
 						if(bindeable)
 						{
-							BindInfo bindInfo = targetData.bindPoses[i];
+							var bindInfo = targetData.bindPoses[i];
 
 							if(FindBindInfo(bindInfo,destinationData) < 0)
 							{
@@ -233,7 +233,7 @@ namespace Anima2D
 				{
 					instance.transform.position = instancePosition;
 
-					SpriteMeshInstance l_currentDestination = GetClosestBindeableIntersectingSpriteMeshInstance();
+					var l_currentDestination = GetClosestBindeableIntersectingSpriteMeshInstance();
 
 					if(currentDestination != l_currentDestination)
 					{
@@ -241,15 +241,15 @@ namespace Anima2D
 
 						if(currentDestination)
 						{
-							List<Bone2D> destinationBones = currentDestination.bones;
-							List<Bone2D> newBones = new List<Bone2D>();
+							var destinationBones = currentDestination.bones;
+							var newBones = new List<Bone2D>();
 
-							SpriteMeshData data = SpriteMeshUtils.LoadSpriteMeshData(instance.spriteMesh);
+							var data = SpriteMeshUtils.LoadSpriteMeshData(instance.spriteMesh);
 
-							for(int i = 0; i < data.bindPoses.Length; ++i)
+							for(var i = 0; i < data.bindPoses.Length; ++i)
 							{
-								BindInfo bindInfo = data.bindPoses[i];
-								int index = FindBindInfo(bindInfo,currentDestination);
+								var bindInfo = data.bindPoses[i];
+								var index = FindBindInfo(bindInfo,currentDestination);
 								if(index >= 0 && index < destinationBones.Count)
 								{
 									newBones.Add(destinationBones[index]);
@@ -260,14 +260,14 @@ namespace Anima2D
 							instance.bones = newBones;
 							SpriteMeshUtils.UpdateRenderer(instance,false);
 
-							foreach(Bone2D bone in s_InstanceBones)
+							foreach(var bone in s_InstanceBones)
 							{
 								bone.hideFlags = HideFlags.HideAndDontSave;
 								bone.gameObject.SetActive(false);
 							}
 
 						}else{
-							foreach(Bone2D bone in s_InstanceBones)
+							foreach(var bone in s_InstanceBones)
 							{
 								bone.hideFlags = HideFlags.None;
 								bone.gameObject.SetActive(true);
@@ -305,7 +305,7 @@ namespace Anima2D
 				{
 					if(currentDestination)
 					{
-						foreach(Bone2D bone in s_InstanceBones)
+						foreach(var bone in s_InstanceBones)
 						{
 							if(bone)
 							{

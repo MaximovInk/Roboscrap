@@ -202,10 +202,10 @@ namespace TriangleNet.Tools
                 100.0, 300.0, 1000.0, 10000.0, 100000.0, 0.0 };
 
 
-            Otri tri = default(Otri);
-            Vertex[] p = new Vertex[3];
+            var tri = default(Otri);
+            var p = new Vertex[3];
             double[] dx = new double[3], dy = new double[3];
-            double[] edgelength = new double[3];
+            var edgelength = new double[3];
             double triarea;
             double trilongest2;
             double triminaltitude2;
@@ -275,7 +275,7 @@ namespace TriangleNet.Tools
             intBoundaryEdges = mesh.subsegs.Count - (int)mesh.hullsize;
             constrainedEdges = mesh.subsegs.Count;
 
-            Point[] p = new Point[3];
+            var p = new Point[3];
 
             int k1, k2;
             int degreeStep;
@@ -284,10 +284,10 @@ namespace TriangleNet.Tools
             //sampleDegrees = 45; // sample every 4 degrees
             sampleDegrees = 60; // sample every 3 degrees
 
-            double[] cosSquareTable = new double[sampleDegrees / 2 - 1];
-            double[] dx = new double[3];
-            double[] dy = new double[3];
-            double[] edgeLength = new double[3];
+            var cosSquareTable = new double[sampleDegrees / 2 - 1];
+            var dx = new double[3];
+            var dy = new double[3];
+            var edgeLength = new double[3];
             double dotProduct;
             double cosSquare;
             double triArea;
@@ -295,20 +295,20 @@ namespace TriangleNet.Tools
             double triMinAltitude2;
             double triAspect2;
 
-            double radconst = Math.PI / sampleDegrees;
-            double degconst = 180.0 / Math.PI;
+            var radconst = Math.PI / sampleDegrees;
+            var degconst = 180.0 / Math.PI;
 
             // New angle table
             angleTable = new int[sampleDegrees];
             minAngles = new int[sampleDegrees];
             maxAngles = new int[sampleDegrees];
 
-            for (int i = 0; i < sampleDegrees / 2 - 1; i++)
+            for (var i = 0; i < sampleDegrees / 2 - 1; i++)
             {
                 cosSquareTable[i] = Math.Cos(radconst * (i + 1));
                 cosSquareTable[i] = cosSquareTable[i] * cosSquareTable[i];
             }
-            for (int i = 0; i < sampleDegrees; i++)
+            for (var i = 0; i < sampleDegrees; i++)
             {
                 angleTable[i] = 0;
             }
@@ -323,8 +323,8 @@ namespace TriangleNet.Tools
             minAngle = 0.0;
             maxAngle = 2.0;
 
-            bool acuteBiggest = true;
-            bool acuteBiggestTri = true;
+            var acuteBiggest = true;
+            var acuteBiggestTri = true;
 
             double triMinAngle, triMaxAngle = 1;
 
@@ -339,7 +339,7 @@ namespace TriangleNet.Tools
 
                 triLongest2 = 0.0;
 
-                for (int i = 0; i < 3; i++)
+                for (var i = 0; i < 3; i++)
                 {
                     k1 = plus1Mod3[i];
                     k2 = minus1Mod3[i];
@@ -391,7 +391,7 @@ namespace TriangleNet.Tools
                     maxAspect = triAspect2;
                 }
 
-                for (int i = 0; i < 3; i++)
+                for (var i = 0; i < 3; i++)
                 {
                     k1 = plus1Mod3[i];
                     k2 = minus1Mod3[i];
@@ -400,7 +400,7 @@ namespace TriangleNet.Tools
                     cosSquare = dotProduct * dotProduct / (edgeLength[k1] * edgeLength[k2]);
                     degreeStep = sampleDegrees / 2 - 1;
 
-                    for (int j = degreeStep - 1; j >= 0; j--)
+                    for (var j = degreeStep - 1; j >= 0; j--)
                     {
                         if (cosSquare > cosSquareTable[j])
                         {
@@ -451,7 +451,7 @@ namespace TriangleNet.Tools
                 // Update min angle histogram
                 degreeStep = sampleDegrees / 2 - 1;
 
-                for (int j = degreeStep - 1; j >= 0; j--)
+                for (var j = degreeStep - 1; j >= 0; j--)
                 {
                     if (triMinAngle > cosSquareTable[j])
                     {
@@ -463,7 +463,7 @@ namespace TriangleNet.Tools
                 // Update max angle histogram
                 degreeStep = sampleDegrees / 2 - 1;
 
-                for (int j = degreeStep - 1; j >= 0; j--)
+                for (var j = degreeStep - 1; j >= 0; j--)
                 {
                     if (triMaxAngle > cosSquareTable[j])
                     {

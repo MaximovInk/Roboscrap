@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Maximovink/Scenes/Menu.unity
+    guid: 7d0e40c1159f7654b8a708cb2dc849ee
+  - enabled: 1
+    path: Assets/Maximovink/Scenes/MainScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects: {}

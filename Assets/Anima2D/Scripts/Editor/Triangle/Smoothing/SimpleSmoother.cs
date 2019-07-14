@@ -34,7 +34,7 @@ namespace TriangleNet.Smoothing
             mesh.behavior.Quality = false;
 
             // Take a few smoothing rounds.
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 Step();
 
@@ -50,7 +50,7 @@ namespace TriangleNet.Smoothing
         /// </summary>
         private void Step()
         {
-            BoundedVoronoi voronoi = new BoundedVoronoi(this.mesh, false);
+            var voronoi = new BoundedVoronoi(this.mesh, false);
 
             var cells = voronoi.Regions;
 
@@ -78,7 +78,7 @@ namespace TriangleNet.Smoothing
         /// </summary>
         private InputGeometry Rebuild()
         {
-            InputGeometry geometry = new InputGeometry(mesh.vertices.Count);
+            var geometry = new InputGeometry(mesh.vertices.Count);
 
             foreach (var vertex in mesh.vertices.Values)
             {

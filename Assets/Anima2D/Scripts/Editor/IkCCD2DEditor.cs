@@ -11,15 +11,15 @@ namespace Anima2D
 	{
 		override public void OnInspectorGUI()
 		{
-			IkCCD2D ikCCD2D = target as IkCCD2D;
+			var ikCCD2D = target as IkCCD2D;
 
 			base.OnInspectorGUI();
 
-			SerializedProperty numBonesProp = serializedObject.FindProperty("m_NumBones");
-			SerializedProperty iterationsProp = serializedObject.FindProperty("iterations");
-			SerializedProperty dampingProp = serializedObject.FindProperty("damping");
+			var numBonesProp = serializedObject.FindProperty("m_NumBones");
+			var iterationsProp = serializedObject.FindProperty("iterations");
+			var dampingProp = serializedObject.FindProperty("damping");
 
-			Bone2D targetBone = ikCCD2D.target;
+			var targetBone = ikCCD2D.target;
 
 			serializedObject.Update();
 
@@ -27,7 +27,7 @@ namespace Anima2D
 
 			EditorGUI.BeginChangeCheck();
 
-			int chainLength = 0;
+			var chainLength = 0;
 
 			if(targetBone)
 			{

@@ -66,22 +66,22 @@ namespace CreativeSpore.SuperTilemapEditor
         public bool SetRenderTile(STETilemap tilemap, uint tileData)
         {
             m_parentTilemap = tilemap;
-            Tile tile = tilemap.Tileset.GetTile(Tileset.GetTileIdFromTileData(tileData));
+            var tile = tilemap.Tileset.GetTile(Tileset.GetTileIdFromTileData(tileData));
             if (tile != null)
             {
                 m_meshRenderer.material = tilemap.Material;
                 m_meshRenderer.sortingLayerID = tilemap.SortingLayerID;
                 m_meshRenderer.sortingOrder = tilemap.OrderInLayer;
-                Vector2 cellSizeDiv2 = tilemap.CellSize / 2f;
-                Vector3[] vertices = new Vector3[4]
+                var cellSizeDiv2 = tilemap.CellSize / 2f;
+                var vertices = new Vector3[4]
                 {
                     new Vector3(-cellSizeDiv2.x, -cellSizeDiv2.y, 0),
                     new Vector3(cellSizeDiv2.x, -cellSizeDiv2.y, 0),
                     new Vector3(-cellSizeDiv2.x, cellSizeDiv2.y, 0),
                     new Vector3(cellSizeDiv2.x, cellSizeDiv2.y, 0),
                 };
-                int[] triangles = new int[] { 3, 0, 2, 0, 3, 1 };
-                Vector2[] uvs = new Vector2[]
+                var triangles = new int[] { 3, 0, 2, 0, 3, 1 };
+                var uvs = new Vector2[]
                 {
                     new Vector2(tile.uv.xMin, tile.uv.yMin),
                     new Vector2(tile.uv.xMax, tile.uv.yMin),
@@ -91,7 +91,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
                 if (!m_meshFilter.sharedMesh) m_meshFilter.sharedMesh = new Mesh();
                 m_meshFilter.sharedMesh.name = "Quad";
-                Mesh mesh = m_meshFilter.sharedMesh;
+                var mesh = m_meshFilter.sharedMesh;
                 mesh.Clear();
                 mesh.vertices = vertices;
                 mesh.triangles = triangles;

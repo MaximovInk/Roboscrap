@@ -25,7 +25,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public static void DoOnTilePrefabCreation(TilemapChunk.OnTilePrefabCreationData data, SpriteRenderer spriteRenderer, bool changeSpriteOnly)
         {
-            Sprite tileSprite = GetOrCreateSprite(data);
+            var tileSprite = GetOrCreateSprite(data);
             if (tileSprite)
             {                
                 spriteRenderer.sprite = tileSprite;
@@ -41,14 +41,14 @@ namespace CreativeSpore.SuperTilemapEditor
         public static Sprite GetOrCreateSprite(TilemapChunk.OnTilePrefabCreationData data)
         {
             Sprite sprite = null;
-            int tileId = Tileset.GetTileIdFromTileData(data.ParentTilemap.GetTileData(data.GridX, data.GridY));
-            Tile tile = data.ParentTilemap.Tileset.GetTile(tileId);
+            var tileId = Tileset.GetTileIdFromTileData(data.ParentTilemap.GetTileData(data.GridX, data.GridY));
+            var tile = data.ParentTilemap.Tileset.GetTile(tileId);
             if (tile != null)
             {
-                float pixelsPerUnit = data.ParentTilemap.Tileset.TilePxSize.x / data.ParentTilemap.CellSize.x;
-                Vector2 atlasSize = new Vector2(data.ParentTilemap.Tileset.AtlasTexture.width, data.ParentTilemap.Tileset.AtlasTexture.height);
-                Rect spriteUV = new Rect(Vector2.Scale(tile.uv.position, atlasSize), Vector2.Scale(tile.uv.size, atlasSize));
-                string spriteName = data.ParentTilemap.Tileset.name + "_" + tileId + "_" + pixelsPerUnit;
+                var pixelsPerUnit = data.ParentTilemap.Tileset.TilePxSize.x / data.ParentTilemap.CellSize.x;
+                var atlasSize = new Vector2(data.ParentTilemap.Tileset.AtlasTexture.width, data.ParentTilemap.Tileset.AtlasTexture.height);
+                var spriteUV = new Rect(Vector2.Scale(tile.uv.position, atlasSize), Vector2.Scale(tile.uv.size, atlasSize));
+                var spriteName = data.ParentTilemap.Tileset.name + "_" + tileId + "_" + pixelsPerUnit;
                 if (!s_spriteCache.TryGetValue(spriteName, out sprite) || !sprite)
                 {
                     sprite = Sprite.Create(data.ParentTilemap.Tileset.AtlasTexture, spriteUV, new Vector2(.5f, .5f), pixelsPerUnit);

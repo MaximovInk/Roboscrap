@@ -74,12 +74,12 @@ namespace CreativeSpore.SuperTilemapEditor
             if (m_selectedTileIdx >= 0 && m_hasFocus)
             {
                 m_tileIdOff = 0;
-                uint brushTileData = m_getTileDataFunc(m_selectedTileIdx);
+                var brushTileData = m_getTileDataFunc(m_selectedTileIdx);
                 if(brushTileData == Tileset.k_TileData_Empty)
                 {
                     brushTileData = 0u; // reset flags and everything
                 }
-                int tileId = (int)(brushTileData & Tileset.k_TileDataMask_TileId);
+                var tileId = (int)(brushTileData & Tileset.k_TileDataMask_TileId);
                 if (tileId != Tileset.k_TileId_Empty && newTileId != tileId)
                 {
                     m_tileIdOff = newTileId - tileId;
@@ -102,15 +102,15 @@ namespace CreativeSpore.SuperTilemapEditor
                 if (m_selectedTileIdx >= 0 && m_hasFocus)
                 {
                     m_tileIdOff = 0;
-                    uint brushTileData = m_getTileDataFunc(m_selectedTileIdx);
+                    var brushTileData = m_getTileDataFunc(m_selectedTileIdx);
                     if (brushTileData == Tileset.k_TileData_Empty)
                     {
                         brushTileData = 0u; // reset flags and everything
                     }
                     Undo.RecordObject(m_target, "BrushChanged");
 
-                    TilesetBrush brush = Tileset.FindBrush(newBrushId);
-                    int tileId = (int)(brush.PreviewTileData() & Tileset.k_TileDataMask_TileId);
+                    var brush = Tileset.FindBrush(newBrushId);
+                    var tileId = (int)(brush.PreviewTileData() & Tileset.k_TileDataMask_TileId);
                     brushTileData &= Tileset.k_TileDataMask_Flags;
                     brushTileData |= (uint)(newBrushId << 16) & Tileset.k_TileDataMask_BrushId;
                     brushTileData |= (uint)(tileId & Tileset.k_TileDataMask_TileId);
@@ -128,53 +128,53 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             GUI.changed |= m_hasChanged;
             m_hasChanged = false;
-            Event e = Event.current;
-            bool isLeftMouseReleased = e.type == EventType.MouseUp && e.button == 0;
+            var e = Event.current;
+            var isLeftMouseReleased = e.type == EventType.MouseUp && e.button == 0;
             if (isLeftMouseReleased)
             {
                 m_hasFocus = m_tileSelectionRect.Contains(e.mousePosition);
             }
 
-            bool hasEmptyTiles = false;
-            int size = m_width * m_height;
-            Color cSelectedBorderColor = new Color(1f, 1f, 0f, 1f);
+            var hasEmptyTiles = false;
+            var size = m_width * m_height;
+            var cSelectedBorderColor = new Color(1f, 1f, 0f, 1f);
             if (!m_hasFocus) cSelectedBorderColor *= .8f;
             GUILayout.BeginHorizontal();
             {
                 // Draw Autotile Combination Control
                 GUI.backgroundColor = Tileset.BackgroundColor;
                 GUILayoutUtility.GetRect(visualTileSize.x * m_width, visualTileSize.y * m_height + 1f);
-                Rect rArea = GUILayoutUtility.GetLastRect();
+                var rArea = GUILayoutUtility.GetLastRect();
                 {
                     if (m_backgroundTexture)
                         GUI.DrawTexture(new Rect(rArea.position, Vector2.Scale(visualTileSize, new Vector2(m_width, m_height))), m_backgroundTexture);
                     GUI.backgroundColor = Color.white;
-                    for (int tileIdx = 0; tileIdx < size; ++tileIdx)
+                    for (var tileIdx = 0; tileIdx < size; ++tileIdx)
                     {
-                        int gx = tileIdx % m_width;
-                        int gy = tileIdx / m_width;
-                        Rect rVisualTile = new Rect(gx * visualTileSize.x, gy * visualTileSize.y, visualTileSize.x, visualTileSize.y);
+                        var gx = tileIdx % m_width;
+                        var gy = tileIdx / m_width;
+                        var rVisualTile = new Rect(gx * visualTileSize.x, gy * visualTileSize.y, visualTileSize.x, visualTileSize.y);
                         rVisualTile.position += rArea.position;
-                        uint tileData = m_getTileDataFunc(tileIdx);
+                        var tileData = m_getTileDataFunc(tileIdx);
                         hasEmptyTiles |= tileData == Tileset.k_TileData_Empty;
-                        TilesetBrush brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(tileData));
+                        var brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(tileData));
                         if (brush)
                         {
                             tileData = TilesetBrush.ApplyAndMergeTileFlags(brush.PreviewTileData(), tileData);
                         }
-                        int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
+                        var tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
                         if (tileId != Tileset.k_TileId_Empty)
                         {
                             TilesetEditor.DoGUIDrawTileFromTileData(rVisualTile, tileData, Tileset);
                         }
 
-                        Color bgColor = new Color(1f - Tileset.BackgroundColor.r, 1f - Tileset.BackgroundColor.g, 1f - Tileset.BackgroundColor.b, Tileset.BackgroundColor.a);
+                        var bgColor = new Color(1f - Tileset.BackgroundColor.r, 1f - Tileset.BackgroundColor.g, 1f - Tileset.BackgroundColor.b, Tileset.BackgroundColor.a);
                         HandlesEx.DrawRectWithOutline(rVisualTile, m_selectedTileIdx == tileIdx ? new Color(0f, 0f, 0f, 0.1f) : new Color(), m_selectedTileIdx == tileIdx ? cSelectedBorderColor : bgColor);
 
                         if (isLeftMouseReleased && rVisualTile.Contains(e.mousePosition))
                         {
                             m_selectedTileIdx = tileIdx;
-                            EditorWindow wnd = EditorWindow.focusedWindow;
+                            var wnd = EditorWindow.focusedWindow;
                             TileSelectionWindow.Show(Tileset);
                             TileSelectionWindow.Instance.Ping();
                             wnd.Focus();
@@ -183,7 +183,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     }
                 }
                 
-                uint brushTileData = m_selectedTileIdx >= 0 ? m_getTileDataFunc(m_selectedTileIdx) : Tileset.k_TileData_Empty;
+                var brushTileData = m_selectedTileIdx >= 0 ? m_getTileDataFunc(m_selectedTileIdx) : Tileset.k_TileData_Empty;
                 brushTileData = DoTileDataPropertiesLayout(brushTileData, Tileset, AllowBrushSelection);
                 if (m_selectedTileIdx >= 0)
                 {
@@ -201,11 +201,11 @@ namespace CreativeSpore.SuperTilemapEditor
             if ( size > 1 && m_displayAutocompleteBtn && GUILayout.Button("Autocomplete relative to last change"))
             {
                 Undo.RecordObject(m_target, "MultipleTileChanged");
-                for (int tileIdx = 0; tileIdx < size; ++tileIdx)
+                for (var tileIdx = 0; tileIdx < size; ++tileIdx)
                 {
                     if (tileIdx != m_tileIdOffSkipIdx)
                     {
-                        int brushTileId = (int)(m_getTileDataFunc(tileIdx) & Tileset.k_TileDataMask_TileId);
+                        var brushTileId = (int)(m_getTileDataFunc(tileIdx) & Tileset.k_TileDataMask_TileId);
                         brushTileId += m_tileIdOff;
                         if (brushTileId < 0 || brushTileId >= m_tileset.Tiles.Count)
                         {
@@ -213,7 +213,7 @@ namespace CreativeSpore.SuperTilemapEditor
                         }
                         else
                         {
-                            uint tileData = m_getTileDataFunc(tileIdx);
+                            var tileData = m_getTileDataFunc(tileIdx);
                             tileData &= ~Tileset.k_TileDataMask_TileId;
                             tileData |= (uint)(brushTileId & Tileset.k_TileDataMask_TileId);
                             m_setTileDataFunc(tileIdx, tileData);
@@ -228,10 +228,10 @@ namespace CreativeSpore.SuperTilemapEditor
                 if (GUILayout.Button("Autocomplete from selection"))
                 {
                     Undo.RecordObject(m_target, "MultipleTileChanged");
-                    for (int tileIdx = 0; tileIdx < size; ++tileIdx)
+                    for (var tileIdx = 0; tileIdx < size; ++tileIdx)
                     {
-                        int selectionIdx = (tileIdx % m_width) + (m_height - 1 - tileIdx / m_width) * m_width;
-                        int brushTileId = (int)(Tileset.TileSelection.selectionData[selectionIdx] & Tileset.k_TileDataMask_TileId);
+                        var selectionIdx = (tileIdx % m_width) + (m_height - 1 - tileIdx / m_width) * m_width;
+                        var brushTileId = (int)(Tileset.TileSelection.selectionData[selectionIdx] & Tileset.k_TileDataMask_TileId);
                         m_setTileDataFunc(tileIdx, (uint)(brushTileId & Tileset.k_TileDataMask_TileId));
                     }
                     m_tileIdOff = 0;
@@ -274,8 +274,8 @@ namespace CreativeSpore.SuperTilemapEditor
                 if (displayBrush)
                 {
                     EditorGUI.BeginChangeCheck();
-                    int brushId = Tileset.GetBrushIdFromTileData(tileData);
-                    TilesetBrush brush = tileset.FindBrush(brushId);
+                    var brushId = Tileset.GetBrushIdFromTileData(tileData);
+                    var brush = tileset.FindBrush(brushId);
                     brush = (TilesetBrush)EditorGUILayout.ObjectField("Brush", brush, typeof(TilesetBrush), false);
                     if (EditorGUI.EndChangeCheck())
                     {
@@ -286,7 +286,7 @@ namespace CreativeSpore.SuperTilemapEditor
                         else
                         {
                             brushId = brush != null ? tileset.FindBrushId(brush.name) : Tileset.k_BrushId_Default;
-                            int tileId = brush != null ? (int)(brush.PreviewTileData() & Tileset.k_TileDataMask_TileId) : Tileset.GetTileIdFromTileData(tileData);
+                            var tileId = brush != null ? (int)(brush.PreviewTileData() & Tileset.k_TileDataMask_TileId) : Tileset.GetTileIdFromTileData(tileData);
                             tileData &= Tileset.k_TileDataMask_Flags;
                             tileData |= (uint)(brushId << 16) & Tileset.k_TileDataMask_BrushId;
                             tileData |= (uint)(tileId & Tileset.k_TileDataMask_TileId);

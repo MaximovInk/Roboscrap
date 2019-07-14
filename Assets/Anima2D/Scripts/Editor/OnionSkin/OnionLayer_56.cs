@@ -14,7 +14,7 @@ namespace Anima2D
 
 		public override GameObject Create()
 		{
-			GameObject l_instance = base.Create();
+			var l_instance = base.Create();
 
 			if(!l_instance.GetComponent<SortingGroup>())
 			{
@@ -61,7 +61,7 @@ namespace Anima2D
 		{
 			if(m_MaterialCache != null)
 			{
-				foreach(MaterialCache materialCache in m_MaterialCache)
+				foreach(var materialCache in m_MaterialCache)
 				{
 					if(materialCache != null)
 					{
@@ -79,16 +79,16 @@ namespace Anima2D
 
 			if(!m_SourceSortingGroup)
 			{
-				List<string> editorSortingLayers = EditorExtra.GetSortingLayerNames();
+				var editorSortingLayers = EditorExtra.GetSortingLayerNames();
 				
 				//Sort renderers front to back taking sorting layer and sorting order into account
-				List< KeyValuePair<Renderer, double> > l_renderersOrder = new List< KeyValuePair<Renderer, double> >();
+				var l_renderersOrder = new List< KeyValuePair<Renderer, double> >();
 				
-				for(int i = 0; i < renderers.Length; ++i)
+				for(var i = 0; i < renderers.Length; ++i)
 				{
-					Renderer l_renderer = renderers[i];
-					int l_sortingOrder = l_renderer.sortingOrder;
-					int l_layerIndex = editorSortingLayers.IndexOf(l_renderer.sortingLayerName);
+					var l_renderer = renderers[i];
+					var l_sortingOrder = l_renderer.sortingOrder;
+					var l_layerIndex = editorSortingLayers.IndexOf(l_renderer.sortingLayerName);
 
 					l_renderersOrder.Add(new KeyValuePair<Renderer, double>(l_renderer,(l_layerIndex * 2.0) + (l_sortingOrder / (double)32767)));
 				}
@@ -100,9 +100,9 @@ namespace Anima2D
 			}
 			
 			//Create temp materials for non sprite renderers
-			List<MaterialCache> l_materialCacheList = new List<MaterialCache>();
+			var l_materialCacheList = new List<MaterialCache>();
 			
-			foreach(Renderer renderer in renderers)
+			foreach(var renderer in renderers)
 			{
 				l_materialCacheList.Add(new MaterialCache(renderer));
 			}
@@ -112,7 +112,7 @@ namespace Anima2D
 		
 		public void SetDepth(int depth)
 		{
-			SortingGroup instanceSG = m_PreviewInstance.GetComponent<SortingGroup>();
+			var instanceSG = m_PreviewInstance.GetComponent<SortingGroup>();
 
 			if(m_SourceSortingGroup)
 			{
@@ -121,7 +121,7 @@ namespace Anima2D
 			}
 			else if(renderers != null && renderers.Length > 0)
 			{
-				Renderer lastRenderer = renderers[renderers.Length-1];
+				var lastRenderer = renderers[renderers.Length-1];
 
 				instanceSG.sortingLayerID = lastRenderer.sortingLayerID;
 				instanceSG.sortingOrder = lastRenderer.sortingOrder - depth;
@@ -142,9 +142,9 @@ namespace Anima2D
 		{
 			if(renderers != null)
 			{
-				foreach(Renderer renderer in renderers)
+				foreach(var renderer in renderers)
 				{
-					SpriteRenderer spriteRenderer = renderer as SpriteRenderer;
+					var spriteRenderer = renderer as SpriteRenderer;
 					
 					if(spriteRenderer)
 					{
@@ -156,7 +156,7 @@ namespace Anima2D
 			
 			if(materialCache != null)
 			{
-				foreach(MaterialCache l_materialCache in materialCache)
+				foreach(var l_materialCache in materialCache)
 				{
 					l_materialCache.SetColor(color);
 				}
@@ -167,13 +167,13 @@ namespace Anima2D
 		{
 			if(renderers != null)
 			{
-				foreach(Renderer renderer in renderers)
+				foreach(var renderer in renderers)
 				{
-					SpriteRenderer spriteRenderer = renderer as SpriteRenderer;
+					var spriteRenderer = renderer as SpriteRenderer;
 					
 					if(spriteRenderer)
 					{
-						Color c = spriteRenderer.color;
+						var c = spriteRenderer.color;
 						c.a = alpha;
 						spriteRenderer.color = c;
 					}
@@ -182,7 +182,7 @@ namespace Anima2D
 			
 			if(materialCache != null)
 			{
-				foreach(MaterialCache l_materialCache in materialCache)
+				foreach(var l_materialCache in materialCache)
 				{
 					l_materialCache.SetAlpha(alpha);
 				}

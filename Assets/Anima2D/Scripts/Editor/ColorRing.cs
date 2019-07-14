@@ -20,18 +20,18 @@ namespace Anima2D
 
 		static ColorRing()
 		{
-			float hueAngleStep = Mathf.Clamp(45f,1f,360f);
-			float hueLoopOffset = Mathf.Clamp(20f,1f,360f);
+			var hueAngleStep = Mathf.Clamp(45f,1f,360f);
+			var hueLoopOffset = Mathf.Clamp(20f,1f,360f);
 
-			int numColors = (int)(360f / hueAngleStep) * (int)(360f / hueLoopOffset);
+			var numColors = (int)(360f / hueAngleStep) * (int)(360f / hueLoopOffset);
 
 			mColors.Capacity = numColors;
 
-			for(int i = 0; i < numColors; ++i)
+			for(var i = 0; i < numColors; ++i)
 			{
-				float hueAngle = i * hueAngleStep;
+				var hueAngle = i * hueAngleStep;
 				float loops = (int)(hueAngle / 360f);
-				float hue = ((hueAngle % 360f + (loops * hueLoopOffset % 360f)) / 360f);
+				var hue = ((hueAngle % 360f + (loops * hueLoopOffset % 360f)) / 360f);
 
 #if UNITY_5_0_0 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2
 				mColors.Add(EditorGUIUtility.HSVToRGB(hue, 1f, 1f));

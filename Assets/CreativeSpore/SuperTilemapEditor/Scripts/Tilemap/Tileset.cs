@@ -25,7 +25,7 @@ namespace CreativeSpore.SuperTilemapEditor
         public TileColliderData Clone()
         {
             if(this.vertices == null) this.vertices = new Vector2[0];
-            Vector2[] clonedVertices = new Vector2[this.vertices.Length];
+            var clonedVertices = new Vector2[this.vertices.Length];
             vertices.CopyTo(clonedVertices, 0);
 
             return new TileColliderData { vertices = clonedVertices, type = type };
@@ -63,7 +63,7 @@ namespace CreativeSpore.SuperTilemapEditor
         public void SnapVertices(Tileset tileset)
         {
             if (vertices != null)
-                for (int i = 0; i < vertices.Length; ++i)
+                for (var i = 0; i < vertices.Length; ++i)
                     vertices[i] = SnapVertex(vertices[i], tileset);
         }
 
@@ -83,7 +83,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void FlipH()
         {
-            for(int i = 0; i < vertices.Length; ++i)
+            for(var i = 0; i < vertices.Length; ++i)
             {
                 vertices[i].x = 1f - vertices[i].x;
             }
@@ -92,7 +92,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void FlipV()
         {
-            for (int i = 0; i < vertices.Length; ++i)
+            for (var i = 0; i < vertices.Length; ++i)
             {
                 vertices[i].y = 1f - vertices[i].y;
             }
@@ -101,9 +101,9 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void Rot90()
         {
-            for (int i = 0; i < vertices.Length; ++i)
+            for (var i = 0; i < vertices.Length; ++i)
             {
-                float tempX = vertices[i].x;
+                var tempX = vertices[i].x;
                 vertices[i].x = vertices[i].y;
                 vertices[i].y = tempX;
                 vertices[i].y = 1f - vertices[i].y;
@@ -112,10 +112,10 @@ namespace CreativeSpore.SuperTilemapEditor
         
         public void Rot90Back()
         {
-            for (int i = 0; i < vertices.Length; ++i)
+            for (var i = 0; i < vertices.Length; ++i)
             {
                 vertices[i].y = 1f - vertices[i].y;
-                float tempX = vertices[i].x;
+                var tempX = vertices[i].x;
                 vertices[i].x = vertices[i].y;
                 vertices[i].y = tempX;
             }
@@ -146,7 +146,7 @@ namespace CreativeSpore.SuperTilemapEditor
             if (obj == null) return false;
             if (obj.GetType() != this.GetType()) return false;
 
-            TilePrefabData other = (TilePrefabData)obj;
+            var other = (TilePrefabData)obj;
             return (other.prefab == this.prefab) && (other.offset == this.offset) && (other.offsetMode == this.offsetMode);
         }
 
@@ -187,20 +187,20 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public TileSelection Clone()
         {
-            List<uint> tileIds = new List<uint>(m_tileIds);
-            int rowLength = m_rowLength;
+            var tileIds = new List<uint>(m_tileIds);
+            var rowLength = m_rowLength;
             return new TileSelection(tileIds, rowLength);
         }
 
         public void FlipVertical()
         {
-            List<uint> flipedTileIds = new List<uint>();
-            int totalRows = 1 + (m_tileIds.Count - 1) / rowLength;
-            for (int y = totalRows - 1; y >= 0; --y)
+            var flipedTileIds = new List<uint>();
+            var totalRows = 1 + (m_tileIds.Count - 1) / rowLength;
+            for (var y = totalRows - 1; y >= 0; --y)
             {
-                for (int x = 0; x < rowLength; ++x)
+                for (var x = 0; x < rowLength; ++x)
                 {
-                    int idx = y * rowLength + x;
+                    var idx = y * rowLength + x;
                     flipedTileIds.Add(m_tileIds[idx]);
                 }
             }
@@ -320,7 +320,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
             set
             {
-                int prevTileId = m_selectedTileId;
+                var prevTileId = m_selectedTileId;
                 m_selectedTileId = value;
                 //if (m_selectedTileId != k_TileId_Empty) // commented to fix select empty tile from tilemap
                 {
@@ -340,7 +340,7 @@ namespace CreativeSpore.SuperTilemapEditor
             get { return m_selectedBrushId; }
             set
             {
-                int prevBrushId = m_selectedBrushId;
+                var prevBrushId = m_selectedBrushId;
                 m_selectedBrushId = Mathf.Clamp(value, -1, m_tiles.Count - 1);
                 m_selectedBrushId = (int)(m_selectedBrushId & k_TileDataMask_TileId); // convert -1 in k_TileId_Empty            
 
@@ -365,7 +365,7 @@ namespace CreativeSpore.SuperTilemapEditor
             }
             set
             {
-                TileSelection prevValue = m_tileSelection;
+                var prevValue = m_tileSelection;
                 m_tileSelection = (value != null && value.selectionData != null && value.selectionData.Count > 0) ? value : null;
                 if (m_tileSelection != null)
                 {
@@ -422,8 +422,8 @@ namespace CreativeSpore.SuperTilemapEditor
         public void AddTileView(string name, TileSelection tileSelection, int idx = -1)
         {
             idx = idx >= 0 ? Mathf.Min(idx, m_tileViews.Count) : m_tileViews.Count;
-            string viewName = name;
-            int i = 1;
+            var viewName = name;
+            var i = 1;
             while (m_tileViews.Exists(x => x.name == viewName))
             {
                 viewName = name + " (" + i + ")";
@@ -439,10 +439,10 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void RenameTileView(string name, string newName)
         {
-            int idx = m_tileViews.FindIndex(x => x.name == name);
+            var idx = m_tileViews.FindIndex(x => x.name == name);
             if (idx >= 0)
             {
-                TileView tileView = m_tileViews[idx];
+                var tileView = m_tileViews[idx];
                 RemoveTileView(name);
                 AddTileView(newName, tileView.tileSelection, idx);
             }
@@ -475,8 +475,8 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 if (!m_brushes.Exists(x => x.BrushAsset == brush))
                 {
-                    int id = m_brushes.Count > 0 ? m_brushes[m_brushes.Count - 1].Id : 1; //NOTE: id 0 is reserved for default brush                
-                    int maxId = (int)(k_TileDataMask_BrushId >> 16);
+                    var id = m_brushes.Count > 0 ? m_brushes[m_brushes.Count - 1].Id : 1; //NOTE: id 0 is reserved for default brush                
+                    var maxId = (int)(k_TileDataMask_BrushId >> 16);
                     if (m_brushes.Count >= maxId)
                     {
                         Debug.LogError(" Max number of brushes reached! " + maxId);
@@ -505,7 +505,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private BrushContainer FindBrushContainerByBrushId(int brushId)
         {
-            for (int i = 0; i < m_brushes.Count; ++i) if (m_brushes[i].Id == brushId) return m_brushes[i];
+            for (var i = 0; i < m_brushes.Count; ++i) if (m_brushes[i].Id == brushId) return m_brushes[i];
             return default(BrushContainer);
         }
 
@@ -526,7 +526,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public int FindBrushId(string name)
         {
-            for (int i = 0; i < m_brushes.Count; ++i )
+            for (var i = 0; i < m_brushes.Count; ++i )
             {
                 if (m_brushes[i].BrushAsset.name == name) return m_brushes[i].Id;
             }
@@ -535,18 +535,18 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void Slice()
         {
-            List<Tile> tiles = new List<Tile>();
+            var tiles = new List<Tile>();
             if (AtlasTexture != null)
             {
-                Vector2 tileTexselSize = CalculateTileTexelSize();
-                int uInc = Mathf.RoundToInt(TilePxSize.x + SlicePadding.x);
-                int vInc = Mathf.RoundToInt(TilePxSize.y + SlicePadding.y);
+                var tileTexselSize = CalculateTileTexelSize();
+                var uInc = Mathf.RoundToInt(TilePxSize.x + SlicePadding.x);
+                var vInc = Mathf.RoundToInt(TilePxSize.y + SlicePadding.y);
                 m_tilesetHeight = m_tilesetWidth = 0;
                 if (uInc > 0 && vInc > 0)
                 {
-                    for (int v = Mathf.RoundToInt(SliceOffset.y); v + TilePxSize.y <= AtlasTexture.height; v += vInc, ++m_tilesetHeight)
+                    for (var v = Mathf.RoundToInt(SliceOffset.y); v + TilePxSize.y <= AtlasTexture.height; v += vInc, ++m_tilesetHeight)
                     {
-                        for (int u = Mathf.RoundToInt(SliceOffset.x); u + TilePxSize.x <= AtlasTexture.width; u += uInc)
+                        for (var u = Mathf.RoundToInt(SliceOffset.x); u + TilePxSize.x <= AtlasTexture.width; u += uInc)
                         {
                             tiles.Add(new Tile() { uv = new Rect(new Vector2((float)u / AtlasTexture.width, (float)(AtlasTexture.height - v - TilePxSize.y) / AtlasTexture.height), tileTexselSize) });
                         }
@@ -561,7 +561,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     if ( m_tiles != null && m_tiles.Count > 0 &&  UnityEditor.EditorUtility.DisplayDialog("Keep previous tile properties?", "Keeping previous tile properties will copy the collider and paramters of previous tiles", "Yes", "No"))
 #endif
                     {
-                        for (int i = 0; i < m_tiles.Count && i < tiles.Count; ++i)
+                        for (var i = 0; i < m_tiles.Count && i < tiles.Count; ++i)
                         {
                             tiles[i].collData = m_tiles[i].collData;
                             tiles[i].paramContainer = m_tiles[i].paramContainer;
@@ -579,13 +579,13 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public string[] UpdateBrushTypeArray()
         {
-            List<string> outList = new List<string>();
-            for(int i = 0; i < Brushes.Count; ++i)
+            var outList = new List<string>();
+            for(var i = 0; i < Brushes.Count; ++i)
             {
-                TilesetBrush brush = Brushes[i].BrushAsset;
+                var brush = Brushes[i].BrushAsset;
                 if(brush)
                 {
-                    string type = brush.GetType().Name;
+                    var type = brush.GetType().Name;
                     if (!outList.Contains(type)) outList.Add(type);
                 }
             }
@@ -604,10 +604,10 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if(brush)
             {
-                string[] brushTypes = GetBrushTypeArray();
+                var brushTypes = GetBrushTypeArray();
                 if(brushTypes != null && brushTypes.Length > 0)
                 {
-                    int idx = System.Array.IndexOf(brushTypes, brush.GetType().Name);
+                    var idx = System.Array.IndexOf(brushTypes, brush.GetType().Name);
                     return ((1 << idx) & m_brushTypeMask) != 0;
                 }
             }
@@ -619,10 +619,10 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (AtlasTexture != null)
             {
-                string assetPath = UnityEditor.AssetDatabase.GetAssetPath(AtlasTexture);
+                var assetPath = UnityEditor.AssetDatabase.GetAssetPath(AtlasTexture);
                 if (!string.IsNullOrEmpty(assetPath))
                 {
-                    UnityEditor.TextureImporter textureImporter = UnityEditor.AssetImporter.GetAtPath(assetPath) as UnityEditor.TextureImporter;
+                    var textureImporter = UnityEditor.AssetImporter.GetAtPath(assetPath) as UnityEditor.TextureImporter;
                     if (textureImporter != null)
                     {
                         m_pixelsPerUnit = textureImporter.spritePixelsPerUnit;
@@ -630,11 +630,11 @@ namespace CreativeSpore.SuperTilemapEditor
                         {
                             if (textureImporter.spriteImportMode == UnityEditor.SpriteImportMode.Multiple)
                             {
-                                List<Tile> tiles = new List<Tile>();
+                                var tiles = new List<Tile>();
                                 if (textureImporter.spritesheet.Length >= 2)
                                 {
-                                    UnityEditor.SpriteMetaData spr0 = textureImporter.spritesheet[0];
-                                    UnityEditor.SpriteMetaData spr1 = textureImporter.spritesheet[1];
+                                    var spr0 = textureImporter.spritesheet[0];
+                                    var spr1 = textureImporter.spritesheet[1];
                                     TilePxSize = textureImporter.spritesheet[0].rect.size;
                                     SliceOffset = spr0.rect.position; SliceOffset.y = AtlasTexture.height - spr0.rect.y - spr0.rect.height;
                                     SlicePadding.x = spr1.rect.x - spr0.rect.xMax;
@@ -646,9 +646,9 @@ namespace CreativeSpore.SuperTilemapEditor
                                     //---
                                     {
                                         m_tilesetHeight = 0;
-                                        foreach (UnityEditor.SpriteMetaData spriteData in textureImporter.spritesheet)
+                                        foreach (var spriteData in textureImporter.spritesheet)
                                         {
-                                            Rect rUV = new Rect(Vector2.Scale(spriteData.rect.position, AtlasTexture.texelSize), Vector2.Scale(spriteData.rect.size, AtlasTexture.texelSize));
+                                            var rUV = new Rect(Vector2.Scale(spriteData.rect.position, AtlasTexture.texelSize), Vector2.Scale(spriteData.rect.size, AtlasTexture.texelSize));
                                             tiles.Add(new Tile() { uv = rUV });
                                             if (tiles.Count >= 2)
                                             {
@@ -673,7 +673,7 @@ namespace CreativeSpore.SuperTilemapEditor
                                         if (m_tiles != null && m_tiles.Count > 0 && UnityEditor.EditorUtility.DisplayDialog("Keep previous tile properties?", "Keeping previous tile properties will copy the collider and paramters of previous tiles", "Yes", "No"))
 #endif
                                         {
-                                            for (int i = 0; i < m_tiles.Count && i < tiles.Count; ++i)
+                                            for (var i = 0; i < m_tiles.Count && i < tiles.Count; ++i)
                                             {
                                                 tiles[i].collData = m_tiles[i].collData;
                                                 tiles[i].paramContainer = m_tiles[i].paramContainer;

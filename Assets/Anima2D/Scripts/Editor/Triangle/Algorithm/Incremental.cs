@@ -28,11 +28,11 @@ namespace TriangleNet.Algorithm
         /// </remarks>
         void GetBoundingBox()
         {
-            Otri inftri = default(Otri); // Handle for the triangular bounding box.
-            BoundingBox box = mesh.bounds;
+            var inftri = default(Otri); // Handle for the triangular bounding box.
+            var box = mesh.bounds;
 
             // Find the width (or height, whichever is larger) of the triangulation.
-            double width = box.Width;
+            var width = box.Width;
             if (box.Height > width)
             {
                 width = box.Height;
@@ -68,14 +68,14 @@ namespace TriangleNet.Algorithm
         /// </remarks>
         int RemoveBox()
         {
-            Otri deadtriangle = default(Otri);
-            Otri searchedge = default(Otri);
-            Otri checkedge = default(Otri);
+            var deadtriangle = default(Otri);
+            var searchedge = default(Otri);
+            var checkedge = default(Otri);
             Otri nextedge = default(Otri), finaledge = default(Otri), dissolveedge = default(Otri);
             Vertex markorg;
             int hullsize;
 
-            bool noPoly = !mesh.behavior.Poly;
+            var noPoly = !mesh.behavior.Poly;
 
             // Find a boundary triangle.
             nextedge.triangle = Mesh.dummytri;
@@ -154,7 +154,7 @@ namespace TriangleNet.Algorithm
         {
             this.mesh = mesh;
 
-            Otri starttri = new Otri();
+            var starttri = new Otri();
 
             // Create a triangular bounding box.
             GetBoundingBox();
@@ -162,7 +162,7 @@ namespace TriangleNet.Algorithm
             foreach (var v in mesh.vertices.Values)
             {
                 starttri.triangle = Mesh.dummytri;
-                Osub tmp = default(Osub);
+                var tmp = default(Osub);
                 if (mesh.InsertVertex(v, ref starttri, ref tmp, false, false) == InsertVertexResult.Duplicate)
                 {
                     if (Behavior.Verbose)

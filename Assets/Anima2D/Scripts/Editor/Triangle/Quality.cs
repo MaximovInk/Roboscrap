@@ -59,7 +59,7 @@ namespace TriangleNet
         /// </summary>
         public bool CheckMesh()
         {
-            Otri tri = default(Otri);
+            var tri = default(Otri);
             Otri oppotri = default(Otri), oppooppotri = default(Otri);
             Vertex triorg, tridest, triapex;
             Vertex oppoorg, oppodest;
@@ -150,9 +150,9 @@ namespace TriangleNet
         /// </summary>
         public bool CheckDelaunay()
         {
-            Otri loop = default(Otri);
-            Otri oppotri = default(Otri);
-            Osub opposubseg = default(Osub);
+            var loop = default(Otri);
+            var oppotri = default(Otri);
+            var opposubseg = default(Osub);
             Vertex triorg, tridest, triapex;
             Vertex oppoapex;
             bool shouldbedelaunay;
@@ -247,8 +247,8 @@ namespace TriangleNet
         /// </remarks>
         public int CheckSeg4Encroach(ref Osub testsubseg)
         {
-            Otri neighbortri = default(Otri);
-            Osub testsym = default(Osub);
+            var neighbortri = default(Otri);
+            var testsym = default(Osub);
             BadSubseg encroachedseg;
             double dotproduct;
             int encroached;
@@ -353,7 +353,7 @@ namespace TriangleNet
         public void TestTriangle(ref Otri testtri)
         {
             Otri tri1 = default(Otri), tri2 = default(Otri);
-            Osub testsub = default(Osub);
+            var testsub = default(Osub);
             Vertex torg, tdest, tapex;
             Vertex base1, base2;
             Vertex org1, dest1, org2, dest2;
@@ -556,7 +556,7 @@ namespace TriangleNet
         /// </summary>
         private void TallyEncs()
         {
-            Osub subsegloop = default(Osub);
+            var subsegloop = default(Osub);
             subsegloop.orient = 0;
 
             foreach (var seg in mesh.subsegs.Values)
@@ -580,10 +580,10 @@ namespace TriangleNet
         /// </remarks>
         private void SplitEncSegs(bool triflaws)
         {
-            Otri enctri = default(Otri);
-            Otri testtri = default(Otri);
-            Osub testsh = default(Osub);
-            Osub currentenc = default(Osub);
+            var enctri = default(Otri);
+            var testtri = default(Otri);
+            var testsh = default(Osub);
+            var currentenc = default(Osub);
             BadSubseg seg;
             Vertex eorg, edest, eapex;
             Vertex newvertex;
@@ -732,7 +732,7 @@ namespace TriangleNet
                     mesh.vertices.Add(newvertex.hash, newvertex);
 
                     // Interpolate attributes.
-                    for (int i = 0; i < mesh.nextras; i++)
+                    for (var i = 0; i < mesh.nextras; i++)
                     {
                         newvertex.attributes[i] = eorg.attributes[i]
                             + split * (edest.attributes[i] - eorg.attributes[i]);
@@ -798,7 +798,7 @@ namespace TriangleNet
         /// </summary>
         private void TallyFaces()
         {
-            Otri triangleloop = default(Otri);
+            var triangleloop = default(Otri);
             triangleloop.orient = 0;
 
             foreach (var tri in mesh.triangles.Values)
@@ -817,7 +817,7 @@ namespace TriangleNet
         /// <param name="badtri"></param>
         private void SplitTriangle(BadTriangle badtri)
         {
-            Otri badotri = default(Otri);
+            var badotri = default(Otri);
             Vertex borg, bdest, bapex;
             Point newloc; // Location of the new vertex
             double xi = 0, eta = 0;
@@ -866,10 +866,10 @@ namespace TriangleNet
                 {
                     // The new vertex must be in the interior, and therefore is a
                     // free vertex with a marker of zero.
-                    Vertex newvertex = new Vertex(newloc.x, newloc.y, 0, mesh.nextras);
+                    var newvertex = new Vertex(newloc.x, newloc.y, 0, mesh.nextras);
                     newvertex.type = VertexType.FreeVertex;
 
-                    for (int i = 0; i < mesh.nextras; i++)
+                    for (var i = 0; i < mesh.nextras; i++)
                     {
                         // Interpolate the vertex attributes at the circumcenter.
                         newvertex.attributes[i] = borg.attributes[i]
@@ -891,7 +891,7 @@ namespace TriangleNet
 
                     // Insert the circumcenter, searching from the edge of the triangle,
                     // and maintain the Delaunay property of the triangulation.
-                    Osub tmp = default(Osub);
+                    var tmp = default(Osub);
                     success = mesh.InsertVertex(newvertex, ref badotri, ref tmp, true, true);
 
                     if (success == InsertVertexResult.Successful)

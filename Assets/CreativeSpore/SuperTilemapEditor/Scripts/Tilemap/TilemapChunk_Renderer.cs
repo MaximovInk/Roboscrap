@@ -50,7 +50,7 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (locGridX >= 0 && locGridX < m_width && locGridY >= 0 && locGridY < m_height)
             {
-                int tileIdx = locGridY * m_width + locGridX;
+                var tileIdx = locGridY * m_width + locGridX;
                 if (m_tileColorList == null || m_tileColorList.Count == 0)
                 {
                     m_tileColorList = Enumerable.Repeat(new TileColor32(new Color32(0xff, 0xff, 0xff, 0xff)), m_tileDataList.Count).ToList();
@@ -69,7 +69,7 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (locGridX >= 0 && locGridX < m_width && locGridY >= 0 && locGridY < m_height)
             {
-                int tileIdx = locGridY * m_width + locGridX;
+                var tileIdx = locGridY * m_width + locGridX;
                 if (m_tileColorList == null || m_tileColorList.Count == 0)
                 {
                     return TileColor32.white;
@@ -88,7 +88,7 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (locGridX >= 0 && locGridX < m_width && locGridY >= 0 && locGridY < m_height)
             {
-                int tileIdx = locGridY * m_width + locGridX;
+                var tileIdx = locGridY * m_width + locGridX;
                 if (m_tileColorList == null || m_tileColorList.Count == 0)
                 {
                     m_tileColorList = Enumerable.Repeat(new TileColor32(new Color32(0xff, 0xff, 0xff, 0xff)), m_tileDataList.Count).ToList();
@@ -153,7 +153,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 if (FillMeshData())
                 {
                     m_invalidateBrushes = false;
-                    Mesh mesh = m_meshFilter.sharedMesh;
+                    var mesh = m_meshFilter.sharedMesh;
                     mesh.Clear();
 
                     UpdateSortOrder();
@@ -190,7 +190,7 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 UpdateMeshVertexColor();
 
-                Mesh mesh = m_meshFilter.sharedMesh;
+                var mesh = m_meshFilter.sharedMesh;
 #if UNITY_5_0 || UNITY_5_1
                 if (s_colors32 != null && s_colors32.Count != 0)
                     mesh.colors32 = s_colors32.ToArray();
@@ -215,9 +215,9 @@ namespace CreativeSpore.SuperTilemapEditor
                 // Reverse the list in chunks of 6 elements (2 triangles = tile)
                 for (int i = 0, j = s_triangles.Count - 6; i < j; i += 6, j -= 6)
                 {
-                    for (int k = 0; k < 6; ++k)
+                    for (var k = 0; k < 6; ++k)
                     {
-                        int temp = s_triangles[i + k];
+                        var temp = s_triangles[i + k];
                         s_triangles[i + k] = s_triangles[j + k];
                         s_triangles[j + k] = temp;
                     }
@@ -258,11 +258,11 @@ namespace CreativeSpore.SuperTilemapEditor
         // This script has been simplified to be used with tiles were the tangent is always (1, 0, 0, -1)
         private void TangentSolver(Mesh mesh)
 	    {
-		    int vertexCount = mesh.vertexCount;
-		    Vector4[] tangents = new Vector4[vertexCount];
+		    var vertexCount = mesh.vertexCount;
+		    var tangents = new Vector4[vertexCount];
             //ref: https://github.com/danielbuechele/SumoVizUnity/blob/master/Assets/Helper/TangentSolver.cs
             //NOTE: fix issues when using a bumped shader
-		    for (int i = 0; i < (vertexCount); i++)
+		    for (var i = 0; i < (vertexCount); i++)
 		    {		
 			    tangents[i].x = 1f;
 			    //tangents[i].y = 0f;
@@ -274,7 +274,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private void DestroyMeshIfNeeded()
         {
-            MeshFilter meshFilter = GetComponent<MeshFilter>();
+            var meshFilter = GetComponent<MeshFilter>();
             if (meshFilter.sharedMesh != null
                 && (meshFilter.sharedMesh.hideFlags & HideFlags.DontSave) != 0)
             {
@@ -320,7 +320,7 @@ namespace CreativeSpore.SuperTilemapEditor
             }
             s_currUpdatedTilechunk = this;
 
-            int totalTiles = m_width * m_height;
+            var totalTiles = m_width * m_height;
             if (s_vertices == null) s_vertices = new List<Vector3>(totalTiles * 4);
             else s_vertices.Clear();
             if (s_triangles == null) s_triangles = new List<int>(totalTiles * 6);
@@ -330,26 +330,26 @@ namespace CreativeSpore.SuperTilemapEditor
             if (m_uv == null) m_uv = new List<Vector2>(totalTiles * 4);
             else m_uv.Clear();
 
-            Vector2[] subTileOffset = new Vector2[]
+            var subTileOffset = new Vector2[]
             {
                 new Vector2( 0f, 0f ),
                 new Vector2( CellSize.x / 2f, 0f ),
                 new Vector2( 0f, CellSize.y / 2f ),
                 new Vector2( CellSize.x / 2f, CellSize.y / 2f ),
             };
-            Vector2 subTileSize = CellSize / 2f;
+            var subTileSize = CellSize / 2f;
             m_animatedTiles.Clear();
-            bool isEmpty = true;
+            var isEmpty = true;
             for (int ty = 0, tileIdx = 0; ty < m_height; ++ty)
             {
-                for (int tx = 0; tx < m_width; ++tx, ++tileIdx)
+                for (var tx = 0; tx < m_width; ++tx, ++tileIdx)
                 {
-                    uint tileData = m_tileDataList[tileIdx];
+                    var tileData = m_tileDataList[tileIdx];
                     if (tileData != Tileset.k_TileData_Empty)
                     {
-                        int brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
-                        int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
-                        Tile tile = Tileset.GetTile(tileId);
+                        var brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
+                        var tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
+                        var tile = Tileset.GetTile(tileId);
                         TilesetBrush tileBrush = null;
                         if(tileId >= 0 && tile == null && brushId <= 0)
                         {
@@ -376,7 +376,7 @@ namespace CreativeSpore.SuperTilemapEditor
                                     tileData &= ~Tileset.k_TileDataMask_BrushId;
                                     tileData |= (uint)( brushId << 16 );
                                 }
-                                int newBrushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
+                                var newBrushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
                                 if(brushId != newBrushId)
                                 {
                                     brushId = newBrushId;
@@ -404,7 +404,7 @@ namespace CreativeSpore.SuperTilemapEditor
                         
                         s_currUVVertex = s_vertices.Count;
                         Rect tileUV;
-                        uint[] subtileData = tileBrush != null ? tileBrush.GetSubtiles(ParentTilemap, GridPosX + tx, GridPosY + ty, tileData) : null;
+                        var subtileData = tileBrush != null ? tileBrush.GetSubtiles(ParentTilemap, GridPosX + tx, GridPosY + ty, tileData) : null;
                         if (subtileData == null)
                         {
                             if (tile != null)
@@ -416,7 +416,7 @@ namespace CreativeSpore.SuperTilemapEditor
                                     _AddTileToMesh(tileUV, tx, ty, tileData, Vector2.zero, CellSize);
                                     if (m_tileColorList != null && m_tileColorList.Count > tileIdx)
                                     {
-                                        TileColor32 tileColor32 = m_tileColorList[tileIdx];
+                                        var tileColor32 = m_tileColorList[tileIdx];
                                         s_colors32.Add(tileColor32.c0);
                                         s_colors32.Add(tileColor32.c1);
                                         s_colors32.Add(tileColor32.c2);
@@ -427,19 +427,19 @@ namespace CreativeSpore.SuperTilemapEditor
                         }
                         else
                         {
-                            for (int i = 0; i < subtileData.Length; ++i)
+                            for (var i = 0; i < subtileData.Length; ++i)
                             {
-                                uint subTileData = subtileData[i];
-                                int subTileId = (int)(subTileData & Tileset.k_TileDataMask_TileId);
-                                Tile subTile = Tileset.GetTile(subTileId);
+                                var subTileData = subtileData[i];
+                                var subTileId = (int)(subTileData & Tileset.k_TileDataMask_TileId);
+                                var subTile = Tileset.GetTile(subTileId);
                                 tileUV = subTile != null ? subTile.uv : default(Rect);
                                 //if (tileUV != default(Rect)) //NOTE: if this is uncommented, there won't be coherence with geometry ( 16 vertices per tiles with subtiles ). But it means also, the tile shouldn't be null.
                                 {
                                     _AddTileToMesh(tileUV, tx, ty, subTileData, subTileOffset[i], subTileSize, i);
                                     if (m_tileColorList != null && m_tileColorList.Count > tileIdx)
                                     {
-                                        TileColor32 tileColor32 = m_tileColorList[tileIdx];
-                                        Color32 middleColor = new Color32(
+                                        var tileColor32 = m_tileColorList[tileIdx];
+                                        var middleColor = new Color32(
                                             System.Convert.ToByte((tileColor32.c0.r + tileColor32.c1.r + tileColor32.c2.r + tileColor32.c3.r) >> 2),
                                             System.Convert.ToByte((tileColor32.c0.g + tileColor32.c1.g + tileColor32.c2.g + tileColor32.c3.g) >> 2),
                                             System.Convert.ToByte((tileColor32.c0.b + tileColor32.c1.b + tileColor32.c2.b + tileColor32.c3.b) >> 2),
@@ -485,7 +485,7 @@ namespace CreativeSpore.SuperTilemapEditor
             }
 
             //NOTE: the destruction of tileobjects needs to be done here to avoid a Undo/Redo bug. Check inside DestroyTileObject for more information.
-            for (int i = 0; i < m_tileObjToBeRemoved.Count; ++i)
+            for (var i = 0; i < m_tileObjToBeRemoved.Count; ++i)
             {
                 DestroyTileObject(m_tileObjToBeRemoved[i]);
             }
@@ -497,18 +497,18 @@ namespace CreativeSpore.SuperTilemapEditor
         static Vector2[] s_tileUV = new Vector2[4];
         private void _AddTileToMesh(Rect tileUV, int tx, int ty, uint tileData, Vector2 subtileOffset, Vector2 subtileCellSize, int subTileIdx = -1)
         {
-            float px0 = tx * CellSize.x + subtileOffset.x;
-            float py0 = ty * CellSize.y + subtileOffset.y;
+            var px0 = tx * CellSize.x + subtileOffset.x;
+            var py0 = ty * CellSize.y + subtileOffset.y;
             //NOTE: px0 and py0 values are not used to avoid float errors and line artifacts. Don't forget Pixel Snap has to be disabled as well.
-            float px1 = tx * CellSize.x + subtileOffset.x + subtileCellSize.x;
-            float py1 = ty * CellSize.y + subtileOffset.y + subtileCellSize.y;
+            var px1 = tx * CellSize.x + subtileOffset.x + subtileCellSize.x;
+            var py1 = ty * CellSize.y + subtileOffset.y + subtileCellSize.y;
 
             //TODO: use a property in the tileset to enable/disable the aspect ratio fix
             // Add also an option to change the tile pivot
-            Tileset tileset = ParentTilemap.Tileset;
-            Texture2D atlasTexture = tileset.AtlasTexture;
-            int pixelW = Mathf.RoundToInt(tileUV.width * atlasTexture.width);
-            int pixelH = Mathf.RoundToInt(tileUV.height * atlasTexture.height);            
+            var tileset = ParentTilemap.Tileset;
+            var atlasTexture = tileset.AtlasTexture;
+            var pixelW = Mathf.RoundToInt(tileUV.width * atlasTexture.width);
+            var pixelH = Mathf.RoundToInt(tileUV.height * atlasTexture.height);            
             if(pixelW != tileset.TilePxSize.x)
             {
                 px1 = px0 + subtileOffset.x + subtileCellSize.x * pixelW / tileset.TilePxSize.x;
@@ -518,7 +518,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 py1 = py0 + subtileOffset.y + subtileCellSize.y * pixelH / tileset.TilePxSize.y;
             }
 
-            int vertexIdx = s_vertices.Count;
+            var vertexIdx = s_vertices.Count;
             s_vertices.Add(new Vector3(px0, py0, 0));
             s_vertices.Add(new Vector3(px1, py0, 0));
             s_vertices.Add(new Vector3(px0, py1, 0));
@@ -531,25 +531,25 @@ namespace CreativeSpore.SuperTilemapEditor
             s_triangles.Add(vertexIdx + 3);
             s_triangles.Add(vertexIdx + 1);
 
-            bool flipH = (tileData & Tileset.k_TileFlag_FlipH) != 0;
-            bool flipV = (tileData & Tileset.k_TileFlag_FlipV) != 0;
-            bool rot90 = (tileData & Tileset.k_TileFlag_Rot90) != 0;
+            var flipH = (tileData & Tileset.k_TileFlag_FlipH) != 0;
+            var flipV = (tileData & Tileset.k_TileFlag_FlipV) != 0;
+            var rot90 = (tileData & Tileset.k_TileFlag_Rot90) != 0;
 
             //NOTE: xMinMax and yMinMax is opposite if width or height is negative
-            float u0 = tileUV.xMin + Tileset.AtlasTexture.texelSize.x * InnerPadding;
-            float v0 = tileUV.yMin + Tileset.AtlasTexture.texelSize.y * InnerPadding;
-            float u1 = tileUV.xMax - Tileset.AtlasTexture.texelSize.x * InnerPadding;
-            float v1 = tileUV.yMax - Tileset.AtlasTexture.texelSize.y * InnerPadding;
+            var u0 = tileUV.xMin + Tileset.AtlasTexture.texelSize.x * InnerPadding;
+            var v0 = tileUV.yMin + Tileset.AtlasTexture.texelSize.y * InnerPadding;
+            var u1 = tileUV.xMax - Tileset.AtlasTexture.texelSize.x * InnerPadding;
+            var v1 = tileUV.yMax - Tileset.AtlasTexture.texelSize.y * InnerPadding;
 
             if (flipV)
             {
-                float v = v0;
+                var v = v0;
                 v0 = v1;
                 v1 = v;
             }
             if (flipH)
             {
-                float u = u0;
+                var u = u0;
                 u0 = u1;
                 u1 = u;
             }
@@ -571,13 +571,13 @@ namespace CreativeSpore.SuperTilemapEditor
             // the uv position in the subtileIdx position and the rest of positions
             if (subTileIdx >= 0)
             {
-                for (int i = 0; i < 4; ++i)
+                for (var i = 0; i < 4; ++i)
                 {
                     if (i == subTileIdx) continue;
                     s_tileUV[i] = (s_tileUV[i] + s_tileUV[subTileIdx]) / 2f;
                 }
             }
-            for (int i = 0; i < 4; ++i)
+            for (var i = 0; i < 4; ++i)
             {
                 m_uv.Add(s_tileUV[i]);
             }
@@ -591,27 +591,27 @@ namespace CreativeSpore.SuperTilemapEditor
                 return;
             }
 
-            int totalTiles = m_width * m_height;
+            var totalTiles = m_width * m_height;
             if (s_colors32 == null) s_colors32 = new List<Color32>(totalTiles * 4);
             else s_colors32.Clear();
 
             for (int ty = 0, tileIdx = 0; ty < m_height; ++ty)
             {
-                for (int tx = 0; tx < m_width; ++tx, ++tileIdx)
+                for (var tx = 0; tx < m_width; ++tx, ++tileIdx)
                 {
-                    uint tileData = m_tileDataList[tileIdx];
+                    var tileData = m_tileDataList[tileIdx];
                     if (tileData != Tileset.k_TileData_Empty)
                     {
-                        int brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
-                        int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
-                        Tile tile = Tileset.GetTile(tileId);
+                        var brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
+                        var tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
+                        var tile = Tileset.GetTile(tileId);
                         TilesetBrush tileBrush = null;
                         if (brushId > 0)
                         {
                             tileBrush = Tileset.FindBrush(brushId);                            
                         }
 
-                        uint[] subtileData = tileBrush != null ? tileBrush.GetSubtiles(ParentTilemap, GridPosX + tx, GridPosY + ty, tileData) : null;
+                        var subtileData = tileBrush != null ? tileBrush.GetSubtiles(ParentTilemap, GridPosX + tx, GridPosY + ty, tileData) : null;
                         if (subtileData == null)
                         {
                             if (tile != null)
@@ -621,7 +621,7 @@ namespace CreativeSpore.SuperTilemapEditor
                                 {
                                     if (m_tileColorList != null && m_tileColorList.Count > tileIdx)
                                     {
-                                        TileColor32 tileColor32 = m_tileColorList[tileIdx];
+                                        var tileColor32 = m_tileColorList[tileIdx];
                                         s_colors32.Add(tileColor32.c0);
                                         s_colors32.Add(tileColor32.c1);
                                         s_colors32.Add(tileColor32.c2);
@@ -632,14 +632,14 @@ namespace CreativeSpore.SuperTilemapEditor
                         }
                         else
                         {
-                            for (int i = 0; i < subtileData.Length; ++i)
+                            for (var i = 0; i < subtileData.Length; ++i)
                             {
                                 //if (tileUV != default(Rect)) //NOTE: if this is uncommented, there won't be coherence with geometry ( 16 vertices per tiles with subtiles ). But it means also, the tile shouldn't be null.
                                 {
                                     if (m_tileColorList != null && m_tileColorList.Count > tileIdx)
                                     {
-                                        TileColor32 tileColor32 = m_tileColorList[tileIdx];
-                                        Color32 middleColor = new Color32(
+                                        var tileColor32 = m_tileColorList[tileIdx];
+                                        var middleColor = new Color32(
                                             System.Convert.ToByte((tileColor32.c0.r + tileColor32.c1.r + tileColor32.c2.r + tileColor32.c3.r) >> 2),
                                             System.Convert.ToByte((tileColor32.c0.g + tileColor32.c1.g + tileColor32.c2.g + tileColor32.c3.g) >> 2),
                                             System.Convert.ToByte((tileColor32.c0.b + tileColor32.c1.b + tileColor32.c2.b + tileColor32.c3.b) >> 2),

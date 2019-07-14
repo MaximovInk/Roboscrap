@@ -17,20 +17,20 @@ namespace CreativeSpore.SuperTilemapEditor
         /// <param name="intensityCurve">The value multiplied to the color along the radius</param>
         public static void VertexPaintCircle(STETilemap tilemap, Vector2 center, float radius, Color color, eBlendMode blendingMode, bool vertexPaint = false, AnimationCurve intensityCurve = null)
         {
-            Vector2 minPos = new Vector2(center.x - radius, center.y - radius);
-            Vector2 maxPos = new Vector2(center.x + radius, center.y + radius);
-            int minGridX = TilemapUtils.GetGridX(tilemap, minPos);
-            int minGridY = TilemapUtils.GetGridY(tilemap, minPos);
-            int maxGridX = TilemapUtils.GetGridX(tilemap, maxPos);
-            int maxGridY = TilemapUtils.GetGridY(tilemap, maxPos);
-            Vector2 tileCenter = TilemapUtils.GetTileCenterPosition(tilemap, minPos);
-            float minX = tileCenter.x;
-            float sqrRadius = radius * radius;
+            var minPos = new Vector2(center.x - radius, center.y - radius);
+            var maxPos = new Vector2(center.x + radius, center.y + radius);
+            var minGridX = TilemapUtils.GetGridX(tilemap, minPos);
+            var minGridY = TilemapUtils.GetGridY(tilemap, minPos);
+            var maxGridX = TilemapUtils.GetGridX(tilemap, maxPos);
+            var maxGridY = TilemapUtils.GetGridY(tilemap, maxPos);
+            var tileCenter = TilemapUtils.GetTileCenterPosition(tilemap, minPos);
+            var minX = tileCenter.x;
+            var sqrRadius = radius * radius;
             Color32 color32 = color;
-            for (int y = minGridY; y <= maxGridY; ++y, tileCenter.y += tilemap.CellSize.y)
+            for (var y = minGridY; y <= maxGridY; ++y, tileCenter.y += tilemap.CellSize.y)
             {
                 tileCenter.x = minX;
-                for (int x = minGridX; x <= maxGridX; ++x, tileCenter.x += tilemap.CellSize.x)
+                for (var x = minGridX; x <= maxGridX; ++x, tileCenter.x += tilemap.CellSize.x)
                 {
                     if (vertexPaint)
                     {
@@ -38,12 +38,12 @@ namespace CreativeSpore.SuperTilemapEditor
                     }
                     else
                     {
-                        float sqrDist = (center - tileCenter).sqrMagnitude;
+                        var sqrDist = (center - tileCenter).sqrMagnitude;
                         if (sqrDist <= sqrRadius)
                         {
                             if (intensityCurve != null)
                             {
-                                float dist = Mathf.Sqrt(sqrDist);
+                                var dist = Mathf.Sqrt(sqrDist);
                                 color32.a = (byte)(255 * color.a * intensityCurve.Evaluate(1f - dist / radius));
                             }
                             tilemap.SetTileColor(x, y, color32, blendingMode);
@@ -57,21 +57,21 @@ namespace CreativeSpore.SuperTilemapEditor
         private static Color32[] s_tileVertexColor = new Color32[4];
         private static void _PaintTileVerticesByDist(STETilemap tilemap, int gridX, int gridY, Vector2 tilePos, Vector2 center, float radius, Color color, eBlendMode blendingMode, AnimationCurve intensityCurve)
         {
-            Vector2 cellSizeDiv2 = tilemap.CellSize / 2f;
+            var cellSizeDiv2 = tilemap.CellSize / 2f;
             s_tileVertexPos[0] = new Vector2(tilePos.x - cellSizeDiv2.x, tilePos.y - cellSizeDiv2.y);
             s_tileVertexPos[1] = new Vector2(tilePos.x + cellSizeDiv2.x, tilePos.y - cellSizeDiv2.y);
             s_tileVertexPos[2] = new Vector2(tilePos.x - cellSizeDiv2.x, tilePos.y + cellSizeDiv2.y);
             s_tileVertexPos[3] = new Vector2(tilePos.x + cellSizeDiv2.x, tilePos.y + cellSizeDiv2.y);
-            float sqrRadius = radius * radius;
+            var sqrRadius = radius * radius;
             Color32 color32 = color;
-            for (int i = 0; i < 4; ++i)
+            for (var i = 0; i < 4; ++i)
             {
-                float sqrDist = (center - s_tileVertexPos[i]).sqrMagnitude;
+                var sqrDist = (center - s_tileVertexPos[i]).sqrMagnitude;
                 if (sqrDist <= sqrRadius)
                 {
                     if (intensityCurve != null)
                     {
-                        float dist = Mathf.Sqrt(sqrDist);
+                        var dist = Mathf.Sqrt(sqrDist);
                         s_tileVertexColor[i] = new Color32(color32.r, color32.g, color32.b, (byte)(255 * color.a * intensityCurve.Evaluate(1f - dist / radius)));
                     }
                     else

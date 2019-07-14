@@ -12,7 +12,7 @@ namespace CreativeSpore.SuperTilemapEditor
         [MenuItem("Assets/Create/SuperTilemapEditor/Brush/CarpetBrush", priority = 50)]
         public static CarpetBrush CreateAsset()
         {
-            CarpetBrush brush = EditorUtils.CreateAssetInSelectedDirectory<CarpetBrush>();
+            var brush = EditorUtils.CreateAssetInSelectedDirectory<CarpetBrush>();
             return brush;
         }
 

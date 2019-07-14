@@ -7,8 +7,8 @@ namespace Anima2D
 	{
 		public static float SignedAngle(Vector3 a, Vector3 b, Vector3 forward)
 		{
-			float angle = Vector3.Angle (a, b);
-			float sign = Mathf.Sign (Vector3.Dot (forward, Vector3.Cross (a, b)));
+			var angle = Vector3.Angle (a, b);
+			var sign = Mathf.Sign (Vector3.Dot (forward, Vector3.Cross (a, b)));
 			
 			return angle * sign;
 		}
@@ -23,7 +23,7 @@ namespace Anima2D
 			Vector2 v = b - a;
 			Vector2 p = point - a;
 			
-			float dot = Vector2.Dot(v,p);
+			var dot = Vector2.Dot(v,p);
 			
 			if(dot <= 0f)
 			{
@@ -43,7 +43,7 @@ namespace Anima2D
 			Vector2 v = b - a;
 			Vector2 p = point - a;
 			
-			float dot = Vector2.Dot(v,p);
+			var dot = Vector2.Dot(v,p);
 			
 			if(dot <= 0f)
 			{
@@ -65,7 +65,7 @@ namespace Anima2D
 		
 		public static float SqrtLineDistance(Vector3 point, Vector3 a, Vector3 b)
 		{
-			float num = Mathf.Abs((b.y-a.y)*point.x - (b.x-a.x)*point.y + b.x*a.y - b.y*a.x);
+			var num = Mathf.Abs((b.y-a.y)*point.x - (b.x-a.x)*point.y + b.x*a.y - b.y*a.x);
 			return num*num / ((b.y - a.y)*(b.y - a.y) + (b.x-a.x)*(b.x-a.x));
 		}
 
@@ -131,13 +131,13 @@ namespace Anima2D
 		{
 			if (rect.xMin > rect.xMax)
 			{
-				float xMin = rect.xMin;
+				var xMin = rect.xMin;
 				rect.xMin = rect.xMax;
 				rect.xMax = xMin;
 			}
 			if (rect.yMin > rect.yMax)
 			{
-				float yMin = rect.yMin;
+				var yMin = rect.yMin;
 				rect.yMin = rect.yMax;
 				rect.yMax = yMin;
 			}
@@ -173,7 +173,7 @@ namespace Anima2D
 
 		public static float DiscardLeastSignificantDecimal(float v)
 		{
-			int digits = Mathf.Clamp((int)(5f - Mathf.Log10(Mathf.Abs(v))), 0, 15);
+			var digits = Mathf.Clamp((int)(5f - Mathf.Log10(Mathf.Abs(v))), 0, 15);
 			return (float)Math.Round((double)v, digits, MidpointRounding.AwayFromZero);
 		}
 
@@ -188,14 +188,14 @@ namespace Anima2D
 			Matrix4x4[] bindposes,
 			Transform[] bones)
 		{
-			Matrix4x4 m0 = bones[boneWeight.boneIndex0].localToWorldMatrix * bindposes[boneWeight.boneIndex0];
-			Matrix4x4 m1 = bones[boneWeight.boneIndex1].localToWorldMatrix * bindposes[boneWeight.boneIndex1];
-			Matrix4x4 m2 = bones[boneWeight.boneIndex2].localToWorldMatrix * bindposes[boneWeight.boneIndex2];
-			Matrix4x4 m3 = bones[boneWeight.boneIndex3].localToWorldMatrix * bindposes[boneWeight.boneIndex3];
+			var m0 = bones[boneWeight.boneIndex0].localToWorldMatrix * bindposes[boneWeight.boneIndex0];
+			var m1 = bones[boneWeight.boneIndex1].localToWorldMatrix * bindposes[boneWeight.boneIndex1];
+			var m2 = bones[boneWeight.boneIndex2].localToWorldMatrix * bindposes[boneWeight.boneIndex2];
+			var m3 = bones[boneWeight.boneIndex3].localToWorldMatrix * bindposes[boneWeight.boneIndex3];
 
-			Matrix4x4 m = Matrix4x4.identity;
+			var m = Matrix4x4.identity;
 
-			for(int n=0;n<16;n++)
+			for(var n=0;n<16;n++)
 			{
 				m0[n] *= boneWeight.weight0;
 				m1[n] *= boneWeight.weight1;

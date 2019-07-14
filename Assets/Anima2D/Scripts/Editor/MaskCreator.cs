@@ -32,17 +32,17 @@ namespace Anima2D
 				return;
 			}
 
-			List<Transform> transforms = new List<Transform>();
+			var transforms = new List<Transform>();
 
-			AvatarMask avatarMask = new AvatarMask();
+			var avatarMask = new AvatarMask();
 
 			animator.GetComponentsInChildren<Transform>(true,transforms);
 
 			avatarMask.transformCount = transforms.Count;
 			
-			int index = 0;
+			var index = 0;
 			
-			foreach(Transform transform in transforms)
+			foreach(var transform in transforms)
 			{
 				avatarMask.SetTransformPath(index, AnimationUtility.CalculateTransformPath(transform,animator.transform));
 				avatarMask.SetTransformActive(index, true);

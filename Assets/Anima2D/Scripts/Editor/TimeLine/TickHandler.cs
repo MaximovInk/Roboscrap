@@ -47,15 +47,15 @@ namespace Anima2D
 			}
 			else
 			{
-				List<int> list = new List<int>();
-				int num = 1;
+				var list = new List<int>();
+				var num = 1;
 				while ((float)num < frameRate)
 				{
 					if ((float)num == frameRate)
 					{
 						break;
 					}
-					int num2 = Mathf.RoundToInt(frameRate / (float)num);
+					var num2 = Mathf.RoundToInt(frameRate / (float)num);
 					if (num2 % 60 == 0)
 					{
 						num *= 2;
@@ -114,8 +114,8 @@ namespace Anima2D
 						}
 					}
 				}
-				float[] array = new float[9 + list.Count];
-				for (int i = 0; i < list.Count; i++)
+				var array = new float[9 + list.Count];
+				for (var i = 0; i < list.Count; i++)
 				{
 					array[i] = 1f / (float)list[list.Count - i - 1];
 				}
@@ -139,11 +139,11 @@ namespace Anima2D
 		}
 		public float[] GetTicksAtLevel(int level, bool excludeTicksFromHigherlevels)
 		{
-			int num = Mathf.Clamp(this.m_SmallestTick + level, 0, this.m_TickModulos.Length - 1);
-			List<float> list = new List<float>();
-			int num2 = Mathf.FloorToInt(this.m_MinValue / this.m_TickModulos[num]);
-			int num3 = Mathf.CeilToInt(this.m_MaxValue / this.m_TickModulos[num]);
-			for (int i = num2; i <= num3; i++)
+			var num = Mathf.Clamp(this.m_SmallestTick + level, 0, this.m_TickModulos.Length - 1);
+			var list = new List<float>();
+			var num2 = Mathf.FloorToInt(this.m_MinValue / this.m_TickModulos[num]);
+			var num3 = Mathf.CeilToInt(this.m_MaxValue / this.m_TickModulos[num]);
+			for (var i = num2; i <= num3; i++)
 			{
 				if (!excludeTicksFromHigherlevels || num >= this.m_BiggestTick || i % Mathf.RoundToInt(this.m_TickModulos[num + 1] / this.m_TickModulos[num]) != 0)
 				{
@@ -162,9 +162,9 @@ namespace Anima2D
 		}
 		public int GetLevelWithMinSeparation(float pixelSeparation)
 		{
-			for (int i = 0; i < this.m_TickModulos.Length; i++)
+			for (var i = 0; i < this.m_TickModulos.Length; i++)
 			{
-				float num = this.m_TickModulos[i] * this.m_PixelRange / (this.m_MaxValue - this.m_MinValue);
+				var num = this.m_TickModulos[i] * this.m_PixelRange / (this.m_MaxValue - this.m_MinValue);
 				if (num >= pixelSeparation)
 				{
 					return i - this.m_SmallestTick;
@@ -177,9 +177,9 @@ namespace Anima2D
 			this.m_TickStrengths = new float[this.m_TickModulos.Length];
 			this.m_SmallestTick = 0;
 			this.m_BiggestTick = this.m_TickModulos.Length - 1;
-			for (int i = this.m_TickModulos.Length - 1; i >= 0; i--)
+			for (var i = this.m_TickModulos.Length - 1; i >= 0; i--)
 			{
-				float num = this.m_TickModulos[i] * this.m_PixelRange / (this.m_MaxValue - this.m_MinValue);
+				var num = this.m_TickModulos[i] * this.m_PixelRange / (this.m_MaxValue - this.m_MinValue);
 				this.m_TickStrengths[i] = (num - tickMinSpacing) / (tickMaxSpacing - tickMinSpacing);
 				if (this.m_TickStrengths[i] >= 1f)
 				{
@@ -191,7 +191,7 @@ namespace Anima2D
 					break;
 				}
 			}
-			for (int j = this.m_SmallestTick; j <= this.m_BiggestTick; j++)
+			for (var j = this.m_SmallestTick; j <= this.m_BiggestTick; j++)
 			{
 				this.m_TickStrengths[j] = Mathf.Clamp01(this.m_TickStrengths[j]);
 				if (sqrt)

@@ -88,7 +88,7 @@ namespace Anima2D
 
 				if(isHovered)
 				{
-					int controlID = GUIUtility.GetControlID("WindowHovered".GetHashCode(), FocusType.Passive);
+					var controlID = GUIUtility.GetControlID("WindowHovered".GetHashCode(), FocusType.Passive);
 					
 					if(Event.current.GetTypeForControl(controlID) == EventType.Layout)
 					{

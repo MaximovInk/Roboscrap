@@ -7,7 +7,7 @@ namespace Anima2D
 	{
 		public static T CreateAssetWithSavePanel<T>(string title, string defaultName, string extension, string message) where T : ScriptableObject
 		{
-			string path = EditorUtility.SaveFilePanelInProject(title,defaultName,extension,message);
+			var path = EditorUtility.SaveFilePanelInProject(title,defaultName,extension,message);
 
 			T asset = null;
 
@@ -25,7 +25,7 @@ namespace Anima2D
 
 		public static T CreateAssetWithSavePanel<T>(T obj, string title, string defaultName, string extension, string message) where T : Object
 		{
-			string path = EditorUtility.SaveFilePanelInProject(title,defaultName,extension,message);
+			var path = EditorUtility.SaveFilePanelInProject(title,defaultName,extension,message);
 
 			T asset = null;
 
@@ -48,7 +48,7 @@ namespace Anima2D
 
 		public static T CreateAsset<T>(string path) where T : ScriptableObject
 		{
-			T asset = ScriptableObject.CreateInstance<T> ();
+			var asset = ScriptableObject.CreateInstance<T> ();
 			
 			ProjectWindowUtil.CreateAsset(asset, AssetDatabase.GenerateUniqueAssetPath(path));
 			

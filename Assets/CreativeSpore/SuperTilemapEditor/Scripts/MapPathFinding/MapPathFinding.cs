@@ -49,7 +49,7 @@ namespace CreativeSpore.SuperTilemapEditor
             Position = TilemapUtils.GetGridWorldPos(gridX, gridY, cellSize);
             for (int y = -1, neighIdx = 0; y <= 1; ++y)
             {
-                for (int x = -1; x <= 1; ++x)
+                for (var x = -1; x <= 1; ++x)
                 {
                     if ((x | y) != 0) // skip this node
                     {
@@ -64,14 +64,14 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if ( m_owner.IsComputing && m_owner.AllowBlockedDestination && m_owner.EndNode == this)
                 return true;
-            bool isBlocked = false;
-            bool isEmptyCell = true; // true is not tile is found in the node position
-            for (int i = 0; !isBlocked && i < m_tilemapGroup.Tilemaps.Count; ++i)
+            var isBlocked = false;
+            var isEmptyCell = true; // true is not tile is found in the node position
+            for (var i = 0; !isBlocked && i < m_tilemapGroup.Tilemaps.Count; ++i)
             {
-                STETilemap tilemap = m_tilemapGroup[i];
+                var tilemap = m_tilemapGroup[i];
                 if (tilemap && tilemap.ColliderType != eColliderType.None && tilemap.IsGridPositionInsideTilemap(GridX, GridY))
                 {
-                    Tile tile = tilemap.GetTile(tilemap.transform.InverseTransformPoint(Position)); // Use Position instead to allow tilemaps with offset different than 0, tilemap.GetTile(GridX, GridY);
+                    var tile = tilemap.GetTile(tilemap.transform.InverseTransformPoint(Position)); // Use Position instead to allow tilemaps with offset different than 0, tilemap.GetTile(GridX, GridY);
                     isEmptyCell = false;
                     isBlocked = tile != null && tile.collData.type != eTileCollider.None;                    
                 }
@@ -83,7 +83,7 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             //NOTE: 10f in Manhattan and 14f in Diagonal should really be 1f and 1.41421356237f, but I discovered by mistake these values improve the performance
 
-            float h = 0f;
+            var h = 0f;
 
             switch( m_owner.HeuristicType )
             {
@@ -110,7 +110,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public override float GetNeigborMovingCost(int neigborIdx) 
         {
-            MapTileNode neighborNode = GetNeighbor(neigborIdx) as MapTileNode;
+            var neighborNode = GetNeighbor(neigborIdx) as MapTileNode;
             if (!m_owner.AllowBlockedDestination || m_owner.EndNode != neighborNode)
             {
                 if ((m_owner.PassableDetectionMode & MapPathFinding.ePassableDetectionMode.Raycast2D) != 0)
@@ -124,22 +124,22 @@ namespace CreativeSpore.SuperTilemapEditor
                         return PathFinding.k_InfiniteCostValue;
                 }
             }
-            float fCost = 1f;
+            var fCost = 1f;
             //567 // 
             //3X4 // neighbor index positions, X is the position of this node
             //012
             if( neigborIdx == 0 || neigborIdx == 2 || neigborIdx ==  5 || neigborIdx == 7 )
             {
                 //check if can reach diagonals as it could be not possible if flank tiles are not passable      
-                MapTileNode nodeN = GetNeighbor(1) as MapTileNode;
-                MapTileNode nodeW = GetNeighbor(3) as MapTileNode;
-                MapTileNode nodeE = GetNeighbor(4) as MapTileNode;
-                MapTileNode nodeS = GetNeighbor(6) as MapTileNode;
-                bool usingColliders = (m_owner.PassableDetectionMode & (MapPathFinding.ePassableDetectionMode.Raycast2D | MapPathFinding.ePassableDetectionMode.Raycast2D)) != 0;
-                bool nodeNisPassable = nodeN.IsPassable() && (!usingColliders || GetNeigborMovingCost(1) != PathFinding.k_InfiniteCostValue);
-                bool nodeWisPassable = nodeW.IsPassable() && (!usingColliders || GetNeigborMovingCost(3) != PathFinding.k_InfiniteCostValue);
-                bool nodeEisPassable = nodeE.IsPassable() && (!usingColliders || GetNeigborMovingCost(4) != PathFinding.k_InfiniteCostValue);
-                bool nodeSisPassable = nodeS.IsPassable() && (!usingColliders || GetNeigborMovingCost(6) != PathFinding.k_InfiniteCostValue);
+                var nodeN = GetNeighbor(1) as MapTileNode;
+                var nodeW = GetNeighbor(3) as MapTileNode;
+                var nodeE = GetNeighbor(4) as MapTileNode;
+                var nodeS = GetNeighbor(6) as MapTileNode;
+                var usingColliders = (m_owner.PassableDetectionMode & (MapPathFinding.ePassableDetectionMode.Raycast2D | MapPathFinding.ePassableDetectionMode.Raycast2D)) != 0;
+                var nodeNisPassable = nodeN.IsPassable() && (!usingColliders || GetNeigborMovingCost(1) != PathFinding.k_InfiniteCostValue);
+                var nodeWisPassable = nodeW.IsPassable() && (!usingColliders || GetNeigborMovingCost(3) != PathFinding.k_InfiniteCostValue);
+                var nodeEisPassable = nodeE.IsPassable() && (!usingColliders || GetNeigborMovingCost(4) != PathFinding.k_InfiniteCostValue);
+                var nodeSisPassable = nodeS.IsPassable() && (!usingColliders || GetNeigborMovingCost(6) != PathFinding.k_InfiniteCostValue);
                 if (
                     !m_owner.AllowDiagonals ||
                     (neigborIdx == 0 && (!nodeNisPassable || !nodeWisPassable)) || // check North West
@@ -167,9 +167,9 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private bool RaycastCheck2D( Vector3 targetPosition )
         {
-            bool savedValue = Physics2D.queriesHitTriggers;
+            var savedValue = Physics2D.queriesHitTriggers;
             Physics2D.queriesHitTriggers = false;
-            Vector3 dir = targetPosition - Position;            
+            var dir = targetPosition - Position;            
             bool raycastCheck = Physics2D.Raycast( Position, dir, dir.magnitude, m_owner.RaycastDetectionLayerMask);
             Physics2D.queriesHitTriggers = savedValue;
             return raycastCheck;
@@ -177,10 +177,10 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private bool RaycastCheck3D(Vector3 targetPosition)
         {
-            bool savedValue = Physics.queriesHitTriggers;
+            var savedValue = Physics.queriesHitTriggers;
             Physics.queriesHitTriggers = false;
-            Vector3 dir = targetPosition - Position;
-            bool raycastCheck = Physics.Raycast(Position, dir, dir.magnitude, m_owner.RaycastDetectionLayerMask);
+            var dir = targetPosition - Position;
+            var raycastCheck = Physics.Raycast(Position, dir, dir.magnitude, m_owner.RaycastDetectionLayerMask);
             Physics.queriesHitTriggers = savedValue;
             return raycastCheck;
         }
@@ -289,7 +289,7 @@ namespace CreativeSpore.SuperTilemapEditor
         public MapTileNode GetMapTileNode( int idx )
         {
             MapTileNode mapTileNode;
-            bool wasFound = m_dicTileNodes.TryGetValue(idx, out mapTileNode);
+            var wasFound = m_dicTileNodes.TryGetValue(idx, out mapTileNode);
             if(!wasFound)
             {
                 mapTileNode = new MapTileNode(TilemapGroup, this, idx);                
@@ -316,7 +316,7 @@ namespace CreativeSpore.SuperTilemapEditor
         /// <returns></returns>
         public LinkedList<IPathNode> GetRouteFromTo(Vector2 startPos, Vector2 endPos)
         {
-            LinkedList<IPathNode> nodeList = new LinkedList<IPathNode>();
+            var nodeList = new LinkedList<IPathNode>();
             if (m_pathFinding.IsComputing)
             {
                 Debug.LogWarning("PathFinding is already computing. GetRouteFromTo will not be executed!");

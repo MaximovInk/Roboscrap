@@ -36,7 +36,7 @@ namespace MaximovInk
                         (n.item.item as RobotPartItem).part).ToList()
                 ;
 
-            for (int i = 0; i < partsViewer.childCount; i++)
+            for (var i = 0; i < partsViewer.childCount; i++)
             {
                 Destroy(partsViewer.transform.GetChild(i).gameObject);
             }
@@ -52,13 +52,13 @@ namespace MaximovInk
 
             this_b.interactable = false;
 
-            for (int i = 0; i < equalItems.Count; i++)
+            for (var i = 0; i < equalItems.Count; i++)
             {
                 var b = Instantiate(buttonPrefab, partsViewer);
                 b.image.sprite = equalItems[i].item.item.Icon;
                 var cond = (int) (equalItems[i].item.condition / equalItems[i].item.item.MaxCondition * 100);
                 b.GetComponentInChildren<Text>().text = cond + "%";
-                int j = i;
+                var j = i;
                 b.onClick.AddListener(() =>
                 {
                     ChangeTo(equalItems[j].item, (equalItems[j].item.item as RobotPartItem).part);

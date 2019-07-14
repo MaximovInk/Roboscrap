@@ -13,14 +13,14 @@ namespace Anima2D
 
 		public static Rect Do()
 		{
-			int controlID = GUIUtility.GetControlID("SelectionRect".GetHashCode(), FocusType.Passive);
+			var controlID = GUIUtility.GetControlID("SelectionRect".GetHashCode(), FocusType.Passive);
 
 			return Do(controlID);
 		}
 
 		public static Rect Do(int controlID)
 		{
-			EventType eventType = Event.current.GetTypeForControl(controlID);
+			var eventType = Event.current.GetTypeForControl(controlID);
 
 			if(eventType == EventType.MouseDown)
 			{

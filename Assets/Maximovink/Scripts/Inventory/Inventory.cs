@@ -30,7 +30,7 @@ namespace MaximovInk
             if (item.item == null || item.ItBreak() || item.count == 0)
                 return false;
             
-            for (int i = 0; i < slots.Count; i++)
+            for (var i = 0; i < slots.Count; i++)
             {
                 if (slots[i].item.item == item.item && slots[i].item.condition == item.condition)
                 {

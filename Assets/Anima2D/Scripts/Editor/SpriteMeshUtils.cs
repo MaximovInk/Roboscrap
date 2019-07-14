@@ -17,8 +17,8 @@ namespace Anima2D
 			get {
 				if(!m_DefaultMaterial)
 				{
-					GameObject go = new GameObject();
-					SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
+					var go = new GameObject();
+					var sr = go.AddComponent<SpriteRenderer>();
 					m_DefaultMaterial = sr.sharedMaterial;
 					GameObject.DestroyImmediate(go);
 				}
@@ -59,14 +59,14 @@ namespace Anima2D
 		
 		public static SpriteMesh CreateSpriteMesh(Sprite sprite)
 		{
-			SpriteMesh spriteMesh = SpriteMeshPostprocessor.GetSpriteMeshFromSprite(sprite);
+			var spriteMesh = SpriteMeshPostprocessor.GetSpriteMeshFromSprite(sprite);
 			SpriteMeshData spriteMeshData = null;
 			
 			if(!spriteMesh && sprite)
 			{
-				string spritePath = AssetDatabase.GetAssetPath(sprite);
-				string directory = Path.GetDirectoryName(spritePath);
-				string assetPath = AssetDatabase.GenerateUniqueAssetPath(directory + Path.DirectorySeparatorChar + sprite.name + ".asset");
+				var spritePath = AssetDatabase.GetAssetPath(sprite);
+				var directory = Path.GetDirectoryName(spritePath);
+				var assetPath = AssetDatabase.GenerateUniqueAssetPath(directory + Path.DirectorySeparatorChar + sprite.name + ".asset");
 				
 				spriteMesh = ScriptableObject.CreateInstance<SpriteMesh>();
 				InitFromSprite(spriteMesh,sprite);
@@ -93,12 +93,12 @@ namespace Anima2D
 		{
 			if(texture)
 			{
-				Object[] objects = AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(texture));
+				var objects = AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(texture));
 				
-				for (int i = 0; i < objects.Length; i++)
+				for (var i = 0; i < objects.Length; i++)
 				{
-					Object o = objects [i];
-					Sprite sprite = o as Sprite;
+					var o = objects [i];
+					var sprite = o as Sprite;
 					if (sprite) {
 						EditorUtility.DisplayProgressBar ("Processing " + texture.name, sprite.name, (i+1) / (float)objects.Length);
 						CreateSpriteMesh(sprite);
@@ -113,11 +113,11 @@ namespace Anima2D
 		{
 			if(spriteMesh)
 			{
-				UnityEngine.Object[] assets = AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(spriteMesh));
+				var assets = AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(spriteMesh));
 				
-				foreach(UnityEngine.Object asset in assets)
+				foreach(var asset in assets)
 				{
-					SpriteMeshData data = asset as SpriteMeshData;
+					var data = asset as SpriteMeshData;
 					
 					if(data)
 					{
@@ -138,14 +138,14 @@ namespace Anima2D
 		{
 			if(spriteMesh && spriteMeshData)
 			{
-				string spriteMeshPath = AssetDatabase.GetAssetPath(spriteMesh);
+				var spriteMeshPath = AssetDatabase.GetAssetPath(spriteMesh);
 				
-				SerializedObject spriteMeshSO = new SerializedObject(spriteMesh);
-				SerializedProperty sharedMeshProp = spriteMeshSO.FindProperty("m_SharedMesh");
+				var spriteMeshSO = new SerializedObject(spriteMesh);
+				var sharedMeshProp = spriteMeshSO.FindProperty("m_SharedMesh");
 				
 				if(!spriteMesh.sharedMesh)
 				{
-					Mesh mesh = new Mesh();
+					var mesh = new Mesh();
 					mesh.hideFlags = HideFlags.HideInHierarchy;
 					AssetDatabase.AddObjectToAsset(mesh,spriteMeshPath);
 					
@@ -160,35 +160,35 @@ namespace Anima2D
 				spriteMeshData.hideFlags = HideFlags.HideInHierarchy;
 				EditorUtility.SetDirty(spriteMeshData);
 				
-				int width = 0;
-				int height = 0;
+				var width = 0;
+				var height = 0;
 				
 				GetSpriteTextureSize(spriteMesh.sprite,ref width,ref height);
 
-				Vector3[] vertices = GetMeshVertices(spriteMesh.sprite, spriteMeshData);
+				var vertices = GetMeshVertices(spriteMesh.sprite, spriteMeshData);
 
-				Vector2 textureWidthHeightInv = new Vector2(1f/width,1f/height);
+				var textureWidthHeightInv = new Vector2(1f/width,1f/height);
 				
-				Vector2[] uvs = (new List<Vector2>(spriteMeshData.vertices)).ConvertAll( v => Vector2.Scale(v,textureWidthHeightInv)).ToArray();
+				var uvs = (new List<Vector2>(spriteMeshData.vertices)).ConvertAll( v => Vector2.Scale(v,textureWidthHeightInv)).ToArray();
 				
-				Vector3[] normals = (new List<Vector3>(vertices)).ConvertAll( v => Vector3.back ).ToArray();
+				var normals = (new List<Vector3>(vertices)).ConvertAll( v => Vector3.back ).ToArray();
 				
-				BoneWeight[] boneWeightsData = spriteMeshData.boneWeights;
+				var boneWeightsData = spriteMeshData.boneWeights;
 				
 				if(boneWeightsData.Length != spriteMeshData.vertices.Length)
 				{
 					boneWeightsData = new BoneWeight[spriteMeshData.vertices.Length];
 				}
 				
-				List<UnityEngine.BoneWeight> boneWeights = new List<UnityEngine.BoneWeight>(boneWeightsData.Length);
+				var boneWeights = new List<UnityEngine.BoneWeight>(boneWeightsData.Length);
 				
-				List<float> verticesOrder = new List<float>(spriteMeshData.vertices.Length);
+				var verticesOrder = new List<float>(spriteMeshData.vertices.Length);
 				
-				for (int i = 0; i < boneWeightsData.Length; i++)
+				for (var i = 0; i < boneWeightsData.Length; i++)
 				{
-					BoneWeight boneWeight = boneWeightsData[i];
+					var boneWeight = boneWeightsData[i];
 					
-					List< KeyValuePair<int,float> > pairs = new List<KeyValuePair<int, float>>();
+					var pairs = new List<KeyValuePair<int, float>>();
 					pairs.Add(new KeyValuePair<int, float>(boneWeight.boneIndex0,boneWeight.weight0));
 					pairs.Add(new KeyValuePair<int, float>(boneWeight.boneIndex1,boneWeight.weight1));
 					pairs.Add(new KeyValuePair<int, float>(boneWeight.boneIndex2,boneWeight.weight2));
@@ -196,7 +196,7 @@ namespace Anima2D
 					
 					pairs = pairs.OrderByDescending(s=>s.Value).ToList();
 					
-					UnityEngine.BoneWeight boneWeight2 = new UnityEngine.BoneWeight();
+					var boneWeight2 = new UnityEngine.BoneWeight();
 					boneWeight2.boneIndex0 = Mathf.Max(0,pairs[0].Key);
 					boneWeight2.boneIndex1 = Mathf.Max(0,pairs[1].Key);
 					boneWeight2.boneIndex2 = Mathf.Max(0,pairs[2].Key);
@@ -221,13 +221,13 @@ namespace Anima2D
 					verticesOrder.Add(vertexOrder);
 				}
 				
-				List<WeightedTriangle> weightedTriangles = new List<WeightedTriangle>(spriteMeshData.indices.Length / 3);
+				var weightedTriangles = new List<WeightedTriangle>(spriteMeshData.indices.Length / 3);
 				
-				for(int i = 0; i < spriteMeshData.indices.Length; i+=3)
+				for(var i = 0; i < spriteMeshData.indices.Length; i+=3)
 				{
-					int p1 = spriteMeshData.indices[i];
-					int p2 = spriteMeshData.indices[i+1];
-					int p3 = spriteMeshData.indices[i+2];
+					var p1 = spriteMeshData.indices[i];
+					var p2 = spriteMeshData.indices[i+1];
+					var p3 = spriteMeshData.indices[i+2];
 					
 					weightedTriangles.Add(new WeightedTriangle(p1,p2,p3,
 					                                           verticesOrder[p1],
@@ -237,21 +237,21 @@ namespace Anima2D
 				
 				weightedTriangles = weightedTriangles.OrderBy( t => t.weight ).ToList();
 				
-				List<int> indices = new List<int>(spriteMeshData.indices.Length);
+				var indices = new List<int>(spriteMeshData.indices.Length);
 				
-				for(int i = 0; i < weightedTriangles.Count; ++i)
+				for(var i = 0; i < weightedTriangles.Count; ++i)
 				{
-					WeightedTriangle t = weightedTriangles[i];
+					var t = weightedTriangles[i];
 					indices.Add(t.p1);
 					indices.Add(t.p2);
 					indices.Add(t.p3);
 				}
 
-				List<Matrix4x4> bindposes = (new List<BindInfo>(spriteMeshData.bindPoses)).ConvertAll( p => p.bindPose );
+				var bindposes = (new List<BindInfo>(spriteMeshData.bindPoses)).ConvertAll( p => p.bindPose );
 
-				for (int i = 0; i < bindposes.Count; i++)
+				for (var i = 0; i < bindposes.Count; i++)
 				{
-					Matrix4x4 bindpose = bindposes [i];
+					var bindpose = bindposes [i];
 
 					bindpose.m23 = 0f;
 
@@ -280,7 +280,7 @@ namespace Anima2D
 
 		public static Vector3[] GetMeshVertices(Sprite sprite, SpriteMeshData spriteMeshData)
 		{
-			float pixelsPerUnit = GetSpritePixelsPerUnit(sprite);
+			var pixelsPerUnit = GetSpritePixelsPerUnit(sprite);
 
 			return (new List<Vector2>(spriteMeshData.vertices)).ConvertAll( v => TexCoordToVertex(spriteMeshData.pivotPoint,v,pixelsPerUnit)).ToArray();
 		}
@@ -289,9 +289,9 @@ namespace Anima2D
 		{
 			if(sprite)
 			{
-				Texture2D texture = SpriteUtility.GetSpriteTexture(sprite,false);
+				var texture = SpriteUtility.GetSpriteTexture(sprite,false);
 				
-				TextureImporter textureImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(texture)) as TextureImporter;
+				var textureImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(texture)) as TextureImporter;
 				
 				GetWidthAndHeight(textureImporter,ref width, ref height);
 			}
@@ -299,11 +299,11 @@ namespace Anima2D
 		
 		public static void GetWidthAndHeight(TextureImporter textureImporter, ref int width, ref int height)
 		{
-			MethodInfo methodInfo = typeof(TextureImporter).GetMethod("GetWidthAndHeight", BindingFlags.Instance | BindingFlags.NonPublic);
+			var methodInfo = typeof(TextureImporter).GetMethod("GetWidthAndHeight", BindingFlags.Instance | BindingFlags.NonPublic);
 			
 			if(methodInfo != null)
 			{
-				object[] parameters = new object[] { null, null };
+				var parameters = new object[] { null, null };
 				methodInfo.Invoke(textureImporter,parameters);
 				width = (int)parameters[0];
 				height = (int)parameters[1];
@@ -312,16 +312,16 @@ namespace Anima2D
 		
 		public static float GetSpritePixelsPerUnit(Sprite sprite)
 		{
-			TextureImporter textureImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sprite)) as TextureImporter;
+			var textureImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sprite)) as TextureImporter;
 			
 			return textureImporter.spritePixelsPerUnit;
 		}
 		
 		static void InitFromSprite(SpriteMesh spriteMesh, Sprite sprite)
 		{
-			SerializedObject spriteMeshSO = new SerializedObject(spriteMesh);
-			SerializedProperty spriteProp = spriteMeshSO.FindProperty("m_Sprite");
-			SerializedProperty apiProp = spriteMeshSO.FindProperty("m_ApiVersion");
+			var spriteMeshSO = new SerializedObject(spriteMesh);
+			var spriteProp = spriteMeshSO.FindProperty("m_Sprite");
+			var apiProp = spriteMeshSO.FindProperty("m_ApiVersion");
 			
 			spriteMeshSO.Update();
 			apiProp.intValue = SpriteMesh.api_version;
@@ -349,42 +349,42 @@ namespace Anima2D
 		
 		public static void GetSpriteData(Sprite sprite, out Vector2[] vertices, out IndexedEdge[] edges, out int[] indices, out Vector2 pivotPoint)
 		{
-			int width = 0;
-			int height = 0;
+			var width = 0;
+			var height = 0;
 			
 			GetSpriteTextureSize(sprite,ref width,ref height);
 			
 			pivotPoint = Vector2.zero;
 			
-			Vector2[] uvs = SpriteUtility.GetSpriteUVs(sprite,false);
+			var uvs = SpriteUtility.GetSpriteUVs(sprite,false);
 			
 			vertices = new Vector2[uvs.Length];
 			
-			for(int i = 0; i < uvs.Length; ++i)
+			for(var i = 0; i < uvs.Length; ++i)
 			{
 				vertices[i] = new Vector2(uvs[i].x * width, uvs[i].y * height);
 			}
 			
-			ushort[] l_indices = sprite.triangles;
+			var l_indices = sprite.triangles;
 			
 			indices = new int[l_indices.Length];
 			
-			for(int i = 0; i < l_indices.Length; ++i)
+			for(var i = 0; i < l_indices.Length; ++i)
 			{	
 				indices[i] = (int)l_indices[i];
 			}
 			
-			HashSet<IndexedEdge> edgesSet = new HashSet<IndexedEdge>();
+			var edgesSet = new HashSet<IndexedEdge>();
 			
-			for(int i = 0; i < indices.Length; i += 3)
+			for(var i = 0; i < indices.Length; i += 3)
 			{
-				int index1 = indices[i];
-				int index2 = indices[i+1];
-				int index3 = indices[i+2];
+				var index1 = indices[i];
+				var index2 = indices[i+1];
+				var index3 = indices[i+2];
 				
-				IndexedEdge edge1 = new IndexedEdge(index1,index2);
-				IndexedEdge edge2 = new IndexedEdge(index2,index3);
-				IndexedEdge edge3 = new IndexedEdge(index1,index3);
+				var edge1 = new IndexedEdge(index1,index2);
+				var edge2 = new IndexedEdge(index2,index3);
+				var edge3 = new IndexedEdge(index1,index3);
 				
 				if(edgesSet.Contains(edge1))
 				{
@@ -409,8 +409,8 @@ namespace Anima2D
 			}
 			
 			edges = new IndexedEdge[edgesSet.Count];
-			int edgeIndex = 0;
-			foreach(IndexedEdge edge in edgesSet)
+			var edgeIndex = 0;
+			foreach(var edge in edgesSet)
 			{
 				edges[edgeIndex] = edge;
 				++edgeIndex;
@@ -428,20 +428,20 @@ namespace Anima2D
 			
 			if(texture)
 			{
-				Vector2[][] paths = GenerateOutline(texture,rect,detail,(byte)(alphaTolerance * 255f),holeDetection);
+				var paths = GenerateOutline(texture,rect,detail,(byte)(alphaTolerance * 255f),holeDetection);
 				
-				int startIndex = 0;
-				for (int i = 0; i < paths.Length; i++)
+				var startIndex = 0;
+				for (var i = 0; i < paths.Length; i++)
 				{
-					Vector2[] path = paths [i];
-					for (int j = 0; j < path.Length; j++)
+					var path = paths [i];
+					for (var j = 0; j < path.Length; j++)
 					{
 						vertices.Add(path[j] + rect.center);
 						indexedEdges.Add(new IndexedEdge(startIndex + j,startIndex + ((j+1) % path.Length)));
 					}
 					startIndex += path.Length;
 				}
-				List<Hole> holes = new List<Hole>();
+				var holes = new List<Hole>();
 				Triangulate(vertices,indexedEdges,holes,ref indices);
 			}
 		}
@@ -450,11 +450,11 @@ namespace Anima2D
 		{
 			Vector2[][] paths = null;
 			
-			MethodInfo methodInfo = typeof(SpriteUtility).GetMethod("GenerateOutline", BindingFlags.Static | BindingFlags.NonPublic);
+			var methodInfo = typeof(SpriteUtility).GetMethod("GenerateOutline", BindingFlags.Static | BindingFlags.NonPublic);
 			
 			if(methodInfo != null)
 			{
-				object[] parameters = new object[] { texture,rect,detail,alphaTolerance,holeDetection,null };
+				var parameters = new object[] { texture,rect,detail,alphaTolerance,holeDetection,null };
 				methodInfo.Invoke(null,parameters);
 				
 				paths = (Vector2[][]) parameters[5];
@@ -469,31 +469,31 @@ namespace Anima2D
 			
 			if(vertices.Count >= 3)
 			{
-				InputGeometry inputGeometry = new InputGeometry(vertices.Count);
+				var inputGeometry = new InputGeometry(vertices.Count);
 				
-				for(int i = 0; i < vertices.Count; ++i)
+				for(var i = 0; i < vertices.Count; ++i)
 				{
-					Vector2 position = vertices[i];
+					var position = vertices[i];
 					inputGeometry.AddPoint(position.x,position.y);
 				}
 				
-				for(int i = 0; i < edges.Count; ++i)
+				for(var i = 0; i < edges.Count; ++i)
 				{
-					IndexedEdge edge = edges[i];
+					var edge = edges[i];
 					inputGeometry.AddSegment(edge.index1,edge.index2);
 				}
 				
-				for(int i = 0; i < holes.Count; ++i)
+				for(var i = 0; i < holes.Count; ++i)
 				{
-					Vector2 hole = holes[i].vertex;
+					var hole = holes[i].vertex;
 					inputGeometry.AddHole(hole.x,hole.y);
 				}
 				
-				TriangleNet.Mesh triangleMesh = new TriangleNet.Mesh();
+				var triangleMesh = new TriangleNet.Mesh();
 
 				triangleMesh.Triangulate(inputGeometry);
 				
-				foreach (TriangleNet.Data.Triangle triangle in triangleMesh.Triangles)
+				foreach (var triangle in triangleMesh.Triangles)
 				{
 					if(triangle.P0 >= 0 && triangle.P0 < vertices.Count &&
 					   triangle.P0 >= 0 && triangle.P1 < vertices.Count &&
@@ -518,28 +518,28 @@ namespace Anima2D
 			
 			if(vertices.Count >= 3)
 			{
-				InputGeometry inputGeometry = new InputGeometry(vertices.Count);
+				var inputGeometry = new InputGeometry(vertices.Count);
 				
-				for(int i = 0; i < vertices.Count; ++i)
+				for(var i = 0; i < vertices.Count; ++i)
 				{
-					Vector2 vertex = vertices[i];
+					var vertex = vertices[i];
 					inputGeometry.AddPoint(vertex.x,vertex.y);
 				}
 				
-				for(int i = 0; i < indexedEdges.Count; ++i)
+				for(var i = 0; i < indexedEdges.Count; ++i)
 				{
-					IndexedEdge edge = indexedEdges[i];
+					var edge = indexedEdges[i];
 					inputGeometry.AddSegment(edge.index1,edge.index2);
 				}
 				
-				for(int i = 0; i < holes.Count; ++i)
+				for(var i = 0; i < holes.Count; ++i)
 				{
-					Vector2 hole = holes[i].vertex;
+					var hole = holes[i].vertex;
 					inputGeometry.AddHole(hole.x,hole.y);
 				}
 				
-				TriangleNet.Mesh triangleMesh = new TriangleNet.Mesh();
-				TriangleNet.Tools.Statistic statistic = new TriangleNet.Tools.Statistic();
+				var triangleMesh = new TriangleNet.Mesh();
+				var statistic = new TriangleNet.Tools.Statistic();
 				
 				triangleMesh.Triangulate(inputGeometry);
 				
@@ -555,17 +555,17 @@ namespace Anima2D
 				vertices.Clear();
 				indexedEdges.Clear();
 				
-				foreach(TriangleNet.Data.Vertex vertex in triangleMesh.Vertices)
+				foreach(var vertex in triangleMesh.Vertices)
 				{
 					vertices.Add(new Vector2((float)vertex.X,(float)vertex.Y));
 				}
 				
-				foreach(TriangleNet.Data.Segment segment in triangleMesh.Segments)
+				foreach(var segment in triangleMesh.Segments)
 				{
 					indexedEdges.Add(new IndexedEdge(segment.P0,segment.P1));
 				}
 				
-				foreach (TriangleNet.Data.Triangle triangle in triangleMesh.Triangles)
+				foreach (var triangle in triangleMesh.Triangles)
 				{
 					if(triangle.P0 >= 0 && triangle.P0 < vertices.Count &&
 					   triangle.P0 >= 0 && triangle.P1 < vertices.Count &&
@@ -598,39 +598,39 @@ namespace Anima2D
 		
 		public static Rect GetRect(Sprite sprite)
 		{
-			float pixelsPerUnit = GetSpritePixelsPerUnit(sprite);
-			float factor = pixelsPerUnit / sprite.pixelsPerUnit;
-			Vector2 position = sprite.rect.position * factor;
-			Vector2 size = sprite.rect.size * factor;
+			var pixelsPerUnit = GetSpritePixelsPerUnit(sprite);
+			var factor = pixelsPerUnit / sprite.pixelsPerUnit;
+			var position = sprite.rect.position * factor;
+			var size = sprite.rect.size * factor;
 			
 			return new Rect(position.x,position.y,size.x,size.y);
 		}
 		
 		public static Vector2 GetPivotPoint(Sprite sprite)
 		{
-			float pixelsPerUnit = GetSpritePixelsPerUnit(sprite);
+			var pixelsPerUnit = GetSpritePixelsPerUnit(sprite);
 			return (sprite.pivot + sprite.rect.position) * pixelsPerUnit / sprite.pixelsPerUnit;
 		}
 		
 		public static Rect CalculateSpriteRect(SpriteMesh spriteMesh, int padding)
 		{
-			int width = 0;
-			int height = 0;
+			var width = 0;
+			var height = 0;
 			
 			GetSpriteTextureSize(spriteMesh.sprite,ref width,ref height);
 			
-			SpriteMeshData spriteMeshData = LoadSpriteMeshData(spriteMesh);
+			var spriteMeshData = LoadSpriteMeshData(spriteMesh);
 			
-			Rect rect = spriteMesh.sprite.rect;
+			var rect = spriteMesh.sprite.rect;
 			
 			if(spriteMeshData)
 			{
-				Vector2 min = new Vector2(float.MaxValue,float.MaxValue);
-				Vector2 max = new Vector2(float.MinValue,float.MinValue);
+				var min = new Vector2(float.MaxValue,float.MaxValue);
+				var max = new Vector2(float.MinValue,float.MinValue);
 				
-				for (int i = 0; i < spriteMeshData.vertices.Length; i++)
+				for (var i = 0; i < spriteMeshData.vertices.Length; i++)
 				{
-					Vector2 v = spriteMeshData.vertices[i];
+					var v = spriteMeshData.vertices[i];
 					
 					if(v.x < min.x) min.x = v.x;
 					if(v.y < min.y) min.y = v.y;
@@ -650,7 +650,7 @@ namespace Anima2D
 		{
 			if(spriteMesh)
 			{
-				GameObject gameObject = new GameObject(spriteMesh.name);
+				var gameObject = new GameObject(spriteMesh.name);
 				
 				if(undo)
 				{
@@ -678,25 +678,25 @@ namespace Anima2D
 				spriteMeshInstance.spriteMesh = spriteMesh;
 				spriteMeshInstance.sharedMaterial = defaultMaterial;
 				
-				SpriteMeshData spriteMeshData = SpriteMeshUtils.LoadSpriteMeshData(spriteMesh);
+				var spriteMeshData = SpriteMeshUtils.LoadSpriteMeshData(spriteMesh);
 				
-				List<Bone2D> bones = new List<Bone2D>();
-				List<string> paths = new List<string>();
+				var bones = new List<Bone2D>();
+				var paths = new List<string>();
 				
-				Vector4 zero = new Vector4 (0f, 0f, 0f, 1f);
+				var zero = new Vector4 (0f, 0f, 0f, 1f);
 				
-				foreach(BindInfo bindInfo in spriteMeshData.bindPoses)
+				foreach(var bindInfo in spriteMeshData.bindPoses)
 				{
-					Matrix4x4 m =  spriteMeshInstance.transform.localToWorldMatrix * bindInfo.bindPose.inverse;
+					var m =  spriteMeshInstance.transform.localToWorldMatrix * bindInfo.bindPose.inverse;
 					
-					GameObject bone = new GameObject(bindInfo.name);
+					var bone = new GameObject(bindInfo.name);
 					
 					if(undo)
 					{
 						Undo.RegisterCreatedObjectUndo(bone,Undo.GetCurrentGroupName());
 					}
 					
-					Bone2D boneComponent = bone.AddComponent<Bone2D>();
+					var boneComponent = bone.AddComponent<Bone2D>();
 					
 					boneComponent.localLength = bindInfo.boneLength;
 					bone.transform.position = m * zero;
@@ -740,13 +740,13 @@ namespace Anima2D
 				return;
 			}
 			
-			SerializedObject spriteMeshInstaceSO = new SerializedObject(spriteMeshInstance);
+			var spriteMeshInstaceSO = new SerializedObject(spriteMeshInstance);
 			
-			SpriteMesh spriteMesh = spriteMeshInstaceSO.FindProperty("m_SpriteMesh").objectReferenceValue as SpriteMesh;
+			var spriteMesh = spriteMeshInstaceSO.FindProperty("m_SpriteMesh").objectReferenceValue as SpriteMesh;
 			
 			if(spriteMesh)
 			{
-				Mesh sharedMesh = spriteMesh.sharedMesh;
+				var sharedMesh = spriteMesh.sharedMesh;
 				
 				if(sharedMesh.bindposes.Length > 0 && spriteMeshInstance.bones.Count > sharedMesh.bindposes.Length)
 				{
@@ -755,8 +755,8 @@ namespace Anima2D
 				
 				if(CanEnableSkinning(spriteMeshInstance))
 				{
-					MeshFilter meshFilter = spriteMeshInstance.cachedMeshFilter;
-					MeshRenderer meshRenderer = spriteMeshInstance.cachedRenderer as MeshRenderer;
+					var meshFilter = spriteMeshInstance.cachedMeshFilter;
+					var meshRenderer = spriteMeshInstance.cachedRenderer as MeshRenderer;
 					
 					if(meshFilter)
 					{
@@ -777,7 +777,7 @@ namespace Anima2D
 						}
 					}
 					
-					SkinnedMeshRenderer skinnedMeshRenderer = spriteMeshInstance.cachedSkinnedRenderer;
+					var skinnedMeshRenderer = spriteMeshInstance.cachedSkinnedRenderer;
 					
 					if(!skinnedMeshRenderer)
 					{
@@ -798,9 +798,9 @@ namespace Anima2D
 
 					EditorUtility.SetDirty(skinnedMeshRenderer);
 				}else{
-					SkinnedMeshRenderer skinnedMeshRenderer = spriteMeshInstance.cachedSkinnedRenderer;
-					MeshFilter meshFilter = spriteMeshInstance.cachedMeshFilter;
-					MeshRenderer meshRenderer = spriteMeshInstance.cachedRenderer as MeshRenderer;
+					var skinnedMeshRenderer = spriteMeshInstance.cachedSkinnedRenderer;
+					var meshFilter = spriteMeshInstance.cachedMeshFilter;
+					var meshRenderer = spriteMeshInstance.cachedRenderer as MeshRenderer;
 					
 					if(skinnedMeshRenderer)
 					{
@@ -843,15 +843,15 @@ namespace Anima2D
 		{
 			if(!spriteMesh || !spriteMesh.sprite) return false;
 			
-			SpriteMeshData spriteMeshData = LoadSpriteMeshData(spriteMesh);
+			var spriteMeshData = LoadSpriteMeshData(spriteMesh);
 			
 			if(!spriteMeshData) return false;
 			
-			ushort[] triangles = spriteMesh.sprite.triangles;
+			var triangles = spriteMesh.sprite.triangles;
 			
 			if(triangles.Length != spriteMeshData.indices.Length) return true;
 			
-			for(int i = 0; i < triangles.Length; i++)
+			for(var i = 0; i < triangles.Length; i++)
 			{
 				if(spriteMeshData.indices[i] != triangles[i])
 				{
@@ -866,7 +866,7 @@ namespace Anima2D
 		{
 			BlendShape l_blendshape = null;
 
-			SpriteMeshData spriteMeshData = LoadSpriteMeshData(spriteMesh);
+			var spriteMeshData = LoadSpriteMeshData(spriteMesh);
 
 			if(spriteMeshData)
 			{
@@ -876,7 +876,7 @@ namespace Anima2D
 
 				AssetDatabase.AddObjectToAsset(l_blendshape,spriteMeshData);
 
-				List<BlendShape> l_blendshapes = new List<BlendShape>(spriteMeshData.blendshapes);
+				var l_blendshapes = new List<BlendShape>(spriteMeshData.blendshapes);
 
 				l_blendshapes.Add(l_blendshape);
 
@@ -901,7 +901,7 @@ namespace Anima2D
 
 				AssetDatabase.AddObjectToAsset(l_blendshapeFrame,blendshape);
 
-				List<BlendShapeFrame> l_blendshapeFrames = new List<BlendShapeFrame>(blendshape.frames);
+				var l_blendshapeFrames = new List<BlendShapeFrame>(blendshape.frames);
 
 				l_blendshapeFrames.Add(l_blendshapeFrame);
 
@@ -935,9 +935,9 @@ namespace Anima2D
 					Undo.RegisterCompleteObjectUndo(spriteMeshData,undoName);
 				}
 
-				foreach(BlendShape blendShape in spriteMeshData.blendshapes)
+				foreach(var blendShape in spriteMeshData.blendshapes)
 				{
-					foreach(BlendShapeFrame frame in blendShape.frames)
+					foreach(var frame in blendShape.frames)
 					{
 						if(undo)
 						{
@@ -974,7 +974,7 @@ namespace Anima2D
 			
 			BlendShape[] blendShapes = null;
 
-			SpriteMeshData spriteMeshData = LoadSpriteMeshData(spriteMesh);
+			var spriteMeshData = LoadSpriteMeshData(spriteMesh);
 
 			if(spriteMeshData)
 			{
@@ -989,19 +989,19 @@ namespace Anima2D
 			if(blendShapes != null)
 			{
 #if !(UNITY_5_0 || UNITY_5_1 || UNITY_5_2)
-				List<string> blendShapeNames = new List<string>();
+				var blendShapeNames = new List<string>();
 
 				mesh.ClearBlendShapes();
 
-				Vector3[] from = mesh.vertices;
+				var from = mesh.vertices;
 
-				for (int i = 0; i < blendShapes.Length; i++)
+				for (var i = 0; i < blendShapes.Length; i++)
 				{
-					BlendShape blendshape = blendShapes[i];
+					var blendshape = blendShapes[i];
 
 					if(blendshape)
 					{
-						string blendShapeName = blendshape.name;
+						var blendShapeName = blendshape.name;
 
 						if(blendShapeNames.Contains(blendShapeName))
 						{
@@ -1009,13 +1009,13 @@ namespace Anima2D
 						}else{
 							blendShapeNames.Add(blendShapeName);
 
-							for(int j = 0; j < blendshape.frames.Length; j++)
+							for(var j = 0; j < blendshape.frames.Length; j++)
 							{
-								BlendShapeFrame l_blendshapeFrame = blendshape.frames[j];
+								var l_blendshapeFrame = blendshape.frames[j];
 
 								if(l_blendshapeFrame && from.Length == l_blendshapeFrame.vertices.Length)
 								{
-									Vector3[] deltaVertices = GetDeltaVertices(from, l_blendshapeFrame.vertices);
+									var deltaVertices = GetDeltaVertices(from, l_blendshapeFrame.vertices);
 
 									mesh.AddBlendShapeFrame(blendShapeName, l_blendshapeFrame.weight, deltaVertices, null, null);
 								}
@@ -1033,9 +1033,9 @@ namespace Anima2D
 
 		static Vector3[] GetDeltaVertices(Vector3[] from, Vector3[] to)
 		{
-			Vector3[] result = new Vector3[from.Length];
+			var result = new Vector3[from.Length];
 
-			for (int i = 0; i < to.Length; i++)
+			for (var i = 0; i < to.Length; i++)
 			{
 				result[i] = to[i] - from[i];
 			}

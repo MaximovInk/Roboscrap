@@ -82,19 +82,19 @@ namespace Anima2D
 
 		public static Vector3 GUIToWorld(Vector3 guiPosition, Vector3 planeNormal, Vector3 planePos)
 		{
-			Vector3 worldPos = Handles.inverseMatrix.MultiplyPoint(guiPosition);
+			var worldPos = Handles.inverseMatrix.MultiplyPoint(guiPosition);
 
 			if(Camera.current)
 			{
-				Ray ray = HandleUtility.GUIPointToWorldRay(guiPosition);
+				var ray = HandleUtility.GUIPointToWorldRay(guiPosition);
 
 				planeNormal = Handles.matrix.MultiplyVector(planeNormal);
 
 				planePos = Handles.matrix.MultiplyPoint(planePos);
 
-				Plane plane = new Plane(planeNormal,planePos);
+				var plane = new Plane(planeNormal,planePos);
 
-				float distance = 0f;
+				var distance = 0f;
 
 				if(plane.Raycast(ray, out distance))
 				{
@@ -112,7 +112,7 @@ namespace Anima2D
 
 		public static Vector2 Slider2D(int id, Vector2 position, CapFunction drawCapFunction, Vector3 planeNormal, Vector3 planePosition)
 		{
-			EventType eventType = Event.current.GetTypeForControl(id);
+			var eventType = Event.current.GetTypeForControl(id);
 			
 			switch(eventType)
 			{
@@ -123,7 +123,7 @@ namespace Anima2D
 					GUIUtility.hotControl = id;
 					s_CurrentMousePosition = Event.current.mousePosition;
 					s_DragStartScreenPosition = Event.current.mousePosition;
-					Vector2 b = HandleUtility.WorldToGUIPoint(position);
+					var b = HandleUtility.WorldToGUIPoint(position);
 					s_DragScreenOffset = s_CurrentMousePosition - b;
 					EditorGUIUtility.SetWantsMouseJumping(1);
 					
@@ -142,7 +142,7 @@ namespace Anima2D
 				if (GUIUtility.hotControl == id)
 				{
 					s_CurrentMousePosition = Event.current.mousePosition;
-					Vector2 center = position;
+					var center = position;
 					position = GUIToWorld(s_CurrentMousePosition - s_DragScreenOffset, planeNormal, planePosition);
 					if (!Mathf.Approximately((center - position).magnitude, 0f))
 					{
@@ -244,8 +244,8 @@ namespace Anima2D
 		{
 			Vector3 vector = HandleUtility.WorldToGUIPoint(position);
 
-			float fixedWidth = style.fixedWidth;
-			float fixedHeight = style.fixedHeight;
+			var fixedWidth = style.fixedWidth;
+			var fixedHeight = style.fixedHeight;
 
 			return new Rect(vector.x - fixedWidth / 2f, vector.y - fixedHeight / 2f, fixedWidth, fixedHeight);
 		}
@@ -299,9 +299,9 @@ namespace Anima2D
 		static void SetDiscSectionPoints(Vector3[] dest, int count, Vector3 normal, Vector3 from, float angle)
 		{
 			from.Normalize();
-			Quaternion rotation = Quaternion.AngleAxis(angle / (float)(count - 1), normal);
-			Vector3 vector = from;
-			for (int i = 0; i < count; i++)
+			var rotation = Quaternion.AngleAxis(angle / (float)(count - 1), normal);
+			var vector = from;
+			for (var i = 0; i < count; i++)
 			{
 				dest[i] = vector;
 				vector = rotation * vector;
@@ -334,7 +334,7 @@ namespace Anima2D
 			GL.PushMatrix();
 			GL.MultMatrix(Handles.matrix);
 			GL.Begin(4);
-			for (int i = 1; i < s_circleArray.Length; i++)
+			for (var i = 1; i < s_circleArray.Length; i++)
 			{
 				GL.Color(Handles.color);
 				GL.Vertex(center + s_circleArray[i - 1]* radius * innerRadius);
@@ -357,7 +357,7 @@ namespace Anima2D
 			
 			innerRadius = Mathf.Clamp01(innerRadius);
 			
-			Vector3[] array = new Vector3[4];
+			var array = new Vector3[4];
 			SetDiscSectionPoints(array, 4, normal, Vector3.up, 360f);
 			Shader.SetGlobalColor("_HandleColor", Handles.color * new Color(1f, 1f, 1f, 0.5f));
 			Shader.SetGlobalFloat("_HandleSize", 1f);
@@ -365,7 +365,7 @@ namespace Anima2D
 			GL.PushMatrix();
 			GL.MultMatrix(Handles.matrix);
 			GL.Begin(4);
-			for (int i = 1; i < array.Length; i++)
+			for (var i = 1; i < array.Length; i++)
 			{
 				GL.Color(Handles.color);
 				GL.Vertex(center + array[i - 1]*innerRadius);
@@ -388,7 +388,7 @@ namespace Anima2D
 			
 			innerRadius = Mathf.Clamp01(innerRadius);
 			
-			Vector3[] array = new Vector3[5];
+			var array = new Vector3[5];
 			SetDiscSectionPoints(array, 5, normal, Vector3.left + Vector3.up, 360f);
 			Shader.SetGlobalColor("_HandleColor", Handles.color * new Color(1f, 1f, 1f, 0.5f));
 			Shader.SetGlobalFloat("_HandleSize", 1f);
@@ -396,7 +396,7 @@ namespace Anima2D
 			GL.PushMatrix();
 			GL.MultMatrix(Handles.matrix);
 			GL.Begin(4);
-			for (int i = 1; i < array.Length; i++)
+			for (var i = 1; i < array.Length; i++)
 			{
 				GL.Color(Handles.color);
 				GL.Vertex(center + array[i - 1]*innerRadius);
@@ -424,7 +424,7 @@ namespace Anima2D
 				return;
 			}
 
-			Vector3 right = Vector3.Cross(normal,p2-p1).normalized;
+			var right = Vector3.Cross(normal,p2-p1).normalized;
 			handleWireMaterial.SetPass(0);
 			GL.PushMatrix ();
 			GL.MultMatrix (Handles.matrix);
@@ -458,7 +458,7 @@ namespace Anima2D
 			GL.PushMatrix();
 			GL.MultMatrix(Handles.matrix);
 			GL.Begin(4);
-			for (int i = 1; i < s_array.Length; i++)
+			for (var i = 1; i < s_array.Length; i++)
 			{
 				GL.Color(color);
 				GL.Vertex(center);
@@ -471,13 +471,13 @@ namespace Anima2D
 
 		public static void DrawAAPolyLine(Color[] colors, Vector3[] points)
 		{
-			Type type = typeof(Handles);
+			var type = typeof(Handles);
 
-			MethodInfo method = type.GetMethod("DrawAAPolyLine", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, null, new [] { typeof(Color[]), typeof(Vector3[]) } , null);
+			var method = type.GetMethod("DrawAAPolyLine", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, null, new [] { typeof(Color[]), typeof(Vector3[]) } , null);
 
 			if(method != null)
 			{
-				object[] parameters = new object[] { colors, points };
+				var parameters = new object[] { colors, points };
 				method.Invoke(null,parameters);
 			}
 		}

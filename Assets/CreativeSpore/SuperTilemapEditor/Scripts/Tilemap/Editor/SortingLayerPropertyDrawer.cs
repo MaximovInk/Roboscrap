@@ -23,11 +23,11 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public static void SortingLayerField(Rect position, GUIContent label, SerializedProperty layerID, GUIStyle style, GUIStyle labelStyle)
         {
-            MethodInfo methodInfo = typeof(EditorGUI).GetMethod("SortingLayerField", BindingFlags.Static | BindingFlags.NonPublic, null, new[] { typeof(Rect), typeof(GUIContent), typeof(SerializedProperty), typeof(GUIStyle), typeof(GUIStyle) }, null);
+            var methodInfo = typeof(EditorGUI).GetMethod("SortingLayerField", BindingFlags.Static | BindingFlags.NonPublic, null, new[] { typeof(Rect), typeof(GUIContent), typeof(SerializedProperty), typeof(GUIStyle), typeof(GUIStyle) }, null);
 
             if (methodInfo != null)
             {
-                object[] parameters = new object[] { position, label, layerID, style, labelStyle };
+                var parameters = new object[] { position, label, layerID, style, labelStyle };
                 methodInfo.Invoke(null, parameters);
             }
         }       

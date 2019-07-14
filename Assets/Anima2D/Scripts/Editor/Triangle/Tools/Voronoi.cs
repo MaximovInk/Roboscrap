@@ -99,7 +99,7 @@ namespace TriangleNet.Tools
 
         private void ComputeCircumCenters()
         {
-            Otri tri = default(Otri);
+            var tri = default(Otri);
             double xi = 0, eta = 0;
             Point pt;
 
@@ -116,7 +116,7 @@ namespace TriangleNet.Tools
                 bounds.Update(pt.x, pt.y);
             }
 
-            double ds = Math.Max(bounds.Width, bounds.Height);
+            var ds = Math.Max(bounds.Width, bounds.Height);
             bounds.Scale(ds, ds);
         }
 
@@ -127,17 +127,17 @@ namespace TriangleNet.Tools
         /// <returns>The circumcenter indices which make up the cell.</returns>
         private void ConstructVoronoiRegion(Vertex vertex)
         {
-            VoronoiRegion region = new VoronoiRegion(vertex);
+            var region = new VoronoiRegion(vertex);
             regions.Add(region);
 
-            List<Point> vpoints = new List<Point>();
+            var vpoints = new List<Point>();
 
-            Otri f = default(Otri);
-            Otri f_init = default(Otri);
-            Otri f_next = default(Otri);
-            Otri f_prev = default(Otri);
+            var f = default(Otri);
+            var f_init = default(Otri);
+            var f_next = default(Otri);
+            var f_prev = default(Otri);
 
-            Osub sub = default(Osub);
+            var sub = default(Osub);
 
             // Call f_init a triangle incident to x
             vertex.tri.Copy(ref f_init);
@@ -260,16 +260,16 @@ namespace TriangleNet.Tools
 
         private bool BoxRayIntersection(Point pt, double dx, double dy, out Vertex intersect)
         {
-            double x = pt.X;
-            double y = pt.Y;
+            var x = pt.X;
+            var y = pt.Y;
 
             double t1, x1, y1, t2, x2, y2;
 
             // Bounding box
-            double minX = bounds.Xmin;
-            double maxX = bounds.Xmax;
-            double minY = bounds.Ymin;
-            double maxY = bounds.Ymax;
+            var minX = bounds.Xmin;
+            var maxX = bounds.Xmax;
+            var minY = bounds.Ymin;
+            var maxY = bounds.Ymax;
 
             // Check if point is inside the bounds
             if (x < minX || x > maxX || y < minY || y > maxY)

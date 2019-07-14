@@ -20,8 +20,8 @@ namespace CreativeSpore.SuperTilemapEditor
         public void AddNewParam(Parameter param, int idx = -1)
         {
             idx = idx >= 0 ? Mathf.Min(idx, m_paramList.Count) : m_paramList.Count;
-            string origName = param.name;
-            int i = 1;
+            var origName = param.name;
+            var i = 1;
             while (m_paramList.Exists(x => x.name == param.name))
             {
                 param.name = origName + " (" + i + ")";
@@ -37,10 +37,10 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void RenameParam(string name, string newName)
         {
-            int idx = m_paramList.FindIndex(x => x.name == name);
+            var idx = m_paramList.FindIndex(x => x.name == name);
             if (idx >= 0)
             {
-                Parameter param = m_paramList[idx];
+                var param = m_paramList[idx];
                 RemoveParam(name);
                 param.name = newName;
                 AddNewParam(param, idx);
@@ -95,7 +95,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private void AddParam<T>(string name, T value)
         {
-            Parameter param = FindParam(name);
+            var param = FindParam(name);
             if (param != null)
             {
                 string.Format(k_warning_msg_wrongName, param.name, param.GetParamType(), param.ToString());
@@ -131,7 +131,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void SetParam(string name, bool value)
         {
-            Parameter param = FindParam(name);
+            var param = FindParam(name);
             if (param != null)
                 param.SetValue(value);
             else
@@ -140,7 +140,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void SetParam(string name, int value)
         {
-            Parameter param = FindParam(name);
+            var param = FindParam(name);
             if (param != null)
                 param.SetValue(value);
             else
@@ -149,7 +149,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void SetParam(string name, float value)
         {
-            Parameter param = FindParam(name);
+            var param = FindParam(name);
             if (param != null)
                 param.SetValue(value);
             else
@@ -158,7 +158,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void SetParam(string name, string value)
         {
-            Parameter param = FindParam(name);
+            var param = FindParam(name);
             if (param != null)
                 param.SetValue(value);
             else
@@ -167,7 +167,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void SetParam(string name, UnityEngine.Object value)
         {
-            Parameter param = FindParam(name);
+            var param = FindParam(name);
             if (param != null)
                 param.SetValue(value);
             else
@@ -176,37 +176,37 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public int GetIntParam(string name, int defaultValue = 0)
         {
-            Parameter param = FindParam(name);
+            var param = FindParam(name);
             return param != null? param.GetAsInt() : defaultValue;            
         }
 
         public float GetFloatParam(string name, float defaultValue = 0f)
         {
-            Parameter param = FindParam(name);
+            var param = FindParam(name);
             return param != null ? param.GetAsFloat() : defaultValue;
         }
 
         public string GetStringParam(string name, string defaultValue = "")
         {
-            Parameter param = FindParam(name);
+            var param = FindParam(name);
             return param != null ? param.GetAsString() : defaultValue;
         }
 
         public bool GetBoolParam(string name, bool defaultValue = false)
         {
-            Parameter param = FindParam(name);
+            var param = FindParam(name);
             return param != null ? param.GetAsBool() : defaultValue;
         }
 
         public UnityEngine.Object GetObjectParam(string name, UnityEngine.Object defaultValue = null)
         {
-            Parameter param = FindParam(name);
+            var param = FindParam(name);
             return param != null ? param.GetAsObject() : defaultValue;
         }
 
         public void AddValueToIntParam(string name, int value, bool createIfDoesntExist = true)
         {
-            Parameter param = FindParam(name);            
+            var param = FindParam(name);            
             if(param != null)
             {
                 param.SetValue( param.GetAsInt() + value );
@@ -219,7 +219,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void AddValueToFloatParam(string name, float value, bool createIfDoesntExist = true)
         {
-            Parameter param = FindParam(name);
+            var param = FindParam(name);
             if (param != null)
             {
                 param.SetValue(param.GetAsFloat() + value);

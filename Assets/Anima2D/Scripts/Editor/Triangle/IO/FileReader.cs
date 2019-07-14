@@ -34,7 +34,7 @@ namespace TriangleNet.IO
                 return false;
             }
 
-            string line = reader.ReadLine().Trim();
+            var line = reader.ReadLine().Trim();
 
             while (String.IsNullOrEmpty(line) || line.StartsWith("#"))
             {
@@ -61,13 +61,13 @@ namespace TriangleNet.IO
         /// <param name="marks">Number of point markers (0 or 1)</param>
         static void ReadVertex(InputGeometry data, int index, string[] line, int attributes, int marks)
         {
-            double x = double.Parse(line[1], nfi);
-            double y = double.Parse(line[2], nfi);
-            int mark = 0;
-            double[] attribs = attributes == 0 ? null : new double[attributes];
+            var x = double.Parse(line[1], nfi);
+            var y = double.Parse(line[2], nfi);
+            var mark = 0;
+            var attribs = attributes == 0 ? null : new double[attributes];
 
             // Read the vertex attributes.
-            for (int j = 0; j < attributes; j++)
+            for (var j = 0; j < attributes; j++)
             {
                 if (line.Length > 3 + j)
                 {
@@ -95,7 +95,7 @@ namespace TriangleNet.IO
         {
             geometry = null;
 
-            string path = Path.ChangeExtension(filename, ".poly");
+            var path = Path.ChangeExtension(filename, ".poly");
 
             if (File.Exists(path))
             {
@@ -117,7 +117,7 @@ namespace TriangleNet.IO
 
             FileReader.Read(filename, out geometry);
 
-            string path = Path.ChangeExtension(filename, ".ele");
+            var path = Path.ChangeExtension(filename, ".ele");
 
             if (File.Exists(path) && geometry != null)
             {
@@ -163,7 +163,7 @@ namespace TriangleNet.IO
             string[] line;
             int invertices = 0, attributes = 0, nodemarkers = 0;
 
-            using (StreamReader reader = new StreamReader(nodefilename))
+            using (var reader = new StreamReader(nodefilename))
             {
                 if (!TryReadLine(reader, out line))
                 {
@@ -202,7 +202,7 @@ namespace TriangleNet.IO
                 // Read the vertices.
                 if (invertices > 0)
                 {
-                    for (int i = 0; i < invertices; i++)
+                    for (var i = 0; i < invertices; i++)
                     {
                         if (!TryReadLine(reader, out line))
                         {
@@ -227,7 +227,7 @@ namespace TriangleNet.IO
             if (readElements)
             {
                 // Read area file
-                string elefile = Path.ChangeExtension(nodefilename, ".ele");
+                var elefile = Path.ChangeExtension(nodefilename, ".ele");
                 if (File.Exists(elefile))
                 {
                     ReadEleFile(elefile, true);
@@ -274,7 +274,7 @@ namespace TriangleNet.IO
             string[] line;
             int invertices = 0, attributes = 0, nodemarkers = 0;
 
-            using (StreamReader reader = new StreamReader(polyfilename))
+            using (var reader = new StreamReader(polyfilename))
             {
                 if (!TryReadLine(reader, out line))
                 {
@@ -308,7 +308,7 @@ namespace TriangleNet.IO
                 {
                     data = new InputGeometry(invertices);
 
-                    for (int i = 0; i < invertices; i++)
+                    for (var i = 0; i < invertices; i++)
                     {
                         if (!TryReadLine(reader, out line))
                         {
@@ -333,7 +333,7 @@ namespace TriangleNet.IO
                 {
                     // If the .poly file claims there are zero vertices, that means that
                     // the vertices should be read from a separate .node file.
-                    string nodefile = Path.ChangeExtension(polyfilename, ".node");
+                    var nodefile = Path.ChangeExtension(polyfilename, ".node");
                     data = ReadNodeFile(nodefile);
                     invertices = data.Count;
                 }
@@ -351,9 +351,9 @@ namespace TriangleNet.IO
                     throw new Exception("Can't read input file (segments).");
                 }
 
-                int insegments = int.Parse(line[0]);
+                var insegments = int.Parse(line[0]);
 
-                int segmentmarkers = 0;
+                var segmentmarkers = 0;
                 if (line.Length > 1)
                 {
                     segmentmarkers = int.Parse(line[1]);
@@ -361,7 +361,7 @@ namespace TriangleNet.IO
 
                 int end1, end2, mark;
                 // Read and insert the segments.
-                for (int i = 0; i < insegments; i++)
+                for (var i = 0; i < insegments; i++)
                 {
                     if (!TryReadLine(reader, out line))
                     {
@@ -413,10 +413,10 @@ namespace TriangleNet.IO
                     throw new Exception("Can't read input file (holes).");
                 }
 
-                int holes = int.Parse(line[0]);
+                var holes = int.Parse(line[0]);
                 if (holes > 0)
                 {
-                    for (int i = 0; i < holes; i++)
+                    for (var i = 0; i < holes; i++)
                     {
                         if (!TryReadLine(reader, out line))
                         {
@@ -436,11 +436,11 @@ namespace TriangleNet.IO
                 // Read area constraints (optional).
                 if (TryReadLine(reader, out line))
                 {
-                    int regions = int.Parse(line[0]);
+                    var regions = int.Parse(line[0]);
 
                     if (regions > 0)
                     {
-                        for (int i = 0; i < regions; i++)
+                        for (var i = 0; i < regions; i++)
                         {
                             if (!TryReadLine(reader, out line))
                             {
@@ -466,7 +466,7 @@ namespace TriangleNet.IO
             // Read ele file
             if (readElements)
             {
-                string elefile = Path.ChangeExtension(polyfilename, ".ele");
+                var elefile = Path.ChangeExtension(polyfilename, ".ele");
                 if (File.Exists(elefile))
                 {
                     ReadEleFile(elefile, readArea);
@@ -498,11 +498,11 @@ namespace TriangleNet.IO
 
             List<ITriangle> triangles;
 
-            using (StreamReader reader = new StreamReader(elefilename))
+            using (var reader = new StreamReader(elefilename))
             {
                 // Read number of elements and number of attributes.
                 string[] line;
-                bool validRegion = false;
+                var validRegion = false;
 
                 if (!TryReadLine(reader, out line))
                 {
@@ -529,7 +529,7 @@ namespace TriangleNet.IO
                 InputTriangle tri;
 
                 // Read triangles.
-                for (int i = 0; i < intriangles; i++)
+                for (var i = 0; i < intriangles; i++)
                 {
                     if (!TryReadLine(reader, out line))
                     {
@@ -550,7 +550,7 @@ namespace TriangleNet.IO
                     // Read triangle region
                     if (attributes > 0 && validRegion)
                     {
-                        int region = 0;
+                        var region = 0;
                         validRegion = int.TryParse(line[4], out region);
                         tri.region = region;
                     }
@@ -562,7 +562,7 @@ namespace TriangleNet.IO
             // Read area file
             if (readArea)
             {
-                string areafile = Path.ChangeExtension(elefilename, ".area");
+                var areafile = Path.ChangeExtension(elefilename, ".area");
                 if (File.Exists(areafile))
                 {
                     ReadAreaFile(areafile, intriangles);
@@ -582,7 +582,7 @@ namespace TriangleNet.IO
         {
             double[] data = null;
 
-            using (StreamReader reader = new StreamReader(areafilename))
+            using (var reader = new StreamReader(areafilename))
             {
                 string[] line;
 
@@ -601,7 +601,7 @@ namespace TriangleNet.IO
                 data = new double[intriangles];
 
                 // Read area constraints.
-                for (int i = 0; i < intriangles; i++)
+                for (var i = 0; i < intriangles; i++)
                 {
                     if (!TryReadLine(reader, out line))
                     {
@@ -635,7 +635,7 @@ namespace TriangleNet.IO
 
             string[] line;
 
-            using (StreamReader reader = new StreamReader(edgeFile))
+            using (var reader = new StreamReader(edgeFile))
             {
                 // Read the edges from a .edge file.
 
@@ -645,9 +645,9 @@ namespace TriangleNet.IO
                     throw new Exception("Can't read input file (segments).");
                 }
 
-                int inedges = int.Parse(line[0]);
+                var inedges = int.Parse(line[0]);
 
-                int edgemarkers = 0;
+                var edgemarkers = 0;
                 if (line.Length > 1)
                 {
                     edgemarkers = int.Parse(line[1]);
@@ -660,7 +660,7 @@ namespace TriangleNet.IO
 
                 int end1, end2, mark;
                 // Read and insert the segments.
-                for (int i = 0; i < inedges; i++)
+                for (var i = 0; i < inedges; i++)
                 {
                     if (!TryReadLine(reader, out line))
                     {

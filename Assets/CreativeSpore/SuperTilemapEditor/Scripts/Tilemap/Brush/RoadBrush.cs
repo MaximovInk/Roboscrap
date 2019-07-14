@@ -23,19 +23,19 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public override uint Refresh(STETilemap tilemap, int gridX, int gridY, uint tileData)
         {
-            int brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
-            bool autotiling_N = AutotileWith(tilemap, brushId, gridX, gridY + 1);
-            bool autotiling_E = AutotileWith(tilemap, brushId, gridX + 1, gridY);
-            bool autotiling_S = AutotileWith(tilemap, brushId, gridX, gridY - 1);
-            bool autotiling_W = AutotileWith(tilemap, brushId, gridX - 1, gridY);
+            var brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
+            var autotiling_N = AutotileWith(tilemap, brushId, gridX, gridY + 1);
+            var autotiling_E = AutotileWith(tilemap, brushId, gridX + 1, gridY);
+            var autotiling_S = AutotileWith(tilemap, brushId, gridX, gridY - 1);
+            var autotiling_W = AutotileWith(tilemap, brushId, gridX - 1, gridY);
 
-            int idx = 0;
+            var idx = 0;
             if (autotiling_N) idx = 1;
             if (autotiling_E) idx |= 2;
             if (autotiling_S) idx |= 4;
             if (autotiling_W) idx |= 8;
 
-            uint brushTileData = RefreshLinkedBrush(tilemap, gridX, gridY, TileIds[idx]);
+            var brushTileData = RefreshLinkedBrush(tilemap, gridX, gridY, TileIds[idx]);
             // overwrite brush id
             brushTileData &= ~Tileset.k_TileDataMask_BrushId;
             brushTileData |= tileData & Tileset.k_TileDataMask_BrushId;
@@ -46,19 +46,19 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             // Add animated tiles
             {
-                int brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
-                bool autotiling_N = AutotileWith(tilemap, brushId, gridX, gridY + 1);
-                bool autotiling_E = AutotileWith(tilemap, brushId, gridX + 1, gridY);
-                bool autotiling_S = AutotileWith(tilemap, brushId, gridX, gridY - 1);
-                bool autotiling_W = AutotileWith(tilemap, brushId, gridX - 1, gridY);
+                var brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
+                var autotiling_N = AutotileWith(tilemap, brushId, gridX, gridY + 1);
+                var autotiling_E = AutotileWith(tilemap, brushId, gridX + 1, gridY);
+                var autotiling_S = AutotileWith(tilemap, brushId, gridX, gridY - 1);
+                var autotiling_W = AutotileWith(tilemap, brushId, gridX - 1, gridY);
 
-                int idx = 0;
+                var idx = 0;
                 if (autotiling_N) idx = 1;
                 if (autotiling_E) idx |= 2;
                 if (autotiling_S) idx |= 4;
                 if (autotiling_W) idx |= 8;
 
-                TilesetBrush brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(TileIds[idx]));
+                var brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(TileIds[idx]));
                 if (brush && brush.IsAnimated())
                 {
                     TilemapChunk.RegisterAnimatedBrush(brush);

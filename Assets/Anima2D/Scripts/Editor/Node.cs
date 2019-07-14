@@ -12,7 +12,7 @@ namespace Anima2D
 
 		public static Node Create(int index)
 		{
-			Node node = ScriptableObject.CreateInstance<Node>();
+			var node = ScriptableObject.CreateInstance<Node>();
 			node.hideFlags = HideFlags.DontSave;
 			node.index = index;
 			return node;

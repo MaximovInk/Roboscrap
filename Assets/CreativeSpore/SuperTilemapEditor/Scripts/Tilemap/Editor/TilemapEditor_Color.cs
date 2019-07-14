@@ -84,7 +84,7 @@ namespace CreativeSpore.SuperTilemapEditor
             }
             s_enableUndoColorPainting = EditorGUILayout.Toggle(new GUIContent("Enable Undo", "Enables undo/redo for color paint actions. It could slowdown the color painting actions."), s_enableUndoColorPainting);
             EditorGUILayout.Space();
-            string helpInfo =
+            var helpInfo =
                 "- Hold " + EditorCompatibilityUtils.CtrKeyName + " while scrolling up/down to change the brush radius.\n" +
                 "- Hold " + EditorCompatibilityUtils.AltKeyName + " while pressing the left mouse button to pick tile color.\n"
                 ;
@@ -93,12 +93,12 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private void DoColorSceneGUI()
         {
-            Event e = Event.current;
-            int controlID = GUIUtility.GetControlID(FocusType.Passive);
+            var e = Event.current;
+            var controlID = GUIUtility.GetControlID(FocusType.Passive);
             HandleUtility.AddDefaultControl(controlID);
-            EventType currentEventType = Event.current.GetTypeForControl(controlID);
-            bool skip = false;
-            int saveControl = GUIUtility.hotControl;
+            var currentEventType = Event.current.GetTypeForControl(controlID);
+            var skip = false;
+            var saveControl = GUIUtility.hotControl;
 
             //Shortcuts
             if(e.type == EventType.ScrollWheel && e.control)
@@ -122,13 +122,13 @@ namespace CreativeSpore.SuperTilemapEditor
                     EditorGUIUtility.AddCursorRect(new Rect(0f, 0f, (float)Screen.width, (float)Screen.height), MouseCursor.Arrow);
                     GUIUtility.hotControl = controlID;
                     {
-                        Plane chunkPlane = new Plane(m_tilemap.transform.forward, m_tilemap.transform.position);
-                        Vector2 mousePos = Event.current.mousePosition; mousePos.y = Screen.height - mousePos.y;
-                        Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+                        var chunkPlane = new Plane(m_tilemap.transform.forward, m_tilemap.transform.position);
+                        var mousePos = Event.current.mousePosition; mousePos.y = Screen.height - mousePos.y;
+                        var ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
                         float dist;
                         if (chunkPlane.Raycast(ray, out dist))
                         {
-                            Vector3 brushWorldPos = ray.GetPoint(dist);
+                            var brushWorldPos = ray.GetPoint(dist);
                             // Update brush transform
                             m_localBrushPos = (Vector2)m_tilemap.transform.InverseTransformPoint(brushWorldPos);
 

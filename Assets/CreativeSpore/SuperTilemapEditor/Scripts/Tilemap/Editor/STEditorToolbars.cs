@@ -16,7 +16,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private STEditorToolbars()
         {
-            List<GUIContent> guiContentList = new List<GUIContent>()
+            var guiContentList = new List<GUIContent>()
             {
                 new GUIContent(ToolIcons.GetToolTexture(ToolIcons.eToolIcon.Pencil), "Paint"),
                 new GUIContent(ToolIcons.GetToolTexture(ToolIcons.eToolIcon.Erase), "Erase (Hold Shift)"),
@@ -50,7 +50,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private void OnToolSelected_BrushToolbar(ToolbarControl source, int selectedToolIdx, int prevSelectedToolIdx)
         {
-            ToolIcons.eToolIcon toolIcon = (ToolIcons.eToolIcon)selectedToolIdx;
+            var toolIcon = (ToolIcons.eToolIcon)selectedToolIdx;
             switch (toolIcon)
             {
                 case ToolIcons.eToolIcon.Pencil:
@@ -89,17 +89,17 @@ namespace CreativeSpore.SuperTilemapEditor
                     source.SetHighlight(selectedToolIdx, TilemapEditor.s_displayHelpBox);
                     break;
                 case ToolIcons.eToolIcon.Refresh:
-                    TilemapGroup tilemapGroup = Selection.activeGameObject.GetComponent<TilemapGroup>();
+                    var tilemapGroup = Selection.activeGameObject.GetComponent<TilemapGroup>();
                     if (tilemapGroup)
                     {
-                        foreach (STETilemap tilemap in tilemapGroup.Tilemaps)
+                        foreach (var tilemap in tilemapGroup.Tilemaps)
                         {
                             tilemap.Refresh(true, true, true, true);
                         }
                     }
                     else
                     {
-                        STETilemap tilemap = Selection.activeGameObject.GetComponent<STETilemap>();
+                        var tilemap = Selection.activeGameObject.GetComponent<STETilemap>();
                         if (tilemap) tilemap.Refresh(true, true, true, true);
                     }
                     Tools.current = Tool.None;

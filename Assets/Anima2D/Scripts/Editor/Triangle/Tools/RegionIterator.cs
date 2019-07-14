@@ -46,16 +46,16 @@ namespace TriangleNet.Tools
         /// </remarks>
         void ProcessRegion(Action<Triangle> func)
         {
-            Otri testtri = default(Otri);
-            Otri neighbor = default(Otri);
-            Osub neighborsubseg = default(Osub);
+            var testtri = default(Otri);
+            var neighbor = default(Otri);
+            var neighborsubseg = default(Osub);
 
             //Behavior behavior = mesh.behavior;
 
             // Loop through all the infected triangles, spreading the attribute
             // and/or area constraint to their neighbors, then to their neighbors'
             // neighbors.
-            for (int i = 0; i < viri.Count; i++)
+            for (var i = 0; i < viri.Count; i++)
             {
                 // WARNING: Don't use foreach, viri list gets modified.
 

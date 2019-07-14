@@ -13,11 +13,11 @@ namespace Anima2D
 
 		public override void DoManipulate()
 		{
-			Rect rect = GetRect(rectManipulatorParams.position, rectManipulatorParams.rotation);
+			var rect = GetRect(rectManipulatorParams.position, rectManipulatorParams.rotation);
 
-			int vertexCount = 0;
+			var vertexCount = 0;
 
-			foreach(IVertexManipulable vm in manipulables)
+			foreach(var vm in manipulables)
 			{
 				vertexCount += vm.GetManipulableVertexCount();
 			}
@@ -25,7 +25,7 @@ namespace Anima2D
 			if(Event.current.type == EventType.MouseDown &&
 				Event.current.button == 0)
 			{
-				foreach(IVertexManipulable vm in manipulables)
+				foreach(var vm in manipulables)
 				{
 					Normalize(vm,rect,rectManipulatorParams.position,rectManipulatorParams.rotation);
 				}
@@ -39,7 +39,7 @@ namespace Anima2D
 
 				if(EditorGUI.EndChangeCheck())
 				{
-					foreach(IVertexManipulable vm in manipulables)
+					foreach(var vm in manipulables)
 					{
 						Denormalize(vm,rect,rectManipulatorParams.position,rectManipulatorParams.rotation);
 					}
@@ -50,17 +50,17 @@ namespace Anima2D
 
 		Rect GetRect(Vector3 position, Quaternion rotation)
 		{
-			Vector2 min = new Vector2(float.MaxValue,float.MaxValue);
-			Vector2 max = new Vector2(float.MinValue,float.MinValue);
+			var min = new Vector2(float.MaxValue,float.MaxValue);
+			var max = new Vector2(float.MinValue,float.MinValue);
 
-			Rect rect = new Rect();
+			var rect = new Rect();
 
-			foreach(IVertexManipulable vm in manipulables)
+			foreach(var vm in manipulables)
 			{
-				for (int i = 0; i < vm.GetManipulableVertexCount(); i++)
+				for (var i = 0; i < vm.GetManipulableVertexCount(); i++)
 				{
-					Vector3 vertex = vm.GetManipulableVertex(i);
-					Vector3 v = (Quaternion.Inverse (rotation) * (vertex - position));
+					var vertex = vm.GetManipulableVertex(i);
+					var v = (Quaternion.Inverse (rotation) * (vertex - position));
 					if (v.x < min.x)
 						min.x = v.x;
 					if (v.y < min.y)
@@ -72,7 +72,7 @@ namespace Anima2D
 				}
 			}
 
-			Vector2 offset = Vector2.one * 0.05f * HandleUtility.GetHandleSize(position);
+			var offset = Vector2.one * 0.05f * HandleUtility.GetHandleSize(position);
 			rect.min = min - offset;
 			rect.max = max + offset;
 
@@ -81,7 +81,7 @@ namespace Anima2D
 
 		void Normalize(IVertexManipulable vm, Rect rect, Vector3 position, Quaternion rotation)
 		{
-			IRectManipulable rm = vm as IRectManipulable;
+			var rm = vm as IRectManipulable;
 
 			if(rm == null)
 			{
@@ -90,9 +90,9 @@ namespace Anima2D
 
 			rm.rectManipulatorData.normalizedVertices.Clear();
 
-			for (int i = 0; i < vm.GetManipulableVertexCount(); i++)
+			for (var i = 0; i < vm.GetManipulableVertexCount(); i++)
 			{
-				Vector3 v = vm.GetManipulableVertex(i);
+				var v = vm.GetManipulableVertex(i);
 
 				v = (Quaternion.Inverse(rotation) * (v - position)) - (Vector3)rect.min;
 				v.x /= rect.width;
@@ -104,16 +104,16 @@ namespace Anima2D
 
 		void Denormalize(IVertexManipulable vm, Rect rect, Vector3 position, Quaternion rotation)
 		{
-			IRectManipulable rm = vm as IRectManipulable;
+			var rm = vm as IRectManipulable;
 
 			if(rm == null)
 			{
 				return;
 			}
 
-			for (int i = 0; i < vm.GetManipulableVertexCount(); i++)
+			for (var i = 0; i < vm.GetManipulableVertexCount(); i++)
 			{
-				Vector3 v = rm.rectManipulatorData.normalizedVertices [i];
+				var v = rm.rectManipulatorData.normalizedVertices [i];
 
 				v = (rotation * (Vector3.Scale (v, (Vector3)rect.size) + (Vector3)rect.min)) + position;
 

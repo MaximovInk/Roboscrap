@@ -34,7 +34,7 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (AnimFrames.Count > 0)
             {
-                int animIdx = (int)(Time.realtimeSinceStartup * AnimFPS) % AnimFrames.Count;
+                var animIdx = (int)(Time.realtimeSinceStartup * AnimFPS) % AnimFrames.Count;
                 return AnimFrames[animIdx].tileId;
             }
             return Tileset.k_TileId_Empty;
@@ -60,7 +60,7 @@ namespace CreativeSpore.SuperTilemapEditor
         private float m_overrideTime;
         private void UpdateAnimTime()
         {
-            float time = Time.realtimeSinceStartup;
+            var time = Time.realtimeSinceStartup;
             if (AnimDelay != 0f)
             {
                 if (m_currentFrame != Time.renderedFrameCount)
@@ -81,11 +81,11 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (AnimFrames.Count > 0)
             {                
-                int animIdx = (int)(GetTime() * AnimFPS) % AnimFrames.Count;            
-                TileAnimFrame animFrame = AnimFrames[animIdx];
-                uint tileData = animFrame.tileId;
-                int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
-                Rect uv = tileId != Tileset.k_TileId_Empty ? Tileset.Tiles[tileId].uv : default(Rect);
+                var animIdx = (int)(GetTime() * AnimFPS) % AnimFrames.Count;            
+                var animFrame = AnimFrames[animIdx];
+                var tileData = animFrame.tileId;
+                var tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
+                var uv = tileId != Tileset.k_TileId_Empty ? Tileset.Tiles[tileId].uv : default(Rect);
                 uv.position += animFrame.UVOffset;                
                 return uv;
             }
@@ -101,8 +101,8 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (AnimFrames.Count > 0)
             {
-                int animIdx = (int)(GetTime() * AnimFPS) % AnimFrames.Count;
-                TileAnimFrame animFrame = AnimFrames[animIdx];
+                var animIdx = (int)(GetTime() * AnimFPS) % AnimFrames.Count;
+                var animFrame = AnimFrames[animIdx];
                 return animFrame.tileId;
             }
             return Tileset.k_TileData_Empty;
@@ -111,7 +111,7 @@ namespace CreativeSpore.SuperTilemapEditor
         public override Vector2[] GetAnimUVWithFlags(float innerPadding = 0f)
         {
             UpdateAnimTime();
-            Vector2[] ret = base.GetAnimUVWithFlags();
+            var ret = base.GetAnimUVWithFlags();
             m_overrideTime = 0f; // restore to normal time
             return ret;
         }

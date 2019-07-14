@@ -30,7 +30,7 @@ namespace CreativeSpore.SuperTilemapEditor
         public void DoInspectorGUI()
         {
             serializedObject.Update();
-            TilesetBrush brush = (TilesetBrush)target;
+            var brush = (TilesetBrush)target;
             if (brush.Tileset == null)
             {
                 EditorGUILayout.HelpBox("Select a tileset first", MessageType.Info);
@@ -42,7 +42,7 @@ namespace CreativeSpore.SuperTilemapEditor
             EditorGUILayout.PropertyField(m_tileset);
             EditorGUILayout.PropertyField(m_showInPalette);
             m_group.intValue = TilesetEditor.DoGroupFieldLayout(brush.Tileset, "Group", m_group.intValue);
-            string sAutotilingModeTooltip =
+            var sAutotilingModeTooltip =
                 "Autotiling Mode:\n" +
                 "Self: autotile only with brushes of same type\n" +
                 "Other: autotile with any other not empty tile\n" +

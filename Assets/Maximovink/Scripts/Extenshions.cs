@@ -6,7 +6,7 @@ namespace MaximovInk
     public  static  class Extenshions
     {
         public static void Populate<T>(this T[] arr, T value ) {
-            for ( int i = 0; i < arr.Length;i++ ) {
+            for ( var i = 0; i < arr.Length;i++ ) {
                 arr[i] = value;
             }
         }
@@ -19,10 +19,10 @@ namespace MaximovInk
 
         public static Color ToColor(this uint color)
         {
-            byte a = (byte)(color >> 24);
-            byte r = (byte)(color >> 16);
-            byte g = (byte)(color >> 8);
-            byte b = (byte)(color >> 0);
+            var a = (byte)(color >> 24);
+            var r = (byte)(color >> 16);
+            var g = (byte)(color >> 8);
+            var b = (byte)(color >> 0);
             return new Color32(a, r, g, b);
         }
 
@@ -32,8 +32,9 @@ namespace MaximovInk
             if (target == null)
             {
                 //TODO: Return null or throw ArgumentNullException;
+                return null;
             }
-            T[] result = new T[target.Length + 1];
+            var result = new T[target.Length + 1];
             target.CopyTo(result, 0);
             result[target.Length] = item;
             return result;
@@ -71,7 +72,7 @@ namespace MaximovInk
         
         public static float ToSingle(uint value)
         {
-            UIntFloat uf = new UIntFloat();
+            var uf = new UIntFloat();
             uf.IntValue = value;
             return uf.FloatValue;
         }

@@ -10,13 +10,13 @@ namespace Anima2D
 	{
 		public static void InitializeIk2D(SerializedObject ikSO)
 		{
-			SerializedProperty targetTransformProp = ikSO.FindProperty("m_TargetTransform");
-			SerializedProperty numBonesProp = ikSO.FindProperty("m_NumBones");
-			SerializedProperty solverProp = ikSO.FindProperty("m_Solver");
-			SerializedProperty solverPosesProp = solverProp.FindPropertyRelative("m_SolverPoses");
-			SerializedProperty rootBoneTransformProp = solverProp.FindPropertyRelative("m_RootBoneTransform");
+			var targetTransformProp = ikSO.FindProperty("m_TargetTransform");
+			var numBonesProp = ikSO.FindProperty("m_NumBones");
+			var solverProp = ikSO.FindProperty("m_Solver");
+			var solverPosesProp = solverProp.FindPropertyRelative("m_SolverPoses");
+			var rootBoneTransformProp = solverProp.FindPropertyRelative("m_RootBoneTransform");
 
-			Transform targetTransform = targetTransformProp.objectReferenceValue as Transform;
+			var targetTransform = targetTransformProp.objectReferenceValue as Transform;
 			Bone2D targetBone = null;
 
 			if(targetTransform)
@@ -37,13 +37,13 @@ namespace Anima2D
 				rootBoneTransform = rootBone.transform;
 			}
 
-			for(int i = 0; i < solverPosesProp.arraySize; ++i)
+			for(var i = 0; i < solverPosesProp.arraySize; ++i)
 			{
-				SerializedProperty poseProp = solverPosesProp.GetArrayElementAtIndex(i);
-				SerializedProperty poseBoneProp = poseProp.FindPropertyRelative("m_BoneTransform");
+				var poseProp = solverPosesProp.GetArrayElementAtIndex(i);
+				var poseBoneProp = poseProp.FindPropertyRelative("m_BoneTransform");
 
-				Transform boneTransform = poseBoneProp.objectReferenceValue as Transform;
-				Bone2D bone = boneTransform.GetComponent<Bone2D>();
+				var boneTransform = poseBoneProp.objectReferenceValue as Transform;
+				var bone = boneTransform.GetComponent<Bone2D>();
 
 				if(bone)
 				{
@@ -58,15 +58,15 @@ namespace Anima2D
 			{
 				solverPosesProp.arraySize = numBonesProp.intValue;
 
-				Bone2D bone = rootBone;
+				var bone = rootBone;
 				
-				for(int i = 0; i < numBonesProp.intValue; ++i)
+				for(var i = 0; i < numBonesProp.intValue; ++i)
 				{
-					SerializedProperty poseProp = solverPosesProp.GetArrayElementAtIndex(i);
-					SerializedProperty poseBoneTransformProp = poseProp.FindPropertyRelative("m_BoneTransform");
-					SerializedProperty localRotationProp = poseProp.FindPropertyRelative("defaultLocalRotation");
-					SerializedProperty solverPositionProp = poseProp.FindPropertyRelative("solverPosition");
-					SerializedProperty solverRotationProp = poseProp.FindPropertyRelative("solverRotation");
+					var poseProp = solverPosesProp.GetArrayElementAtIndex(i);
+					var poseBoneTransformProp = poseProp.FindPropertyRelative("m_BoneTransform");
+					var localRotationProp = poseProp.FindPropertyRelative("defaultLocalRotation");
+					var solverPositionProp = poseProp.FindPropertyRelative("solverPosition");
+					var solverRotationProp = poseProp.FindPropertyRelative("solverRotation");
 
 					if(bone)
 					{
@@ -103,15 +103,15 @@ namespace Anima2D
 
 		public static void UpdateAttachedIKs(List<Ik2D> Ik2Ds)
 		{
-			for (int i = 0; i < Ik2Ds.Count; i++)
+			for (var i = 0; i < Ik2Ds.Count; i++)
 			{
-				Ik2D ik2D = Ik2Ds[i];
+				var ik2D = Ik2Ds[i];
 				
 				if(ik2D)
 				{
-					for (int j = 0; j < ik2D.solver.solverPoses.Count; j++)
+					for (var j = 0; j < ik2D.solver.solverPoses.Count; j++)
 					{
-						IkSolver2D.SolverPose pose = ik2D.solver.solverPoses[j];
+						var pose = ik2D.solver.solverPoses[j];
 						
 						if(pose.bone)
 						{
@@ -131,13 +131,13 @@ namespace Anima2D
 		{
 			if(updateAttachedIK)
 			{
-				List<Ik2D> ik2Ds = new List<Ik2D>();
+				var ik2Ds = new List<Ik2D>();
 				gameObject.GetComponentsInChildren<Ik2D>(ik2Ds);
 				
 				UpdateAttachedIKs(ik2Ds);
 			}
 
-			List<Ik2D> list = BuildIkList(gameObject);
+			var list = BuildIkList(gameObject);
 
 			UpdateIkList(list,undoName,recordObject);
 
@@ -155,7 +155,7 @@ namespace Anima2D
 
 		public static List<Ik2D> UpdateIK(Bone2D bone, string undoName, bool recordObject)
 		{
-			List<Ik2D> list = BuildIkList(bone.chainRoot.gameObject);
+			var list = BuildIkList(bone.chainRoot.gameObject);
 
 			UpdateIkList(list,undoName,recordObject);
 
@@ -164,17 +164,17 @@ namespace Anima2D
 
 		static void UpdateIkList(List<Ik2D> ikList, string undoName, bool recordObject)
 		{
-			for (int i = 0; i < ikList.Count; i++)
+			for (var i = 0; i < ikList.Count; i++)
 			{
-				Ik2D l_ik2D = ikList[i];
+				var l_ik2D = ikList[i];
 				
 				if(l_ik2D && l_ik2D.isActiveAndEnabled)
 				{
 					if(!string.IsNullOrEmpty(undoName))
 					{
-						for (int j = 0; j < l_ik2D.solver.solverPoses.Count; j++)
+						for (var j = 0; j < l_ik2D.solver.solverPoses.Count; j++)
 						{
-							IkSolver2D.SolverPose pose = l_ik2D.solver.solverPoses [j];
+							var pose = l_ik2D.solver.solverPoses [j];
 							if(pose.bone)
 							{
 								if(recordObject)
@@ -202,9 +202,9 @@ namespace Anima2D
 
 					l_ik2D.UpdateIK();
 
-					for (int j = 0; j < l_ik2D.solver.solverPoses.Count; j++)
+					for (var j = 0; j < l_ik2D.solver.solverPoses.Count; j++)
 					{
-						IkSolver2D.SolverPose pose = l_ik2D.solver.solverPoses [j];
+						var pose = l_ik2D.solver.solverPoses [j];
 						if(pose.bone)
 						{
 							BoneUtils.FixLocalEulerHint(pose.bone.transform);

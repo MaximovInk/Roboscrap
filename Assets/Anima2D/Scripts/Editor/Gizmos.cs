@@ -50,20 +50,20 @@ namespace Anima2D
 		{
 			dirA = Vector3.ProjectOnPlane(dirA, axis);
 			dirB = Vector3.ProjectOnPlane(dirB, axis);
-			float num = Vector3.Angle(dirA, dirB);
+			var num = Vector3.Angle(dirA, dirB);
 			return num * (float)((Vector3.Dot(axis, Vector3.Cross(dirA, dirB)) >= 0f) ? 1 : -1);
 		}
 
 		public static void OnSceneGUI(SceneView sceneview)
 		{
-			for (int i = 0; i < s_Bones.Count; i++)
+			for (var i = 0; i < s_Bones.Count; i++)
 			{
-				Bone2D bone = s_Bones[i];
+				var bone = s_Bones[i];
 				
 				if(bone && IsVisible(bone))
 				{
-					int controlID = GUIUtility.GetControlID("BoneHandle".GetHashCode(),FocusType.Passive);
-					EventType eventType = Event.current.GetTypeForControl(controlID);
+					var controlID = GUIUtility.GetControlID("BoneHandle".GetHashCode(),FocusType.Passive);
+					var eventType = Event.current.GetTypeForControl(controlID);
 
 					if(!IsLocked(bone))
 					{
@@ -84,7 +84,7 @@ namespace Anima2D
 							{
 								if(EditorGUI.actionKey)
 								{
-									List<Object> objects = new List<Object>(Selection.objects);
+									var objects = new List<Object>(Selection.objects);
 									objects.Add(bone.gameObject);
 									Selection.objects = objects.ToArray();
 								}else{
@@ -102,7 +102,7 @@ namespace Anima2D
 							   Event.current.button == 0)
 							{
 								Handles.matrix = bone.transform.localToWorldMatrix;
-								Vector3 position = HandlesExtra.GUIToWorld(Event.current.mousePosition);
+								var position = HandlesExtra.GUIToWorld(Event.current.mousePosition);
 
 								BoneUtils.OrientToLocalPosition(bone,position,Event.current.shift,"Rotate",true);
 
@@ -120,12 +120,12 @@ namespace Anima2D
 						   GUIUtility.hotControl == controlID ||
 						   Selection.gameObjects.Contains(bone.gameObject))
 						{
-							Color color = Color.yellow;
+							var color = Color.yellow;
 
-							float outlineSize = HandleUtility.GetHandleSize(bone.transform.position) * 0.015f * bone.color.a;
+							var outlineSize = HandleUtility.GetHandleSize(bone.transform.position) * 0.015f * bone.color.a;
 							BoneUtils.DrawBoneOutline(bone,outlineSize,color);
 
-							Bone2D outlineBone = bone.child;
+							var outlineBone = bone.child;
 							color.a *= 0.5f;
 
 							while(outlineBone)
@@ -149,7 +149,7 @@ namespace Anima2D
 
 						if(bone.parentBone && !bone.linkedParentBone)
 						{
-							Color color = bone.color;
+							var color = bone.color;
 							color.a *= 0.25f;
 							Handles.matrix = Matrix4x4.identity;
 							BoneUtils.DrawBoneBody(bone.transform.position,bone.parentBone.transform.position,BoneUtils.GetBoneRadius(bone),color);
@@ -157,7 +157,7 @@ namespace Anima2D
 
 						BoneUtils.DrawBoneBody(bone);
 
-						Color innerColor = bone.color * 0.25f;
+						var innerColor = bone.color * 0.25f;
 						
 						if(bone.attachedIK && bone.attachedIK.isActiveAndEnabled)
 						{
@@ -176,11 +176,11 @@ namespace Anima2D
 				}
 			}
 
-			foreach(Control control in s_Controls)
+			foreach(var control in s_Controls)
 			{
 				if(control && control.isActiveAndEnabled && IsVisible(control.gameObject))
 				{
-					Transform transform = control.transform;
+					var transform = control.transform;
 
 					if(Selection.activeTransform != transform)
 					{
@@ -194,22 +194,22 @@ namespace Anima2D
 							{
 								EditorGUI.BeginChangeCheck();
 
-								Quaternion cameraRotation = Camera.current.transform.rotation;
+								var cameraRotation = Camera.current.transform.rotation;
 
 								if(Event.current.type == EventType.Repaint)
 								{
 									Camera.current.transform.rotation = transform.rotation;
 								}
 
-								float size = HandleUtility.GetHandleSize(transform.position) / 5f;
+								var size = HandleUtility.GetHandleSize(transform.position) / 5f;
 								//Handles.DrawLine(transform.position + transform.rotation * new Vector3(size,0f,0f), transform.position + transform.rotation * new Vector3(-size,0f,0f));
 								//Handles.DrawLine(transform.position + transform.rotation * new Vector3(0f,size,0f), transform.position + transform.rotation * new Vector3(0f,-size,0f));
 
-								bool guiEnabled = GUI.enabled;
+								var guiEnabled = GUI.enabled;
 								GUI.enabled = !IsLocked(control.gameObject);
 
 #if UNITY_5_6_OR_NEWER
-								Vector3 newPosition = Handles.FreeMoveHandle(transform.position, transform.rotation, size, Vector3.zero, Handles.RectangleHandleCap);
+								var newPosition = Handles.FreeMoveHandle(transform.position, transform.rotation, size, Vector3.zero, Handles.RectangleHandleCap);
 #else
 								Vector3 newPosition = Handles.FreeMoveHandle(transform.position, transform.rotation, size, Vector3.zero, Handles.RectangleCap);
 #endif
@@ -243,14 +243,14 @@ namespace Anima2D
 							{
 								EditorGUI.BeginChangeCheck();
 
-								float size = HandleUtility.GetHandleSize(transform.position) * 0.5f;
+								var size = HandleUtility.GetHandleSize(transform.position) * 0.5f;
 								//Handles.DrawLine(transform.position + transform.rotation * new Vector3(size,0f,0f), transform.position + transform.rotation * new Vector3(-size,0f,0f));
 								//Handles.DrawLine(transform.position + transform.rotation * new Vector3(0f,size,0f), transform.position + transform.rotation * new Vector3(0f,-size,0f));
 
-								bool guiEnabled = GUI.enabled;
+								var guiEnabled = GUI.enabled;
 								GUI.enabled = !IsLocked(control.gameObject);
 
-								Quaternion newRotation = Handles.Disc(transform.rotation, transform.position, transform.forward, size, false, 0f);
+								var newRotation = Handles.Disc(transform.rotation, transform.position, transform.forward, size, false, 0f);
 
 								GUI.enabled = guiEnabled;
 

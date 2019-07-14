@@ -70,7 +70,7 @@ namespace Anima2D
 
 		static void UndoRedoPerformed()
 		{
-			foreach(Bone2D bone in s_Bones)
+			foreach(var bone in s_Bones)
 			{
 				if(bone)
 				{
@@ -96,15 +96,15 @@ namespace Anima2D
 
 		public static void Update(string undoName, bool record)
 		{
-			List<Ik2D> updatedIKs = new List<Ik2D>();
+			var updatedIKs = new List<Ik2D>();
 
-			for (int i = 0; i < s_Ik2Ds.Count; i++)
+			for (var i = 0; i < s_Ik2Ds.Count; i++)
 			{
-				Ik2D ik2D = s_Ik2Ds[i];
+				var ik2D = s_Ik2Ds[i];
 				
 				if(ik2D && !updatedIKs.Contains(ik2D))
 				{
-					List<Ik2D> ikList = IkUtils.UpdateIK(ik2D,undoName,record);
+					var ikList = IkUtils.UpdateIK(ik2D,undoName,record);
 
 					if(ikList != null)
 					{
@@ -114,7 +114,7 @@ namespace Anima2D
 				}
 			}
 
-			foreach(Control control in s_Controls)
+			foreach(var control in s_Controls)
 			{
 				if(control && control.isActiveAndEnabled && control.bone)
 				{
@@ -135,7 +135,7 @@ namespace Anima2D
 
 		static void AnimationWindowTimeCheck()
 		{
-			float currentAnimationTime = AnimationWindowExtra.currentTime;
+			var currentAnimationTime = AnimationWindowExtra.currentTime;
 			
 			if(s_OldAnimationTime != currentAnimationTime)
 			{
@@ -182,15 +182,15 @@ namespace Anima2D
 			{	
 				s_DraggingATool = false;
 
-				string undoName = "Move";
+				var undoName = "Move";
 
 				if(Tools.current == Tool.Rotate) undoName = "Rotate";
 				if(Tools.current == Tool.Scale) undoName = "Scale";
 
-				for (int i = 0; i < Selection.transforms.Length; i++)
+				for (var i = 0; i < Selection.transforms.Length; i++)
 				{
-					Transform transform = Selection.transforms [i];
-					Control control = transform.GetComponent<Control> ();
+					var transform = Selection.transforms [i];
+					var control = transform.GetComponent<Control> ();
 					if(control && control.isActiveAndEnabled && control.bone)
 					{
 						Undo.RecordObject(control.bone.transform,undoName);
@@ -201,7 +201,7 @@ namespace Anima2D
 						BoneUtils.OrientToChild(control.bone.parentBone,false,undoName,true);
 					}
 
-					Ik2D ik2D = transform.GetComponent<Ik2D>();
+					var ik2D = transform.GetComponent<Ik2D>();
 					if(ik2D && ik2D.record)
 					{
 						IkUtils.UpdateIK(ik2D,undoName,true);

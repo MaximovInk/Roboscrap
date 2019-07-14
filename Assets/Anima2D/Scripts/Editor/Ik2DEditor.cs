@@ -43,7 +43,7 @@ namespace Anima2D
 			
 			EditorGUI.BeginChangeCheck();
 			
-			Transform newTargetTransform = EditorGUILayout.ObjectField(new GUIContent("Target"),targetTransform,typeof(Transform),true) as Transform;
+			var newTargetTransform = EditorGUILayout.ObjectField(new GUIContent("Target"),targetTransform,typeof(Transform),true) as Transform;
 			
 			if(EditorGUI.EndChangeCheck())
 			{

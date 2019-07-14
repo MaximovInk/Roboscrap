@@ -28,7 +28,7 @@ namespace Anima2D
 			if (obj == null || GetType() != obj.GetType()) 
 				return false;
 			
-			BindInfo p = (BindInfo)obj;
+			var p = (BindInfo)obj;
 			
 			return Mathf.Approximately((position-p.position).sqrMagnitude,0f) && Mathf.Approximately((endPoint-p.endPoint).sqrMagnitude,0f);
 		}

@@ -26,8 +26,8 @@ namespace CreativeSpore.SuperTilemapEditor
             }
             else
             {
-                MonoBehaviour targetObj = property.serializedObject.targetObject as MonoBehaviour;
-                STETilemap parentTilemap = targetObj.GetComponentInParent<STETilemap>();
+                var targetObj = property.serializedObject.targetObject as MonoBehaviour;
+                var parentTilemap = targetObj.GetComponentInParent<STETilemap>();
                 if (parentTilemap && parentTilemap.Tileset)
                 {
                     TileDataField(position, label, property, parentTilemap.Tileset);
@@ -42,19 +42,19 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public static void TileDataField(Rect position, GUIContent label, SerializedProperty property, Tileset tileset)
         {
-            Event e = Event.current;
-            bool isLeftMouseReleased = e.type == EventType.MouseUp && e.button == 0;
+            var e = Event.current;
+            var isLeftMouseReleased = e.type == EventType.MouseUp && e.button == 0;
             //NOTE: there is a bug with DrawTextureWithTexCoords where the texture disappears. It is fixed by overriding the Editor Script with a CustomEditor.
-            Rect rVisualTile = new Rect(position.x, position.y, k_TilePreviewSize, k_TilePreviewSize);
-            uint tileData = (uint)property.intValue;
-            TilesetBrush brush = tileset.FindBrush(Tileset.GetBrushIdFromTileData(tileData));
+            var rVisualTile = new Rect(position.x, position.y, k_TilePreviewSize, k_TilePreviewSize);
+            var tileData = (uint)property.intValue;
+            var brush = tileset.FindBrush(Tileset.GetBrushIdFromTileData(tileData));
             if (brush)
                 tileData = brush.PreviewTileData();
 
             TilesetEditor.DoGUIDrawTileFromTileData(rVisualTile, tileData, tileset);
             if (isLeftMouseReleased && rVisualTile.Contains(e.mousePosition))
             {
-                EditorWindow wnd = EditorWindow.focusedWindow;
+                var wnd = EditorWindow.focusedWindow;
                 TileSelectionWindow.Show(tileset);
                 TileSelectionWindow.Instance.Ping();
                 wnd.Focus();

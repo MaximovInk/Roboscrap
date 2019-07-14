@@ -16,3 +16,23 @@ MonoBehaviour:
     Components:
     - item: {fileID: 11400000, guid: e81b8249b0e28a94d9594c35edcf9b75, type: 2}
       count: 1
+  - result: {fileID: 11400000, guid: a63c9d80cc742f5449e0a59fc26fd033, type: 2}
+    Components:
+    - item: {fileID: 11400000, guid: c49f2b349fd0659458fddac676c00ff5, type: 2}
+      count: 2
+    - item: {fileID: 11400000, guid: e81b8249b0e28a94d9594c35edcf9b75, type: 2}
+      count: 3
+    - item: {fileID: 11400000, guid: a28293dce3b6e934fba8988f72ab4986, type: 2}
+      count: 1
+  - result: {fileID: 11400000, guid: dbedcec6ae40b4845a15adfcea13492d, type: 2}
+    Components:
+    - item: {fileID: 11400000, guid: c49f2b349fd0659458fddac676c00ff5, type: 2}
+      count: 1
+    - item: {fileID: 11400000, guid: e81b8249b0e28a94d9594c35edcf9b75, type: 2}
+      count: 1
+    - item: {fileID: 11400000, guid: a28293dce3b6e934fba8988f72ab4986, type: 2}
+      count: 1
+  - result: {fileID: 11400000, guid: c49f2b349fd0659458fddac676c00ff5, type: 2}
+    Components:
+    - item: {fileID: 11400000, guid: e81b8249b0e28a94d9594c35edcf9b75, type: 2}
+      count: 2

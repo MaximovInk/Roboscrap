@@ -46,7 +46,6 @@ namespace MaximovInk
         public LayerMask items_mask;
 
         private DroppedItem item_on_ground;
-        private Vector2 old_mouse;
 
         private ItemInstance EquipedItem;
         private ItemInstance DeequipedItem;
@@ -92,12 +91,12 @@ namespace MaximovInk
                 }
             }
 
-            for (int i = 0; i < weaponsParentLeft.childCount; i++)
+            for (var i = 0; i < weaponsParentLeft.childCount; i++)
             {
                 Destroy(weaponsParentLeft.GetChild(i).gameObject);
             }
 
-            for (int i = 0; i < weaponsParentRight.childCount; i++)
+            for (var i = 0; i < weaponsParentRight.childCount; i++)
             {
                 Destroy(weaponsParentRight.GetChild(i).gameObject);
             }
@@ -233,10 +232,13 @@ namespace MaximovInk
                     cond > 0.6f ? rp.part.meshes[0] : cond > 0.3f ? rp.part.meshes[1] : rp.part.meshes[2];
         }
 
-        private void DamageMP(Vector2 world_mp)
+        private void DamageMP(Vector2 world_mp, bool right = true)
         {
-            RaycastHit2D hit = Physics2D.Raycast(world_mp, Vector2.zero);
-            Animator.SetTrigger("attack_right");
+            var hit = Physics2D.Raycast(world_mp, Vector2.zero);
+            if(right)
+                Animator.SetTrigger("attack_right");
+            else
+                Animator.SetTrigger("attack_left");
             if (hit)
             {
                 var breakable = hit.collider.GetComponentInParent<Breakable>();
@@ -248,9 +250,9 @@ namespace MaximovInk
                 GameManager.Instance.MakeParticleAt(hit.collider.gameObject,hit.point);
             }
         }
-        private void DamageMP(Vector2 world_mp, int amount, bool right = true)
+        private void DamageMP(Vector2 world_mp, MeleeWeapon weapon, bool right = true)
         {
-            RaycastHit2D hit = Physics2D.Raycast(world_mp, Vector2.zero);
+            var hit = Physics2D.Raycast(world_mp, Vector2.zero);
             if(right)
             Animator.SetTrigger("attack_right");
             else
@@ -261,7 +263,7 @@ namespace MaximovInk
 
                 if (breakable != null)
                 {
-                    breakable.Attack(amount);
+                    breakable.Attack(weapon.TrashDamange);
                 }
                 GameManager.Instance.MakeParticleAt(hit.collider.gameObject,hit.point);
             }
@@ -293,9 +295,6 @@ namespace MaximovInk
             Vector2 world_mp = Camera.main.ScreenToWorldPoint(mouse_pos);
             if (!isTaking)
             {
-
-
-                Vector3 delta = mouse_pos - old_mouse;
                 camIK.position = world_mp;
                 camIK.localPosition = new Vector3(
                     Mathf.Clamp(camIK.localPosition.x,
@@ -386,7 +385,7 @@ namespace MaximovInk
                             if (Input.GetMouseButtonDown(0))
                             {
                                 if(EquipedWeapon is MeleeWeapon)
-                                    DamageMP(world_mp,((MeleeWeapon) EquipedWeapon).Damage);
+                                    DamageMP(world_mp,(MeleeWeapon) EquipedWeapon);
                             }
 
                             if (Input.GetMouseButton(0))
@@ -436,7 +435,7 @@ namespace MaximovInk
 
                                     if (Input.GetMouseButtonDown(1))
                                     {
-                                        DamageMP(world_mp,damage,false);
+                                        DamageMP(world_mp,false);
                                     }
                                 }
 
@@ -477,7 +476,7 @@ namespace MaximovInk
                                     
                                     if (Input.GetMouseButtonDown(1))
                                     {
-                                        DamageMP(world_mp,(EquipedWeapon as MeleeWeapon).Damage, false);
+                                        DamageMP(world_mp,EquipedWeapon as MeleeWeapon, false);
                                     }
                                 }
 
@@ -497,7 +496,7 @@ namespace MaximovInk
                      
                     if (Input.GetMouseButtonDown(1) && (ra3.part as Hand_RP).CanKeepItems)
                     {
-                        DamageMP(world_mp,damage,false);
+                        DamageMP(world_mp,false);
                     }
                 }
                 }
@@ -515,9 +514,6 @@ namespace MaximovInk
                 } 
             }
 
-          
-
-            old_mouse = mouse_pos;
         }
 
         private void LateUpdate()

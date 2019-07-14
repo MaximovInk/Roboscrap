@@ -1,8 +1,8 @@
 
+    using System.Collections;
     using UnityEngine;
     using UnityEngine.EventSystems;
     using UnityEngine.SceneManagement;
-    using UnityEngine.Serialization;
     using UnityEngine.UI;
 
     namespace MaximovInk
@@ -31,9 +31,18 @@
             
             public Text Fps;
 
-            public GameObject InventoryPanel, RobotPartsPanel,WorkbenchPanel,OpenWorkbenchButton;
+            public GameObject InventoryPanel, RobotPartsPanel,WorkbenchPanel,OpenWB,OpenInv,OpenRE;
 
-            
+            public GameObject LoadingPanel,MainMenu,PauseMenu,BlackBackground;
+            public Slider LoadingSlider;
+            public Text LoadingText;
+
+            public bool ISPause
+            {
+                get { return Time.timeScale == 0; }
+                set { Time.timeScale = value ? 0 : 1; PauseMenu.SetActive(value); BlackBackground.SetActive(ISPause); }
+            }
+
             public void SetTextMesh(string text)
             {
                 if(!TextMesh.gameObject.activeSelf)
@@ -41,6 +50,8 @@
                 TextMesh.text = text;
             }
 
+            public static int loadingPercent = 0;
+            
             public bool MouseIsFree => !EventSystem.current.IsPointerOverGameObject() /*&&
             EventSystem.current.currentSelectedGameObject == null*/;
             
@@ -53,10 +64,41 @@
                 else
                 {
                     Instance = this;
+                    SceneManager.sceneLoaded += OnLoadScene;
                     DontDestroyOnLoad(Instance);
                 }
+                
+               
+            }
+            
+            public void LoadScene(int index)
+            {
+                StartCoroutine(nameof(LoadAsyncronously), index);
+            }
 
-                SceneManager.sceneLoaded += OnLoadScene;
+            public void Exit()
+            {
+                Application.Quit();
+            }
+
+            private IEnumerator LoadAsyncronously(int index)
+            {
+                LoadingPanel.gameObject.SetActive(true);
+                var operation = SceneManager.LoadSceneAsync(index);
+                while (!operation.isDone)
+                {
+                    var progress = Mathf.Clamp01(operation.progress / .9f);
+                    LoadingSlider.value = progress;
+                    loadingPercent = (int)(progress * 100);
+                    LoadingText.text = LanguageManager.instance.GetValueByKey("_loading");
+                    if (loadingPercent == 100)
+                    {
+                        LoadingText.text = "Generation terrain";
+                    }
+
+                    yield return null;
+                }
+                LoadingPanel.gameObject.SetActive(false);
             }
 
             private void OnLoadScene(Scene arg0, LoadSceneMode arg1)
@@ -64,12 +106,32 @@
                 if (arg0.name != "Menu")
                 {
                     player = FindObjectOfType<Player>();
+                    OpenRE.SetActive(true);
+                    OpenInv.SetActive(true);
+                    MainMenu.SetActive(false);
+                    BlackBackground.SetActive(false);
+                }
+                else
+                {
+                    ISPause = false;
+                    BlackBackground.SetActive(true);
+                    MainMenu.SetActive(true);
+                    OpenRE.SetActive(false);
+                    OpenInv.SetActive(false);
+                    OpenWB.SetActive(false);
+                    WorkbenchPanel.SetActive(false);
+                    InventoryPanel.SetActive(false);
+                   RobotPartsPanel.SetActive(false);
+                   //PauseMenu.SetActive(false);
+                   
                 }
             }
 
+            
+            
             public void WorkbenchChanged(bool active)
             {
-                OpenWorkbenchButton.SetActive(active);
+                OpenWB.SetActive(active);
                 if (!active)
                 {
                     WorkbenchPanel.SetActive(false);
@@ -79,25 +141,34 @@
 
             public void Update()
             {
-                if (Input.GetKeyDown(KeyCode.Tab))
+                if (SceneManager.GetActiveScene().name != "Menu")
                 {
-                    InventoryPanel.SetActive(!InventoryPanel.activeSelf);
-                }
-
-                if (Input.GetKeyDown(KeyCode.V))
-                {
-                    RobotPartsPanel.SetActive(!RobotPartsPanel.activeSelf);
-                }
-
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    if (player.workbench)
+                    if (Input.GetKeyDown(KeyCode.Escape))
                     {
-                        WorkbenchPanel.SetActive(!WorkbenchPanel.activeSelf);
+                        ISPause = true;
+                    }
+
+                    if (Input.GetKeyDown(KeyCode.Tab))
+                    {
+                        InventoryPanel.SetActive(!InventoryPanel.activeSelf);
+                    }
+
+                    if (Input.GetKeyDown(KeyCode.V))
+                    {
+                        RobotPartsPanel.SetActive(!RobotPartsPanel.activeSelf);
+                    }
+
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        if (player.workbench)
+                        {
+                            WorkbenchPanel.SetActive(!WorkbenchPanel.activeSelf);
+                            OpenWB.SetActive(WorkbenchPanel.activeSelf);
+                        }
                     }
                 }
-
-                Fps.text = "FPS:" + (1 / Time.smoothDeltaTime).ToString("0.00") + "\n (" + (Time.smoothDeltaTime).ToString("0.00") + ")";
+                if(!ISPause)
+                    Fps.text = "FPS:" + (1 / Time.smoothDeltaTime).ToString("0.00") + "\n (" + (Time.smoothDeltaTime).ToString("0.00") + ")";
             }
 
 
@@ -106,6 +177,12 @@
                 if (TextMesh.gameObject.activeSelf)
                 {
                     TextCheckerTimer += Time.deltaTime;
+
+                    if (lastText != TextMesh.text)
+                    {
+                        TextCheckerTimer = 0;
+                        lastText = TextMesh.text;
+                    }
 
                     if (TextCheckerTimer > 10)
                     {

@@ -78,7 +78,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 return;
             }
 
-            STETilemap selectedTilemap = Selection.activeGameObject ? Selection.activeGameObject.GetComponent<STETilemap>() : null;
+            var selectedTilemap = Selection.activeGameObject ? Selection.activeGameObject.GetComponent<STETilemap>() : null;
             if (selectedTilemap && selectedTilemap.Tileset != m_tilePropertiesControl.Tileset)
             {
                 Refresh();

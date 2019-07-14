@@ -16,22 +16,22 @@ namespace Anima2D
 	{
 		public static GameObject InstantiateForAnimatorPreview(UnityEngine.Object original)
 		{
-			GameObject result = GameObject.Instantiate(original) as GameObject;
+			var result = GameObject.Instantiate(original) as GameObject;
 
-			List<Behaviour> behaviours = new List<Behaviour>();
+			var behaviours = new List<Behaviour>();
 			result.GetComponentsInChildren<Behaviour>(false,behaviours);
 
-			foreach(Behaviour behaviour in behaviours)
+			foreach(var behaviour in behaviours)
 			{
-				SpriteMeshInstance spriteMeshInstance = behaviour as SpriteMeshInstance;
+				var spriteMeshInstance = behaviour as SpriteMeshInstance;
 
 				if(spriteMeshInstance && spriteMeshInstance.spriteMesh && spriteMeshInstance.spriteMesh.sprite)
 				{
-					Material material = spriteMeshInstance.sharedMaterial;
+					var material = spriteMeshInstance.sharedMaterial;
 
 					if(material)
 					{
-						Material materialClone = GameObject.Instantiate(material);
+						var materialClone = GameObject.Instantiate(material);
 						materialClone.hideFlags = HideFlags.HideAndDontSave;
 						materialClone.mainTexture = spriteMeshInstance.spriteMesh.sprite.texture;
 
@@ -60,7 +60,7 @@ namespace Anima2D
 			var spriteMeshInstances = new List<SpriteMeshInstance>();
 			instance.GetComponentsInChildren<SpriteMeshInstance>(false, spriteMeshInstances);
 
-			foreach(SpriteMeshInstance spriteMeshInstance in spriteMeshInstances)
+			foreach(var spriteMeshInstance in spriteMeshInstances)
 			{
 				if(spriteMeshInstance && spriteMeshInstance.spriteMesh && spriteMeshInstance.spriteMesh.sprite)
 				{
@@ -87,12 +87,12 @@ namespace Anima2D
 		
 		public static List<string> GetSortingLayerNames()
 		{
-			List<string> names = new List<string>();
+			var names = new List<string>();
 			
-			PropertyInfo sortingLayersProperty = typeof(InternalEditorUtility).GetProperty("sortingLayerNames", BindingFlags.Static | BindingFlags.NonPublic);
+			var sortingLayersProperty = typeof(InternalEditorUtility).GetProperty("sortingLayerNames", BindingFlags.Static | BindingFlags.NonPublic);
 			if(sortingLayersProperty != null)
 			{
-				string[] sortingLayers = (string[])sortingLayersProperty.GetValue(null, new object[0]);
+				var sortingLayers = (string[])sortingLayersProperty.GetValue(null, new object[0]);
 				names.AddRange(sortingLayers);
 			}
 			
@@ -101,9 +101,9 @@ namespace Anima2D
 
 		public static bool IsProSkin()
 		{
-			bool isProSkin = false;
+			var isProSkin = false;
 
-			PropertyInfo prop = typeof(EditorGUIUtility).GetProperty("isProSkin", BindingFlags.Static | BindingFlags.NonPublic);
+			var prop = typeof(EditorGUIUtility).GetProperty("isProSkin", BindingFlags.Static | BindingFlags.NonPublic);
 
 			if(prop != null)
 			{
@@ -115,7 +115,7 @@ namespace Anima2D
 
 		public static GameObject PickGameObject(Vector2 mousePosition)
 		{
-			MethodInfo methodInfo = typeof(EditorWindow).Assembly.GetType("UnityEditor.SceneViewPicking").GetMethod("PickGameObject", BindingFlags.Static | BindingFlags.Public);
+			var methodInfo = typeof(EditorWindow).Assembly.GetType("UnityEditor.SceneViewPicking").GetMethod("PickGameObject", BindingFlags.Static | BindingFlags.Public);
 
 			if(methodInfo != null)
 			{

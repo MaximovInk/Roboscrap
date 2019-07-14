@@ -13,7 +13,7 @@ namespace CreativeSpore.SuperTilemapEditor
         [MenuItem("GameObject/SuperTilemapEditor/TilemapGroup", false, 10)]
         static void CreateTilemapGroup(MenuCommand menuCommand)
         {
-            GameObject obj = new GameObject("TilemapGroup");
+            var obj = new GameObject("TilemapGroup");
             obj.AddComponent<TilemapGroup>();
             if (menuCommand.context is GameObject)
                 obj.transform.SetParent((menuCommand.context as GameObject).transform);
@@ -80,7 +80,7 @@ namespace CreativeSpore.SuperTilemapEditor
             EditorGUILayout.Space();
 
             // Draw Tilemap Inspector
-            TilemapEditor tilemapEditor = GetTilemapEditor();
+            var tilemapEditor = GetTilemapEditor();
             if (tilemapEditor)
             {
                 tilemapEditor.OnInspectorGUI();
@@ -92,7 +92,7 @@ namespace CreativeSpore.SuperTilemapEditor
             //fix: argument exception when removing the last tilemap in the list
             if (Event.current.type == EventType.Layout)
             {
-                for (int i = 0; i < m_tilemapRemovingList.Count; ++i)
+                for (var i = 0; i < m_tilemapRemovingList.Count; ++i)
                     Undo.DestroyObjectImmediate(m_tilemapRemovingList[i]);
                 m_tilemapRemovingList.Clear();
             }
@@ -115,12 +115,12 @@ namespace CreativeSpore.SuperTilemapEditor
             m_selectedIndexProp.intValue = Mathf.Clamp(m_selectedIndexProp.intValue, -1, m_target.Tilemaps.Count - 1);
             m_sceneViewTilemapRList.index = m_selectedIndexProp.intValue;
             GUI.color = new Color(.75f, .75f, 0.8f, 0.85f);
-            float hOff = m_displayTilemapRList.boolValue? 40f : 20f;
+            var hOff = m_displayTilemapRList.boolValue? 40f : 20f;
             m_sceneViewTilemapRList.DoList(new Rect(Screen.width - 300f - 10f, Screen.height - m_sceneViewTilemapRList.GetHeight() - hOff, 300f, 1f));
             GUI.color = Color.white;
             Handles.EndGUI();
 
-            TilemapEditor tilemapEditor = GetTilemapEditor();
+            var tilemapEditor = GetTilemapEditor();
             if (tilemapEditor)
             {
                 (tilemapEditor as TilemapEditor).OnSceneGUI();                
@@ -132,7 +132,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
             if (m_defaultTilemapWindowVisibleProperty.boolValue)
             {
-                Rect rDefaultTilemapWindow = new Rect(5f, Screen.height - m_defaultTilemapsWindowRect.height - 20f, m_defaultTilemapsWindowRect.width, m_defaultTilemapsWindowRect.height);
+                var rDefaultTilemapWindow = new Rect(5f, Screen.height - m_defaultTilemapsWindowRect.height - 20f, m_defaultTilemapsWindowRect.width, m_defaultTilemapsWindowRect.height);
                 if (m_defaultTilemapWindowMinimized)
                 {
                     rDefaultTilemapWindow.y = Screen.height - 55f;
@@ -143,15 +143,15 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private void DoWindow(int id)
         {
-            Event e = Event.current;            
-            STETilemap defaultTilemap = m_target.GetDefaultTilemapForCurrentTileSelection();
+            var e = Event.current;            
+            var defaultTilemap = m_target.GetDefaultTilemapForCurrentTileSelection();
             GUILayout.BeginArea(new Rect(0f, EditorGUIUtility.singleLineHeight, m_defaultTilemapsWindowRect.width, m_defaultTilemapsWindowRect.height));
             GUILayout.Label("Default Tilemap: " + (defaultTilemap? "<b>" + defaultTilemap.name + "</b>" : "<none>"), STEditorStyles.Instance.richLabel);
             if (GUILayout.Button("Set Default Tilemap <b>(For the Palette Selection)</b>", STEditorStyles.Instance.richButton))
             {
                 if (m_target.SelectedTilemap && m_target.SelectedTilemap.Tileset && m_target.SelectedTilemap.Tileset.TileSelection != null)
                 {
-                    foreach (uint tileData in m_target.SelectedTilemap.Tileset.TileSelection.selectionData)
+                    foreach (var tileData in m_target.SelectedTilemap.Tileset.TileSelection.selectionData)
                         SetDefaultTilemapFromTileData(m_target.SelectedTilemap, 0, 0, tileData);
                 }
                 else
@@ -199,12 +199,12 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private void SetDefaultTilemapFromTileData(STETilemap tilemap, int gx, int gy, uint tileData) 
         {
-            int brushId = Tileset.GetBrushIdFromTileData(tileData);
+            var brushId = Tileset.GetBrushIdFromTileData(tileData);
             if (brushId != Tileset.k_BrushId_Default)
                 m_target.SetBrushDefaultTilemap(brushId, tilemap);
             else
             {
-                int tileId = Tileset.GetTileIdFromTileData(tileData);
+                var tileId = Tileset.GetTileIdFromTileData(tileData);
                 if(tileId != Tileset.k_TileId_Empty)
                     m_target.SetTileDefaultTilemap(tileId, tilemap);
             }
@@ -212,7 +212,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
 private void DoKeyboardChecks()
         {
-            Event e = Event.current;
+            var e = Event.current;
             // Cycle over tilemaps
             if (e.type == EventType.KeyDown)
             {
@@ -246,12 +246,12 @@ private void DoKeyboardChecks()
 
         private ReorderableList CreateTilemapReorderableList()
         {
-            ReorderableList reordList = new ReorderableList(serializedObject, serializedObject.FindProperty("m_tilemaps"), true, true, true, true);
+            var reordList = new ReorderableList(serializedObject, serializedObject.FindProperty("m_tilemaps"), true, true, true, true);
             reordList.displayAdd = reordList.displayRemove = true;
             reordList.drawHeaderCallback = (Rect rect) =>
             {
                 EditorGUI.LabelField(rect, "Tilemaps", EditorStyles.boldLabel);
-                Texture2D btnTexture = reordList.elementHeight == 0f ? EditorGUIUtility.FindTexture("winbtn_win_max_h") : EditorGUIUtility.FindTexture("winbtn_win_min_h");
+                var btnTexture = reordList.elementHeight == 0f ? EditorGUIUtility.FindTexture("winbtn_win_max_h") : EditorGUIUtility.FindTexture("winbtn_win_min_h");
                 if (GUI.Button(new Rect( rect.x + rect.width - rect.height, rect.y, rect.height, rect.height), btnTexture, EditorStyles.label))
                 {
                     GUI.changed = true;
@@ -269,7 +269,7 @@ private void DoKeyboardChecks()
                     return;
                 var element = reordList.serializedProperty.GetArrayElementAtIndex(index);               
                 rect.y += 2;
-                STETilemap tilemap = element.objectReferenceValue as STETilemap;
+                var tilemap = element.objectReferenceValue as STETilemap;
                 if (tilemap)
                 {
                     SerializedObject tilemapSerialized;
@@ -284,18 +284,18 @@ private void DoKeyboardChecks()
                         tilemapTilemapObjectSerialized[tilemapSerialized] = tilemapObjSerialized = new SerializedObject(tilemapSerialized.FindProperty("m_GameObject").objectReferenceValue);
                     }
 
-                    Rect rToggle = new Rect(rect.x, rect.y, 16f, EditorGUIUtility.singleLineHeight);
-                    Rect rName = new Rect(rect.x + 20f, rect.y, rect.width - 130f - 20f, EditorGUIUtility.singleLineHeight);
-                    Rect rColliders = new Rect(rect.x + rect.width - 125f, rect.y, 125f, EditorGUIUtility.singleLineHeight);
-                    Rect rSortingLayer = new Rect(rect.x + rect.width - 125f, rect.y, 80f, EditorGUIUtility.singleLineHeight);
-                    Rect rSortingOrder = new Rect(rect.x + rect.width - 40f, rect.y, 40f, EditorGUIUtility.singleLineHeight);
+                    var rToggle = new Rect(rect.x, rect.y, 16f, EditorGUIUtility.singleLineHeight);
+                    var rName = new Rect(rect.x + 20f, rect.y, rect.width - 130f - 20f, EditorGUIUtility.singleLineHeight);
+                    var rColliders = new Rect(rect.x + rect.width - 125f, rect.y, 125f, EditorGUIUtility.singleLineHeight);
+                    var rSortingLayer = new Rect(rect.x + rect.width - 125f, rect.y, 80f, EditorGUIUtility.singleLineHeight);
+                    var rSortingOrder = new Rect(rect.x + rect.width - 40f, rect.y, 40f, EditorGUIUtility.singleLineHeight);
 
                     tilemap.IsVisible = EditorGUI.Toggle(rToggle, GUIContent.none, tilemap.IsVisible, STEditorStyles.Instance.visibleToggleStyle);
                     EditorGUI.PropertyField(rName, tilemapObjSerialized.FindProperty("m_Name"), GUIContent.none);
                     if (TilemapEditor.EditMode == TilemapEditor.eEditMode.Collider)
                     {
-                        SerializedProperty colliderTypeProperty = tilemapSerialized.FindProperty("ColliderType");
-                        string[] colliderTypeNames = new List<string>(System.Enum.GetNames(typeof(eColliderType)).Select(x => x.Replace('_', ' '))).ToArray();
+                        var colliderTypeProperty = tilemapSerialized.FindProperty("ColliderType");
+                        var colliderTypeNames = new List<string>(System.Enum.GetNames(typeof(eColliderType)).Select(x => x.Replace('_', ' '))).ToArray();
                         EditorGUI.BeginChangeCheck();
                         colliderTypeProperty.intValue = GUI.Toolbar(rColliders, colliderTypeProperty.intValue, colliderTypeNames);
                         if (EditorGUI.EndChangeCheck())
@@ -329,8 +329,8 @@ private void DoKeyboardChecks()
             reordList.onReorderCallback = (ReorderableList list) =>
             {
                 var targetObj = target as TilemapGroup;
-                int sibilingIdx = 0;
-                foreach (STETilemap tilemap in targetObj.Tilemaps)
+                var sibilingIdx = 0;
+                foreach (var tilemap in targetObj.Tilemaps)
                 {
                     tilemap.transform.SetSiblingIndex(sibilingIdx++);
                 }
@@ -348,13 +348,13 @@ private void DoKeyboardChecks()
             {
                 var targetObj = target as TilemapGroup;
                 Undo.RegisterCompleteObjectUndo(targetObj, "New Tilemap");
-                GameObject obj = new GameObject();
+                var obj = new GameObject();
                 Undo.RegisterCreatedObjectUndo(obj, "New Tilemap");
-                STETilemap newTilemap = obj.AddComponent<STETilemap>();
+                var newTilemap = obj.AddComponent<STETilemap>();
                 obj.transform.parent = targetObj.transform;
                 obj.name = GameObjectUtility.GetUniqueNameForSibling(obj.transform.parent, "New Tilemap");
 
-                STETilemap copiedTilemap = targetObj.SelectedTilemap;
+                var copiedTilemap = targetObj.SelectedTilemap;
                 if(copiedTilemap)
                 {
                     UnityEditorInternal.ComponentUtility.CopyComponent(copiedTilemap);

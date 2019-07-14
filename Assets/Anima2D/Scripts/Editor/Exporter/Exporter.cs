@@ -23,35 +23,35 @@ namespace Anima2D
 		[MenuItem("Window/Anima2D/Export Prefab",false,40)]
 		static void Export()
 		{
-			string path = EditorUtility.SaveFilePanelInProject("Export",Selection.activeGameObject.name + ".prefab","prefab","Export to prefab");
+			var path = EditorUtility.SaveFilePanelInProject("Export",Selection.activeGameObject.name + ".prefab","prefab","Export to prefab");
 
 			if(path.Length <= 0)
 			{
 				return;
 			}
 
-			GameObject instance = GameObject.Instantiate(Selection.activeGameObject) as GameObject;
+			var instance = GameObject.Instantiate(Selection.activeGameObject) as GameObject;
 
 #if UNITY_2018_3_OR_NEWER
 			GameObject prefab = PrefabUtility.SaveAsPrefabAsset(instance, path);
 #else
-			GameObject prefab = PrefabUtility.CreatePrefab(path,instance);
+			var prefab = PrefabUtility.CreatePrefab(path,instance);
 #endif
 
 			GameObject.DestroyImmediate(instance);
 
-			List<SpriteMeshInstance> spriteMeshInstances = new List<SpriteMeshInstance>();
+			var spriteMeshInstances = new List<SpriteMeshInstance>();
 
 			prefab.GetComponentsInChildren<SpriteMeshInstance>(true,spriteMeshInstances);
 
-			foreach(SpriteMeshInstance spriteMeshInstance in spriteMeshInstances)
+			foreach(var spriteMeshInstance in spriteMeshInstances)
 			{
 				if(spriteMeshInstance.spriteMesh &&
 				   spriteMeshInstance.spriteMesh.sprite)
 				{
 					if(spriteMeshInstance.spriteMesh.sharedMesh)
 					{
-						Mesh mesh = GameObject.Instantiate(spriteMeshInstance.spriteMesh.sharedMesh) as Mesh;
+						var mesh = GameObject.Instantiate(spriteMeshInstance.spriteMesh.sharedMesh) as Mesh;
 
 						mesh.name = spriteMeshInstance.spriteMesh.sharedMesh.name;
 
@@ -69,7 +69,7 @@ namespace Anima2D
 
 					if(spriteMeshInstance.sharedMaterial)
 					{
-						Material material = GameObject.Instantiate(spriteMeshInstance.sharedMaterial) as Material;
+						var material = GameObject.Instantiate(spriteMeshInstance.sharedMaterial) as Material;
 
 						material.name = spriteMeshInstance.name;
 						material.mainTexture = spriteMeshInstance.spriteMesh.sprite.texture;
@@ -100,11 +100,11 @@ namespace Anima2D
 
 		static void DestroyComponents<T>(GameObject gameObject) where T : MonoBehaviour
 		{
-			List<T> components = new List<T>();
+			var components = new List<T>();
 
 			gameObject.GetComponentsInChildren<T>(true,components);
 
-			foreach(T component in components)
+			foreach(var component in components)
 			{
 				GameObject.DestroyImmediate(component,true);
 			}

@@ -18,7 +18,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void Update()
         {
-            Event e = Event.current;
+            var e = Event.current;
             m_isDblClick = false;
             if (e.isMouse && e.type == EventType.MouseDown)
             {
@@ -35,7 +35,7 @@ namespace CreativeSpore.SuperTilemapEditor
         [MenuItem("GameObject/SuperTilemapEditor/Tilemap", false, 10)]
         static void CreateTilemap(MenuCommand menuCommand)
         {
-            GameObject obj = new GameObject("New Tilemap");
+            var obj = new GameObject("New Tilemap");
             obj.AddComponent<STETilemap>();
             if (menuCommand.context is GameObject)
                 obj.transform.SetParent((menuCommand.context as GameObject).transform);
@@ -137,7 +137,7 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             Tools.current = Tool.Rect;
             ResetBrushMode();
-            BrushBehaviour brush = BrushBehaviour.GetOrCreateBrush(m_tilemap);
+            var brush = BrushBehaviour.GetOrCreateBrush(m_tilemap);
             brush.BrushTilemap.ClearMap();
             brush.BrushTilemap.SetTileData(0, 0, (uint)newTileId);
             brush.BrushTilemap.UpdateMesh();
@@ -150,7 +150,7 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             Tools.current = Tool.Rect;
             ResetBrushMode();
-            BrushBehaviour brush = BrushBehaviour.GetOrCreateBrush(m_tilemap);
+            var brush = BrushBehaviour.GetOrCreateBrush(m_tilemap);
             brush.BrushTilemap.ClearMap();
             brush.BrushTilemap.SetTileData(0, 0, (uint)(newBrushId << 16) | Tileset.k_TileDataMask_TileId);
             brush.BrushTilemap.UpdateMesh();
@@ -163,15 +163,15 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             Tools.current = Tool.Rect;
             ResetBrushMode();
-            BrushBehaviour brush = BrushBehaviour.GetOrCreateBrush(m_tilemap);
+            var brush = BrushBehaviour.GetOrCreateBrush(m_tilemap);
             brush.BrushTilemap.ClearMap();
 
             if (source.TileSelection != null)
             {
-                for (int i = 0; i < source.TileSelection.selectionData.Count; ++i)
+                for (var i = 0; i < source.TileSelection.selectionData.Count; ++i)
                 {
-                    int gx = i % source.TileSelection.rowLength;
-                    int gy = i / source.TileSelection.rowLength;
+                    var gx = i % source.TileSelection.rowLength;
+                    var gy = i / source.TileSelection.rowLength;
                     brush.BrushTilemap.SetTileData(gx, gy, (uint)source.TileSelection.selectionData[i]);
                 }
             }
@@ -265,12 +265,12 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public override void OnInspectorGUI()
         {
-            Event e = Event.current;
+            var e = Event.current;
             if (e.type == EventType.ValidateCommand && e.commandName == "UndoRedoPerformed")
                     m_tilemap.Refresh();
             serializedObject.Update();
 
-            Tileset prevTileset = m_tilemap.Tileset;
+            var prevTileset = m_tilemap.Tileset;
             
             GUI.backgroundColor = Color.yellow;
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
@@ -291,7 +291,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 return;
             }
 
-            string[] editModeNames = System.Enum.GetNames(typeof(eEditMode));
+            var editModeNames = System.Enum.GetNames(typeof(eEditMode));
             s_editMode = (eEditMode)GUILayout.Toolbar((int)s_editMode, editModeNames);
             EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.MinHeight( s_editMode == eEditMode.Paint? Screen.height * 0.8f : 0f ));
             {
@@ -346,7 +346,7 @@ namespace CreativeSpore.SuperTilemapEditor
             }
 
             //NOTE: tilemap.transform.position shouldn't be modified. When the parent has a rotation, it leads to float precision, changing slowly the position.
-            Vector3 savedPos = m_tilemap.transform.localPosition;
+            var savedPos = m_tilemap.transform.localPosition;
             m_tilemap.transform.localPosition += (Vector3)(Vector2.Scale(Camera.current.transform.position, (Vector2.one - m_tilemap.ParallaxFactor))); //apply parallax
             m_brushVisible = s_editMode == eEditMode.Paint;
             if (s_editMode == eEditMode.Paint)
@@ -355,10 +355,10 @@ namespace CreativeSpore.SuperTilemapEditor
 
                 if (GetBrushMode() == eBrushMode.Fill && Event.current.type == EventType.Repaint)
                 {
-                    Color fillPreviewColor = new Color(1f, 1f, 1f, 0.2f);
-                    Color emptyColor = new Color(0f, 0f, 0f, 0f);
-                    Rect rTile = new Rect(Vector2.zero, m_tilemap.CellSize);
-                    foreach (Vector2 tilePos in m_fillPreview)
+                    var fillPreviewColor = new Color(1f, 1f, 1f, 0.2f);
+                    var emptyColor = new Color(0f, 0f, 0f, 0f);
+                    var rTile = new Rect(Vector2.zero, m_tilemap.CellSize);
+                    foreach (var tilePos in m_fillPreview)
                     {
                         rTile.position = tilePos;
                         HandlesEx.DrawRectWithOutline(m_tilemap.transform, rTile, fillPreviewColor, emptyColor);
@@ -395,7 +395,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                 EditorGUILayout.LabelField("Collider Type:", EditorStyles.boldLabel);
                 EditorGUI.indentLevel += 2;
-                string[] colliderTypeNames = new List<string>(System.Enum.GetNames(typeof(eColliderType)).Select(x => x.Replace('_', ' '))).ToArray();
+                var colliderTypeNames = new List<string>(System.Enum.GetNames(typeof(eColliderType)).Select(x => x.Replace('_', ' '))).ToArray();
 
                 m_ColliderType.intValue = GUILayout.Toolbar(m_ColliderType.intValue, colliderTypeNames);
                 EditorGUI.indentLevel -= 2;
@@ -471,8 +471,8 @@ namespace CreativeSpore.SuperTilemapEditor
                 }
             }
             EditorGUILayout.BeginHorizontal();
-            bool clearMap = GUILayout.Button("Clear Map", GUILayout.MaxWidth(125));
-            bool clearTilesOnly = GUILayout.Button("Clear Tiles", GUILayout.MaxWidth(125));
+            var clearMap = GUILayout.Button("Clear Map", GUILayout.MaxWidth(125));
+            var clearTilesOnly = GUILayout.Button("Clear Tiles", GUILayout.MaxWidth(125));
             EditorGUILayout.EndHorizontal();
             if (clearMap || clearTilesOnly)
             {
@@ -518,7 +518,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 EditorGUILayout.LabelField("Map Bounds (in tiles):", EditorStyles.boldLabel);
                 m_toggleMapBoundsEdit = EditorUtils.DoToggleIconButton("Edit Map Bounds", m_toggleMapBoundsEdit, EditorGUIUtility.IconContent("EditCollider"));
 
-                float savedLabelWidth = EditorGUIUtility.labelWidth;
+                var savedLabelWidth = EditorGUIUtility.labelWidth;
                 EditorGUIUtility.labelWidth = 80;
                 EditorGUI.indentLevel += 2;
 
@@ -561,7 +561,7 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 EditorGUILayout.LabelField("Advanced Options", EditorStyles.boldLabel);
                 EditorGUI.BeginChangeCheck();
-                bool isChunksVisible = IsTilemapChunksVisible();
+                var isChunksVisible = IsTilemapChunksVisible();
                 isChunksVisible = EditorGUILayout.Toggle(new GUIContent("Show Tile Chunks", "Show tilemap chunk objects for debugging or other purposes. Hiding will be refreshed after collapsing the tilemap."), isChunksVisible);
                 if (EditorGUI.EndChangeCheck())
                 {
@@ -583,7 +583,7 @@ namespace CreativeSpore.SuperTilemapEditor
         private void OnInspectorGUI_Renderer()
         {
             EditorGUI.BeginChangeCheck();
-            Material prevMaterial = m_tilemap.Material;
+            var prevMaterial = m_tilemap.Material;
             EditorGUILayout.PropertyField(m_material);
             if (EditorGUI.EndChangeCheck())
             {
@@ -617,7 +617,7 @@ namespace CreativeSpore.SuperTilemapEditor
             if (m_tilemap.Material.HasProperty("PixelSnap"))
             {
                 EditorGUI.BeginChangeCheck();
-                bool isPixelSnapOn = EditorGUILayout.Toggle("Pixel Snap", m_tilemap.PixelSnap);
+                var isPixelSnapOn = EditorGUILayout.Toggle("Pixel Snap", m_tilemap.PixelSnap);
                 if (EditorGUI.EndChangeCheck())
                 {
                     m_tilemap.PixelSnap = isPixelSnapOn;
@@ -647,11 +647,11 @@ namespace CreativeSpore.SuperTilemapEditor
             m_tilemap.IsVisible = EditorGUILayout.Toggle("Visible", m_tilemap.IsVisible);
             if(GUILayout.Button("Export To Png file"))
             {
-                string defaultName = m_tilemap.ParentTilemapGroup ? m_tilemap.ParentTilemapGroup.name : m_tilemap.name;
-                string path = EditorUtility.SaveFilePanel("Save Png file...", AssetDatabase.GetAssetPath(m_tilemap), defaultName + ".png", "png");
+                var defaultName = m_tilemap.ParentTilemapGroup ? m_tilemap.ParentTilemapGroup.name : m_tilemap.name;
+                var path = EditorUtility.SaveFilePanel("Save Png file...", AssetDatabase.GetAssetPath(m_tilemap), defaultName + ".png", "png");
                 if(!string.IsNullOrEmpty(path))
                 {
-                    Texture2D previewTexture = TilemapUtils.CreateTilemapGroupPreviewTexture(m_tilemap, m_tilemap.ParentTilemapGroup);
+                    var previewTexture = TilemapUtils.CreateTilemapGroupPreviewTexture(m_tilemap, m_tilemap.ParentTilemapGroup);
                     System.IO.File.WriteAllBytes(path, previewTexture.EncodeToPNG());
                 }
             }
@@ -697,7 +697,7 @@ namespace CreativeSpore.SuperTilemapEditor
         EventModifiers m_prevEventModifiers;
         private void DoPaintSceneGUI()
         {
-            Event e = Event.current;            
+            var e = Event.current;            
 
             if (DoToolBar()
                 || DragAndDrop.objectReferences.Length > 0 // hide brush when user is dragging a prefab into the scene
@@ -710,11 +710,11 @@ namespace CreativeSpore.SuperTilemapEditor
                 return;
             }
 
-            int controlID = GUIUtility.GetControlID(FocusType.Passive);
+            var controlID = GUIUtility.GetControlID(FocusType.Passive);
             HandleUtility.AddDefaultControl(controlID);
-            EventType currentEventType = Event.current.GetTypeForControl(controlID);
-            bool skip = false;
-            int saveControl = GUIUtility.hotControl;
+            var currentEventType = Event.current.GetTypeForControl(controlID);
+            var skip = false;
+            var saveControl = GUIUtility.hotControl;
 
             try
             {
@@ -770,16 +770,16 @@ namespace CreativeSpore.SuperTilemapEditor
                     EditorGUIUtility.AddCursorRect(new Rect(0f, 0f, (float)Screen.width, (float)Screen.height), MouseCursor.Arrow);
                     GUIUtility.hotControl = controlID;
                     {
-                        Plane chunkPlane = new Plane(m_tilemap.transform.forward, m_tilemap.transform.position);
-                        Vector2 mousePos = Event.current.mousePosition; mousePos.y = Screen.height - mousePos.y;
-                        Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+                        var chunkPlane = new Plane(m_tilemap.transform.forward, m_tilemap.transform.position);
+                        var mousePos = Event.current.mousePosition; mousePos.y = Screen.height - mousePos.y;
+                        var ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
                         float dist;
                         if (chunkPlane.Raycast(ray, out dist))
                         {
-                            Rect rTile = new Rect(0, 0, m_tilemap.CellSize.x, m_tilemap.CellSize.y);
+                            var rTile = new Rect(0, 0, m_tilemap.CellSize.x, m_tilemap.CellSize.y);
                             rTile.position = m_tilemap.transform.InverseTransformPoint(ray.GetPoint(dist));
 
-                            Vector2 tilePos = rTile.position;
+                            var tilePos = rTile.position;
                             if (tilePos.x < 0) tilePos.x -= m_tilemap.CellSize.x;
                             if (tilePos.y < 0) tilePos.y -= m_tilemap.CellSize.y;
                             tilePos.x -= tilePos.x % m_tilemap.CellSize.x;
@@ -787,15 +787,15 @@ namespace CreativeSpore.SuperTilemapEditor
                             rTile.position = tilePos;
 
 
-                            Vector2 startPos = new Vector2(Mathf.Min(m_startDragging.x, m_endDragging.x), Mathf.Min(m_startDragging.y, m_endDragging.y));
-                            Vector2 endPos = new Vector2(Mathf.Max(m_startDragging.x, m_endDragging.x), Mathf.Max(m_startDragging.y, m_endDragging.y));
-                            Vector2 selectionSnappedPos = BrushUtil.GetSnappedPosition(startPos, m_tilemap.CellSize);
-                            Vector2 selectionSize = BrushUtil.GetSnappedPosition(endPos, m_tilemap.CellSize) - selectionSnappedPos + m_tilemap.CellSize;
+                            var startPos = new Vector2(Mathf.Min(m_startDragging.x, m_endDragging.x), Mathf.Min(m_startDragging.y, m_endDragging.y));
+                            var endPos = new Vector2(Mathf.Max(m_startDragging.x, m_endDragging.x), Mathf.Max(m_startDragging.y, m_endDragging.y));
+                            var selectionSnappedPos = BrushUtil.GetSnappedPosition(startPos, m_tilemap.CellSize);
+                            var selectionSize = BrushUtil.GetSnappedPosition(endPos, m_tilemap.CellSize) - selectionSnappedPos + m_tilemap.CellSize;
 
-                            BrushBehaviour brush = BrushBehaviour.GetOrCreateBrush(m_tilemap);
+                            var brush = BrushBehaviour.GetOrCreateBrush(m_tilemap);
                             // Update brush transform
                             m_localBrushPos = (Vector2)m_tilemap.transform.InverseTransformPoint(ray.GetPoint(dist));
-                            Vector2 brushSnappedPos = BrushUtil.GetSnappedPosition(brush.Offset + m_localBrushPos, m_tilemap.CellSize);
+                            var brushSnappedPos = BrushUtil.GetSnappedPosition(brush.Offset + m_localBrushPos, m_tilemap.CellSize);
                             brush.transform.rotation = m_tilemap.transform.rotation;
                             brush.transform.localScale = m_tilemap.transform.lossyScale;
                             
@@ -809,14 +809,14 @@ namespace CreativeSpore.SuperTilemapEditor
                             }
                             //---
 
-                            int prevMouseGridX = m_mouseGridX;
-                            int prevMouseGridY = m_mouseGridY;
+                            var prevMouseGridX = m_mouseGridX;
+                            var prevMouseGridY = m_mouseGridY;
                             if (e.isMouse)
                             {
                                 m_mouseGridX = BrushUtil.GetGridX(m_localBrushPos, m_tilemap.CellSize);
                                 m_mouseGridY = BrushUtil.GetGridY(m_localBrushPos, m_tilemap.CellSize);
                             }
-                            bool isMouseGridChanged = prevMouseGridX != m_mouseGridX || prevMouseGridY != m_mouseGridY;
+                            var isMouseGridChanged = prevMouseGridX != m_mouseGridX || prevMouseGridY != m_mouseGridY;
                             //Update Fill Preview
                             if(GetBrushMode() == eBrushMode.Fill && isMouseGridChanged)
                             {
@@ -824,10 +824,10 @@ namespace CreativeSpore.SuperTilemapEditor
                                 TilemapDrawingUtils.FloodFillPreview(m_tilemap, brush.Offset + m_localBrushPos, brush.BrushTilemap.GetTileData(0, 0), m_fillPreview);
                             }
 
-                            bool isModifiersChanged = false;
+                            var isModifiersChanged = false;
                             if (e.isKey)
                             {
-                                EventModifiers filteredModifiers = e.modifiers & (EventModifiers.Control | EventModifiers.Alt);
+                                var filteredModifiers = e.modifiers & (EventModifiers.Control | EventModifiers.Alt);
                                 isModifiersChanged = filteredModifiers != m_prevEventModifiers;
                                 m_prevEventModifiers = filteredModifiers;
                             }
@@ -895,14 +895,14 @@ namespace CreativeSpore.SuperTilemapEditor
                                     // Copy one tile
                                     if (selectionSize.x <= m_tilemap.CellSize.x && selectionSize.y <= m_tilemap.CellSize.y)
                                     {
-                                        uint tileData = m_tilemap.GetTileData(m_localBrushPos);
+                                        var tileData = m_tilemap.GetTileData(m_localBrushPos);
                                         //Select the first tile not null if any and select the tilemap
                                         if (e.control && m_tilemap.ParentTilemapGroup)
                                         {
                                             //for (int i = m_tilemap.ParentTilemapGroup.Tilemaps.Count - 1; i >= 0; --i) // from bottom to top
-                                            for (int i = 0; i < m_tilemap.ParentTilemapGroup.Tilemaps.Count; ++i) // from top to bottom
+                                            for (var i = 0; i < m_tilemap.ParentTilemapGroup.Tilemaps.Count; ++i) // from top to bottom
                                             {
-                                                STETilemap tilemap = m_tilemap.ParentTilemapGroup.Tilemaps[i];
+                                                var tilemap = m_tilemap.ParentTilemapGroup.Tilemaps[i];
                                                 tileData = tilemap.GetTileData(m_localBrushPos);
                                                 if(tileData != Tileset.k_TileData_Empty)
                                                 {
@@ -921,8 +921,8 @@ namespace CreativeSpore.SuperTilemapEditor
                                         }
                                         else
                                         {
-                                            int brushId = Tileset.GetBrushIdFromTileData(tileData);
-                                            int tileId = Tileset.GetTileIdFromTileData(tileData);
+                                            var brushId = Tileset.GetBrushIdFromTileData(tileData);
+                                            var tileId = Tileset.GetTileIdFromTileData(tileData);
 
                                             // Select the copied tile in the tileset
                                             if (brushId > 0 && !e.alt) //NOTE: if Alt is held, the tile is selected instead
@@ -939,8 +939,8 @@ namespace CreativeSpore.SuperTilemapEditor
                                         // Cut tile if key shift is pressed
                                         if (e.shift)
                                         {
-                                            int startGridX = BrushUtil.GetGridX(startPos, m_tilemap.CellSize);
-                                            int startGridY = BrushUtil.GetGridY(startPos, m_tilemap.CellSize);
+                                            var startGridX = BrushUtil.GetGridX(startPos, m_tilemap.CellSize);
+                                            var startGridY = BrushUtil.GetGridY(startPos, m_tilemap.CellSize);
                                             brush.CutRect(m_tilemap, startGridX, startGridY, startGridX, startGridY);
                                         }
 
@@ -950,10 +950,10 @@ namespace CreativeSpore.SuperTilemapEditor
                                     // copy a rect of tiles
                                     else
                                     {
-                                        int startGridX = BrushUtil.GetGridX(startPos, m_tilemap.CellSize);
-                                        int startGridY = BrushUtil.GetGridY(startPos, m_tilemap.CellSize);
-                                        int endGridX = BrushUtil.GetGridX(endPos, m_tilemap.CellSize);
-                                        int endGridY = BrushUtil.GetGridY(endPos, m_tilemap.CellSize);
+                                        var startGridX = BrushUtil.GetGridX(startPos, m_tilemap.CellSize);
+                                        var startGridY = BrushUtil.GetGridY(startPos, m_tilemap.CellSize);
+                                        var endGridX = BrushUtil.GetGridX(endPos, m_tilemap.CellSize);
+                                        var endGridY = BrushUtil.GetGridY(endPos, m_tilemap.CellSize);
 
                                         // Cut tile if key shift is pressed
                                         if (e.shift)
@@ -973,12 +973,12 @@ namespace CreativeSpore.SuperTilemapEditor
 
                             if (m_isDragging)
                             {
-                                Rect rGizmo = new Rect(selectionSnappedPos, selectionSize);
+                                var rGizmo = new Rect(selectionSnappedPos, selectionSize);
                                 HandlesEx.DrawRectWithOutline(m_tilemap.transform, rGizmo, new Color(), Color.white);
                             }
                             else // Draw brush border
                             {
-                                Rect rBound = new Rect(brush.BrushTilemap.MapBounds.min, brush.BrushTilemap.MapBounds.size);
+                                var rBound = new Rect(brush.BrushTilemap.MapBounds.min, brush.BrushTilemap.MapBounds.size);
                                 Color fillColor;
                                 switch (GetBrushMode())
                                 {
@@ -1023,15 +1023,15 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 EditorGUI.BeginChangeCheck();
                 Handles.color = Color.green;
-                Vector3 vMinX = Handles.FreeMoveHandle(m_tilemap.transform.TransformPoint(new Vector2(m_tilemap.MinGridX * m_tilemap.CellSize.x, m_tilemap.MapBounds.center.y)), Quaternion.identity, 0.1f * HandleUtility.GetHandleSize(m_tilemap.transform.position), Vector3.zero, EditorCompatibilityUtils.CubeCap);
-                Vector3 vMaxX = Handles.FreeMoveHandle(m_tilemap.transform.TransformPoint(new Vector2((m_tilemap.MaxGridX + 1f) * m_tilemap.CellSize.x, m_tilemap.MapBounds.center.y)), Quaternion.identity, 0.1f * HandleUtility.GetHandleSize(m_tilemap.transform.position), Vector3.zero, EditorCompatibilityUtils.CubeCap);
-                Vector3 vMinY = Handles.FreeMoveHandle(m_tilemap.transform.TransformPoint(new Vector2(m_tilemap.MapBounds.center.x, m_tilemap.MinGridY * m_tilemap.CellSize.y)), Quaternion.identity, 0.1f * HandleUtility.GetHandleSize(m_tilemap.transform.position), Vector3.zero, EditorCompatibilityUtils.CubeCap);
-                Vector3 vMaxY = Handles.FreeMoveHandle(m_tilemap.transform.TransformPoint(new Vector2(m_tilemap.MapBounds.center.x, (m_tilemap.MaxGridY + 1f) * m_tilemap.CellSize.y)), Quaternion.identity, 0.1f * HandleUtility.GetHandleSize(m_tilemap.transform.position), Vector3.zero, EditorCompatibilityUtils.CubeCap);
+                var vMinX = Handles.FreeMoveHandle(m_tilemap.transform.TransformPoint(new Vector2(m_tilemap.MinGridX * m_tilemap.CellSize.x, m_tilemap.MapBounds.center.y)), Quaternion.identity, 0.1f * HandleUtility.GetHandleSize(m_tilemap.transform.position), Vector3.zero, EditorCompatibilityUtils.CubeCap);
+                var vMaxX = Handles.FreeMoveHandle(m_tilemap.transform.TransformPoint(new Vector2((m_tilemap.MaxGridX + 1f) * m_tilemap.CellSize.x, m_tilemap.MapBounds.center.y)), Quaternion.identity, 0.1f * HandleUtility.GetHandleSize(m_tilemap.transform.position), Vector3.zero, EditorCompatibilityUtils.CubeCap);
+                var vMinY = Handles.FreeMoveHandle(m_tilemap.transform.TransformPoint(new Vector2(m_tilemap.MapBounds.center.x, m_tilemap.MinGridY * m_tilemap.CellSize.y)), Quaternion.identity, 0.1f * HandleUtility.GetHandleSize(m_tilemap.transform.position), Vector3.zero, EditorCompatibilityUtils.CubeCap);
+                var vMaxY = Handles.FreeMoveHandle(m_tilemap.transform.TransformPoint(new Vector2(m_tilemap.MapBounds.center.x, (m_tilemap.MaxGridY + 1f) * m_tilemap.CellSize.y)), Quaternion.identity, 0.1f * HandleUtility.GetHandleSize(m_tilemap.transform.position), Vector3.zero, EditorCompatibilityUtils.CubeCap);
                 Handles.color = Color.white;
-                int minGridX = Mathf.RoundToInt(m_tilemap.transform.InverseTransformPoint(vMinX).x / m_tilemap.CellSize.x);
-                int maxGridX = Mathf.RoundToInt(m_tilemap.transform.InverseTransformPoint(vMaxX).x / m_tilemap.CellSize.x - 1f);
-                int minGridY = Mathf.RoundToInt(m_tilemap.transform.InverseTransformPoint(vMinY).y / m_tilemap.CellSize.y);
-                int maxGridY = Mathf.RoundToInt(m_tilemap.transform.InverseTransformPoint(vMaxY).y / m_tilemap.CellSize.y - 1f);
+                var minGridX = Mathf.RoundToInt(m_tilemap.transform.InverseTransformPoint(vMinX).x / m_tilemap.CellSize.x);
+                var maxGridX = Mathf.RoundToInt(m_tilemap.transform.InverseTransformPoint(vMaxX).x / m_tilemap.CellSize.x - 1f);
+                var minGridY = Mathf.RoundToInt(m_tilemap.transform.InverseTransformPoint(vMinY).y / m_tilemap.CellSize.y);
+                var maxGridY = Mathf.RoundToInt(m_tilemap.transform.InverseTransformPoint(vMaxY).y / m_tilemap.CellSize.y - 1f);
                 if(EditorGUI.EndChangeCheck())
                 {
                     EditorUtility.SetDirty(target);
@@ -1045,7 +1045,7 @@ namespace CreativeSpore.SuperTilemapEditor
         private int m_lastControl = -1;
         private void DoColliderSceneGUI()
         {
-            Event e = Event.current;
+            var e = Event.current;
             Vector2 vLocMousePos;
             //if (!m_editColliders) return;            
             if (EditorWindow.mouseOverWindow == SceneView.currentDrawingSceneView)
@@ -1055,40 +1055,40 @@ namespace CreativeSpore.SuperTilemapEditor
                 {
                     //NOTE: Threshold should be a value between [0, 1). This is a percent of the size of the tile area to be taken into account to consider the mouse over the tile. 
                     /// Ex: for a value of 0.5, the mouse should be inside the tile at a distance of half of the size
-                    float threshold = 0.7f;
-                    Vector2 vTileCenter = BrushUtil.GetSnappedPosition(vLocMousePos, m_tilemap.CellSize) + m_tilemap.CellSize / 2f;
-                    float distX = Mathf.Abs(vLocMousePos.x - vTileCenter.x);
-                    float distY = Mathf.Abs(vLocMousePos.y - vTileCenter.y);
+                    var threshold = 0.7f;
+                    var vTileCenter = BrushUtil.GetSnappedPosition(vLocMousePos, m_tilemap.CellSize) + m_tilemap.CellSize / 2f;
+                    var distX = Mathf.Abs(vLocMousePos.x - vTileCenter.x);
+                    var distY = Mathf.Abs(vLocMousePos.y - vTileCenter.y);
                     if (distX <= m_tilemap.CellSize.x * threshold / 2f && distY <= m_tilemap.CellSize.y * threshold / 2f)
                         m_colMouseLocPos = vLocMousePos;
                 }
                 // Draw selected tile handles     
-                uint tileData = m_tilemap.GetTileData(m_colMouseLocPos);
-                Tile tile = m_tilemap.GetTile(m_colMouseLocPos);
-                Vector2 tileLocPos = BrushUtil.GetSnappedPosition(m_colMouseLocPos, m_tilemap.CellSize);
-                Vector2 tileCenter = tileLocPos + m_tilemap.CellSize / 2f;
+                var tileData = m_tilemap.GetTileData(m_colMouseLocPos);
+                var tile = m_tilemap.GetTile(m_colMouseLocPos);
+                var tileLocPos = BrushUtil.GetSnappedPosition(m_colMouseLocPos, m_tilemap.CellSize);
+                var tileCenter = tileLocPos + m_tilemap.CellSize / 2f;
                 if (tile != null)
                 {
                     // Prevent from selecting another gameobject when clicking the scene
-                    int controlID = GUIUtility.GetControlID(FocusType.Passive);
+                    var controlID = GUIUtility.GetControlID(FocusType.Passive);
                     HandleUtility.AddDefaultControl(controlID);
 
                     HandlesEx.DrawRectWithOutline(m_tilemap.transform, new Rect(BrushUtil.GetSnappedPosition(m_colMouseLocPos, m_tilemap.CellSize), m_tilemap.CellSize), new Color(0f, 0f, 0f, 0.1f), new Color(0f, 0f, 0f, 0f));
-                    bool updateColliders = false;
-                    TileColliderData tileColliderData = tile.collData.Clone();
+                    var updateColliders = false;
+                    var tileColliderData = tile.collData.Clone();
                     tileColliderData.ApplyFlippingFlags(tileData);
-                    List<Vector2> handlesPos = new List<Vector2>(tile.collData.vertices != null && tile.collData.vertices.Length > 0 ? tileColliderData.vertices : s_fullCollTileVertices);
-                    for (int i = 0; i < handlesPos.Count; ++i)
+                    var handlesPos = new List<Vector2>(tile.collData.vertices != null && tile.collData.vertices.Length > 0 ? tileColliderData.vertices : s_fullCollTileVertices);
+                    for (var i = 0; i < handlesPos.Count; ++i)
                         handlesPos[i] = m_tilemap.transform.TransformPoint(tileLocPos + Vector2.Scale(handlesPos[i], m_tilemap.CellSize));
                     HandlesEx.DrawDottedPolyLine(handlesPos.Select(x => (Vector3)x).ToArray(), 10, Color.white * 0.6f);
                     if (e.isMouse && e.button == 1)
                         m_tilemap.Tileset.SelectedTileId = Tileset.GetTileIdFromTileData(tileData);
                     if (e.alt)
                     {                        
-                        bool hasColliders = tile.collData.type != eTileCollider.None;
+                        var hasColliders = tile.collData.type != eTileCollider.None;
                         Handles.color = hasColliders ? Color.white : Color.black;
                         Vector2 centerPos = m_tilemap.transform.TransformPoint(tileCenter);
-                        float size = 0.1f * m_tilemap.CellSize.x;
+                        var size = 0.1f * m_tilemap.CellSize.x;
                         Handles.DrawSolidDisc(centerPos, -m_tilemap.transform.forward, size);
                         if (Handles.Button(centerPos, Quaternion.identity, size, m_tilemap.CellSize.x, EditorCompatibilityUtils.CircleCap))
                         {
@@ -1099,26 +1099,26 @@ namespace CreativeSpore.SuperTilemapEditor
                         Handles.color = Color.white;
                     }
 
-                    int closestVertIdx = -1;
+                    var closestVertIdx = -1;
                     if (e.shift && m_lastControl == 0)
                     {
-                        List<Vector3> polyLine = handlesPos.Select(x => (Vector3)x).ToList();
+                        var polyLine = handlesPos.Select(x => (Vector3)x).ToList();
                         polyLine.Add(polyLine[0]); // close poly
-                        Vector3 newVertexHandlePos = ClosestPointToPolyLine(polyLine.ToArray(), out closestVertIdx);
+                        var newVertexHandlePos = ClosestPointToPolyLine(polyLine.ToArray(), out closestVertIdx);
                         if (HandleUtility.DistanceToCircle(newVertexHandlePos, 0f) < 10f)
                         {
                             handlesPos.Insert(closestVertIdx + 1, newVertexHandlePos);
                         }
                     }
-                    int selectedIdx = -1;
-                    for (int i = 0; i < handlesPos.Count; ++i)
+                    var selectedIdx = -1;
+                    for (var i = 0; i < handlesPos.Count; ++i)
                     {
-                        int idx = i; // real index having into account flip and rotation flags
+                        var idx = i; // real index having into account flip and rotation flags
                         if ((tileData & Tileset.k_TileFlag_FlipH) != 0 ^ (tileData & Tileset.k_TileFlag_FlipV) != 0)
                             idx = handlesPos.Count - i - 1;
-                        Vector2 handlePos = handlesPos[i];
-                        Vector2 vLocVertex = (Vector2)m_tilemap.transform.InverseTransformPoint(handlePos) - tileLocPos;
-                        Vector2 oldVertexValue = PointToSnappedVertex(vLocVertex, m_tilemap);
+                        var handlePos = handlesPos[i];
+                        var vLocVertex = (Vector2)m_tilemap.transform.InverseTransformPoint(handlePos) - tileLocPos;
+                        var oldVertexValue = PointToSnappedVertex(vLocVertex, m_tilemap);
                         if (tile.collData.type != eTileCollider.None)
                         {
                             handlePos = Handles.FreeMoveHandle(handlePos, Quaternion.identity, 0.1f * HandleUtility.GetHandleSize(m_tilemap.transform.position), Vector3.zero, EditorCompatibilityUtils.CubeCap);
@@ -1130,7 +1130,7 @@ namespace CreativeSpore.SuperTilemapEditor
                                 HandlesEx.DrawDotOutline(handlePos, 0.1f * HandleUtility.GetHandleSize(m_tilemap.transform.position), Color.red, Color.red);
                             }
                             vLocVertex = (Vector2)m_tilemap.transform.InverseTransformPoint(handlePos) - tileLocPos;
-                            Vector2 newVertexValue = PointToSnappedVertex(vLocVertex, m_tilemap);
+                            var newVertexValue = PointToSnappedVertex(vLocVertex, m_tilemap);
                             updateColliders |= (oldVertexValue != newVertexValue) || m_lastControl == 0 && EditorGUIUtility.hotControl != 0 && HandleUtility.DistanceToCircle(handlePos, 0f) < 10f;
                             if (updateColliders)
                             {
@@ -1169,9 +1169,9 @@ namespace CreativeSpore.SuperTilemapEditor
                     Handles.color = Color.white;
                 }
             }
-            Rect rHelpInfoArea = new Rect(0, Screen.height - 100f, 350f, 50f);
+            var rHelpInfoArea = new Rect(0, Screen.height - 100f, 350f, 50f);
             GUILayout.BeginArea(rHelpInfoArea);
-            string helpInfo =
+            var helpInfo =
                 "<b>"+
                 "<color=#FFD500FF>  - Hold " + ((Application.platform == RuntimePlatform.OSXEditor) ? "Option" : "Alt") + " + Click to enable/disable tile colliders" + "</color>\n" +
                 "<color=orange>"+
@@ -1189,9 +1189,9 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private static bool GetMousePosOverTilemap(STETilemap tilemap, out Vector2 vLocPos)
         {
-            Plane chunkPlane = new Plane(tilemap.transform.forward, tilemap.transform.position);
-            Vector2 mousePos = Event.current.mousePosition; mousePos.y = Screen.height - mousePos.y;
-            Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+            var chunkPlane = new Plane(tilemap.transform.forward, tilemap.transform.position);
+            var mousePos = Event.current.mousePosition; mousePos.y = Screen.height - mousePos.y;
+            var ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
             float dist;
             if (chunkPlane.Raycast(ray, out dist))
             {
@@ -1204,17 +1204,17 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private static Vector2 PointToSnappedVertex(Vector2 point, STETilemap tilemap)
         {
-            Vector2 vertex = new Vector2(point.x /= tilemap.CellSize.x, point.y /= tilemap.CellSize.y);
+            var vertex = new Vector2(point.x /= tilemap.CellSize.x, point.y /= tilemap.CellSize.y);
             return TileColliderData.SnapVertex(vertex, tilemap.Tileset);
         }
 
         private static Vector3 ClosestPointToPolyLine(Vector3[] vertices, out int closestSegmentIdx)
         {
-            float minDist = float.MaxValue;
+            var minDist = float.MaxValue;
             closestSegmentIdx = 0;
-            for (int i = 0; i < vertices.Length - 1; ++i)
+            for (var i = 0; i < vertices.Length - 1; ++i)
             {
-                float dist = HandleUtility.DistanceToLine(vertices[i], vertices[i + 1]);
+                var dist = HandleUtility.DistanceToLine(vertices[i], vertices[i + 1]);
                 if (dist < minDist)
                 {
                     minDist = dist;
@@ -1232,8 +1232,8 @@ namespace CreativeSpore.SuperTilemapEditor
         static Color s_toolbarBoxOutlineColor = new Color(.25f, .25f, 1f, 0.70f);
         bool DoToolBar()
         {
-            bool isMouseInsideToolbar = false;
-            GUIContent brushCoords = new GUIContent("<b> Brush Pos: (" + m_mouseGridX + "," + m_mouseGridY + ")</b>");
+            var isMouseInsideToolbar = false;
+            var brushCoords = new GUIContent("<b> Brush Pos: (" + m_mouseGridX + "," + m_mouseGridY + ")</b>");
             GUIContent selectedTileOrBrushId = null;
             if (m_tilemap.Tileset.SelectedTileId != Tileset.k_TileId_Empty)
                 selectedTileOrBrushId = new GUIContent("<b> Selected Tile Id: " + m_tilemap.Tileset.SelectedTileId.ToString() + "</b>");
@@ -1242,7 +1242,7 @@ namespace CreativeSpore.SuperTilemapEditor
             else
                 selectedTileOrBrushId = new GUIContent("<b> Empty tile selected</b>");
 
-            Rect rTools = new Rect(4f, 4f, Mathf.Max(Mathf.Max(Styles.Instance.toolbarBoxStyle.CalcSize(brushCoords).x, Styles.Instance.toolbarBoxStyle.CalcSize(selectedTileOrBrushId).x) + 4f, 180f), 54f);
+            var rTools = new Rect(4f, 4f, Mathf.Max(Mathf.Max(Styles.Instance.toolbarBoxStyle.CalcSize(brushCoords).x, Styles.Instance.toolbarBoxStyle.CalcSize(selectedTileOrBrushId).x) + 4f, 180f), 54f);
             
             Handles.BeginGUI();            
             GUILayout.BeginArea(rTools);
@@ -1259,15 +1259,15 @@ namespace CreativeSpore.SuperTilemapEditor
             GUILayout.EndArea();
 
             // Display ToolBar           
-            Vector2 toolbarPos = new Vector2(rTools.xMax + 4f, rTools.y);
-            Vector2 toolbarButtonSize = new Vector2(32f, 32f);
+            var toolbarPos = new Vector2(rTools.xMax + 4f, rTools.y);
+            var toolbarButtonSize = new Vector2(32f, 32f);
             STEditorToolbars.Instance.brushToolbar.SetHighlight((int)ToolIcons.eToolIcon.Erase, GetBrushMode() == eBrushMode.Erase);
             STEditorToolbars.Instance.brushToolbar.DoGUI(toolbarPos, toolbarButtonSize, s_toolbarBoxBgColor, s_toolbarBoxOutlineColor);            
             //---     
 
             if (Tools.current != Tool.None && Tools.current != Tool.Rect)
             {
-                Rect rWarningArea = new Rect(toolbarPos.x, toolbarPos.y + toolbarButtonSize.y, 370f, 22f);
+                var rWarningArea = new Rect(toolbarPos.x, toolbarPos.y + toolbarButtonSize.y, 370f, 22f);
                 GUILayout.BeginArea(rWarningArea);
                 EditorGUI.HelpBox(new Rect(Vector2.zero, rWarningArea.size), "Select the Rect Tool (T) or press any toolbar button to start painting", MessageType.Warning);
                 GUILayout.EndArea();
@@ -1299,8 +1299,8 @@ namespace CreativeSpore.SuperTilemapEditor
 
         void DisplayHelpBox()
         {
-            string sCtrl = (Application.platform == RuntimePlatform.OSXEditor) ? "Command" : "Ctrl";
-            string sHelp =
+            var sCtrl = (Application.platform == RuntimePlatform.OSXEditor) ? "Command" : "Ctrl";
+            var sHelp =
                 "\n" +
                 " - <b>Drag:</b>\t Middle mouse button\n" +
                 " - <b>Paint:</b>\t Left mouse button\n" +
@@ -1316,9 +1316,9 @@ namespace CreativeSpore.SuperTilemapEditor
                 "   * <b>Horizontal Flip</b> by pressing Y\n" +
                 "   * <i>Hold shift to only rotate or flip tile positions</i>\n" +
                 "\n - <b>Use Ctrl-Z/Ctrl-Y</b> to Undo/Redo changes\n";
-            GUIContent helpContent = new GUIContent(sHelp);
+            var helpContent = new GUIContent(sHelp);
             Handles.BeginGUI();
-            Rect rHelpBox = new Rect(new Vector2(2f, 64f), Styles.Instance.toolbarBoxStyle.CalcSize(helpContent));
+            var rHelpBox = new Rect(new Vector2(2f, 64f), Styles.Instance.toolbarBoxStyle.CalcSize(helpContent));
             GUILayout.BeginArea(rHelpBox);
             HandlesEx.DrawRectWithOutline(new Rect(Vector2.zero, rHelpBox.size), s_toolbarBoxBgColor, s_toolbarBoxOutlineColor);
             GUILayout.Label(sHelp, Styles.Instance.toolbarBoxStyle);
@@ -1344,14 +1344,14 @@ namespace CreativeSpore.SuperTilemapEditor
         
         private bool IsTilemapChunksVisible()
         {
-            TilemapChunk chunk = m_tilemap.GetComponentInChildren<TilemapChunk>();
+            var chunk = m_tilemap.GetComponentInChildren<TilemapChunk>();
             return chunk && (chunk.gameObject.hideFlags & HideFlags.HideInHierarchy) == 0;
         }
 
         private void SetTilemapChunkHideFlag(HideFlags flags, bool value)
         {
-            TilemapChunk[] chunks = m_tilemap.GetComponentsInChildren<TilemapChunk>();
-            foreach (TilemapChunk chunk in chunks)
+            var chunks = m_tilemap.GetComponentsInChildren<TilemapChunk>();
+            foreach (var chunk in chunks)
             {
                 if (value)
                     chunk.gameObject.hideFlags |= flags;

@@ -13,7 +13,7 @@ namespace Anima2D
 
 			serializedObject.Update();
 			
-			SerializedProperty flipProp = serializedObject.FindProperty("flip");
+			var flipProp = serializedObject.FindProperty("flip");
 
 			EditorGUI.BeginChangeCheck();
 

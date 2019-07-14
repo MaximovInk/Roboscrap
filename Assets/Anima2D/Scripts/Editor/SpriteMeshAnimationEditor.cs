@@ -29,7 +29,7 @@ namespace Anima2D
 				
 				m_List.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) => {
 					
-					SerializedProperty poseProperty = m_List.serializedProperty.GetArrayElementAtIndex(index);
+					var poseProperty = m_List.serializedProperty.GetArrayElementAtIndex(index);
 					
 					rect.y += 1.5f;
 					
@@ -48,13 +48,13 @@ namespace Anima2D
 		{
 			serializedObject.Update();
 
-			SpriteMeshAnimation spriteMeshAnimation = target as SpriteMeshAnimation;
+			var spriteMeshAnimation = target as SpriteMeshAnimation;
 
 			EditorGUI.BeginDisabledGroup(m_FrameListProperty.arraySize == 0);
 
 			EditorGUI.BeginChangeCheck();
 
-			int frame = EditorGUILayout.IntSlider("Frame",spriteMeshAnimation.frame,0,m_FrameListProperty.arraySize-1);
+			var frame = EditorGUILayout.IntSlider("Frame",spriteMeshAnimation.frame,0,m_FrameListProperty.arraySize-1);
 
 			if(EditorGUI.EndChangeCheck())
 			{

@@ -84,9 +84,9 @@ namespace CreativeSpore.SuperTilemapEditor
         public bool Display()
         {
             //NOTE: for performance, the brush animations has been disabled. Set needsRepaint to true to enable brush animation in the inspector.
-            bool needsRepaint = false;
+            var needsRepaint = false;
             AssetPreview.SetPreviewTextureCacheSize(256); //FIX clickeing issues when displaying multiple prefab previews (when a tile has a prefab attached
-            Event e = Event.current;
+            var e = Event.current;
             m_dblClick.Update();
 
             //FIX: when a tileset is changed, the layout change and during some frames, the BeginScrollView could return wrong values
@@ -129,10 +129,10 @@ namespace CreativeSpore.SuperTilemapEditor
             m_sharedData = GetSharedTilesetData(Tileset);
 
             float visualTilePadding = 1;
-            bool isLeftMouseReleased = e.type == EventType.MouseUp && e.button == 0;
-            bool isRightMouseReleased = e.type == EventType.MouseUp && e.button == 1;
-            bool isInsideTileScrollArea = e.isMouse && m_rTileScrollArea.Contains(e.mousePosition);
-            bool isInsideBrushScrollArea = e.isMouse && m_rBrushScrollArea.Contains(e.mousePosition);
+            var isLeftMouseReleased = e.type == EventType.MouseUp && e.button == 0;
+            var isRightMouseReleased = e.type == EventType.MouseUp && e.button == 1;
+            var isInsideTileScrollArea = e.isMouse && m_rTileScrollArea.Contains(e.mousePosition);
+            var isInsideBrushScrollArea = e.isMouse && m_rBrushScrollArea.Contains(e.mousePosition);
 
             // Create TileView ReorderableList
             if (m_sharedData.tileViewList == null || m_sharedData.tileViewList.list != Tileset.TileViews)
@@ -162,7 +162,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 GUILayout.BeginVertical(Styles.Instance.customBox);
                 m_sharedData.tileViewList.index = Mathf.Clamp(m_sharedData.tileViewList.index, -1, Tileset.TileViews.Count - 1);
                 m_sharedData.tileViewList.DoLayoutList();
-                Rect rList = GUILayoutUtility.GetLastRect();
+                var rList = GUILayoutUtility.GetLastRect();
                 if (e.isMouse && !rList.Contains(e.mousePosition))
                 {
                     m_sharedData.tileViewList.ReleaseKeyboardFocus();
@@ -170,7 +170,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 GUILayout.EndVertical();
                 GUI.color = Color.white;
             }
-            TileView tileView = m_sharedData.tileViewList != null && m_sharedData.tileViewList.index >= 0 ? Tileset.TileViews[m_sharedData.tileViewList.index] : null;
+            var tileView = m_sharedData.tileViewList != null && m_sharedData.tileViewList.index >= 0 ? Tileset.TileViews[m_sharedData.tileViewList.index] : null;
 
             if (tileView == null)
             {
@@ -187,10 +187,10 @@ namespace CreativeSpore.SuperTilemapEditor
             }
 
             
-            List<string> viewNameList = new List<string>() { "(All)" };
+            var viewNameList = new List<string>() { "(All)" };
             viewNameList.AddRange(Tileset.TileViews.Select(x => x.name));
-            string[] tileViewNames = viewNameList.ToArray();
-            int[] tileViewValues = Enumerable.Range(-1, Tileset.TileViews.Count + 1).ToArray();
+            var tileViewNames = viewNameList.ToArray();
+            var tileViewValues = Enumerable.Range(-1, Tileset.TileViews.Count + 1).ToArray();
             EditorGUI.BeginChangeCheck();
             m_sharedData.tileViewList.index = EditorGUILayout.IntPopup("Tileset View", m_sharedData.tileViewList.index, tileViewNames, tileViewValues);
             if (EditorGUI.EndChangeCheck())
@@ -212,24 +212,24 @@ namespace CreativeSpore.SuperTilemapEditor
             // Draw Zoom Selector
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label(EditorGUIUtility.FindTexture("ViewToolZoom"), GUILayout.Width(35f));
-            float visualTileZoom = EditorGUILayout.Slider(Tileset.VisualTileSize.x / Tileset.TilePxSize.x, 0.25f, 4f);
+            var visualTileZoom = EditorGUILayout.Slider(Tileset.VisualTileSize.x / Tileset.TilePxSize.x, 0.25f, 4f);
             Tileset.VisualTileSize = visualTileZoom * Tileset.TilePxSize;
             if (GUILayout.Button("Reset", GUILayout.Width(50f))) Tileset.VisualTileSize = new Vector2(32f * Tileset.TilePxSize.x / Tileset.TilePxSize.y, 32f);
             EditorGUILayout.EndHorizontal();
             //---
 
-            string sTileIdLabel = Tileset.SelectedTileId != Tileset.k_TileId_Empty? " (id:" + Tileset.SelectedTileId + ")" : "";
+            var sTileIdLabel = Tileset.SelectedTileId != Tileset.k_TileId_Empty? " (id:" + Tileset.SelectedTileId + ")" : "";
             EditorGUILayout.LabelField("Tile Palette" + sTileIdLabel, EditorStyles.boldLabel);
 
             m_sharedData.tileViewRowLength = tileView != null ? tileView.tileSelection.rowLength : Tileset.TileRowLength;
             // keeps values safe
             m_sharedData.tileViewRowLength = Mathf.Max(1, m_sharedData.tileViewRowLength);
 
-            float tileAreaWidth = m_sharedData.tileViewRowLength * (Tileset.VisualTileSize.x + visualTilePadding) + 4f;
-            float tileAreaHeight = (Tileset.VisualTileSize.y + visualTilePadding) * (1 + (m_visibleTileCount - 1) / m_sharedData.tileViewRowLength) + 4f;
+            var tileAreaWidth = m_sharedData.tileViewRowLength * (Tileset.VisualTileSize.x + visualTilePadding) + 4f;
+            var tileAreaHeight = (Tileset.VisualTileSize.y + visualTilePadding) * (1 + (m_visibleTileCount - 1) / m_sharedData.tileViewRowLength) + 4f;
             
             //float minTileScrollHeight = (Tileset.VisualTileSize.y + visualTilePadding) * 6f;// NOTE: GUILayout.MinHeight is not working with BeginScrollView            
-            Vector2 tilesScrollPos = EditorGUILayout.BeginScrollView(m_sharedData.tilesScrollPos, Styles.Instance.scrollStyle/*, GUILayout.MinHeight(minTileScrollHeight)*/);
+            var tilesScrollPos = EditorGUILayout.BeginScrollView(m_sharedData.tilesScrollPos, Styles.Instance.scrollStyle/*, GUILayout.MinHeight(minTileScrollHeight)*/);
             if(m_updateScrollPos) m_sharedData.tilesScrollPos = tilesScrollPos;
             {
                 // Scroll Moving Drag
@@ -249,20 +249,20 @@ namespace CreativeSpore.SuperTilemapEditor
                 if (Tileset.Tiles != null)
                 {
                     GUILayoutUtility.GetRect(tileAreaWidth, tileAreaHeight);
-                    int lastVisibleTileCount = m_visibleTileCount;
+                    var lastVisibleTileCount = m_visibleTileCount;
                     m_visibleTileCount = 0;
-                    List<uint> visibleTileList = new List<uint>();
-                    int tileViewWidth = tileView != null ? tileView.tileSelection.rowLength : Tileset.Width;
-                    int tileViewHeight = tileView != null ? ((tileView.tileSelection.selectionData.Count - 1) / tileView.tileSelection.rowLength) + 1 : Tileset.Height;
-                    int totalCount = ((((tileViewWidth - 1) / m_sharedData.tileViewRowLength) + 1) * m_sharedData.tileViewRowLength) * tileViewHeight;
-                    int tileIdOffset = 0;
-                    for (int i = 0; i < totalCount; ++i)
+                    var visibleTileList = new List<uint>();
+                    var tileViewWidth = tileView != null ? tileView.tileSelection.rowLength : Tileset.Width;
+                    var tileViewHeight = tileView != null ? ((tileView.tileSelection.selectionData.Count - 1) / tileView.tileSelection.rowLength) + 1 : Tileset.Height;
+                    var totalCount = ((((tileViewWidth - 1) / m_sharedData.tileViewRowLength) + 1) * m_sharedData.tileViewRowLength) * tileViewHeight;
+                    var tileIdOffset = 0;
+                    for (var i = 0; i < totalCount; ++i)
                     {
-                        int tileId = GetTileIdFromIdx(i, m_sharedData.tileViewRowLength, tileViewWidth, tileViewHeight) + tileIdOffset;
-                        uint tileData = (uint)tileId;
+                        var tileId = GetTileIdFromIdx(i, m_sharedData.tileViewRowLength, tileViewWidth, tileViewHeight) + tileIdOffset;
+                        var tileData = (uint)tileId;
                         if (tileView != null && tileId != Tileset.k_TileId_Empty)
                         {
-                            int viewIdx = tileId - tileIdOffset;
+                            var viewIdx = tileId - tileIdOffset;
                             if (viewIdx >= tileView.tileSelection.selectionData.Count)
                             {
                                 tileData = Tileset.k_TileData_Empty;
@@ -273,7 +273,7 @@ namespace CreativeSpore.SuperTilemapEditor
                             }
                             tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
                         }
-                        Tile tile = Tileset.GetTile(tileId);
+                        var tile = Tileset.GetTile(tileId);
                         while (tile != null && tile.uv == default(Rect)) // skip invalid tiles
                         {
                             tile = Tileset.GetTile(++tileId);
@@ -282,12 +282,12 @@ namespace CreativeSpore.SuperTilemapEditor
                         }
                         visibleTileList.Add(tileData);
 
-                        int tx = m_visibleTileCount % m_sharedData.tileViewRowLength;
-                        int ty = m_visibleTileCount / m_sharedData.tileViewRowLength;
-                        Rect rVisualTile = new Rect(2 + tx * (Tileset.VisualTileSize.x + visualTilePadding), 2 + ty * (Tileset.VisualTileSize.y + visualTilePadding), Tileset.VisualTileSize.x, Tileset.VisualTileSize.y);
+                        var tx = m_visibleTileCount % m_sharedData.tileViewRowLength;
+                        var ty = m_visibleTileCount / m_sharedData.tileViewRowLength;
+                        var rVisualTile = new Rect(2 + tx * (Tileset.VisualTileSize.x + visualTilePadding), 2 + ty * (Tileset.VisualTileSize.y + visualTilePadding), Tileset.VisualTileSize.x, Tileset.VisualTileSize.y);
 
                         // Optimization, skipping not visible tiles
-                        Rect rLocalVisualTile = rVisualTile; rLocalVisualTile.position -= m_sharedData.tilesScrollPos;
+                        var rLocalVisualTile = rVisualTile; rLocalVisualTile.position -= m_sharedData.tilesScrollPos;
                         if (!rLocalVisualTile.Overlaps(m_rTileScrollSize))
                         {
                             ; // Do Nothing
@@ -306,7 +306,7 @@ namespace CreativeSpore.SuperTilemapEditor
                                 TilesetEditor.DoGUIDrawTileFromTileData(rVisualTile, tileData, Tileset);                                
                             }
 
-                            Rect rTileRect = new Rect(2 + tx * (Tileset.VisualTileSize.x + visualTilePadding), 2 + ty * (Tileset.VisualTileSize.y + visualTilePadding), (Tileset.VisualTileSize.x + visualTilePadding), (Tileset.VisualTileSize.y + visualTilePadding));
+                            var rTileRect = new Rect(2 + tx * (Tileset.VisualTileSize.x + visualTilePadding), 2 + ty * (Tileset.VisualTileSize.y + visualTilePadding), (Tileset.VisualTileSize.x + visualTilePadding), (Tileset.VisualTileSize.y + visualTilePadding));
                             if (rVisualTile.Contains(e.mousePosition))
                             {
                                 if (e.type == EventType.MouseDrag && e.button == 0)
@@ -349,7 +349,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     // Draw selection rect
                     if (m_sharedData.startDragTileIdxRect.Key != m_sharedData.pointedTileIdxRect.Key /*&& m_startDragTileIdxRect.Key == m_endDragTileIdxRect.Key*/)
                     {
-                        Rect rSelection = new Rect(m_sharedData.startDragTileIdxRect.Value.center, m_sharedData.pointedTileIdxRect.Value.center - m_sharedData.startDragTileIdxRect.Value.center);
+                        var rSelection = new Rect(m_sharedData.startDragTileIdxRect.Value.center, m_sharedData.pointedTileIdxRect.Value.center - m_sharedData.startDragTileIdxRect.Value.center);
                         rSelection.Set(Mathf.Min(rSelection.xMin, rSelection.xMax), Mathf.Min(rSelection.yMin, rSelection.yMax), Mathf.Abs(rSelection.width), Mathf.Abs(rSelection.height));
                         rSelection.xMin -= m_sharedData.startDragTileIdxRect.Value.width / 2;
                         rSelection.xMax += m_sharedData.startDragTileIdxRect.Value.width / 2;
@@ -363,7 +363,7 @@ namespace CreativeSpore.SuperTilemapEditor
             if (e.type == EventType.Repaint)
             {
                 m_rTileScrollArea = GUILayoutUtility.GetLastRect();
-                Rect lastTileScrollSize = m_rTileScrollSize;
+                var lastTileScrollSize = m_rTileScrollSize;
                 m_rTileScrollSize = m_rTileScrollArea;
                 m_rTileScrollSize.position = Vector2.zero; // reset position to the Contains and Overlaps inside the tile scroll view without repositioning the position of local positions
                 if (tileAreaWidth > m_rTileScrollSize.width)
@@ -375,20 +375,20 @@ namespace CreativeSpore.SuperTilemapEditor
             }
 
             EditorGUILayout.BeginHorizontal();
-            string sBrushIdLabel = Tileset.SelectedBrushId > 0 ? " (id:" + Tileset.SelectedBrushId + ")" : "";
+            var sBrushIdLabel = Tileset.SelectedBrushId > 0 ? " (id:" + Tileset.SelectedBrushId + ")" : "";
             EditorGUILayout.LabelField("Brush Palette" + sBrushIdLabel, EditorStyles.boldLabel);
             m_displayBrushReordList = EditorUtils.DoToggleButton("Display List", m_displayBrushReordList);
             EditorGUILayout.EndHorizontal();
 
-            string[] brushTypeArray = Tileset.GetBrushTypeArray();
+            var brushTypeArray = Tileset.GetBrushTypeArray();
             if (brushTypeArray != null && brushTypeArray.Length > 0)
                 Tileset.BrushTypeMask = EditorGUILayout.MaskField("Brush Mask", Tileset.BrushTypeMask, brushTypeArray);
 
-            int tileRowLength = (int)(m_rTileScrollSize.width / (Tileset.VisualTileSize.x + visualTilePadding));
+            var tileRowLength = (int)(m_rTileScrollSize.width / (Tileset.VisualTileSize.x + visualTilePadding));
             if (tileRowLength <= 0) tileRowLength = 1;
             float fBrushesScrollMaxHeight = Screen.height / 4;
             //commented because m_rTileScrollSize.width.height was changed to Screen.height;  fBrushesScrollMaxHeight -= fBrushesScrollMaxHeight % 2; // sometimes because size of tile scroll affects size of brush scroll, the height is dancing between +-1, so this is always taking the pair value
-            float fBrushesScrollHeight = Mathf.Min(fBrushesScrollMaxHeight, 4 + (Tileset.VisualTileSize.y + visualTilePadding) * (1 + (Tileset.Brushes.Count / tileRowLength)));
+            var fBrushesScrollHeight = Mathf.Min(fBrushesScrollMaxHeight, 4 + (Tileset.VisualTileSize.y + visualTilePadding) * (1 + (Tileset.Brushes.Count / tileRowLength)));
             EditorGUILayout.BeginVertical(GUILayout.MinHeight(fBrushesScrollHeight));
             if (m_displayBrushReordList)
             {
@@ -396,18 +396,18 @@ namespace CreativeSpore.SuperTilemapEditor
             }
             else
             {
-                bool refreshBrushes = false;
-                Vector2 brushesScrollPos = EditorGUILayout.BeginScrollView(m_sharedData.brushesScrollPos, Styles.Instance.scrollStyle);
+                var refreshBrushes = false;
+                var brushesScrollPos = EditorGUILayout.BeginScrollView(m_sharedData.brushesScrollPos, Styles.Instance.scrollStyle);
                 if (m_updateScrollPos) m_sharedData.brushesScrollPos = brushesScrollPos;
                 {
-                    Rect rScrollView = new Rect(0, 0, m_rTileScrollSize.width, 0);
+                    var rScrollView = new Rect(0, 0, m_rTileScrollSize.width, 0);
                     tileRowLength = Mathf.Clamp((int)rScrollView.width / (int)(Tileset.VisualTileSize.x + visualTilePadding), 1, tileRowLength);
                     if (Tileset.Brushes != null)
                     {
                         GUILayout.Space((Tileset.VisualTileSize.y + visualTilePadding) * (1 + (Tileset.Brushes.Count - 1) / tileRowLength));
                         for (int i = 0, idx = 0; i < Tileset.Brushes.Count; ++i, ++idx)
                         {
-                            Tileset.BrushContainer brushCont = Tileset.Brushes[i];
+                            var brushCont = Tileset.Brushes[i];
                             if (brushCont.BrushAsset == null || brushCont.BrushAsset.Tileset != Tileset)
                             {
                                 refreshBrushes = true;
@@ -419,16 +419,16 @@ namespace CreativeSpore.SuperTilemapEditor
                                 continue;
                             }
 
-                            int tx = idx % tileRowLength;
-                            int ty = idx / tileRowLength;
-                            Rect rVisualTile = new Rect(2 + tx * (Tileset.VisualTileSize.x + visualTilePadding), 2 + ty * (Tileset.VisualTileSize.y + visualTilePadding), Tileset.VisualTileSize.x, Tileset.VisualTileSize.y);
+                            var tx = idx % tileRowLength;
+                            var ty = idx / tileRowLength;
+                            var rVisualTile = new Rect(2 + tx * (Tileset.VisualTileSize.x + visualTilePadding), 2 + ty * (Tileset.VisualTileSize.y + visualTilePadding), Tileset.VisualTileSize.x, Tileset.VisualTileSize.y);
                             //Fix Missing Tileset reference
                             if(brushCont.BrushAsset.Tileset == null)
                             {
                                 Debug.LogWarning("Fixed missing tileset reference in brush " + brushCont.BrushAsset.name + " Id("+brushCont.Id+")");
                                 brushCont.BrushAsset.Tileset = Tileset;
                             }
-                            uint tileData = Tileset.k_TileData_Empty;
+                            var tileData = Tileset.k_TileData_Empty;
                             if (brushCont.BrushAsset.IsAnimated())
                             {
                                 tileData = brushCont.BrushAsset.GetAnimTileData();
@@ -454,7 +454,7 @@ namespace CreativeSpore.SuperTilemapEditor
                             }
                             else if (Tileset.SelectedBrushId == brushCont.Id)
                             {
-                                Rect rSelection = new Rect(2 + tx * (Tileset.VisualTileSize.x + visualTilePadding), 2 + ty * (Tileset.VisualTileSize.y + visualTilePadding), (Tileset.VisualTileSize.x + visualTilePadding), (Tileset.VisualTileSize.y + visualTilePadding));
+                                var rSelection = new Rect(2 + tx * (Tileset.VisualTileSize.x + visualTilePadding), 2 + ty * (Tileset.VisualTileSize.y + visualTilePadding), (Tileset.VisualTileSize.x + visualTilePadding), (Tileset.VisualTileSize.y + visualTilePadding));
                                 HandlesEx.DrawRectWithOutline(rSelection, new Color(0f, 0f, 0f, 0.1f), new Color(1f, 1f, 0f, 1f));
                             }
                         }
@@ -486,7 +486,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private void DisplayBrushReorderableList()
         {
-            Event e = Event.current;
+            var e = Event.current;
             if (m_sharedData.brushList == null || m_sharedData.brushList.list != Tileset.Brushes)
             {
                 if (e.type != EventType.Layout)
@@ -494,7 +494,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     m_sharedData.brushList = TilesetEditor.CreateBrushReorderableList(Tileset);
                     m_sharedData.brushList.onSelectCallback += (ReorderableList list) =>
                     {
-                        Tileset.BrushContainer brushCont = Tileset.Brushes[list.index];
+                        var brushCont = Tileset.Brushes[list.index];
                         Tileset.SelectedBrushId = brushCont.Id;
                         RemoveTileSelection();
                         if (m_dblClick.IsDblClick)
@@ -512,7 +512,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 m_sharedData.brushList.index = Mathf.Clamp(m_sharedData.brushList.index, -1, Tileset.Brushes.Count - 1);
                 m_sharedData.brushList.elementHeight = Tileset.VisualTileSize.y + 10f;
                 m_sharedData.brushList.DoLayoutList();
-                Rect rList = GUILayoutUtility.GetLastRect();
+                var rList = GUILayoutUtility.GetLastRect();
                 if (e.isMouse && !rList.Contains(e.mousePosition))
                 {
                     m_sharedData.brushList.ReleaseKeyboardFocus();
@@ -531,19 +531,19 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private void DoAutoScroll()
         {
-            Event e = Event.current;
+            var e = Event.current;
             if (m_rTileScrollSize.Contains(e.mousePosition - m_sharedData.tilesScrollPos))
             {
                 if (e.type == EventType.MouseDrag && e.button == 0)
                 {
-                    Vector2 mouseMoveDisp = e.mousePosition - m_lastTileScrollMousePos;
+                    var mouseMoveDisp = e.mousePosition - m_lastTileScrollMousePos;
                     float autoScrollDist = 40;
                     float autoScrollSpeed = 500;
-                    Vector2 mousePosition = e.mousePosition - m_sharedData.tilesScrollPos;
-                    float leftFactorX = mouseMoveDisp.x < 0f ? 1f - Mathf.Pow(Mathf.Clamp01(mousePosition.x / autoScrollDist), 2) : 0f;
-                    float rightFactorX = mouseMoveDisp.x > 0f ? 1f - Mathf.Pow(Mathf.Clamp01((m_rTileScrollSize.width - mousePosition.x) / autoScrollDist), 2) : 0f;
-                    float topFactorY = mouseMoveDisp.y < 0f ? 1f - Mathf.Pow(Mathf.Clamp01(mousePosition.y / autoScrollDist), 2) : 0f;
-                    float bottomFactorY = mouseMoveDisp.y > 0f ? 1f - Mathf.Pow(Mathf.Clamp01((m_rTileScrollSize.height - mousePosition.y) / autoScrollDist), 2) : 0f;
+                    var mousePosition = e.mousePosition - m_sharedData.tilesScrollPos;
+                    var leftFactorX = mouseMoveDisp.x < 0f ? 1f - Mathf.Pow(Mathf.Clamp01(mousePosition.x / autoScrollDist), 2) : 0f;
+                    var rightFactorX = mouseMoveDisp.x > 0f ? 1f - Mathf.Pow(Mathf.Clamp01((m_rTileScrollSize.width - mousePosition.x) / autoScrollDist), 2) : 0f;
+                    var topFactorY = mouseMoveDisp.y < 0f ? 1f - Mathf.Pow(Mathf.Clamp01(mousePosition.y / autoScrollDist), 2) : 0f;
+                    var bottomFactorY = mouseMoveDisp.y > 0f ? 1f - Mathf.Pow(Mathf.Clamp01((m_rTileScrollSize.height - mousePosition.y) / autoScrollDist), 2) : 0f;
                     m_tileScrollSpeed = autoScrollSpeed * new Vector2((-leftFactorX + rightFactorX), (-topFactorY + bottomFactorY));
                 }
                 else if (e.type == EventType.MouseUp)
@@ -561,8 +561,8 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private int GetTileIdFromIdx(int idx, int rowLength, int width, int height)
         {
-            int cWxH = rowLength * height;
-            int n = idx % cWxH;
+            var cWxH = rowLength * height;
+            var n = idx % cWxH;
             if (((idx / cWxH) * rowLength) + (idx % rowLength) >= width)
             {
                 return Tileset.k_TileId_Empty;
@@ -580,18 +580,18 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (m_sharedData.startDragTileIdxRect.Key != m_sharedData.endDragTileIdxRect.Key)
             {
-                int tx_start = Mathf.Min(m_sharedData.startDragTileIdxRect.Key % m_sharedData.tileViewRowLength, m_sharedData.endDragTileIdxRect.Key % m_sharedData.tileViewRowLength);
-                int ty_start = Mathf.Min(m_sharedData.startDragTileIdxRect.Key / m_sharedData.tileViewRowLength, m_sharedData.endDragTileIdxRect.Key / m_sharedData.tileViewRowLength);
-                int tx_end = Mathf.Max(m_sharedData.startDragTileIdxRect.Key % m_sharedData.tileViewRowLength, m_sharedData.endDragTileIdxRect.Key % m_sharedData.tileViewRowLength);
-                int ty_end = Mathf.Max(m_sharedData.startDragTileIdxRect.Key / m_sharedData.tileViewRowLength, m_sharedData.endDragTileIdxRect.Key / m_sharedData.tileViewRowLength);
-                List<uint> selectionData = new List<uint>();
-                int tileIdx = 0;
-                for (int ty = ty_end; ty >= ty_start; --ty) // NOTE: this goes from bottom to top to fit the tilemap coordinate system
+                var tx_start = Mathf.Min(m_sharedData.startDragTileIdxRect.Key % m_sharedData.tileViewRowLength, m_sharedData.endDragTileIdxRect.Key % m_sharedData.tileViewRowLength);
+                var ty_start = Mathf.Min(m_sharedData.startDragTileIdxRect.Key / m_sharedData.tileViewRowLength, m_sharedData.endDragTileIdxRect.Key / m_sharedData.tileViewRowLength);
+                var tx_end = Mathf.Max(m_sharedData.startDragTileIdxRect.Key % m_sharedData.tileViewRowLength, m_sharedData.endDragTileIdxRect.Key % m_sharedData.tileViewRowLength);
+                var ty_end = Mathf.Max(m_sharedData.startDragTileIdxRect.Key / m_sharedData.tileViewRowLength, m_sharedData.endDragTileIdxRect.Key / m_sharedData.tileViewRowLength);
+                var selectionData = new List<uint>();
+                var tileIdx = 0;
+                for (var ty = ty_end; ty >= ty_start; --ty) // NOTE: this goes from bottom to top to fit the tilemap coordinate system
                 {
-                    for (int tx = tx_start; tx <= tx_end; ++tx, ++tileIdx)
+                    for (var tx = tx_start; tx <= tx_end; ++tx, ++tileIdx)
                     {
-                        int visibleTileIdx = ty * m_sharedData.tileViewRowLength + tx;
-                        uint tileData = m_visibleTileList[visibleTileIdx];
+                        var visibleTileIdx = ty * m_sharedData.tileViewRowLength + tx;
+                        var tileData = m_visibleTileList[visibleTileIdx];
                         selectionData.Add(tileData);
                     }
                 }

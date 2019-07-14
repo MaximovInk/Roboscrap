@@ -26,15 +26,15 @@ namespace Anima2D
 		
 		public static SpriteMesh GetSpriteMeshFromSprite(Sprite sprite)
 		{
-			string guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(sprite));
+			var guid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(sprite));
 			
 			if(s_SpriteMeshToTextureCache.ContainsValue(guid))
 			{
-				foreach(KeyValuePair<string,string> pair in s_SpriteMeshToTextureCache)
+				foreach(var pair in s_SpriteMeshToTextureCache)
 				{
 					if(pair.Value.Equals(guid))
 					{
-						SpriteMesh spriteMesh = LoadSpriteMesh(AssetDatabase.GUIDToAssetPath(pair.Key));
+						var spriteMesh = LoadSpriteMesh(AssetDatabase.GUIDToAssetPath(pair.Key));
 						
 						if(spriteMesh && spriteMesh.sprite == sprite)
 						{
@@ -51,13 +51,13 @@ namespace Anima2D
 		{
 			s_SpriteMeshToTextureCache.Clear();
 			
-			string[] spriteMeshGUIDs = AssetDatabase.FindAssets("t:SpriteMesh");
+			var spriteMeshGUIDs = AssetDatabase.FindAssets("t:SpriteMesh");
 			
-			List<string> needsOverride = new List<string>();
+			var needsOverride = new List<string>();
 			
-			foreach(string guid in spriteMeshGUIDs)
+			foreach(var guid in spriteMeshGUIDs)
 			{
-				SpriteMesh spriteMesh = LoadSpriteMesh(AssetDatabase.GUIDToAssetPath(guid));
+				var spriteMesh = LoadSpriteMesh(AssetDatabase.GUIDToAssetPath(guid));
 				
 				if(spriteMesh)
 				{
@@ -78,7 +78,7 @@ namespace Anima2D
 			
 			AssetDatabase.StartAssetEditing();
 			
-			foreach(string textureGuid in needsOverride)
+			foreach(var textureGuid in needsOverride)
 			{
 				AssetDatabase.ImportAsset(AssetDatabase.GUIDToAssetPath(textureGuid));
 			}
@@ -91,8 +91,8 @@ namespace Anima2D
 		{
 			if(spriteMesh)
 			{
-				SerializedObject spriteMeshSO = new SerializedObject(spriteMesh);
-				SerializedProperty apiVersionProp = spriteMeshSO.FindProperty("m_ApiVersion");
+				var spriteMeshSO = new SerializedObject(spriteMesh);
+				var apiVersionProp = spriteMeshSO.FindProperty("m_ApiVersion");
 				
 				if(apiVersionProp.intValue < SpriteMesh.api_version)
 				{
@@ -123,41 +123,41 @@ namespace Anima2D
 		
 		static void Upgrade_003(SerializedObject spriteMeshSO)
 		{
-			SpriteMesh spriteMesh = spriteMeshSO.targetObject as SpriteMesh;
-			SpriteMeshData spriteMeshData = SpriteMeshUtils.LoadSpriteMeshData(spriteMesh);
+			var spriteMesh = spriteMeshSO.targetObject as SpriteMesh;
+			var spriteMeshData = SpriteMeshUtils.LoadSpriteMeshData(spriteMesh);
 			
 			if(spriteMesh.sprite && spriteMeshData)
 			{
-				TextureImporter textureImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(spriteMesh.sprite)) as TextureImporter;
+				var textureImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(spriteMesh.sprite)) as TextureImporter;
 				
 				float maxImporterSize = textureImporter.maxTextureSize;
 				
-				int width = 1;
-				int height = 1;
+				var width = 1;
+				var height = 1;
 				
 				SpriteMeshUtils.GetWidthAndHeight(textureImporter,ref width, ref height);
 				
-				int maxSize = Mathf.Max(width,height);
+				var maxSize = Mathf.Max(width,height);
 				
-				float factor = maxSize / maxImporterSize;
+				var factor = maxSize / maxImporterSize;
 				
 				if(factor > 1f)
 				{
-					SerializedObject spriteMeshDataSO = new SerializedObject(spriteMeshData);
-					SerializedProperty smdPivotPointProp = spriteMeshDataSO.FindProperty("m_PivotPoint");
-					SerializedProperty smdVerticesProp = spriteMeshDataSO.FindProperty("m_Vertices");
-					SerializedProperty smdHolesProp = spriteMeshDataSO.FindProperty("m_Holes");
+					var spriteMeshDataSO = new SerializedObject(spriteMeshData);
+					var smdPivotPointProp = spriteMeshDataSO.FindProperty("m_PivotPoint");
+					var smdVerticesProp = spriteMeshDataSO.FindProperty("m_Vertices");
+					var smdHolesProp = spriteMeshDataSO.FindProperty("m_Holes");
 					
 					spriteMeshDataSO.Update();
 					
 					smdPivotPointProp.vector2Value = spriteMeshData.pivotPoint * factor;
 					
-					for(int i = 0; i < spriteMeshData.vertices.Length; ++i)
+					for(var i = 0; i < spriteMeshData.vertices.Length; ++i)
 					{
 						smdVerticesProp.GetArrayElementAtIndex(i).vector2Value = spriteMeshData.vertices[i] * factor;
 					}
 					
-					for(int i = 0; i < spriteMeshData.holes.Length; ++i)
+					for(var i = 0; i < spriteMeshData.holes.Length; ++i)
 					{
 						smdHolesProp.GetArrayElementAtIndex(i).vector2Value = spriteMeshData.holes[i] * factor;
 					}
@@ -171,12 +171,12 @@ namespace Anima2D
 
 		static void Upgrade_004(SerializedObject spriteMeshSO)
 		{
-			SerializedProperty materialsProp = spriteMeshSO.FindProperty("m_SharedMaterials");
+			var materialsProp = spriteMeshSO.FindProperty("m_SharedMaterials");
 
-			for(int i = 0; i < materialsProp.arraySize; ++i)
+			for(var i = 0; i < materialsProp.arraySize; ++i)
 			{
-				SerializedProperty materialProp = materialsProp.GetArrayElementAtIndex(i);
-				Material material = materialProp.objectReferenceValue as Material;
+				var materialProp = materialsProp.GetArrayElementAtIndex(i);
+				var material = materialProp.objectReferenceValue as Material;
 
 				if(material)
 				{
@@ -193,15 +193,15 @@ namespace Anima2D
 		{
 			if(spriteMesh)
 			{
-				string key = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(spriteMesh));
+				var key = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(spriteMesh));
 				
 				if(spriteMesh.sprite)
 				{
-					SpriteMesh spriteMeshFromSprite = GetSpriteMeshFromSprite(spriteMesh.sprite);
+					var spriteMeshFromSprite = GetSpriteMeshFromSprite(spriteMesh.sprite);
 					
 					if(!spriteMeshFromSprite || spriteMesh == spriteMeshFromSprite)
 					{
-						string value = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(SpriteUtility.GetSpriteTexture(spriteMesh.sprite,false)));
+						var value = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(SpriteUtility.GetSpriteTexture(spriteMesh.sprite,false)));
 						
 						s_SpriteMeshToTextureCache[key] = value;
 					}else{
@@ -219,9 +219,9 @@ namespace Anima2D
 		{
 			if(!s_Initialized) return;
 			
-			foreach(string importetAssetPath in importedAssets)
+			foreach(var importetAssetPath in importedAssets)
 			{
-				SpriteMesh spriteMesh = LoadSpriteMesh(importetAssetPath);
+				var spriteMesh = LoadSpriteMesh(importetAssetPath);
 				
 				if(spriteMesh)
 				{
@@ -245,20 +245,20 @@ namespace Anima2D
 		{
 			if(!s_Initialized) return;
 			
-			string guid = AssetDatabase.AssetPathToGUID(assetPath);
+			var guid = AssetDatabase.AssetPathToGUID(assetPath);
 			
 			if(s_SpriteMeshToTextureCache.ContainsValue(guid))
 			{
-				TextureImporter textureImporter  = (TextureImporter) assetImporter;
-				SerializedObject textureImporterSO = new SerializedObject(textureImporter);
-				SerializedProperty textureImporterSprites = textureImporterSO.FindProperty("m_SpriteSheet.m_Sprites");
+				var textureImporter  = (TextureImporter) assetImporter;
+				var textureImporterSO = new SerializedObject(textureImporter);
+				var textureImporterSprites = textureImporterSO.FindProperty("m_SpriteSheet.m_Sprites");
 				
-				foreach(KeyValuePair<string,string> pair in s_SpriteMeshToTextureCache)
+				foreach(var pair in s_SpriteMeshToTextureCache)
 				{
 					if(pair.Value == guid)
 					{
-						SpriteMesh spriteMesh = LoadSpriteMesh(AssetDatabase.GUIDToAssetPath(pair.Key));
-						SpriteMeshData spriteMeshData = SpriteMeshUtils.LoadSpriteMeshData(spriteMesh);
+						var spriteMesh = LoadSpriteMesh(AssetDatabase.GUIDToAssetPath(pair.Key));
+						var spriteMeshData = SpriteMeshUtils.LoadSpriteMeshData(spriteMesh);
 						
 						if(spriteMesh && spriteMeshData && spriteMesh.sprite && spriteMeshData.vertices.Length > 0)
 						{
@@ -267,8 +267,8 @@ namespace Anima2D
 							if(textureImporter.spriteImportMode == SpriteImportMode.Multiple)
 							{
 								SerializedProperty spriteProp = null;
-								int i = 0;
-								string name = "";
+								var i = 0;
+								var name = "";
 								
 								while(i < textureImporterSprites.arraySize && name != spriteMesh.sprite.name)
 								{
@@ -280,14 +280,14 @@ namespace Anima2D
 								
 								if(name == spriteMesh.sprite.name)
 								{
-									Rect textureRect = SpriteMeshUtils.CalculateSpriteRect(spriteMesh,5);
+									var textureRect = SpriteMeshUtils.CalculateSpriteRect(spriteMesh,5);
 									spriteProp.FindPropertyRelative("m_Rect").rectValue = textureRect;
 									spriteProp.FindPropertyRelative("m_Alignment").intValue = 9;
 									spriteProp.FindPropertyRelative("m_Pivot").vector2Value = Vector2.Scale(spriteMeshData.pivotPoint - textureRect.position, new Vector2(1f / textureRect.size.x, 1f / textureRect.size.y));
 								}
 							}else{
-								int width = 0;
-								int height = 0;
+								var width = 0;
+								var height = 0;
 								SpriteMeshUtils.GetSpriteTextureSize(spriteMesh.sprite,ref width,ref height);
 								textureImporterSO.FindProperty("m_Alignment").intValue = 9;
 								textureImporterSO.FindProperty("m_SpritePivot").vector2Value = Vector2.Scale(spriteMeshData.pivotPoint, new Vector2(1f / width, 1f / height));
@@ -304,17 +304,17 @@ namespace Anima2D
 		{
 			if(!s_Initialized) return;
 			
-			string guid = AssetDatabase.AssetPathToGUID(assetPath);
+			var guid = AssetDatabase.AssetPathToGUID(assetPath);
 			
 			if(s_SpriteMeshToTextureCache.ContainsValue(guid))
 			{
-				foreach(Sprite sprite in sprites)
+				foreach(var sprite in sprites)
 				{
-					foreach(KeyValuePair<string,string> pair in s_SpriteMeshToTextureCache)
+					foreach(var pair in s_SpriteMeshToTextureCache)
 					{
 						if(pair.Value == guid)
 						{
-							SpriteMesh spriteMesh = LoadSpriteMesh(AssetDatabase.GUIDToAssetPath(pair.Key));
+							var spriteMesh = LoadSpriteMesh(AssetDatabase.GUIDToAssetPath(pair.Key));
 							
 							if(spriteMesh && spriteMesh.sprite && sprite.name == spriteMesh.sprite.name)
 							{
@@ -329,7 +329,7 @@ namespace Anima2D
 		
 		void DoSpriteOverride(SpriteMesh spriteMesh, Sprite sprite)
 		{
-			TextureImporter textureImporter = (TextureImporter) assetImporter;
+			var textureImporter = (TextureImporter) assetImporter;
 
 #if UNITY_5_1 || UNITY_5_2 || UNITY_5_3_OR_NEWER
 			Debug.Assert(textureImporter.spriteImportMode == SpriteImportMode.Single ||
@@ -337,18 +337,18 @@ namespace Anima2D
 						"Incompatible Sprite Mode. Use Single or Multiple.");
 #endif
 
-			SpriteMeshData spriteMeshData = SpriteMeshUtils.LoadSpriteMeshData(spriteMesh);
+			var spriteMeshData = SpriteMeshUtils.LoadSpriteMeshData(spriteMesh);
 			
 			if(spriteMeshData) 
 			{
-				Vector2 factor = Vector2.one;
-				Rect spriteRect = sprite.rect;
-				Rect rectTextureSpace = new Rect();
+				var factor = Vector2.one;
+				var spriteRect = sprite.rect;
+				var rectTextureSpace = new Rect();
 
 				if(textureImporter.spriteImportMode == SpriteImportMode.Single)
 				{
-					int width = 0;
-					int height = 0;
+					var width = 0;
+					var height = 0;
 
 					SpriteMeshUtils.GetSpriteTextureSize(spriteMesh.sprite,ref width,ref height);
 					rectTextureSpace = new Rect(0, 0, width, height);
@@ -360,8 +360,8 @@ namespace Anima2D
 				
 				factor = new Vector2(spriteRect.width/rectTextureSpace.width,spriteRect.height/rectTextureSpace.height);
 				
-				Vector2[] newVertices = new List<Vector2>(spriteMeshData.vertices).ConvertAll( v => MathUtils.ClampPositionInRect(Vector2.Scale(v,factor),spriteRect) - spriteRect.position ).ToArray();
-				ushort[] newIndices = new List<int>(spriteMeshData.indices).ConvertAll<ushort>( i => (ushort)i ).ToArray();
+				var newVertices = new List<Vector2>(spriteMeshData.vertices).ConvertAll( v => MathUtils.ClampPositionInRect(Vector2.Scale(v,factor),spriteRect) - spriteRect.position ).ToArray();
+				var newIndices = new List<int>(spriteMeshData.indices).ConvertAll<ushort>( i => (ushort)i ).ToArray();
 				
 				sprite.OverrideGeometry(newVertices, newIndices);
 			}

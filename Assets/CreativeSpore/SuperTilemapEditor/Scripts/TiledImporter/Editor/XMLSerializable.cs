@@ -17,9 +17,9 @@ namespace CreativeSpore.TiledImporter
 
         public void SaveToXMLFile<T>( T obj_, string sFilePath_ )
         {
-            string sXml = Serialize<T>(obj_);
+            var sXml = Serialize<T>(obj_);
 
-            using (StreamWriter textWriter = new StreamWriter(sFilePath_, false) )
+            using (var textWriter = new StreamWriter(sFilePath_, false) )
             {
                 textWriter.Write(sXml);
             }
@@ -29,7 +29,7 @@ namespace CreativeSpore.TiledImporter
         {
             string sXml;
 
-            using (StreamReader textReader = new StreamReader(sFilePath_))
+            using (var textReader = new StreamReader(sFilePath_))
             {
                 sXml = textReader.ReadToEnd();
             }
@@ -47,9 +47,9 @@ namespace CreativeSpore.TiledImporter
             try
             {
                 String XmlizedString = null;
-                MemoryStream memoryStream = new MemoryStream();
-                XmlSerializer xs = new XmlSerializer(typeof(T));
-                XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
+                var memoryStream = new MemoryStream();
+                var xs = new XmlSerializer(typeof(T));
+                var xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
                 xmlTextWriter.Formatting = Formatting.Indented;
 
                 xs.Serialize(xmlTextWriter, pObject);
@@ -71,8 +71,8 @@ namespace CreativeSpore.TiledImporter
         /// <returns></returns>
         public T DeserializeObject<T>(String pXmlizedString)
         {
-            XmlSerializer xs = new XmlSerializer(typeof(T));
-            MemoryStream memoryStream = new MemoryStream(StringToUTF8ByteArray(pXmlizedString));
+            var xs = new XmlSerializer(typeof(T));
+            var memoryStream = new MemoryStream(StringToUTF8ByteArray(pXmlizedString));
 
             return (T)xs.Deserialize(memoryStream);
         }
@@ -84,8 +84,8 @@ namespace CreativeSpore.TiledImporter
         /// <returns>String converted from Unicode Byte Array</returns>
         private String UTF8ByteArrayToString(Byte[] characters)
         {
-            UTF8Encoding encoding = new UTF8Encoding();
-            String constructedString = encoding.GetString(characters);
+            var encoding = new UTF8Encoding();
+            var constructedString = encoding.GetString(characters);
             return (constructedString);
         }
 
@@ -96,8 +96,8 @@ namespace CreativeSpore.TiledImporter
         /// <returns></returns>
         private Byte[] StringToUTF8ByteArray(String pXmlString)
         {
-            UTF8Encoding encoding = new UTF8Encoding();
-            Byte[] byteArray = encoding.GetBytes(pXmlString);
+            var encoding = new UTF8Encoding();
+            var byteArray = encoding.GetBytes(pXmlString);
             return byteArray;
         }
     }

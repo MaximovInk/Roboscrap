@@ -21,7 +21,7 @@ namespace Anima2D
 
 		override public void OnInspectorGUI()
 		{
-			Sprite oldSprite = m_SpriteProperty.objectReferenceValue as Sprite;
+			var oldSprite = m_SpriteProperty.objectReferenceValue as Sprite;
 
 			EditorGUI.BeginChangeCheck();
 
@@ -33,7 +33,7 @@ namespace Anima2D
 
 			if(EditorGUI.EndChangeCheck())
 			{
-				Sprite sprite = m_SpriteProperty.objectReferenceValue as Sprite;
+				var sprite = m_SpriteProperty.objectReferenceValue as Sprite;
 
 				SpriteMeshUtils.UpdateAssets(target as SpriteMesh);
 				AssetDatabase.SaveAssets();
@@ -63,7 +63,7 @@ namespace Anima2D
 			
 			if (GUILayout.Button("Edit Sprite Mesh",GUILayout.Width(150f)))
 			{
-				SpriteMeshEditorWindow window = SpriteMeshEditorWindow.GetWindow();
+				var window = SpriteMeshEditorWindow.GetWindow();
 				window.UpdateFromSelection();
 			}
 			
@@ -91,14 +91,14 @@ namespace Anima2D
 		{
 			Texture2D result = null;
 			
-			MethodInfo methodInfo = typeof(Editor).Assembly.GetType("UnityEditor.SpriteInspector").GetMethod("BuildPreviewTexture", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+			var methodInfo = typeof(Editor).Assembly.GetType("UnityEditor.SpriteInspector").GetMethod("BuildPreviewTexture", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
 			
 			if(methodInfo != null)
 			{
 #if UNITY_5_0_0 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2
 				object[] parameters = new object[] { width, height, sprite, spriteRendererMaterial };
 #else
-				object[] parameters = new object[] { width, height, sprite, spriteRendererMaterial, false };
+				var parameters = new object[] { width, height, sprite, spriteRendererMaterial, false };
 #endif
 				result = (Texture2D)methodInfo.Invoke(null,parameters);
 			}
@@ -132,14 +132,14 @@ namespace Anima2D
 			{
 				return;
 			}
-			MethodInfo methodInfo = typeof(Editor).Assembly.GetType("UnityEditor.SpriteInspector").GetMethod("DrawPreview", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+			var methodInfo = typeof(Editor).Assembly.GetType("UnityEditor.SpriteInspector").GetMethod("DrawPreview", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
 			
 			if(methodInfo != null)
 			{
 #if UNITY_5_0_0 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2
 				object[] parameters = new object[] { r, frame, spriteRendererMaterial };
 #else
-				object[] parameters = new object[] { r, frame, spriteRendererMaterial, false };
+				var parameters = new object[] { r, frame, spriteRendererMaterial, false };
 #endif
 				methodInfo.Invoke(null,parameters);
 			}

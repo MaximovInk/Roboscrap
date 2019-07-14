@@ -15,10 +15,10 @@ namespace CreativeSpore.SuperTilemapEditor
         [MenuItem("Assets/Create/SuperTilemapEditor/Tileset", priority = 50)]
         public static Tileset CreateTileset()
         {
-            Texture2D selectedAtlas = Selection.activeObject as Texture2D;
+            var selectedAtlas = Selection.activeObject as Texture2D;
             if (selectedAtlas)
             {
-                Tileset newTileset = EditorUtils.CreateAssetInSelectedDirectory<Tileset>(selectedAtlas.name);
+                var newTileset = EditorUtils.CreateAssetInSelectedDirectory<Tileset>(selectedAtlas.name);
                 newTileset.AtlasTexture = selectedAtlas;                
                 return newTileset;
             }
@@ -43,7 +43,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 this.m_groupsList.drawElementCallback = (Rect rect, int index, bool selected, bool focused) =>
                 {
                     rect.height -= 2f;
-                    string stringValue = this.m_brushGroupNames.GetArrayElementAtIndex(index).stringValue;
+                    var stringValue = this.m_brushGroupNames.GetArrayElementAtIndex(index).stringValue;
                     string text;
                     GUI.enabled = true;// index > 0;
                     text = EditorGUI.TextField(rect, " Brush Group " + index, stringValue);
@@ -69,7 +69,7 @@ namespace CreativeSpore.SuperTilemapEditor
         static Vector2 s_brushGroupMatrixScrollPos = Vector2.zero;
         public override void OnInspectorGUI()
         {
-            Tileset tileset = (Tileset)target;
+            var tileset = (Tileset)target;
             serializedObject.Update();
 
             EditorGUI.BeginChangeCheck();
@@ -110,7 +110,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     CreativeSpore.TiledImporter.TmxImporter.ImportTmxIntoTheScene(tileset);
                 }
                 EditorGUILayout.Separator();
-                string[] modeNames = System.Enum.GetNames(typeof(eMode));
+                var modeNames = System.Enum.GetNames(typeof(eMode));
                 s_mode = (eMode)GUILayout.Toolbar((int)s_mode, modeNames);
                 EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.MinHeight(s_mode == eMode.Tiles ? Screen.height * 0.8f : 0f));
                 {
@@ -144,12 +144,12 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private bool GetAutotiling(int groupA, int groupB)
         {
-            Tileset tileset = (Tileset)target;
+            var tileset = (Tileset)target;
             return tileset.GetGroupAutotiling(groupA, groupB);
         }
         private void SetAutotiling(int groupA, int groupB, bool val)
         {
-            Tileset tileset = (Tileset)target;
+            var tileset = (Tileset)target;
             tileset.SetGroupAutotiling(groupA, groupB, val);
         }
 
@@ -170,10 +170,10 @@ namespace CreativeSpore.SuperTilemapEditor
             }
             else if (Selection.activeObject is GameObject)
             {
-                STETilemap tilemap = (Selection.activeObject as GameObject).GetComponent<STETilemap>();
+                var tilemap = (Selection.activeObject as GameObject).GetComponent<STETilemap>();
                 if (tilemap == null)
                 {
-                    TilemapGroup tilemapGroup = (Selection.activeObject as GameObject).GetComponent<TilemapGroup>();
+                    var tilemapGroup = (Selection.activeObject as GameObject).GetComponent<TilemapGroup>();
                     if (tilemapGroup != null)
                     {
                         tilemap = tilemapGroup.SelectedTilemap;
@@ -190,15 +190,15 @@ namespace CreativeSpore.SuperTilemapEditor
         public static void AddAllBrushesFoundInTheProject(Tileset tileset)
         {
             // Load all TilesetBrush assets found in the project
-            string[] guids = AssetDatabase.FindAssets("t:TilesetBrush");
-            foreach (string brushGuid in guids)
+            var guids = AssetDatabase.FindAssets("t:TilesetBrush");
+            foreach (var brushGuid in guids)
             {
-                string brushAssetPath = AssetDatabase.GUIDToAssetPath(brushGuid);
+                var brushAssetPath = AssetDatabase.GUIDToAssetPath(brushGuid);
                 AssetDatabase.LoadAssetAtPath<TilesetBrush>(brushAssetPath);
             }
             // Get all loaded brushes
-            TilesetBrush[] brushesFound = (TilesetBrush[])Resources.FindObjectsOfTypeAll(typeof(TilesetBrush));
-            for (int i = 0; i < brushesFound.Length; ++i)
+            var brushesFound = (TilesetBrush[])Resources.FindObjectsOfTypeAll(typeof(TilesetBrush));
+            for (var i = 0; i < brushesFound.Length; ++i)
             {
                 if (brushesFound[i].Tileset == tileset)
                 {
@@ -211,10 +211,10 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public static int DoGroupFieldLayout( Tileset tileset, string label, int groupIdx)
         {
-            string groupName = tileset.BrushGroupNames[groupIdx];
-            string[] groupList = tileset.BrushGroupNames.Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            var groupName = tileset.BrushGroupNames[groupIdx];
+            var groupList = tileset.BrushGroupNames.Where(x => !string.IsNullOrEmpty(x)).ToArray();
             EditorGUI.BeginChangeCheck();
-            int idx = EditorGUILayout.Popup(label, ArrayUtility.FindIndex(groupList, x => x == groupName), groupList);
+            var idx = EditorGUILayout.Popup(label, ArrayUtility.FindIndex(groupList, x => x == groupName), groupList);
             if( EditorGUI.EndChangeCheck() )
             {
                 return ArrayUtility.FindIndex(tileset.BrushGroupNames, x => x == groupList[idx]);
@@ -224,20 +224,20 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public static ReorderableList CreateTileViewReorderableList(Tileset tileset)
         {
-            ReorderableList tileViewRList = new ReorderableList( tileset.TileViews, typeof(TileView), true, true, true, true);
+            var tileViewRList = new ReorderableList( tileset.TileViews, typeof(TileView), true, true, true, true);
             tileViewRList.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) =>
             {
-                GenericMenu menu = new GenericMenu();
+                var menu = new GenericMenu();
                 GenericMenu.MenuFunction addTileSelectionFunc = () =>
                 {
-                    TileSelection tileSelection = tileset.TileSelection.Clone();
+                    var tileSelection = tileset.TileSelection.Clone();
                     tileSelection.FlipVertical(); // flip vertical to fit the tileset coordinate system ( from top to bottom )                   
                     tileset.AddTileView("new TileView", tileSelection);
                     EditorUtility.SetDirty(tileset);
                 };
                 GenericMenu.MenuFunction addBrushSelectionFunc = () =>
                 {
-                    TileSelection tileSelection = BrushBehaviour.CreateTileSelection();
+                    var tileSelection = BrushBehaviour.CreateTileSelection();
                     tileset.AddTileView("new TileView", tileSelection);
                     EditorUtility.SetDirty(tileset);
                 };
@@ -274,7 +274,7 @@ namespace CreativeSpore.SuperTilemapEditor
             tileViewRList.drawHeaderCallback = (Rect rect) =>
             {
                 EditorGUI.LabelField(rect, "TileViews", EditorStyles.boldLabel);
-                Texture2D btnTexture = tileViewRList.elementHeight == 0f ? EditorGUIUtility.FindTexture("winbtn_win_max_h") : EditorGUIUtility.FindTexture("winbtn_win_min_h");
+                var btnTexture = tileViewRList.elementHeight == 0f ? EditorGUIUtility.FindTexture("winbtn_win_max_h") : EditorGUIUtility.FindTexture("winbtn_win_min_h");
                 if (GUI.Button(new Rect(rect.width - rect.height, rect.y, rect.height, rect.height), btnTexture, EditorStyles.label))
                 {
                     tileViewRList.elementHeight = tileViewRList.elementHeight == 0f ? EditorGUIUtility.singleLineHeight : 0f;
@@ -285,11 +285,11 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 if (tileViewRList.elementHeight == 0f)
                     return;
-                Rect rLabel = new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight);
-                TileView tileView = tileViewRList.list[index] as TileView;
+                var rLabel = new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight);
+                var tileView = tileViewRList.list[index] as TileView;
                 if (index == tileViewRList.index)
                 {
-                    string newName = EditorGUI.TextField(rLabel, tileView.name);
+                    var newName = EditorGUI.TextField(rLabel, tileView.name);
                     if (newName != tileView.name)
                     {
                         tileset.RenameTileView(tileView.name, newName);
@@ -306,7 +306,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public static ReorderableList CreateBrushReorderableList(Tileset tileset)
         {
-            ReorderableList brushRList = new ReorderableList(tileset.Brushes, typeof(Tileset.BrushContainer), true, true, true, true);            
+            var brushRList = new ReorderableList(tileset.Brushes, typeof(Tileset.BrushContainer), true, true, true, true);            
             brushRList.displayAdd = brushRList.displayRemove = false;
             brushRList.drawHeaderCallback = (Rect rect) =>
             {
@@ -314,16 +314,16 @@ namespace CreativeSpore.SuperTilemapEditor
             };
             brushRList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
             {
-                Tileset.BrushContainer brushContainer = tileset.Brushes[index];
+                var brushContainer = tileset.Brushes[index];
                 if (brushContainer.BrushAsset)
                 {
-                    Rect rToggle = new Rect(rect.x, rect.y, 16f, EditorGUIUtility.singleLineHeight);
-                    Rect rTile = new Rect(rect.x + 16f, rect.y, tileset.VisualTileSize.x, tileset.VisualTileSize.y);
-                    Rect rTileId = rTile;
+                    var rToggle = new Rect(rect.x, rect.y, 16f, EditorGUIUtility.singleLineHeight);
+                    var rTile = new Rect(rect.x + 16f, rect.y, tileset.VisualTileSize.x, tileset.VisualTileSize.y);
+                    var rTileId = rTile;
                     rTileId.x += rTile.width + 20; rTileId.width = rect.width - rTileId.x;
                     rTileId.height = rect.height / 2;
 
-                    Rect tileUV = brushContainer.BrushAsset.GetAnimUV();
+                    var tileUV = brushContainer.BrushAsset.GetAnimUV();
                     if (tileUV != default(Rect))
                     {
                         GUI.Box(new Rect(rTile.position - Vector2.one, rTile.size + 2 * Vector2.one), "");
@@ -346,8 +346,8 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (Event.current.type == EventType.Repaint)
             {
-                int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
-                Tile tile = tileset.GetTile(tileId);
+                var tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
+                var tile = tileset.GetTile(tileId);
                 if (tileId != Tileset.k_TileId_Empty && tileset.AtlasTexture)
                 {
                     if ((tileData & Tileset.k_TileFlag_FlipV) != 0) GUIUtility.ScaleAroundPivot(new Vector2(1f, -1f), dstRect.center);
@@ -355,7 +355,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     if ((tileData & Tileset.k_TileFlag_Rot90) != 0) GUIUtility.RotateAroundPivot(90f, dstRect.center);
                     if (tile != null && tile.prefabData.prefab && tile.prefabData.showPrefabPreviewInTilePalette)
                     {
-                        Texture2D assetPreview = AssetPreview.GetAssetPreview(tile.prefabData.prefab);
+                        var assetPreview = AssetPreview.GetAssetPreview(tile.prefabData.prefab);
                         if (assetPreview)
                             GUI.DrawTexture(dstRect, assetPreview, ScaleMode.ScaleToFit);
                         else
@@ -374,10 +374,10 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (texture2D != null)
             {
-                string assetPath = AssetDatabase.GetAssetPath(texture2D);
+                var assetPath = AssetDatabase.GetAssetPath(texture2D);
                 if (!string.IsNullOrEmpty(assetPath))
                 {
-                    TextureImporter textureImporter = AssetImporter.GetAtPath(assetPath) as UnityEditor.TextureImporter;
+                    var textureImporter = AssetImporter.GetAtPath(assetPath) as UnityEditor.TextureImporter;
                     textureImporter.textureType = TextureImporterType.Sprite;
                     if (textureImporter.spriteImportMode == SpriteImportMode.None)
                         textureImporter.spriteImportMode = SpriteImportMode.Single;
@@ -414,8 +414,8 @@ namespace CreativeSpore.SuperTilemapEditor
             int width = 0, height = 0, max;
             GetOriginalTextureSize(importer, ref width, ref height);
             max = Mathf.Max(width, height);
-            int size = 1024; //Default size
-            for (int i = 0; i < textureSizes.Length; i++)
+            var size = 1024; //Default size
+            for (var i = 0; i < textureSizes.Length; i++)
             {
                 if (textureSizes[i] >= max)
                 {
@@ -472,8 +472,8 @@ namespace CreativeSpore.SuperTilemapEditor
         public delegate void SetValueFunc(int layerA, int layerB, bool val);
         public static void DoGUI(string title, string[] groupNames, ref bool show, ref Vector2 scrollPos, GetValueFunc getValue, SetValueFunc setValue, bool allowBothCombinations = true)
         {
-            int num = 0;
-            for (int i = 0; i < groupNames.Length; i++)
+            var num = 0;
+            for (var i = 0; i < groupNames.Length; i++)
             {
                 if (!string.IsNullOrEmpty(groupNames[i]))
                 {
@@ -498,20 +498,20 @@ namespace CreativeSpore.SuperTilemapEditor
 					GUILayout.MinHeight(250f),
 					GUILayout.MaxHeight((float)(100 + (num + 1) * 16))
 				});
-                Rect rect = GUILayoutUtility.GetRect((float)(16 * num + 100), 100f);
-                Rect topmostRect = GUIClip_topmostRect();//GUIClip.topmostRect;
-                Vector2 vector = GUIClip_Unclip(new Vector2(rect.x, rect.y));//GUIClip.Unclip(new Vector2(rect.x, rect.y));
-                int num2 = 0;
-                for (int j = 0; j < groupNames.Length; j++)
+                var rect = GUILayoutUtility.GetRect((float)(16 * num + 100), 100f);
+                var topmostRect = GUIClip_topmostRect();//GUIClip.topmostRect;
+                var vector = GUIClip_Unclip(new Vector2(rect.x, rect.y));//GUIClip.Unclip(new Vector2(rect.x, rect.y));
+                var num2 = 0;
+                for (var j = 0; j < groupNames.Length; j++)
                 {
                     if (groupNames[j] != string.Empty)
                     {
-                        float num3 = (float)(130 + (num - num2) * 16) - (topmostRect.width + scrollPos.x);
+                        var num3 = (float)(130 + (num - num2) * 16) - (topmostRect.width + scrollPos.x);
                         if (num3 < 0f)
                         {
                             num3 = 0f;
                         }
-                        Vector3 pos = new Vector3((float)(130 + 16 * (num - num2)) + vector.y + vector.x + scrollPos.y - num3, vector.y + scrollPos.y, 0f);
+                        var pos = new Vector3((float)(130 + 16 * (num - num2)) + vector.y + vector.x + scrollPos.y - num3, vector.y + scrollPos.y, 0f);
                         GUI.matrix = Matrix4x4.TRS(pos, Quaternion.identity, Vector3.one) * Matrix4x4.TRS(Vector3.zero, Quaternion.Euler(0f, 0f, 90f), Vector3.one);
                         if (SystemInfo.graphicsDeviceVersion.StartsWith("Direct3D 9.0"))
                         {
@@ -523,22 +523,22 @@ namespace CreativeSpore.SuperTilemapEditor
                 }
                 GUI.matrix = Matrix4x4.identity;
                 num2 = 0;
-                for (int k = 0; k < groupNames.Length; k++)
+                for (var k = 0; k < groupNames.Length; k++)
                 {
                     if (groupNames[k] != string.Empty)
                     {
-                        int num4 = 0;
-                        Rect rect2 = GUILayoutUtility.GetRect((float)(30 + 16 * num + 100), 16f);
+                        var num4 = 0;
+                        var rect2 = GUILayoutUtility.GetRect((float)(30 + 16 * num + 100), 16f);
                         GUI.Label(new Rect(rect2.x + 2f, rect2.y, 100f, 16f), groupNames[k], "RightLabel");
-                        for (int l = groupNames.Length - 1; l >= 0; l--)
+                        for (var l = groupNames.Length - 1; l >= 0; l--)
                         {
                             if (groupNames[l] != string.Empty)
                             {
                                 //if (num4 < num - num2)
                                 {
-                                    GUIContent content = new GUIContent(string.Empty, groupNames[k] + "/" + groupNames[l]);
-                                    bool flag = getValue(k, l);
-                                    bool flag2 = GUI.Toggle(new Rect(130f + rect2.x + (float)(num4 * 16), rect2.y, 16f, 16f), flag, content);
+                                    var content = new GUIContent(string.Empty, groupNames[k] + "/" + groupNames[l]);
+                                    var flag = getValue(k, l);
+                                    var flag2 = GUI.Toggle(new Rect(130f + rect2.x + (float)(num4 * 16), rect2.y, 16f, 16f), flag, content);
                                     if (flag2 != flag)
                                     {
                                         setValue(k, l, flag2);
@@ -573,7 +573,7 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (s_GUIClip_Type == null)
             {
-                System.Reflection.Assembly[] assemblies = System.AppDomain.CurrentDomain.GetAssemblies();
+                var assemblies = System.AppDomain.CurrentDomain.GetAssemblies();
                 foreach (var A in assemblies)
                 {
                     s_GUIClip_Type = A.GetType("UnityEngine.GUIClip");

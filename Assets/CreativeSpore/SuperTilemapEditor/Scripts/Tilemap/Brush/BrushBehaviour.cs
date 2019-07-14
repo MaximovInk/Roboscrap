@@ -26,10 +26,10 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 if (s_instance == null)
                 {
-                    BrushBehaviour[] brushes = FindObjectsOfType<BrushBehaviour>();
+                    var brushes = FindObjectsOfType<BrushBehaviour>();
                     if (brushes.Length == 0)
                     {
-                        GameObject obj = new GameObject("Brush");
+                        var obj = new GameObject("Brush");
                         s_instance = obj.AddComponent<BrushBehaviour>();
                         obj.hideFlags = HideFlags.HideInHierarchy;
                     }
@@ -40,7 +40,7 @@ namespace CreativeSpore.SuperTilemapEditor
                         if (brushes.Length > 1)
                         {
                             Debug.LogWarning("More than one brush found. Removing rest of brushes...");
-                            for (int i = 1; i < brushes.Length; ++i)
+                            for (var i = 1; i < brushes.Length; ++i)
                             {
                                 DestroyImmediate(brushes[i]);
                             }
@@ -93,14 +93,14 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public static BrushBehaviour GetOrCreateBrush(STETilemap tilemap)
         {
-            BrushBehaviour brush = Instance;
+            var brush = Instance;
             if (brush.m_brushTilemap == null)
             {
                 brush.m_brushTilemap = brush.GetComponent<STETilemap>();
             }
             brush.IsUndoEnabled = tilemap.EnableUndoWhilePainting;
             brush.m_brushTilemap.ColliderType = eColliderType.None;
-            bool needsRefresh = 
+            var needsRefresh = 
                 brush.m_brushTilemap.Tileset != tilemap.Tileset || 
                 brush.m_brushTilemap.CellSize != tilemap.CellSize;
             brush.m_brushTilemap.Tileset = tilemap.Tileset;
@@ -132,7 +132,7 @@ namespace CreativeSpore.SuperTilemapEditor
             if (s_instance && s_instance.BrushTilemap)
             {
                 s_instance.BrushTilemap.IsVisible = isVisible;
-                for (int i = 0; i < s_instance.transform.childCount; ++i)
+                for (var i = 0; i < s_instance.transform.childCount; ++i)
                 {
                     s_instance.transform.GetChild(i).gameObject.SetActive(isVisible);
                 }
@@ -161,10 +161,10 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (s_instance && s_instance.BrushTilemap && (s_instance.BrushTilemap.GridWidth * s_instance.BrushTilemap.GridHeight > 1) )
             {
-                List<uint> selectionData = new List<uint>(s_instance.BrushTilemap.GridWidth * s_instance.BrushTilemap.GridHeight);
-                for(int gy = 0; gy < s_instance.BrushTilemap.GridHeight; ++gy)
+                var selectionData = new List<uint>(s_instance.BrushTilemap.GridWidth * s_instance.BrushTilemap.GridHeight);
+                for(var gy = 0; gy < s_instance.BrushTilemap.GridHeight; ++gy)
                 {
-                    for(int gx = 0; gx < s_instance.BrushTilemap.GridWidth; ++gx)
+                    for(var gx = 0; gx < s_instance.BrushTilemap.GridWidth; ++gx)
                     {
                         selectionData.Add(s_instance.BrushTilemap.GetTileData(gx, s_instance.BrushTilemap.GridHeight - gy - 1));
                     }
@@ -196,8 +196,8 @@ namespace CreativeSpore.SuperTilemapEditor
         public void Rot90(bool changeFlags = true)
         {
 
-            int gridX = BrushUtil.GetGridX(-Offset, m_brushTilemap.CellSize);
-            int gridY = BrushUtil.GetGridY(-Offset, m_brushTilemap.CellSize);
+            var gridX = BrushUtil.GetGridX(-Offset, m_brushTilemap.CellSize);
+            var gridY = BrushUtil.GetGridY(-Offset, m_brushTilemap.CellSize);
 
             Offset = -new Vector2(gridY * m_brushTilemap.CellSize.x, (m_brushTilemap.GridWidth - gridX - 1) * m_brushTilemap.CellSize.y);
 
@@ -209,10 +209,10 @@ namespace CreativeSpore.SuperTilemapEditor
         {
 
             //NOTE: This is a fast way to rotate back 90º by rotating forward 3 times
-            for (int i = 0; i < 3; ++i)
+            for (var i = 0; i < 3; ++i)
             {
-                int gridX = BrushUtil.GetGridX(-Offset, m_brushTilemap.CellSize);
-                int gridY = BrushUtil.GetGridY(-Offset, m_brushTilemap.CellSize);
+                var gridX = BrushUtil.GetGridX(-Offset, m_brushTilemap.CellSize);
+                var gridY = BrushUtil.GetGridY(-Offset, m_brushTilemap.CellSize);
                 Offset = -new Vector2(gridY * m_brushTilemap.CellSize.x, (m_brushTilemap.GridWidth - gridX - 1) * m_brushTilemap.CellSize.y);
                 m_brushTilemap.Rot90(changeFlags);
             }
@@ -239,9 +239,9 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void CopyRect(STETilemap tilemap, int startGridX, int startGridY, int endGridX, int endGridY)
         {
-            for (int gridY = startGridY; gridY <= endGridY; ++gridY)
+            for (var gridY = startGridY; gridY <= endGridY; ++gridY)
             {
-                for (int gridX = startGridX; gridX <= endGridX; ++gridX)
+                for (var gridX = startGridX; gridX <= endGridX; ++gridX)
                 {
                     BrushTilemap.SetTileData(gridX - startGridX, gridY - startGridY, tilemap.GetTileData(gridX, gridY));
                 }
@@ -260,9 +260,9 @@ namespace CreativeSpore.SuperTilemapEditor
             }
             tilemap.IsUndoEnabled = IsUndoEnabled;
 
-            for (int gridY = startGridY; gridY <= endGridY; ++gridY)
+            for (var gridY = startGridY; gridY <= endGridY; ++gridY)
             {
-                for (int gridX = startGridX; gridX <= endGridX; ++gridX)
+                for (var gridX = startGridX; gridX <= endGridX; ++gridX)
                 {
                     BrushTilemap.SetTileData(gridX - startGridX, gridY - startGridY, tilemap.GetTileData(gridX, gridY));
                     tilemap.SetTileData(gridX, gridY, Tileset.k_TileData_Empty);
@@ -280,9 +280,9 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public uint[,] GetBrushPattern()
         {
-            uint[,] brushPattern = new uint[BrushTilemap.GridWidth, BrushTilemap.GridHeight];
-            for (int y = BrushTilemap.MinGridY; y <= BrushTilemap.MaxGridY; ++y)
-                for (int x = BrushTilemap.MinGridX; x <= BrushTilemap.MaxGridX; ++x)
+            var brushPattern = new uint[BrushTilemap.GridWidth, BrushTilemap.GridHeight];
+            for (var y = BrushTilemap.MinGridY; y <= BrushTilemap.MaxGridY; ++y)
+                for (var x = BrushTilemap.MinGridX; x <= BrushTilemap.MaxGridX; ++x)
                 {
                     brushPattern[x - BrushTilemap.MinGridX, y - BrushTilemap.MinGridY] = BrushTilemap.GetTileData(x, y);
                 }
@@ -299,7 +299,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 m_isDragging = true;
                 Offset = Vector2.zero;
                 m_brushPattern = GetBrushPattern();
-                bool isSingleEmptyTile = BrushTilemap.GridWidth == 1 && BrushTilemap.GridHeight == 1 && BrushTilemap.GetTileData(0, 0) == Tileset.k_TileData_Empty;
+                var isSingleEmptyTile = BrushTilemap.GridWidth == 1 && BrushTilemap.GridHeight == 1 && BrushTilemap.GetTileData(0, 0) == Tileset.k_TileData_Empty;
                 if (isSingleEmptyTile)
                     Paint(tilemap, localPos);
             }
@@ -308,7 +308,7 @@ namespace CreativeSpore.SuperTilemapEditor
         public void DoPaintDragged(STETilemap tilemap, Vector2 localPos, EventModifiers modifiers = default(EventModifiers))
         {
             //Debug.Log("DoPaintDragged (" + TilemapUtils.GetGridX(tilemap, localPos) + "," + TilemapUtils.GetGridY(tilemap, localPos) + ")");
-            bool isSingleEmptyTile = BrushTilemap.GridWidth == 1 && BrushTilemap.GridHeight == 1 && BrushTilemap.GetTileData(0, 0) == Tileset.k_TileData_Empty;
+            var isSingleEmptyTile = BrushTilemap.GridWidth == 1 && BrushTilemap.GridHeight == 1 && BrushTilemap.GetTileData(0, 0) == Tileset.k_TileData_Empty;
             if (m_paintMode == eBrushPaintMode.Pencil || isSingleEmptyTile) Paint(tilemap, localPos);
             else
             {
@@ -316,10 +316,10 @@ namespace CreativeSpore.SuperTilemapEditor
                 {
                     BrushTilemap.ClearMap();
                     Vector2 brushLocPos = tilemap.transform.InverseTransformPoint(transform.position);
-                    Vector2 startPos = BrushUtil.GetSnappedPosition(m_pressedPosition, BrushTilemap.CellSize) + BrushTilemap.CellSize / 2f - brushLocPos;
-                    Vector2 endPos = BrushUtil.GetSnappedPosition(localPos, BrushTilemap.CellSize) + BrushTilemap.CellSize / 2f - brushLocPos;
-                    bool isCtrl = (modifiers & EventModifiers.Control) != 0;
-                    bool isShift = (modifiers & EventModifiers.Shift) != 0;
+                    var startPos = BrushUtil.GetSnappedPosition(m_pressedPosition, BrushTilemap.CellSize) + BrushTilemap.CellSize / 2f - brushLocPos;
+                    var endPos = BrushUtil.GetSnappedPosition(localPos, BrushTilemap.CellSize) + BrushTilemap.CellSize / 2f - brushLocPos;
+                    var isCtrl = (modifiers & EventModifiers.Control) != 0;
+                    var isShift = (modifiers & EventModifiers.Shift) != 0;
                     switch(m_paintMode)
                     {
                         case eBrushPaintMode.Line:
@@ -332,9 +332,9 @@ namespace CreativeSpore.SuperTilemapEditor
                         case eBrushPaintMode.FilledEllipse:    
                             if (isShift)
                             {
-                                Vector2 vTemp = endPos - startPos;
-                                float absX = Mathf.Abs(vTemp.x);
-                                float absY = Mathf.Abs(vTemp.y);
+                                var vTemp = endPos - startPos;
+                                var absX = Mathf.Abs(vTemp.x);
+                                var absY = Mathf.Abs(vTemp.y);
                                 vTemp.x = (absX > absY) ? vTemp.x : Mathf.Sign(vTemp.x) * absY;
                                 vTemp.y = Mathf.Sign(vTemp.y) * Mathf.Abs(vTemp.x);
                                 endPos = startPos + vTemp;
@@ -357,12 +357,12 @@ namespace CreativeSpore.SuperTilemapEditor
             //Debug.Log("DoPaintReleased (" + TilemapUtils.GetGridX(tilemap, localPos) + "," + TilemapUtils.GetGridY(tilemap, localPos) + ")");
             if (m_paintMode != eBrushPaintMode.Pencil)
             {
-                Vector2 pressedPos = BrushUtil.GetSnappedPosition(m_pressedPosition, BrushTilemap.CellSize) + BrushTilemap.CellSize / 2f;
+                var pressedPos = BrushUtil.GetSnappedPosition(m_pressedPosition, BrushTilemap.CellSize) + BrushTilemap.CellSize / 2f;
                 Paint(tilemap, pressedPos + (Vector2)BrushTilemap.MapBounds.min, true);
                 m_pressedPosition = localPos;
                 BrushTilemap.ClearMap();
-                for (int y = 0; y < m_brushPattern.GetLength(1); ++y)
-                    for (int x = 0; x < m_brushPattern.GetLength(0); ++x)
+                for (var y = 0; y < m_brushPattern.GetLength(1); ++y)
+                    for (var x = 0; x < m_brushPattern.GetLength(0); ++x)
                     {
                         BrushTilemap.SetTileData( x, y, m_brushPattern[x, y]);
                     }
@@ -379,8 +379,8 @@ namespace CreativeSpore.SuperTilemapEditor
                 if (m_paintMode != eBrushPaintMode.Pencil)
                 {
                     BrushTilemap.ClearMap();
-                    for (int y = 0; y < m_brushPattern.GetLength(1); ++y)
-                        for (int x = 0; x < m_brushPattern.GetLength(0); ++x)
+                    for (var y = 0; y < m_brushPattern.GetLength(1); ++y)
+                        for (var x = 0; x < m_brushPattern.GetLength(0); ++x)
                         {
                             BrushTilemap.SetTileData(x, y, m_brushPattern[x, y]);
                         }
@@ -392,10 +392,10 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void Paint(STETilemap tilemap, Vector2 localPos, bool skipEmptyTiles = false)
         {
-            int minGridX = m_brushTilemap.MinGridX;
-            int minGridY = m_brushTilemap.MinGridY;
-            int maxGridX = m_brushTilemap.MaxGridX;
-            int maxGridY = m_brushTilemap.MaxGridY;
+            var minGridX = m_brushTilemap.MinGridX;
+            var minGridY = m_brushTilemap.MinGridY;
+            var maxGridX = m_brushTilemap.MaxGridX;
+            var maxGridY = m_brushTilemap.MaxGridY;
 
             if (IsUndoEnabled)
             {
@@ -405,16 +405,16 @@ namespace CreativeSpore.SuperTilemapEditor
 #endif
             }
             tilemap.IsUndoEnabled = IsUndoEnabled;
-            int dstGy = BrushUtil.GetGridY(localPos, tilemap.CellSize);
-            bool doPaintEmpty = m_brushTilemap.GridWidth == 1 && m_brushTilemap.GridHeight == 1 // don't copy empty tiles
+            var dstGy = BrushUtil.GetGridY(localPos, tilemap.CellSize);
+            var doPaintEmpty = m_brushTilemap.GridWidth == 1 && m_brushTilemap.GridHeight == 1 // don't copy empty tiles
                         || m_brushPattern != null && m_brushPattern.GetLength(0) == 1 && m_brushPattern.GetLength(1) == 1;// unless the brush size is one
             doPaintEmpty &= !skipEmptyTiles;
-            for (int gridY = minGridY; gridY <= maxGridY; ++gridY, ++dstGy)
+            for (var gridY = minGridY; gridY <= maxGridY; ++gridY, ++dstGy)
             {
-                int dstGx = BrushUtil.GetGridX(localPos, tilemap.CellSize);
-                for (int gridX = minGridX; gridX <= maxGridX; ++gridX, ++dstGx)
+                var dstGx = BrushUtil.GetGridX(localPos, tilemap.CellSize);
+                for (var gridX = minGridX; gridX <= maxGridX; ++gridX, ++dstGx)
                 {
-                    uint tileData = m_brushTilemap.GetTileData(gridX, gridY);
+                    var tileData = m_brushTilemap.GetTileData(gridX, gridY);
                     if (
                         doPaintEmpty ||
                         tileData != Tileset.k_TileData_Empty
@@ -430,10 +430,10 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void Erase(STETilemap tilemap, Vector2 localPos)
         {
-            int minGridX = m_brushTilemap.MinGridX;
-            int minGridY = m_brushTilemap.MinGridY;
-            int maxGridX = m_brushTilemap.MaxGridX;
-            int maxGridY = m_brushTilemap.MaxGridY;
+            var minGridX = m_brushTilemap.MinGridX;
+            var minGridY = m_brushTilemap.MinGridY;
+            var maxGridX = m_brushTilemap.MaxGridX;
+            var maxGridY = m_brushTilemap.MaxGridY;
 
             if (IsUndoEnabled)
             {
@@ -443,11 +443,11 @@ namespace CreativeSpore.SuperTilemapEditor
 #endif
             }
             tilemap.IsUndoEnabled = IsUndoEnabled;
-            int dstGy = BrushUtil.GetGridY(localPos, tilemap.CellSize);
-            for (int gridY = minGridY; gridY <= maxGridY; ++gridY, ++dstGy)
+            var dstGy = BrushUtil.GetGridY(localPos, tilemap.CellSize);
+            for (var gridY = minGridY; gridY <= maxGridY; ++gridY, ++dstGy)
             {
-                int dstGx = BrushUtil.GetGridX(localPos, tilemap.CellSize);
-                for (int gridX = minGridX; gridX <= maxGridX; ++gridX, ++dstGx)
+                var dstGx = BrushUtil.GetGridX(localPos, tilemap.CellSize);
+                for (var gridX = minGridX; gridX <= maxGridX; ++gridX, ++dstGx)
                 {
                     tilemap.SetTileData(dstGx, dstGy, Tileset.k_TileData_Empty);
                 }

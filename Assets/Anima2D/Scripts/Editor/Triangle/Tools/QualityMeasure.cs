@@ -180,7 +180,7 @@ namespace TriangleNet.Tools
             double lx, ly;
             double area;
 
-            int n = 0;
+            var n = 0;
 
             foreach (var tri in mesh.triangles.Values)
             {
@@ -249,11 +249,11 @@ namespace TriangleNet.Tools
 
             foreach (var tri in mesh.triangles.Values)
             {
-                for (int j = 0; j < 3; j++)
+                for (var j = 0; j < 3; j++)
                 {
                     gi = tri.GetVertex(j).id;
 
-                    for (int k = 0; k < 3; k++)
+                    for (var k = 0; k < 3; k++)
                     {
                         gj = tri.GetVertex(k).id;
 
@@ -297,7 +297,7 @@ namespace TriangleNet.Tools
             /// <returns>Triangle area.</returns>
             public double Measure(Point a, Point b, Point c)
             {
-                double area = 0.5 * Math.Abs(a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y));
+                var area = 0.5 * Math.Abs(a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y));
 
                 area_min = Math.Min(area_min, area);
                 area_max = Math.Max(area_max, area);
@@ -372,11 +372,11 @@ namespace TriangleNet.Tools
             /// <returns></returns>
             public double Measure(double ab, double bc, double ca, double area)
             {
-                double alpha = double.MaxValue;
+                var alpha = double.MaxValue;
 
-                double ab2 = ab * ab;
-                double bc2 = bc * bc;
-                double ca2 = ca * ca;
+                var ab2 = ab * ab;
+                var bc2 = bc * bc;
+                var ca2 = ca * ca;
 
                 double a_angle;
                 double b_angle;
@@ -505,7 +505,7 @@ namespace TriangleNet.Tools
             /// <returns></returns>
             public double Measure(double ab, double bc, double ca, double area)
             {
-                double q = (bc + ca - ab) * (ca + ab - bc) * (ab + bc - ca) / (ab * bc * ca);
+                var q = (bc + ca - ab) * (ca + ab - bc) * (ab + bc - ca) / (ab * bc * ca);
 
                 q_min = Math.Min(q_min, q);
                 q_max = Math.Max(q_max, q);

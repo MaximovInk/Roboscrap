@@ -35,15 +35,15 @@ namespace Anima2D
 
 		protected override void DoWindow(int windowId)
 		{
-			float labelWidth = EditorGUIUtility.labelWidth;
-			bool wideMode = EditorGUIUtility.wideMode;
+			var labelWidth = EditorGUIUtility.labelWidth;
+			var wideMode = EditorGUIUtility.wideMode;
 
 			EditorGUIUtility.wideMode = true;
 
 			EditorGUILayout.BeginHorizontal();
 
-			string[] names = spriteMeshCache.GetBoneNames("None");
-			int index = spriteMeshCache.bindPoses.IndexOf(spriteMeshCache.selectedBindPose);
+			var names = spriteMeshCache.GetBoneNames("None");
+			var index = spriteMeshCache.bindPoses.IndexOf(spriteMeshCache.selectedBindPose);
 			
 			index = EditorGUILayout.Popup(index + 1,names,GUILayout.Width(75f)) - 1;
 
@@ -92,10 +92,10 @@ namespace Anima2D
 					nodes = spriteMeshCache.selectedNodes;
 				}
 
-				for (int i = 0; i < nodes.Count; i++)
+				for (var i = 0; i < nodes.Count; i++)
 				{
-					Node node = nodes[i];
-					BoneWeight tempWeight = m_TempWeights[i];
+					var node = nodes[i];
+					var tempWeight = m_TempWeights[i];
 					tempWeight.SetBoneIndexWeight(index, tempWeight.GetBoneWeight(index) + m_Weight, !EditorGUI.actionKey, true);
 					spriteMeshCache.SetBoneWeight(node, tempWeight);
 				}
@@ -111,7 +111,7 @@ namespace Anima2D
 			{
 				spriteMeshCache.RegisterUndo("smooth weights");
 
-				List<Node> targetNodes = spriteMeshCache.nodes;
+				var targetNodes = spriteMeshCache.nodes;
 
 				if(spriteMeshCache.selection.Count > 0)
 				{
@@ -125,7 +125,7 @@ namespace Anima2D
 			{
 				spriteMeshCache.RegisterUndo("calculate weights");
 
-				List<Node> targetNodes = spriteMeshCache.nodes;
+				var targetNodes = spriteMeshCache.nodes;
 				
 				if(spriteMeshCache.selection.Count > 0)
 				{

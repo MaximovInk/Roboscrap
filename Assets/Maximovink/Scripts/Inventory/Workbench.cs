@@ -18,6 +18,8 @@ namespace MaximovInk
         public GameObject CraftButton;
         public Image Icon;
 
+        public RectTransform layoutRebuild;
+        
         //public int count = 1;
         private Slot selectedSlot;
         
@@ -27,6 +29,7 @@ namespace MaximovInk
         {
             public Item item;
             public Button selectButton;
+            public bool canCraft;
         }
 
         private void Start()
@@ -36,7 +39,7 @@ namespace MaximovInk
 
         private void OnEnable()
         {
-            for (int i = 0; i < items_parent.childCount; i++)
+            for (var i = 0; i < items_parent.childCount; i++)
             {
                 Destroy(items_parent.GetChild(i).gameObject);
             }
@@ -45,48 +48,42 @@ namespace MaximovInk
             {
                 var b = Instantiate(button_prefab, items_parent);
             
-                var slot = new Slot{item = recipe.result, selectButton = b};
+                var slot = new Slot{item = recipe.result, selectButton = b,canCraft =  CanCraft(recipe.result)};
             
                 slots.Add(slot);
+                    
                 b.onClick.AddListener(() => { DisplayInfo(slot); });
-                b.GetComponentInChildren<Text>().text = "<color=#" + Extenshions.GetColorFrom(slot.item.Rarity) + ">" + slot.item.Name + "</color>";
+                b.GetComponentInChildren<Text>().text = "<color=" + (slot.canCraft ? "green" : "red") + ">" + slot.item.Name + "</color>";
             }
         }
 
-        /*public void OnSliderChange(float value)
-        {
-            count = (int) value;
-        }*/
-
         public void DisplayInfo(Slot slot)
         {
-            //count = 1;
             if (slot != null)
             {
-                Name.text ="<color=#" + Extenshions.GetColorFrom(slot.item.Rarity) + ">" + slot.item.Name + "</color>";
+                Name.text ="<color=" + (slot.canCraft ? "green" : "red") +  ">" + slot.item.Name + "</color>";
                 Rarity.text = "<color=#" + Extenshions.GetColorFrom(slot.item.Rarity) + ">Rarity: " + slot.item.Rarity + "</color>";
                 Description.text = slot.item.Description;
-                //Slider.interactable = true;
                 CraftButton.SetActive(true);
                 Icon.sprite = slot.item.Icon;
                 Components.text = string.Empty;
                 var comp = RecipeDatabase.Recipes.First(n => n.result == slot.item).Components;
-                for (int i = 0; i < comp.Length; i++)
+                for (var i = 0; i < comp.Length; i++)
                 {
                     var inInv = GameManager.Instance.mainInventory.slots.FirstOrDefault(n =>
                         n.item.item == comp[i].item);
-                    int have = inInv != null ? 
+                    var have = inInv != null ? 
                         GameManager.Instance.mainInventory.slots.First(n => n.item.item == comp[i].item).item.count 
                         : 0;
 
-                    bool red = have < comp[i].count;
+                    var red = have < comp[i].count;
                     
                     
                     Components.text += "<color="+ (red ? "red" : "green") +">" + comp[i].item.Name + " " + have + "/" + comp[i].count + " </color>\n";
                 }
                 
                 Icon.gameObject.SetActive(true);
-                
+                LayoutRebuilder.ForceRebuildLayoutImmediate(layoutRebuild);
                 selectedSlot = slot;
             }
             else
@@ -94,7 +91,6 @@ namespace MaximovInk
                 Name.text = string.Empty;
                 Rarity.text = string.Empty;
                 Description.text = string.Empty;
-                //Slider.interactable = false;
                 CraftButton.SetActive(false);
                 Icon.sprite = null;
                 Components.text = string.Empty;
@@ -103,8 +99,34 @@ namespace MaximovInk
             }
         }
 
+        public bool CanCraft(Item item)
+        {
+            var comp = RecipeDatabase.Recipes.First(n => n.result == item).Components;
+            
+            
+            
+            for (var i = 0; i < comp.Length; i++)
+            {
+                var inInv = GameManager.Instance.mainInventory.slots.FirstOrDefault(n =>
+                    n.item.item == comp[i].item);
+                var have = inInv != null ? 
+                    GameManager.Instance.mainInventory.slots.First(n => n.item.item == comp[i].item).item.count 
+                    : 0;
+
+                if (have < comp[i].count)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         public void Craft()
         {
+            if(!selectedSlot.canCraft)
+                return;
+            
             var comp = RecipeDatabase.Recipes.First(n => n.result == selectedSlot.item).Components;
             
             

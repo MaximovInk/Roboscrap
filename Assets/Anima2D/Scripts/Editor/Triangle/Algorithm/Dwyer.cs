@@ -61,9 +61,9 @@ namespace TriangleNet.Algorithm
         /// </remarks>
         void VertexSort(int left, int right)
         {
-            int oleft = left;
-            int oright = right;
-            int arraysize = right - left + 1;
+            var oleft = left;
+            var oright = right;
+            var arraysize = right - left + 1;
             int pivot;
             double pivotx, pivoty;
             Vertex temp;
@@ -71,10 +71,10 @@ namespace TriangleNet.Algorithm
             if (arraysize < 32)
             {
                 // Insertion sort
-                for (int i = left + 1; i <= right; i++)
+                for (var i = left + 1; i <= right; i++)
                 {
                     var a = sortarray[i];
-                    int j = i - 1;
+                    var j = i - 1;
                     while (j >= left && (sortarray[j].x > a.x || (sortarray[j].x == a.x && sortarray[j].y > a.y)))
                     {
                         sortarray[j + 1] = sortarray[j];
@@ -147,7 +147,7 @@ namespace TriangleNet.Algorithm
         /// </remarks>
         void VertexMedian(int left, int right, int median, int axis)
         {
-            int arraysize = right - left + 1;
+            var arraysize = right - left + 1;
             int oleft = left, oright = right;
             int pivot;
             double pivot1, pivot2;
@@ -227,7 +227,7 @@ namespace TriangleNet.Algorithm
         /// </remarks>
         void AlternateAxes(int left, int right, int axis)
         {
-            int arraysize = right - left + 1;
+            var arraysize = right - left + 1;
             int divider;
 
             divider = arraysize >> 1;
@@ -292,10 +292,10 @@ namespace TriangleNet.Algorithm
                         ref Otri farright, int axis)
         {
             Otri leftcand = default(Otri), rightcand = default(Otri);
-            Otri nextedge = default(Otri);
+            var nextedge = default(Otri);
             Otri sidecasing = default(Otri), topcasing = default(Otri), outercasing = default(Otri);
-            Otri checkedge = default(Otri);
-            Otri baseedge = default(Otri);
+            var checkedge = default(Otri);
+            var baseedge = default(Otri);
             Vertex innerleftdest;
             Vertex innerrightorg;
             Vertex innerleftapex, innerrightapex;
@@ -618,13 +618,13 @@ namespace TriangleNet.Algorithm
         void DivconqRecurse(int left, int right, int axis,
                             ref Otri farleft, ref Otri farright)
         {
-            Otri midtri = default(Otri);
-            Otri tri1 = default(Otri);
-            Otri tri2 = default(Otri);
-            Otri tri3 = default(Otri);
+            var midtri = default(Otri);
+            var tri1 = default(Otri);
+            var tri2 = default(Otri);
+            var tri3 = default(Otri);
             Otri innerleft = default(Otri), innerright = default(Otri);
             double area;
-            int vertices = right - left + 1;
+            var vertices = right - left + 1;
             int divider;
 
             if (vertices == 2)
@@ -773,14 +773,14 @@ namespace TriangleNet.Algorithm
         /// <returns>Number of vertices on the hull.</returns>
         int RemoveGhosts(ref Otri startghost)
         {
-            Otri searchedge = default(Otri);
-            Otri dissolveedge = default(Otri);
-            Otri deadtriangle = default(Otri);
+            var searchedge = default(Otri);
+            var dissolveedge = default(Otri);
+            var deadtriangle = default(Otri);
             Vertex markorg;
 
             int hullsize;
 
-            bool noPoly = !mesh.behavior.Poly;
+            var noPoly = !mesh.behavior.Poly;
 
             // Find an edge on the convex hull to start point location from.
             startghost.Lprev(ref searchedge);

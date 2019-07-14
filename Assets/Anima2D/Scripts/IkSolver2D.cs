@@ -122,14 +122,14 @@ namespace Anima2D
 		{
 			rootBone = _rootBone;
 
-			Bone2D bone = rootBone;
+			var bone = rootBone;
 			solverPoses.Clear();
 
-			for(int i = 0; i < numChilds; ++i)
+			for(var i = 0; i < numChilds; ++i)
 			{
 				if(bone)
 				{
-					SolverPose solverPose = new SolverPose();
+					var solverPose = new SolverPose();
 					solverPose.bone = bone;
 					solverPoses.Add(solverPose);
 					bone = bone.child;
@@ -155,9 +155,9 @@ namespace Anima2D
 
 		public void StoreDefaultPoses()
 		{
-			for (int i = 0; i < solverPoses.Count; i++)
+			for (var i = 0; i < solverPoses.Count; i++)
 			{
-				SolverPose pose = solverPoses [i];
+				var pose = solverPoses [i];
 				
 				if(pose != null)
 				{
@@ -168,9 +168,9 @@ namespace Anima2D
 
 		public void RestoreDefaultPoses()
 		{
-			for (int i = 0; i < solverPoses.Count; i++)
+			for (var i = 0; i < solverPoses.Count; i++)
 			{
-				SolverPose pose = solverPoses [i];
+				var pose = solverPoses [i];
 				
 				if(pose != null)
 				{
@@ -181,9 +181,9 @@ namespace Anima2D
 
 		void UpdateBones()
 		{
-			for(int i = 0; i < solverPoses.Count; ++i)
+			for(var i = 0; i < solverPoses.Count; ++i)
 			{
-				SolverPose solverPose = solverPoses[i];
+				var solverPose = solverPoses[i];
 				
 				if(solverPose != null && solverPose.bone)
 				{

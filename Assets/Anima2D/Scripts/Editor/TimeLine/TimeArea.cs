@@ -55,7 +55,7 @@ namespace Anima2D
 
 		public TimeArea(bool minimalGUI) : base(minimalGUI)
 		{
-			float[] tickModulos = new float[]
+			var tickModulos = new float[]
 			{
 				1E-07f,
 				5E-07f,
@@ -106,7 +106,7 @@ namespace Anima2D
 		}
 		public void DrawMajorTicks(Rect position, float frameRate)
 		{
-			Color color = Handles.color;
+			var color = Handles.color;
 			GUI.BeginGroup(position);
 			if (Event.current.type != EventType.Repaint)
 			{
@@ -116,21 +116,21 @@ namespace Anima2D
 			TimeArea.InitStyles();
 			this.SetTickMarkerRanges();
 			this.hTicks.SetTickStrengths(3f, 80f, true);
-			Color textColor = TimeArea.styles.TimelineTick.normal.textColor;
+			var textColor = TimeArea.styles.TimelineTick.normal.textColor;
 			textColor.a = 0.1f;
 			Handles.color = textColor;
-			for (int i = 0; i < this.hTicks.tickLevels; i++)
+			for (var i = 0; i < this.hTicks.tickLevels; i++)
 			{
-				float num = this.hTicks.GetStrengthOfLevel(i) * 0.9f;
+				var num = this.hTicks.GetStrengthOfLevel(i) * 0.9f;
 				if (num > 0.5f)
 				{
-					float[] ticksAtLevel = this.hTicks.GetTicksAtLevel(i, true);
-					for (int j = 0; j < ticksAtLevel.Length; j++)
+					var ticksAtLevel = this.hTicks.GetTicksAtLevel(i, true);
+					for (var j = 0; j < ticksAtLevel.Length; j++)
 					{
 						if (ticksAtLevel[j] >= 0f)
 						{
-							int num2 = Mathf.RoundToInt(ticksAtLevel[j] * frameRate);
-							float x = this.FrameToPixel((float)num2, frameRate, position);
+							var num2 = Mathf.RoundToInt(ticksAtLevel[j] * frameRate);
+							var x = this.FrameToPixel((float)num2, frameRate, position);
 							Handles.DrawLine(new Vector3(x, 0f, 0f), new Vector3(x, position.height, 0f));
 						}
 					}
@@ -141,7 +141,7 @@ namespace Anima2D
 		}
 		public void TimeRuler(Rect position, float frameRate)
 		{
-			Color color = GUI.color;
+			var color = GUI.color;
 			GUI.BeginGroup(position);
 			if (Event.current.type != EventType.Repaint)
 			{
@@ -151,22 +151,22 @@ namespace Anima2D
 			TimeArea.InitStyles();
 			HandlesExtra.ApplyWireMaterial();
 			GL.Begin(1);
-			Color backgroundColor = GUI.backgroundColor;
+			var backgroundColor = GUI.backgroundColor;
 			this.SetTickMarkerRanges();
 			this.hTicks.SetTickStrengths(3f, 80f, true);
-			Color textColor = TimeArea.styles.TimelineTick.normal.textColor;
+			var textColor = TimeArea.styles.TimelineTick.normal.textColor;
 			textColor.a = 0.75f;
-			for (int i = 0; i < this.hTicks.tickLevels; i++)
+			for (var i = 0; i < this.hTicks.tickLevels; i++)
 			{
-				float num = this.hTicks.GetStrengthOfLevel(i) * 0.9f;
-				float[] ticksAtLevel = this.hTicks.GetTicksAtLevel(i, true);
-				for (int j = 0; j < ticksAtLevel.Length; j++)
+				var num = this.hTicks.GetStrengthOfLevel(i) * 0.9f;
+				var ticksAtLevel = this.hTicks.GetTicksAtLevel(i, true);
+				for (var j = 0; j < ticksAtLevel.Length; j++)
 				{
 					if (ticksAtLevel[j] >= base.hRangeMin && ticksAtLevel[j] <= base.hRangeMax)
 					{
-						int num2 = Mathf.RoundToInt(ticksAtLevel[j] * frameRate);
-						float num3 = position.height * Mathf.Min(1f, num) * 0.7f;
-						float num4 = this.FrameToPixel((float)num2, frameRate, position);
+						var num2 = Mathf.RoundToInt(ticksAtLevel[j] * frameRate);
+						var num3 = position.height * Mathf.Min(1f, num) * 0.7f;
+						var num4 = this.FrameToPixel((float)num2, frameRate, position);
 						GL.Color(new Color(1f, 1f, 1f, num / 0.5f) * textColor);
 						GL.Vertex(new Vector3(num4, position.height - num3 + 0.5f, 0f));
 						GL.Vertex(new Vector3(num4, position.height - 0.5f, 0f));
@@ -180,15 +180,15 @@ namespace Anima2D
 				}
 			}
 			GL.End();
-			int levelWithMinSeparation = this.hTicks.GetLevelWithMinSeparation(40f);
-			float[] ticksAtLevel2 = this.hTicks.GetTicksAtLevel(levelWithMinSeparation, false);
-			for (int k = 0; k < ticksAtLevel2.Length; k++)
+			var levelWithMinSeparation = this.hTicks.GetLevelWithMinSeparation(40f);
+			var ticksAtLevel2 = this.hTicks.GetTicksAtLevel(levelWithMinSeparation, false);
+			for (var k = 0; k < ticksAtLevel2.Length; k++)
 			{
 				if (ticksAtLevel2[k] >= base.hRangeMin && ticksAtLevel2[k] <= base.hRangeMax)
 				{
-					int num5 = Mathf.RoundToInt(ticksAtLevel2[k] * frameRate);
-					float num6 = Mathf.Floor(this.FrameToPixel((float)num5, frameRate, base.rect));
-					string text = this.FormatFrame(num5, frameRate);
+					var num5 = Mathf.RoundToInt(ticksAtLevel2[k] * frameRate);
+					var num6 = Mathf.Floor(this.FrameToPixel((float)num5, frameRate, base.rect));
+					var text = this.FormatFrame(num5, frameRate);
 					GUI.Label(new Rect(num6 + 3f, -3f, 40f, 20f), text, TimeArea.styles.TimelineTick);
 				}
 			}
@@ -198,13 +198,13 @@ namespace Anima2D
 		}
 		public TimeArea.TimeRulerDragMode BrowseRuler(Rect position, ref float time, float frameRate, bool pickAnywhere, GUIStyle thumbStyle)
 		{
-			int controlID = GUIUtility.GetControlID(3126789, FocusType.Passive);
+			var controlID = GUIUtility.GetControlID(3126789, FocusType.Passive);
 			return this.BrowseRuler(position, controlID, ref time, frameRate, pickAnywhere, thumbStyle);
 		}
 		public TimeArea.TimeRulerDragMode BrowseRuler(Rect position, int id, ref float time, float frameRate, bool pickAnywhere, GUIStyle thumbStyle)
 		{
-			Event current = Event.current;
-			Rect position2 = position;
+			var current = Event.current;
+			var position2 = position;
 			if (time != -1f)
 			{
 				position2.x = Mathf.Round(base.TimeToPixel(time, position)) - (float)thumbStyle.overflow.left;
@@ -223,7 +223,7 @@ namespace Anima2D
 				if (pickAnywhere && position.Contains(current.mousePosition))
 				{
 					GUIUtility.hotControl = id;
-					float num = TimeArea.SnapTimeToWholeFPS(base.PixelToTime(current.mousePosition.x, position), frameRate);
+					var num = TimeArea.SnapTimeToWholeFPS(base.PixelToTime(current.mousePosition.x, position), frameRate);
 					TimeArea.s_OriginalTime = time;
 					if (num != time)
 					{
@@ -246,7 +246,7 @@ namespace Anima2D
 			case EventType.MouseDrag:
 				if (GUIUtility.hotControl == id)
 				{
-					float num2 = TimeArea.SnapTimeToWholeFPS(base.PixelToTime(current.mousePosition.x - TimeArea.s_PickOffset, position), frameRate);
+					var num2 = TimeArea.SnapTimeToWholeFPS(base.PixelToTime(current.mousePosition.x - TimeArea.s_PickOffset, position), frameRate);
 					if (num2 != time)
 					{
 						GUI.changed = true;
@@ -272,7 +272,7 @@ namespace Anima2D
 			case EventType.Repaint:
 				if (time != -1f)
 				{
-					bool flag = position.Contains(current.mousePosition);
+					var flag = position.Contains(current.mousePosition);
 					position2.x += (float)thumbStyle.overflow.left;
 					thumbStyle.Draw(position2, id == GUIUtility.hotControl, flag || id == GUIUtility.hotControl, false, false);
 				}
@@ -291,8 +291,8 @@ namespace Anima2D
 		}
 		public string FormatFrame(int frame, float frameRate)
 		{
-			int length = ((int)frameRate).ToString().Length;
-			string str = string.Empty;
+			var length = ((int)frameRate).ToString().Length;
+			var str = string.Empty;
 			if (frame < 0)
 			{
 				str = "-";

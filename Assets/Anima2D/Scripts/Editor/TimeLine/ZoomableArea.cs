@@ -266,7 +266,7 @@ namespace Anima2D
 			}
 			set
 			{
-				Rect rect = this.rect;
+				var rect = this.rect;
 				this.m_HSlider = value;
 				this.rect = rect;
 			}
@@ -279,7 +279,7 @@ namespace Anima2D
 			}
 			set
 			{
-				Rect rect = this.rect;
+				var rect = this.rect;
 				this.m_VSlider = value;
 				this.rect = rect;
 			}
@@ -375,7 +375,7 @@ namespace Anima2D
 			}
 			set
 			{
-				Rect rect = new Rect(value.x, value.y, value.width - ((!this.m_VSlider) ? 0f : this.styles.visualSliderWidth), value.height - ((!this.m_HSlider) ? 0f : this.styles.visualSliderWidth));
+				var rect = new Rect(value.x, value.y, value.width - ((!this.m_VSlider) ? 0f : this.styles.visualSliderWidth), value.height - ((!this.m_HSlider) ? 0f : this.styles.visualSliderWidth));
 				if (rect != this.m_DrawArea)
 				{
 					if (this.m_ScaleWithWindow)
@@ -430,11 +430,11 @@ namespace Anima2D
 		{
 			get
 			{
-				float num = this.leftmargin / this.m_Scale.x;
-				float num2 = this.rightmargin / this.m_Scale.x;
-				float num3 = this.topmargin / this.m_Scale.y;
-				float num4 = this.bottommargin / this.m_Scale.y;
-				Rect shownArea = this.shownArea;
+				var num = this.leftmargin / this.m_Scale.x;
+				var num2 = this.rightmargin / this.m_Scale.x;
+				var num3 = this.topmargin / this.m_Scale.y;
+				var num4 = this.bottommargin / this.m_Scale.y;
+				var shownArea = this.shownArea;
 				shownArea.x += num;
 				shownArea.y -= num3;
 				shownArea.width -= num + num2;
@@ -592,7 +592,7 @@ namespace Anima2D
 			GUILayout.BeginArea(area);
 			area.x = 0f;
 			area.y = 0f;
-			int controlID = GUIUtility.GetControlID(ZoomableArea.zoomableAreaHash, FocusType.Passive, area);
+			var controlID = GUIUtility.GetControlID(ZoomableArea.zoomableAreaHash, FocusType.Passive, area);
 			switch (Event.current.GetTypeForControl(controlID))
 			{
 			case EventType.MouseDown:
@@ -658,19 +658,19 @@ namespace Anima2D
 			{
 				return;
 			}
-			Bounds drawingBounds = this.drawingBounds;
-			Rect shownAreaInsideMargins = this.shownAreaInsideMargins;
-			float num = this.styles.sliderWidth - this.styles.visualSliderWidth;
-			float num2 = (!this.vSlider || !this.hSlider) ? 0f : num;
-			Vector2 a = this.m_Scale;
+			var drawingBounds = this.drawingBounds;
+			var shownAreaInsideMargins = this.shownAreaInsideMargins;
+			var num = this.styles.sliderWidth - this.styles.visualSliderWidth;
+			var num2 = (!this.vSlider || !this.hSlider) ? 0f : num;
+			var a = this.m_Scale;
 			if (this.m_HSlider)
 			{
-				Rect position = new Rect(this.drawRect.x + 1f, this.drawRect.yMax - num, this.drawRect.width - num2, this.styles.sliderWidth);
-				float width = shownAreaInsideMargins.width;
-				float xMin = shownAreaInsideMargins.xMin;
+				var position = new Rect(this.drawRect.x + 1f, this.drawRect.yMax - num, this.drawRect.width - num2, this.styles.sliderWidth);
+				var width = shownAreaInsideMargins.width;
+				var xMin = shownAreaInsideMargins.xMin;
 				EditorGUIExtra.MinMaxScroller(position, this.horizontalScrollbarID, ref xMin, ref width, drawingBounds.min.x, drawingBounds.max.x, float.NegativeInfinity, float.PositiveInfinity, this.styles.horizontalScrollbar, this.styles.horizontalMinMaxScrollbarThumb, this.styles.horizontalScrollbarLeftButton, this.styles.horizontalScrollbarRightButton, true);
-				float num3 = xMin;
-				float num4 = xMin + width;
+				var num3 = xMin;
+				var num4 = xMin + width;
 				if (num3 > shownAreaInsideMargins.xMin)
 				{
 					num3 = Mathf.Min(num3, num4 - this.m_HScaleMin);
@@ -683,12 +683,12 @@ namespace Anima2D
 			}
 			if (this.m_VSlider)
 			{
-				Rect position2 = new Rect(this.drawRect.xMax - num, this.drawRect.y, this.styles.sliderWidth, this.drawRect.height - num2);
-				float height = shownAreaInsideMargins.height;
-				float num5 = -shownAreaInsideMargins.yMax;
+				var position2 = new Rect(this.drawRect.xMax - num, this.drawRect.y, this.styles.sliderWidth, this.drawRect.height - num2);
+				var height = shownAreaInsideMargins.height;
+				var num5 = -shownAreaInsideMargins.yMax;
 				EditorGUIExtra.MinMaxScroller(position2, this.verticalScrollbarID, ref num5, ref height, -drawingBounds.max.y, -drawingBounds.min.y, float.NegativeInfinity, float.PositiveInfinity, this.styles.verticalScrollbar, this.styles.verticalMinMaxScrollbarThumb, this.styles.verticalScrollbarUpButton, this.styles.verticalScrollbarDownButton, false);
-				float num3 = -(num5 + height);
-				float num4 = -num5;
+				var num3 = -(num5 + height);
+				var num4 = -num5;
 				if (num3 > shownAreaInsideMargins.yMin)
 				{
 					num3 = Mathf.Min(num3, num4 - this.m_VScaleMin);
@@ -701,9 +701,9 @@ namespace Anima2D
 			}
 			if (this.uniformScale)
 			{
-				float num6 = this.drawRect.width / this.drawRect.height;
+				var num6 = this.drawRect.width / this.drawRect.height;
 				a -= this.m_Scale;
-				Vector2 b = new Vector2(-a.y * num6, -a.x / num6);
+				var b = new Vector2(-a.y * num6, -a.x / num6);
 				this.m_Scale -= b;
 				this.m_Translation.x = this.m_Translation.x - a.y / 2f;
 				this.m_Translation.y = this.m_Translation.y - a.x / 2f;
@@ -724,12 +724,12 @@ namespace Anima2D
 		}
 		private void Zoom(Vector2 zoomAround, bool scrollwhell)
 		{
-			float num = Event.current.delta.x + Event.current.delta.y;
+			var num = Event.current.delta.x + Event.current.delta.y;
 			if (scrollwhell)
 			{
 				num = -num;
 			}
-			float num2 = Mathf.Max(0.01f, 1f + num * 0.01f);
+			var num2 = Mathf.Max(0.01f, 1f + num * 0.01f);
 			if (!this.m_HRangeLocked)
 			{
 				this.m_Translation.x = this.m_Translation.x - zoomAround.x * (num2 - 1f) * this.m_Scale.x;
@@ -744,10 +744,10 @@ namespace Anima2D
 		}
 		private void EnforceScaleAndRange()
 		{
-			float hScaleMin = this.m_HScaleMin;
-			float vScaleMin = this.m_VScaleMin;
-			float value = this.m_HScaleMax;
-			float value2 = this.m_VScaleMax;
+			var hScaleMin = this.m_HScaleMin;
+			var vScaleMin = this.m_VScaleMin;
+			var value = this.m_HScaleMax;
+			var value2 = this.m_VScaleMax;
 			if (this.hRangeMax != float.PositiveInfinity && this.hRangeMin != float.NegativeInfinity)
 			{
 				value = Mathf.Min(this.m_HScaleMax, this.hRangeMax - this.hRangeMin);
@@ -756,31 +756,31 @@ namespace Anima2D
 			{
 				value2 = Mathf.Min(this.m_VScaleMax, this.vRangeMax - this.vRangeMin);
 			}
-			Rect lastShownAreaInsideMargins = this.m_LastShownAreaInsideMargins;
-			Rect shownAreaInsideMargins = this.shownAreaInsideMargins;
+			var lastShownAreaInsideMargins = this.m_LastShownAreaInsideMargins;
+			var shownAreaInsideMargins = this.shownAreaInsideMargins;
 			if (shownAreaInsideMargins == lastShownAreaInsideMargins)
 			{
 				return;
 			}
-			float num = 1E-05f;
+			var num = 1E-05f;
 			if (shownAreaInsideMargins.width < lastShownAreaInsideMargins.width - num)
 			{
-				float t = Mathf.InverseLerp(lastShownAreaInsideMargins.width, shownAreaInsideMargins.width, hScaleMin);
+				var t = Mathf.InverseLerp(lastShownAreaInsideMargins.width, shownAreaInsideMargins.width, hScaleMin);
 				shownAreaInsideMargins = new Rect(Mathf.Lerp(lastShownAreaInsideMargins.x, shownAreaInsideMargins.x, t), shownAreaInsideMargins.y, Mathf.Lerp(lastShownAreaInsideMargins.width, shownAreaInsideMargins.width, t), shownAreaInsideMargins.height);
 			}
 			if (shownAreaInsideMargins.height < lastShownAreaInsideMargins.height - num)
 			{
-				float t2 = Mathf.InverseLerp(lastShownAreaInsideMargins.height, shownAreaInsideMargins.height, vScaleMin);
+				var t2 = Mathf.InverseLerp(lastShownAreaInsideMargins.height, shownAreaInsideMargins.height, vScaleMin);
 				shownAreaInsideMargins = new Rect(shownAreaInsideMargins.x, Mathf.Lerp(lastShownAreaInsideMargins.y, shownAreaInsideMargins.y, t2), shownAreaInsideMargins.width, Mathf.Lerp(lastShownAreaInsideMargins.height, shownAreaInsideMargins.height, t2));
 			}
 			if (shownAreaInsideMargins.width > lastShownAreaInsideMargins.width + num)
 			{
-				float t3 = Mathf.InverseLerp(lastShownAreaInsideMargins.width, shownAreaInsideMargins.width, value);
+				var t3 = Mathf.InverseLerp(lastShownAreaInsideMargins.width, shownAreaInsideMargins.width, value);
 				shownAreaInsideMargins = new Rect(Mathf.Lerp(lastShownAreaInsideMargins.x, shownAreaInsideMargins.x, t3), shownAreaInsideMargins.y, Mathf.Lerp(lastShownAreaInsideMargins.width, shownAreaInsideMargins.width, t3), shownAreaInsideMargins.height);
 			}
 			if (shownAreaInsideMargins.height > lastShownAreaInsideMargins.height + num)
 			{
-				float t4 = Mathf.InverseLerp(lastShownAreaInsideMargins.height, shownAreaInsideMargins.height, value2);
+				var t4 = Mathf.InverseLerp(lastShownAreaInsideMargins.height, shownAreaInsideMargins.height, value2);
 				shownAreaInsideMargins = new Rect(shownAreaInsideMargins.x, Mathf.Lerp(lastShownAreaInsideMargins.y, shownAreaInsideMargins.y, t4), shownAreaInsideMargins.width, Mathf.Lerp(lastShownAreaInsideMargins.height, shownAreaInsideMargins.height, t4));
 			}
 			if (shownAreaInsideMargins.xMin < this.hRangeMin)

@@ -42,23 +42,23 @@ public class SkinnedMeshCombiner : MonoBehaviour
 
 	void Start()
 	{        
-		Vector3 l_position = transform.position;
-		Quaternion l_rotation = transform.rotation;
-		Vector3 l_scale = transform.localScale;
+		var l_position = transform.position;
+		var l_rotation = transform.rotation;
+		var l_scale = transform.localScale;
 
 		transform.position = Vector3.zero;
 		transform.rotation = Quaternion.identity;
 		transform.localScale = Vector3.one;
 
-		List<Transform> bones = new List<Transform>();        
-		List<BoneWeight> boneWeights = new List<BoneWeight>();        
-		List<CombineInstance> combineInstances = new List<CombineInstance>();
+		var bones = new List<Transform>();        
+		var boneWeights = new List<BoneWeight>();        
+		var combineInstances = new List<CombineInstance>();
 
-		int numSubmeshes = 0;
+		var numSubmeshes = 0;
 		
-		for (int i = 0; i < spriteMeshInstances.Length; i++)
+		for (var i = 0; i < spriteMeshInstances.Length; i++)
 		{
-			SpriteMeshInstance spriteMeshInstance = spriteMeshInstances[i];
+			var spriteMeshInstance = spriteMeshInstances[i];
 
 			if(spriteMeshInstance.cachedSkinnedRenderer)
 			{
@@ -66,23 +66,23 @@ public class SkinnedMeshCombiner : MonoBehaviour
 			}
 		}
 		
-		int[] meshIndex = new int[numSubmeshes];
-		int boneOffset = 0;
-		for( int i = 0; i < m_SpriteMeshInstances.Length; ++i)
+		var meshIndex = new int[numSubmeshes];
+		var boneOffset = 0;
+		for( var i = 0; i < m_SpriteMeshInstances.Length; ++i)
 		{
-			SpriteMeshInstance spriteMeshInstance = spriteMeshInstances[i];
+			var spriteMeshInstance = spriteMeshInstances[i];
 
 			if(spriteMeshInstance.cachedSkinnedRenderer)
 			{
-				SkinnedMeshRenderer skinnedMeshRenderer = spriteMeshInstance.cachedSkinnedRenderer;          
+				var skinnedMeshRenderer = spriteMeshInstance.cachedSkinnedRenderer;          
 
-				BoneWeight[] meshBoneweight = spriteMeshInstance.sharedMesh.boneWeights;
+				var meshBoneweight = spriteMeshInstance.sharedMesh.boneWeights;
 				
 				// May want to modify this if the renderer shares bones as unnecessary bones will get added.
-				for (int j = 0; j < meshBoneweight.Length; ++j)
+				for (var j = 0; j < meshBoneweight.Length; ++j)
 				{
-					BoneWeight bw = meshBoneweight[j];
-					BoneWeight bWeight = bw;
+					var bw = meshBoneweight[j];
+					var bWeight = bw;
 					bWeight.boneIndex0 += boneOffset;
 					bWeight.boneIndex1 += boneOffset;
 					bWeight.boneIndex2 += boneOffset;
@@ -92,15 +92,15 @@ public class SkinnedMeshCombiner : MonoBehaviour
 
 				boneOffset += spriteMeshInstance.bones.Count;
 				
-				Transform[] meshBones = skinnedMeshRenderer.bones;
-				for (int j = 0; j < meshBones.Length; j++)
+				var meshBones = skinnedMeshRenderer.bones;
+				for (var j = 0; j < meshBones.Length; j++)
 				{
-					Transform bone = meshBones[j];
+					var bone = meshBones[j];
 					bones.Add (bone);
 				}
 
-				CombineInstance combineInstance = new CombineInstance();
-				Mesh mesh = new Mesh();
+				var combineInstance = new CombineInstance();
+				var mesh = new Mesh();
 				skinnedMeshRenderer.BakeMesh(mesh);
 				mesh.uv = spriteMeshInstance.spriteMesh.sprite.uv;
 				combineInstance.mesh = mesh;
@@ -112,14 +112,14 @@ public class SkinnedMeshCombiner : MonoBehaviour
 			}
 		}
 		
-		List<Matrix4x4> bindposes = new List<Matrix4x4>();
+		var bindposes = new List<Matrix4x4>();
 		
-		for( int b = 0; b < bones.Count; b++ ) {
+		for( var b = 0; b < bones.Count; b++ ) {
 			bindposes.Add( bones[b].worldToLocalMatrix * transform.worldToLocalMatrix );
 		}
 		
-		SkinnedMeshRenderer combinedSkinnedRenderer = gameObject.AddComponent<SkinnedMeshRenderer>();
-		Mesh combinedMesh = new Mesh();
+		var combinedSkinnedRenderer = gameObject.AddComponent<SkinnedMeshRenderer>();
+		var combinedMesh = new Mesh();
 		combinedMesh.CombineMeshes( combineInstances.ToArray(), true, true );
 		combinedSkinnedRenderer.sharedMesh = combinedMesh;
 		combinedSkinnedRenderer.bones = bones.ToArray();

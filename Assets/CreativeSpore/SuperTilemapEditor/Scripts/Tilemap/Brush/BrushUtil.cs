@@ -8,8 +8,8 @@ namespace CreativeSpore.SuperTilemapEditor
     {
         public static Vector2 GetSnappedPosition(Vector2 position, Vector2 cellSize)
         {
-            Vector2 centerCell = position - cellSize / 2f;
-            Vector2 snappedPos = new Vector2
+            var centerCell = position - cellSize / 2f;
+            var snappedPos = new Vector2
             (
                 Mathf.Round(centerCell.x / cellSize.x) * cellSize.x,
                 Mathf.Round(centerCell.y / cellSize.y) * cellSize.y

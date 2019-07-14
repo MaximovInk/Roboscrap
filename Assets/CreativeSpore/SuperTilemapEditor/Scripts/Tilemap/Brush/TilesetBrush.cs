@@ -60,7 +60,7 @@ namespace CreativeSpore.SuperTilemapEditor
             }
             if ((AutotilingMode & eAutotilingMode.Group) != 0)
             {
-                TilesetBrush brush = Tileset.FindBrush(otherBrushId);
+                var brush = Tileset.FindBrush(otherBrushId);
                 if (brush)
                     return Tileset.GetGroupAutotiling(Group, brush.Group);
                 else if (otherBrushId == Tileset.k_BrushId_Default)
@@ -71,21 +71,21 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public bool AutotileWith(STETilemap tilemap, int selfBrushId, int gridX, int gridY)
         {
-            bool isOutOfBounds = gridX > tilemap.MaxGridX || gridX < tilemap.MinGridX || gridY > tilemap.MaxGridY || gridY < tilemap.MinGridY;
+            var isOutOfBounds = gridX > tilemap.MaxGridX || gridX < tilemap.MinGridX || gridY > tilemap.MaxGridY || gridY < tilemap.MinGridY;
             if ((AutotilingMode & eAutotilingMode.TilemapBounds) != 0 && isOutOfBounds) return true;
-            uint otherTileData = tilemap.GetTileData(gridX, gridY);
+            var otherTileData = tilemap.GetTileData(gridX, gridY);
             return AutotileWith(tilemap.Tileset, selfBrushId, otherTileData);
         }
 
         public bool AutotileWith(Tileset tileset, int selfBrushId, uint otherTileData)
         {
-            int otherBrushId = (int)((uint)(otherTileData & Tileset.k_TileDataMask_BrushId) >> 16);
+            var otherBrushId = (int)((uint)(otherTileData & Tileset.k_TileDataMask_BrushId) >> 16);
             if (otherBrushId != Tileset.k_BrushId_Default && otherBrushId != selfBrushId && (AutotilingMode & eAutotilingMode.SkipOtherBrushes) != 0)
                 return false;
             if ((AutotilingMode & eAutotilingMode.EmptyCells) != 0 && otherTileData == Tileset.k_TileData_Empty) return true;
             if ((AutotilingMode & eAutotilingMode.Group) != 0)
             {
-                Tile tile = tileset.GetTile((int)(otherTileData & Tileset.k_TileDataMask_TileId));
+                var tile = tileset.GetTile((int)(otherTileData & Tileset.k_TileDataMask_TileId));
                 if (tile != null && Tileset.GetGroupAutotiling(Group, tile.autilingGroup)) return true;
             }
             return AutotileWith(selfBrushId, otherBrushId);
@@ -105,8 +105,8 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (s_refreshingLinkedBrush) return tileData;
 
-            int brushId = Tileset.GetBrushIdFromTileData(tileData);
-            TilesetBrush brush = Tileset.FindBrush(brushId);
+            var brushId = Tileset.GetBrushIdFromTileData(tileData);
+            var brush = Tileset.FindBrush(brushId);
             if (brush)
             {
                 s_refreshingLinkedBrush = true;
@@ -168,7 +168,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public virtual Rect GetAnimUV()
         {
-            int tileId = (int)(PreviewTileData() & Tileset.k_TileDataMask_TileId);
+            var tileId = (int)(PreviewTileData() & Tileset.k_TileDataMask_TileId);
             return Tileset && tileId != Tileset.k_TileId_Empty ? Tileset.Tiles[tileId].uv : default(Rect);
         }
 
@@ -186,28 +186,28 @@ namespace CreativeSpore.SuperTilemapEditor
             else
                 m_lastFrameToken = GetAnimFrameIdx();
 
-            uint tileData = GetAnimTileData();
-            Rect tileUV = GetAnimUV();
+            var tileData = GetAnimTileData();
+            var tileUV = GetAnimUV();
 
-            bool flipH = (tileData & Tileset.k_TileFlag_FlipH) != 0;
-            bool flipV = (tileData & Tileset.k_TileFlag_FlipV) != 0;
-            bool rot90 = (tileData & Tileset.k_TileFlag_Rot90) != 0;
+            var flipH = (tileData & Tileset.k_TileFlag_FlipH) != 0;
+            var flipV = (tileData & Tileset.k_TileFlag_FlipV) != 0;
+            var rot90 = (tileData & Tileset.k_TileFlag_Rot90) != 0;
 
             //NOTE: xMinMax and yMinMax is opposite if width or height is negative
-            float u0 = tileUV.xMin + Tileset.AtlasTexture.texelSize.x * innerPadding;
-            float v0 = tileUV.yMin + Tileset.AtlasTexture.texelSize.y * innerPadding;
-            float u1 = tileUV.xMax - Tileset.AtlasTexture.texelSize.x * innerPadding;
-            float v1 = tileUV.yMax - Tileset.AtlasTexture.texelSize.y * innerPadding;
+            var u0 = tileUV.xMin + Tileset.AtlasTexture.texelSize.x * innerPadding;
+            var v0 = tileUV.yMin + Tileset.AtlasTexture.texelSize.y * innerPadding;
+            var u1 = tileUV.xMax - Tileset.AtlasTexture.texelSize.x * innerPadding;
+            var v1 = tileUV.yMax - Tileset.AtlasTexture.texelSize.y * innerPadding;
 
             if (flipV)
             {
-                float v = v0;
+                var v = v0;
                 v0 = v1;
                 v1 = v;
             }
             if (flipH)
             {
-                float u = u0;
+                var u = u0;
                 u0 = u1;
                 u1 = u;
             }

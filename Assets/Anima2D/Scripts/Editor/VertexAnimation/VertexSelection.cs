@@ -73,7 +73,7 @@ namespace Anima2D
 			{
 				m_Selection.UnionWith(m_TemporalSelection);
 			}else{
-				foreach(int value in m_TemporalSelection)
+				foreach(var value in m_TemporalSelection)
 				{
 					if(m_Selection.Contains(value))
 					{

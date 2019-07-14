@@ -27,7 +27,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public static Texture2D GetTileSymbolTexture(bool west, bool south, bool east, bool north)
         {
-            int idx = GetTileNeighboursFlags(west, south, east, north);
+            var idx = GetTileNeighboursFlags(west, south, east, north);
             return GetTileSymbolTexture(idx);
         }
 
@@ -36,23 +36,23 @@ namespace CreativeSpore.SuperTilemapEditor
             if (s_tileSymbolTextures == null)
             {
                 s_tileSymbolTextures = new Texture2D[16];
-                for (int i = 0; i < s_tileSymbolTextures.Length; ++i)
+                for (var i = 0; i < s_tileSymbolTextures.Length; ++i)
                 {
-                    Texture2D tex = new Texture2D(3, 3);
+                    var tex = new Texture2D(3, 3);
                     tex.hideFlags = HideFlags.DontSave;
                     tex.anisoLevel = 0;
                     tex.filterMode = FilterMode.Point;
                     s_tileSymbolTextures[i] = tex;
 
-                    bool west = ((eNeighbourFlags)i & eNeighbourFlags.West) != 0;
-                    bool south = ((eNeighbourFlags)i & eNeighbourFlags.South) != 0;
-                    bool east = ((eNeighbourFlags)i & eNeighbourFlags.East) != 0;
-                    bool north = ((eNeighbourFlags)i & eNeighbourFlags.North) != 0;
+                    var west = ((eNeighbourFlags)i & eNeighbourFlags.West) != 0;
+                    var south = ((eNeighbourFlags)i & eNeighbourFlags.South) != 0;
+                    var east = ((eNeighbourFlags)i & eNeighbourFlags.East) != 0;
+                    var north = ((eNeighbourFlags)i & eNeighbourFlags.North) != 0;
 
-                    Color x = new Color(0, 0, 0, 0.2f);
-                    Color d = new Color(0, 0, 0, 0.1f);
-                    Color o = new Color(1, 1, 1, 0.1f);
-                    Color[] colors = new Color[]
+                    var x = new Color(0, 0, 0, 0.2f);
+                    var d = new Color(0, 0, 0, 0.1f);
+                    var o = new Color(1, 1, 1, 0.1f);
+                    var colors = new Color[]
                 {
                     o/*6*/, o/*7*/, o/*8*/,
                     o/*3*/, o/*4*/, o/*5*/,
@@ -156,12 +156,12 @@ namespace CreativeSpore.SuperTilemapEditor
             if (m_selectedTileIdx >= 0)
             {
                 m_tileIdOff = 0;
-                uint brushTileData = m_aBrushTileData[m_selectedTileIdx];
+                var brushTileData = m_aBrushTileData[m_selectedTileIdx];
                 if(brushTileData == Tileset.k_TileData_Empty)
                 {
                     brushTileData = 0u; // reset flags and everything
                 }
-                int tileId = (int)(brushTileData & Tileset.k_TileDataMask_TileId);
+                var tileId = (int)(brushTileData & Tileset.k_TileDataMask_TileId);
                 if (tileId != Tileset.k_TileId_Empty && newTileId != tileId)
                 {
                     m_tileIdOff = newTileId - tileId;
@@ -182,15 +182,15 @@ namespace CreativeSpore.SuperTilemapEditor
             if (m_selectedTileIdx >= 0)
             {
                 m_tileIdOff = 0;
-                uint brushTileData = m_aBrushTileData[m_selectedTileIdx];
+                var brushTileData = m_aBrushTileData[m_selectedTileIdx];
                 if (brushTileData == Tileset.k_TileData_Empty)
                 {
                     brushTileData = 0u; // reset flags and everything
                 }
                 Undo.RecordObject(m_target, "BrushChanged");
 
-                TilesetBrush brush = Tileset.FindBrush(newBrushId);
-                int tileId = (int)(brush.PreviewTileData() & Tileset.k_TileDataMask_TileId);
+                var brush = Tileset.FindBrush(newBrushId);
+                var tileId = (int)(brush.PreviewTileData() & Tileset.k_TileDataMask_TileId);
                 brushTileData &= Tileset.k_TileDataMask_Flags;
                 brushTileData |= (uint)(newBrushId << 16) & Tileset.k_TileDataMask_BrushId;
                 brushTileData |= (uint)(tileId & Tileset.k_TileDataMask_TileId);
@@ -209,8 +209,8 @@ namespace CreativeSpore.SuperTilemapEditor
             m_hasChanged = false;
             m_target = target;
             m_aBrushTileData = aTileData;
-            Event e = Event.current;
-            bool isRightMouseReleased = e.type == EventType.MouseUp && e.button == 0;
+            var e = Event.current;
+            var isRightMouseReleased = e.type == EventType.MouseUp && e.button == 0;
             if (isRightMouseReleased && !m_tileSelectionRect.Contains(e.mousePosition))
             {
                 m_selectedTileIdx = -1;
@@ -222,19 +222,19 @@ namespace CreativeSpore.SuperTilemapEditor
             GUI.backgroundColor = Tileset.BackgroundColor;
             GUILayout.BeginScrollView(Vector2.zero, (GUIStyle)"Button", GUILayout.Width(visualTileSize.x * gridWidth), GUILayout.Height(visualTileSize.y * gridHeight + 1f));
             GUI.backgroundColor = Color.white;
-            for (int i = 0; i < gridWidth * gridHeight; ++i)
+            for (var i = 0; i < gridWidth * gridHeight; ++i)
             {
-                int gx = i % gridWidth;
-                int gy = i / gridWidth;
-                int tileIdx = tileIdxMap[i];
-                Rect rVisualTile = new Rect(gx * visualTileSize.x, gy * visualTileSize.y, visualTileSize.x, visualTileSize.y);
-                uint tileData = m_aBrushTileData[tileIdx];
-                TilesetBrush brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(tileData));
+                var gx = i % gridWidth;
+                var gy = i / gridWidth;
+                var tileIdx = tileIdxMap[i];
+                var rVisualTile = new Rect(gx * visualTileSize.x, gy * visualTileSize.y, visualTileSize.x, visualTileSize.y);
+                var tileData = m_aBrushTileData[tileIdx];
+                var brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(tileData));
                 if (brush)
                 {
                     tileData = TilesetBrush.ApplyAndMergeTileFlags(brush.PreviewTileData(), tileData);
                 }
-                int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
+                var tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
                 if (tileId != Tileset.k_TileId_Empty)
                 {
                     //Rect tileUV = Tileset.Tiles[tileId].uv;
@@ -246,13 +246,13 @@ namespace CreativeSpore.SuperTilemapEditor
                     GUI.DrawTexture(rVisualTile, GetTileSymbolTexture((byte)symbolIdxMap[i]), ScaleMode.ScaleToFit, true);
                 }
 
-                Color bgColor = new Color(1f - Tileset.BackgroundColor.r, 1f - Tileset.BackgroundColor.g, 1f - Tileset.BackgroundColor.b, Tileset.BackgroundColor.a);
+                var bgColor = new Color(1f - Tileset.BackgroundColor.r, 1f - Tileset.BackgroundColor.g, 1f - Tileset.BackgroundColor.b, Tileset.BackgroundColor.a);
                 HandlesEx.DrawRectWithOutline(rVisualTile, m_selectedTileIdx == tileIdx ? new Color(0f, 0f, 0f, 0.1f) : new Color(), m_selectedTileIdx == tileIdx ? new Color(1f, 1f, 0f, 1f) : bgColor);
 
                 if (isRightMouseReleased && rVisualTile.Contains(e.mousePosition))
                 {
                     m_selectedTileIdx = tileIdx;
-                    EditorWindow wnd = EditorWindow.focusedWindow;
+                    var wnd = EditorWindow.focusedWindow;
                     TileSelectionWindow.Show(Tileset);
                     TileSelectionWindow.Instance.Ping();
                     wnd.Focus();
@@ -261,7 +261,7 @@ namespace CreativeSpore.SuperTilemapEditor
             }
             GUILayout.EndScrollView();
 
-            uint brushTileData = m_selectedTileIdx >= 0 ? m_aBrushTileData[m_selectedTileIdx] : Tileset.k_TileData_Empty;
+            var brushTileData = m_selectedTileIdx >= 0 ? m_aBrushTileData[m_selectedTileIdx] : Tileset.k_TileData_Empty;
             brushTileData = DoTileDataPropertiesLayout(brushTileData, Tileset);
             if (m_selectedTileIdx >= 0)
             {
@@ -274,17 +274,17 @@ namespace CreativeSpore.SuperTilemapEditor
                 m_tileSelectionRect = GUILayoutUtility.GetLastRect();
             }
 
-            bool hasEmptyTiles = ArrayUtility.Contains<uint>(m_aBrushTileData, Tileset.k_TileData_Empty);
+            var hasEmptyTiles = ArrayUtility.Contains<uint>(m_aBrushTileData, Tileset.k_TileData_Empty);
             m_displayAutocompleteBtn = e.type == EventType.Layout ? !hasEmptyTiles && m_tileIdOff != 0 : m_displayAutocompleteBtn;
             if (m_displayAutocompleteBtn && GUILayout.Button("Autocomplete relative to last change"))
             {
                 Undo.RecordObject(m_target, "MultipleTileChanged");
-                for (int i = 0; i < tileIdxMap.Length; ++i)
+                for (var i = 0; i < tileIdxMap.Length; ++i)
                 {
-                    int tileIdx = tileIdxMap[i];
+                    var tileIdx = tileIdxMap[i];
                     if (tileIdx != m_tileIdOffSkipIdx)
                     {
-                        int brushTileId = (int)(m_aBrushTileData[tileIdx] & Tileset.k_TileDataMask_TileId);
+                        var brushTileId = (int)(m_aBrushTileData[tileIdx] & Tileset.k_TileDataMask_TileId);
                         brushTileId += m_tileIdOff;
                         if (brushTileId < 0 || brushTileId >= m_tileset.Tiles.Count)
                         {
@@ -305,11 +305,11 @@ namespace CreativeSpore.SuperTilemapEditor
                 if (GUILayout.Button("Autocomplete from selection"))
                 {
                     Undo.RecordObject(m_target, "MultipleTileChanged");
-                    for (int i = 0; i < tileIdxMap.Length; ++i)
+                    for (var i = 0; i < tileIdxMap.Length; ++i)
                     {
-                        int tileIdx = tileIdxMap[i];
-                        int selectionIdx = (i % gridWidth) + ( gridHeight - 1 - i / gridWidth) * gridWidth;
-                        int brushTileId = (int)(Tileset.TileSelection.selectionData[selectionIdx] & Tileset.k_TileDataMask_TileId);
+                        var tileIdx = tileIdxMap[i];
+                        var selectionIdx = (i % gridWidth) + ( gridHeight - 1 - i / gridWidth) * gridWidth;
+                        var brushTileId = (int)(Tileset.TileSelection.selectionData[selectionIdx] & Tileset.k_TileDataMask_TileId);
                         m_aBrushTileData[tileIdx] = (uint)(brushTileId & Tileset.k_TileDataMask_TileId);
                     }
                     m_tileIdOff = 0;
@@ -352,8 +352,8 @@ namespace CreativeSpore.SuperTilemapEditor
             if (displayBrush)
             {
                 EditorGUI.BeginChangeCheck();
-                int brushId = Tileset.GetBrushIdFromTileData(tileData);
-                TilesetBrush brush = tileset.FindBrush(brushId);
+                var brushId = Tileset.GetBrushIdFromTileData(tileData);
+                var brush = tileset.FindBrush(brushId);
                 brush = (TilesetBrush)EditorGUILayout.ObjectField("Brush", brush, typeof(TilesetBrush), false);
                 if (EditorGUI.EndChangeCheck())
                 {
@@ -364,7 +364,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     else
                     {
                         brushId = brush != null ? tileset.FindBrushId(brush.name) : Tileset.k_BrushId_Default;
-                        int tileId = brush != null ? (int)(brush.PreviewTileData() & Tileset.k_TileDataMask_TileId) : Tileset.GetTileIdFromTileData(tileData);
+                        var tileId = brush != null ? (int)(brush.PreviewTileData() & Tileset.k_TileDataMask_TileId) : Tileset.GetTileIdFromTileData(tileData);
                         tileData &= Tileset.k_TileDataMask_Flags;
                         tileData |= (uint)(brushId << 16) & Tileset.k_TileDataMask_BrushId;
                         tileData |= (uint)(tileId & Tileset.k_TileDataMask_TileId);

@@ -12,11 +12,11 @@ namespace Anima2D
 		
 		public override GameObject Create()
 		{
-			bool active = original.activeSelf;
+			var active = original.activeSelf;
 			
 			original.SetActive(true);
 			
-			GameObject l_instance = base.Create();
+			var l_instance = base.Create();
 			
 			original.SetActive(active);
 			
@@ -113,11 +113,11 @@ namespace Anima2D
 		
 		void ReturnOnionLayers(int minFrame, int maxFrame, int step)
 		{
-			List< KeyValuePair<int,OnionLayer> > l_returnOnionLayers = new List< KeyValuePair<int,OnionLayer> >();
+			var l_returnOnionLayers = new List< KeyValuePair<int,OnionLayer> >();
 			
 			if(minFrame <= maxFrame && step > 0)
 			{
-				foreach(KeyValuePair<int,OnionLayer> pair in m_OnionLayers)
+				foreach(var pair in m_OnionLayers)
 				{
 					if(pair.Key < minFrame || pair.Key > maxFrame || pair.Key % step != 0)
 					{
@@ -125,10 +125,10 @@ namespace Anima2D
 					}
 				}
 				
-				foreach(KeyValuePair<int,OnionLayer> pair in l_returnOnionLayers)
+				foreach(var pair in l_returnOnionLayers)
 				{
-					OnionLayer onionLayer = pair.Value;
-					int frame = pair.Key;
+					var onionLayer = pair.Value;
+					var frame = pair.Key;
 					
 					onionLayer.previewInstance.SetActive(false);
 					
@@ -145,10 +145,10 @@ namespace Anima2D
 				return;
 			}
 
-			foreach(KeyValuePair<int,OnionLayer> pair in m_OnionLayers)
+			foreach(var pair in m_OnionLayers)
 			{
-				OnionLayer onionLayer = pair.Value;
-				int frame = pair.Key;
+				var onionLayer = pair.Value;
+				var frame = pair.Key;
 				
 				onionLayer.previewInstance.transform.position = source.transform.position;
 				onionLayer.previewInstance.transform.rotation = source.transform.rotation;
@@ -167,25 +167,25 @@ namespace Anima2D
 				return;
 			}
 			
-			int frameCount = (int)(AnimationWindowExtra.activeAnimationClip.length * AnimationWindowExtra.activeAnimationClip.frameRate);
+			var frameCount = (int)(AnimationWindowExtra.activeAnimationClip.length * AnimationWindowExtra.activeAnimationClip.frameRate);
 
 			
-			int minFrame = Mathf.Max(0,frame - offset * step);
-			int maxFrame = Mathf.Min(frame + offset * step,frameCount);
+			var minFrame = Mathf.Max(0,frame - offset * step);
+			var maxFrame = Mathf.Min(frame + offset * step,frameCount);
 			
-			int numLayersPerSide = ((maxFrame - minFrame) / step);
+			var numLayersPerSide = ((maxFrame - minFrame) / step);
 
-			int depth = numLayersPerSide;
+			var depth = numLayersPerSide;
 
 			ReturnOnionLayers(minFrame,maxFrame,step);
 			
-			int l_frame = step * Mathf.CeilToInt(frame / (float) step);
-			for(int i = l_frame - step; i >= minFrame; i -= step)
+			var l_frame = step * Mathf.CeilToInt(frame / (float) step);
+			for(var i = l_frame - step; i >= minFrame; i -= step)
 			{
 				onionLayer = GetOnionLayer(i,clip);
 				onionLayer.previewInstance.SetActive(true);
 
-				float alpha = 1f - (depth - numLayersPerSide) / (float)numLayersPerSide;
+				var alpha = 1f - (depth - numLayersPerSide) / (float)numLayersPerSide;
 				onionLayer.SetDepth(depth);
 				onionLayer.SetAlpha(alpha  * alpha * alpha * alphaMultiplier);
 				onionLayer.SetColor(colorPrevFrames);
@@ -196,12 +196,12 @@ namespace Anima2D
 			depth = 1;
 			
 			l_frame = step * (frame / step);
-			for(int i = l_frame+step; i <= maxFrame; i += step)
+			for(var i = l_frame+step; i <= maxFrame; i += step)
 			{
 				onionLayer = GetOnionLayer(i,clip);
 				onionLayer.previewInstance.SetActive(true);
 
-				float alpha = 1 - (depth - 1) / (float)numLayersPerSide;
+				var alpha = 1 - (depth - 1) / (float)numLayersPerSide;
 				onionLayer.SetDepth(depth);
 				onionLayer.SetAlpha(alpha * alpha * alpha * alphaMultiplier);
 				onionLayer.SetColor(colorNextFrames);

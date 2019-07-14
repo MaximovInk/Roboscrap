@@ -34,23 +34,23 @@ namespace CreativeSpore.SuperTilemapEditor
 
         int CalculateIndex(STETilemap tilemap, int gridX, int gridY, uint tileData)
         {
-            int brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
+            var brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
 
             // upper row
-            bool autotiling_NW = AutotileWith(tilemap, brushId, gridX - 1, gridY + 1);
-            bool autotiling_N = AutotileWith(tilemap, brushId, gridX, gridY + 1);
-            bool autotiling_NE = AutotileWith(tilemap, brushId, gridX + 1, gridY + 1);
+            var autotiling_NW = AutotileWith(tilemap, brushId, gridX - 1, gridY + 1);
+            var autotiling_N = AutotileWith(tilemap, brushId, gridX, gridY + 1);
+            var autotiling_NE = AutotileWith(tilemap, brushId, gridX + 1, gridY + 1);
 
             // mid row
-            bool autotiling_E = AutotileWith(tilemap, brushId, gridX + 1, gridY);
-            bool autotiling_W = AutotileWith(tilemap, brushId, gridX - 1, gridY);
+            var autotiling_E = AutotileWith(tilemap, brushId, gridX + 1, gridY);
+            var autotiling_W = AutotileWith(tilemap, brushId, gridX - 1, gridY);
 
             // bottom row
-            bool autotiling_SW = AutotileWith(tilemap, brushId, gridX - 1, gridY - 1);
-            bool autotiling_S = AutotileWith(tilemap, brushId, gridX, gridY - 1);
-            bool autotiling_SE = AutotileWith(tilemap, brushId, gridX + 1, gridY - 1);
+            var autotiling_SW = AutotileWith(tilemap, brushId, gridX - 1, gridY - 1);
+            var autotiling_S = AutotileWith(tilemap, brushId, gridX, gridY - 1);
+            var autotiling_SE = AutotileWith(tilemap, brushId, gridX + 1, gridY - 1);
 
-            int binIdx = 0;
+            var binIdx = 0;
             // clockwise
             if (autotiling_N) binIdx = 1;
             if (autotiling_N && autotiling_E && autotiling_NE) binIdx |= 2;
@@ -66,9 +66,9 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public override uint Refresh(STETilemap tilemap, int gridX, int gridY, uint tileData)
         {
-            int idx = CalculateIndex(tilemap, gridX, gridY, tileData);
+            var idx = CalculateIndex(tilemap, gridX, gridY, tileData);
 
-            uint brushTileData = RefreshLinkedBrush(tilemap, gridX, gridY, TileIds[idx]);
+            var brushTileData = RefreshLinkedBrush(tilemap, gridX, gridY, TileIds[idx]);
             // overwrite brush id
             brushTileData &= ~Tileset.k_TileDataMask_BrushId;
             brushTileData |= tileData & Tileset.k_TileDataMask_BrushId;
@@ -79,9 +79,9 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             // Add animated tiles
             {				
-                int idx = CalculateIndex(tilemap, gridX, gridY, tileData);
+                var idx = CalculateIndex(tilemap, gridX, gridY, tileData);
 
-                TilesetBrush brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(TileIds[idx]));
+                var brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(TileIds[idx]));
                 if (brush && brush.IsAnimated())
                 {
                     TilemapChunk.RegisterAnimatedBrush(brush);

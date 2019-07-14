@@ -66,9 +66,9 @@ namespace Anima2D
 		{
 			if(canShow())
 			{
-				Vector3 pos = Vector3.zero;
-				Quaternion rot = Quaternion.identity;
-				Rect rect = spriteMeshCache.rect;
+				var pos = Vector3.zero;
+				var rot = Quaternion.identity;
+				var rect = spriteMeshCache.rect;
 
 				EditorGUI.BeginChangeCheck();
 

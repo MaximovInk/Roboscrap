@@ -1,3 +1,6 @@
+
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace MaximovInk
@@ -9,6 +12,13 @@ namespace MaximovInk
 
         protected int loadedData;
         
+        private List<Entity> entites = new List<Entity>();
+
+        private void Awake()
+        {
+            entites = GetComponentsInChildren<Entity>().ToList();
+        }
+
         public void Load()
         {
             OnLoad(Chunk.objects[ObjectId].data);
@@ -27,6 +37,11 @@ namespace MaximovInk
         protected virtual void OnLoad(int data)
         {
             loadedData = data;
+
+            foreach (var entity in entites)
+            {
+                entity.Sort();
+            }
         }
     }
 }

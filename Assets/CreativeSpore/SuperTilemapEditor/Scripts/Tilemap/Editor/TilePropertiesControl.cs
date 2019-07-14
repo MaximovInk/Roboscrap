@@ -75,7 +75,7 @@ namespace CreativeSpore.SuperTilemapEditor
             EditorGUILayout.BeginVertical();
             m_scrollPos = EditorGUILayout.BeginScrollView(m_scrollPos, GUILayout.Width(EditorGUIUtility.currentViewWidth));
             {
-                string[] editModeNames = System.Enum.GetNames(typeof(eEditMode));
+                var editModeNames = System.Enum.GetNames(typeof(eEditMode));
                 m_editMode = (eEditMode)GUILayout.Toolbar((int)m_editMode, editModeNames);
                 switch (m_editMode)
                 {
@@ -103,10 +103,10 @@ namespace CreativeSpore.SuperTilemapEditor
             }
             else
             {
-                bool isMultiselection = Tileset.TileSelection != null;
-                Tile selectedTile = isMultiselection ? Tileset.Tiles[(int)(Tileset.TileSelection.selectionData[0] & Tileset.k_TileDataMask_TileId)] : Tileset.SelectedTile;
+                var isMultiselection = Tileset.TileSelection != null;
+                var selectedTile = isMultiselection ? Tileset.Tiles[(int)(Tileset.TileSelection.selectionData[0] & Tileset.k_TileDataMask_TileId)] : Tileset.SelectedTile;
                 GUILayoutUtility.GetRect(1, 1, GUILayout.Width(Tileset.VisualTileSize.x), GUILayout.Height(Tileset.VisualTileSize.y));
-                Rect tileUV = selectedTile.uv;
+                var tileUV = selectedTile.uv;
                 GUI.color = Tileset.BackgroundColor;
                 GUI.DrawTextureWithTexCoords(GUILayoutUtility.GetLastRect(), EditorGUIUtility.whiteTexture, tileUV, true);
                 GUI.color = Color.white;
@@ -117,16 +117,16 @@ namespace CreativeSpore.SuperTilemapEditor
                     EditorGUILayout.LabelField("* Multi-selection Edition", EditorStyles.boldLabel);
                 }
                 EditorGUI.BeginChangeCheck();
-                TilePrefabData prefabData = selectedTile.prefabData;
-                float savedLabelWidth = EditorGUIUtility.labelWidth;
+                var prefabData = selectedTile.prefabData;
+                var savedLabelWidth = EditorGUIUtility.labelWidth;
                 EditorGUIUtility.labelWidth = 80;
                 prefabData.offset = EditorGUILayout.Vector3Field("Offset", prefabData.offset);
                 prefabData.offsetMode = (TilePrefabData.eOffsetMode)EditorGUILayout.EnumPopup("Offset Mode", prefabData.offsetMode);
                 prefabData.rotation = EditorGUILayout.Vector3Field("Rotation", prefabData.rotation);
                 EditorGUI.BeginChangeCheck();
-                GameObject prevPrefab = prefabData.prefab;
+                var prevPrefab = prefabData.prefab;
                 prefabData.prefab = (GameObject)EditorGUILayout.ObjectField("Prefab", prefabData.prefab, typeof(GameObject), false);
-                bool isPrefabChanged = EditorGUI.EndChangeCheck();
+                var isPrefabChanged = EditorGUI.EndChangeCheck();
                 // Special case for 3D tiles where tilemap will be rotated over the plane XZ
                 if(isPrefabChanged && !prevPrefab && prefabData.rotation == Vector3.zero && prefabData.prefab && prefabData.prefab.GetComponentInChildren<MeshRenderer>())
                 {
@@ -135,7 +135,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 }
 
                 GUILayout.BeginHorizontal();
-                Texture2D prefabPreview = AssetPreview.GetAssetPreview(selectedTile.prefabData.prefab);                
+                var prefabPreview = AssetPreview.GetAssetPreview(selectedTile.prefabData.prefab);                
                 GUILayout.Box(prefabPreview, prefabPreview != null? (GUIStyle)"Box" : GUIStyle.none);
                 GUILayout.EndHorizontal();
 
@@ -153,10 +153,10 @@ namespace CreativeSpore.SuperTilemapEditor
                     Undo.RecordObject(Tileset, "Tile Prefab Data Changed");
                     if (isMultiselection)
                     {
-                        for (int i = 0; i < Tileset.TileSelection.selectionData.Count; ++i)
+                        for (var i = 0; i < Tileset.TileSelection.selectionData.Count; ++i)
                         {
-                            Tile tile = Tileset.Tiles[(int)(Tileset.TileSelection.selectionData[i] & Tileset.k_TileDataMask_TileId)];
-                            GameObject savedPrefab = tile.prefabData.prefab;
+                            var tile = Tileset.Tiles[(int)(Tileset.TileSelection.selectionData[i] & Tileset.k_TileDataMask_TileId)];
+                            var savedPrefab = tile.prefabData.prefab;
                             tile.prefabData = prefabData;
                             if (!isPrefabChanged)
                                 tile.prefabData.prefab = savedPrefab;
@@ -176,7 +176,7 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (Tileset.SelectedBrushId != Tileset.k_BrushId_Default)
             {
-                TilesetBrush brush = Tileset.FindBrush(Tileset.SelectedBrushId);
+                var brush = Tileset.FindBrush(Tileset.SelectedBrushId);
                 if(brush)
                 {
                     EditorGUILayout.BeginHorizontal();
@@ -192,10 +192,10 @@ namespace CreativeSpore.SuperTilemapEditor
             }
             else
             {
-                bool isMultiselection = Tileset.TileSelection != null;
-                Tile selectedTile = isMultiselection ? Tileset.Tiles[(int)(Tileset.TileSelection.selectionData[0] & Tileset.k_TileDataMask_TileId)] : Tileset.SelectedTile;
+                var isMultiselection = Tileset.TileSelection != null;
+                var selectedTile = isMultiselection ? Tileset.Tiles[(int)(Tileset.TileSelection.selectionData[0] & Tileset.k_TileDataMask_TileId)] : Tileset.SelectedTile;
                 GUILayoutUtility.GetRect(1, 1, GUILayout.Width(Tileset.VisualTileSize.x), GUILayout.Height(Tileset.VisualTileSize.y));
-                Rect tileUV = selectedTile.uv;
+                var tileUV = selectedTile.uv;
                 GUI.color = Tileset.BackgroundColor;
                 GUI.DrawTextureWithTexCoords(GUILayoutUtility.GetLastRect(), EditorGUIUtility.whiteTexture, tileUV, true);
                 GUI.color = Color.white;
@@ -214,9 +214,9 @@ namespace CreativeSpore.SuperTilemapEditor
                     Undo.RecordObject(Tileset, "Tile Autotiling Data Changed");
                     if (isMultiselection)
                     {
-                        for (int i = 0; i < Tileset.TileSelection.selectionData.Count; ++i)
+                        for (var i = 0; i < Tileset.TileSelection.selectionData.Count; ++i)
                         {
-                            Tile tile = Tileset.Tiles[(int)(Tileset.TileSelection.selectionData[i] & Tileset.k_TileDataMask_TileId)];
+                            var tile = Tileset.Tiles[(int)(Tileset.TileSelection.selectionData[i] & Tileset.k_TileDataMask_TileId)];
                             tile.autilingGroup = selectedTile.autilingGroup;
                         }
                     }
@@ -231,8 +231,8 @@ namespace CreativeSpore.SuperTilemapEditor
         Vector2 m_tileParamScrollViewPos;
         private void DisplayParameters()
         {
-            Event e = Event.current;
-            TileSelection tileSelection = Tileset.TileSelection;
+            var e = Event.current;
+            var tileSelection = Tileset.TileSelection;
             if (tileSelection != null)
             {
                 EditorGUILayout.LabelField("Multi-tile editing. Only merge allowed.", EditorStyles.boldLabel);
@@ -246,7 +246,7 @@ namespace CreativeSpore.SuperTilemapEditor
             }
             else
             {
-                UnityEngine.Object prevOwner = m_parameterListOwner;
+                var prevOwner = m_parameterListOwner;
                 if (Tileset.SelectedBrushId != Tileset.k_BrushId_Default)
                 {
                     m_parameterListOwner = Tileset.FindBrush(Tileset.SelectedBrushId);
@@ -271,11 +271,11 @@ namespace CreativeSpore.SuperTilemapEditor
                     }
 
                     GUILayoutUtility.GetRect(1, 1, GUILayout.Width(Tileset.VisualTileSize.x), GUILayout.Height(Tileset.VisualTileSize.y));
-                    uint tilePreviewData = m_parameterListOwner is Tileset ?
+                    var tilePreviewData = m_parameterListOwner is Tileset ?
                         (uint)(((Tileset)m_parameterListOwner).SelectedTileId & Tileset.k_TileDataMask_TileId)
                         :
                         ((TilesetBrush)m_parameterListOwner).GetAnimTileData();
-                    Rect customUV = m_parameterListOwner is Tileset ? default(Rect) : ((TilesetBrush)m_parameterListOwner).GetAnimUV();
+                    var customUV = m_parameterListOwner is Tileset ? default(Rect) : ((TilesetBrush)m_parameterListOwner).GetAnimUV();
                     GUI.color = Tileset.BackgroundColor;
                     GUI.DrawTexture(GUILayoutUtility.GetLastRect(), EditorGUIUtility.whiteTexture);
                     GUI.color = Color.white;
@@ -284,7 +284,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     m_tileParamScrollViewPos = EditorGUILayout.BeginScrollView(m_tileParamScrollViewPos, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
                     EditorGUI.BeginChangeCheck();
                     m_tileParameterList.DoLayoutList();
-                    Rect rList = GUILayoutUtility.GetLastRect();
+                    var rList = GUILayoutUtility.GetLastRect();
                     if (e.type == EventType.MouseDown && !rList.Contains(e.mousePosition))
                     {
                         m_tileParameterList.ReleaseKeyboardFocus();
@@ -301,11 +301,11 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private void MergeTileParameters(List<uint> listOfTileData)
         {
-            List<Parameter> fullParameterList = new List<Parameter>();
-            foreach(uint tileData in listOfTileData)
+            var fullParameterList = new List<Parameter>();
+            foreach(var tileData in listOfTileData)
             {
-                ParameterContainer @params = TilemapUtils.GetParamsFromTileData(Tileset, tileData);
-                foreach(Parameter param in @params.ParameterList)
+                var @params = TilemapUtils.GetParamsFromTileData(Tileset, tileData);
+                foreach(var param in @params.ParameterList)
                 {
                     if(!fullParameterList.Exists(o => o.name.Equals(param.name)))
                     {
@@ -313,10 +313,10 @@ namespace CreativeSpore.SuperTilemapEditor
                     }
                 }
             }
-            foreach (uint tileData in listOfTileData)
+            foreach (var tileData in listOfTileData)
             {
-                ParameterContainer @params = TilemapUtils.GetParamsFromTileData(Tileset, tileData);
-                foreach (Parameter param in fullParameterList)
+                var @params = TilemapUtils.GetParamsFromTileData(Tileset, tileData);
+                foreach (var param in fullParameterList)
                 {
                     if (!@params.ParameterList.Exists(o => o.name.Equals(param.name)))
                     {
@@ -337,7 +337,7 @@ namespace CreativeSpore.SuperTilemapEditor
         static private bool s_showHelp = false;
         private void DisplayCollider()
         {
-            Event e = Event.current;
+            var e = Event.current;
 
             if (Tileset.SelectedBrushId != Tileset.k_BrushId_Default)
             {
@@ -345,9 +345,9 @@ namespace CreativeSpore.SuperTilemapEditor
                 return;
             }
 
-            bool isMultiselection = Tileset.TileSelection != null;
-            bool saveChanges = false;
-            Tile selectedTile = isMultiselection ? Tileset.Tiles[(int)(Tileset.TileSelection.selectionData[0] & Tileset.k_TileDataMask_TileId)] : Tileset.SelectedTile;
+            var isMultiselection = Tileset.TileSelection != null;
+            var saveChanges = false;
+            var selectedTile = isMultiselection ? Tileset.Tiles[(int)(Tileset.TileSelection.selectionData[0] & Tileset.k_TileDataMask_TileId)] : Tileset.SelectedTile;
 
             if (e.type == EventType.MouseDown)
             {
@@ -372,14 +372,14 @@ namespace CreativeSpore.SuperTilemapEditor
                 Styles.Instance.colliderBgStyle.normal.background.Apply();
             }
 
-            float aspectRatio = Tileset.TilePxSize.x / Tileset.TilePxSize.y;
+            var aspectRatio = Tileset.TilePxSize.x / Tileset.TilePxSize.y;
             float padding = 2; // pixel size of the border around the tile
             //Rect rCollArea = GUILayoutUtility.GetRect(1, 1, GUILayout.Width(EditorGUIUtility.currentViewWidth), GUILayout.Height(EditorGUIUtility.currentViewWidth / aspectRatio));
-            Rect rCollArea = GUILayoutUtility.GetRect(1, 1, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+            var rCollArea = GUILayoutUtility.GetRect(1, 1, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
             GUI.BeginGroup(rCollArea, Styles.Instance.colliderBgStyle);
             if (e.type == EventType.Repaint)
             {
-                float pixelSize = rCollArea.width / (Tileset.TilePxSize.x + 2 * padding);
+                var pixelSize = rCollArea.width / (Tileset.TilePxSize.x + 2 * padding);
                 m_mousePos = e.mousePosition;
                 m_rTile = new Rect(padding * pixelSize, padding * pixelSize, rCollArea.width - 2 * padding * pixelSize, (rCollArea.width / aspectRatio) - 2 * padding * pixelSize);
                 m_rTile.height = Mathf.Min(m_rTile.height, rCollArea.height - 2 * padding * pixelSize);
@@ -390,10 +390,10 @@ namespace CreativeSpore.SuperTilemapEditor
             GUI.color = Color.white;
             if (isMultiselection)
             {
-                foreach (uint tileData in Tileset.TileSelection.selectionData)
+                foreach (var tileData in Tileset.TileSelection.selectionData)
                 {
-                    int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
-                    Tile tile = Tileset.GetTile(tileId);
+                    var tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
+                    var tile = Tileset.GetTile(tileId);
                     if (tile != null)
                     {
                         GUI.color = new Color(1f, 1f, 1f, 1f / Tileset.TileSelection.selectionData.Count);
@@ -407,10 +407,10 @@ namespace CreativeSpore.SuperTilemapEditor
                 GUI.DrawTextureWithTexCoords(m_rTile, Tileset.AtlasTexture, selectedTile.uv);
             }
 
-            Color savedHandleColor = Handles.color;
+            var savedHandleColor = Handles.color;
             if (selectedTile.collData.type != eTileCollider.None)
             {
-                Vector2[] collVertices = selectedTile.collData.type == eTileCollider.Full ? s_fullCollTileVertices : selectedTile.collData.vertices;
+                var collVertices = selectedTile.collData.type == eTileCollider.Full ? s_fullCollTileVertices : selectedTile.collData.vertices;
                 if ( collVertices == null || collVertices.Length == 0)
                 {
                     collVertices = selectedTile.collData.vertices = new Vector2[s_fullCollTileVertices.Length];
@@ -419,21 +419,21 @@ namespace CreativeSpore.SuperTilemapEditor
                 }
 
                 // Fix and snap positions
-                for (int i = 0; i < collVertices.Length; ++i)
+                for (var i = 0; i < collVertices.Length; ++i)
                 {
-                    Vector2 s0 = collVertices[i];
+                    var s0 = collVertices[i];
                     s0.x = Mathf.Clamp01(Mathf.Round(s0.x * Tileset.TilePxSize.x) / Tileset.TilePxSize.x);
                     s0.y = Mathf.Clamp01(Mathf.Round(s0.y * Tileset.TilePxSize.y) / Tileset.TilePxSize.y);
                     collVertices[i] = s0;
                 }
 
                 // Draw edges
-                Vector3[] polyEdges = new Vector3[collVertices.Length + 1];
-                for (int i = 0; i < collVertices.Length; ++i)
+                var polyEdges = new Vector3[collVertices.Length + 1];
+                for (var i = 0; i < collVertices.Length; ++i)
                 {
-                    Vector2 s0 = collVertices[i];
+                    var s0 = collVertices[i];
                     s0.x = m_rTile.x + m_rTile.width * s0.x; s0.y = m_rTile.yMax - m_rTile.height * s0.y;
-                    Vector2 s1 = collVertices[(i + 1) % collVertices.Length];
+                    var s1 = collVertices[(i + 1) % collVertices.Length];
                     s1.x = m_rTile.x + m_rTile.width * s1.x; s1.y = m_rTile.yMax - m_rTile.height * s1.y;
 
                     polyEdges[i] = s0;
@@ -451,11 +451,11 @@ namespace CreativeSpore.SuperTilemapEditor
                     Handles.color = savedHandleColor;
                 }
 
-                float pixelSize = m_rTile.width / Tileset.TilePxSize.x;
+                var pixelSize = m_rTile.width / Tileset.TilePxSize.x;
                 if (selectedTile.collData.type == eTileCollider.Polygon)
                 {
-                    bool isAddingVertexOn = !m_isDragging && e.shift && m_activeVertexIdx == -1;
-                    bool isRemovingVertexOn = !m_isDragging && ((Application.platform == RuntimePlatform.OSXEditor)? e.command : e.control) && collVertices.Length > 3;
+                    var isAddingVertexOn = !m_isDragging && e.shift && m_activeVertexIdx == -1;
+                    var isRemovingVertexOn = !m_isDragging && ((Application.platform == RuntimePlatform.OSXEditor)? e.command : e.control) && collVertices.Length > 3;
                     if (isRemovingVertexOn && m_activeVertexIdx != -1 && e.type == EventType.MouseUp)
                     {
                         selectedTile.collData.vertices = new Vector2[collVertices.Length - 1];
@@ -469,14 +469,14 @@ namespace CreativeSpore.SuperTilemapEditor
                         m_activeVertexIdx = -1;
                     }
 
-                    float minDist = float.MaxValue;
+                    var minDist = float.MaxValue;
                     if (!m_isDragging)
                     {
                         m_activeVertexIdx = -1;
                     }
-                    for (int i = 0; i < collVertices.Length; ++i)
+                    for (var i = 0; i < collVertices.Length; ++i)
                     {
-                        Vector2 s0 = collVertices[i];
+                        var s0 = collVertices[i];
                         s0.x = m_rTile.x + m_rTile.width * s0.x;
                         s0.y = m_rTile.yMax - m_rTile.height * s0.y;
 
@@ -495,7 +495,7 @@ namespace CreativeSpore.SuperTilemapEditor
                         }
                         else
                         {
-                            float dist = Vector2.Distance(m_mousePos, s0);
+                            var dist = Vector2.Distance(m_mousePos, s0);
                             if (dist <= minDist && dist < Styles.Instance.collVertexHandleStyle.normal.background.width)
                             {
                                 minDist = dist;
@@ -576,7 +576,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
             EditorGUILayout.Space();
 
-            string helpInfo =
+            var helpInfo =
                 "  - Click and drag over a vertex to move it" + "\n" +
                 "  - Hold Shift + Click for adding a new vertex" + "\n" +
                 "  - Hold "+((Application.platform == RuntimePlatform.OSXEditor)? "Command" : "Ctrl")+" + Click for removing a vertex. (should be more than 3)" + "\n" +
@@ -589,7 +589,7 @@ namespace CreativeSpore.SuperTilemapEditor
             }
 
             //+++ Collider Settings
-            float savedLabelWidth = EditorGUIUtility.labelWidth;
+            var savedLabelWidth = EditorGUIUtility.labelWidth;
             EditorGUIUtility.labelWidth = 40;
             if (isMultiselection)
             {
@@ -616,7 +616,7 @@ namespace CreativeSpore.SuperTilemapEditor
             //selectedTile.collData.type = (eTileCollider)EditorGUILayout.EnumPopup("Collider Type", selectedTile.collData.type);
             EditorGUILayout.LabelField("Collider Type:", EditorStyles.boldLabel);
             EditorGUI.indentLevel += 2;
-            string[] tileColliderNames = System.Enum.GetNames(typeof(eTileCollider));
+            var tileColliderNames = System.Enum.GetNames(typeof(eTileCollider));
 
             selectedTile.collData.type = (eTileCollider)GUILayout.Toolbar((int)selectedTile.collData.type, tileColliderNames);
             EditorGUI.indentLevel -= 2;
@@ -630,14 +630,14 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 if (isMultiselection)
                 {
-                    for (int i = 0; i < Tileset.TileSelection.selectionData.Count; ++i)
+                    for (var i = 0; i < Tileset.TileSelection.selectionData.Count; ++i)
                     {
                         Tileset.Tiles[(int)(Tileset.TileSelection.selectionData[i] & Tileset.k_TileDataMask_TileId)].collData = selectedTile.collData.Clone();
                     }
                 }
                 EditorUtility.SetDirty(Tileset);
                 //Refresh selected tilemap
-                STETilemap selectedTilemap = Selection.activeGameObject? Selection.activeGameObject.GetComponent<STETilemap>() : null;
+                var selectedTilemap = Selection.activeGameObject? Selection.activeGameObject.GetComponent<STETilemap>() : null;
                 if(selectedTilemap)
                     selectedTilemap.Refresh(false, true);
             }
@@ -652,11 +652,11 @@ namespace CreativeSpore.SuperTilemapEditor
         /// <returns></returns>
         Vector3 ClosestPointToPolyLine(Vector3[] vertices, out int closestSegmentIdx)
         {
-            float minDist = float.MaxValue;
+            var minDist = float.MaxValue;
             closestSegmentIdx = 0;
-            for (int i = 0; i < vertices.Length - 1; ++i)
+            for (var i = 0; i < vertices.Length - 1; ++i)
             {
-                float dist = HandleUtility.DistanceToLine(vertices[i], vertices[i + 1]);
+                var dist = HandleUtility.DistanceToLine(vertices[i], vertices[i + 1]);
                 if (dist < minDist)
                 {
                     minDist = dist;
@@ -669,10 +669,10 @@ namespace CreativeSpore.SuperTilemapEditor
         private static float s_maxLabelNameSize = 0f;
         public static ReorderableList CreateParameterReorderableList( ParameterContainer paramContainer )
         {
-            ReorderableList reordList = new ReorderableList(paramContainer.ParameterList, typeof(Parameter), true, true, true, true);
+            var reordList = new ReorderableList(paramContainer.ParameterList, typeof(Parameter), true, true, true, true);
             reordList.onAddDropdownCallback = (Rect buttonRect, ReorderableList l) =>
             {
-                GenericMenu menu = new GenericMenu();
+                var menu = new GenericMenu();
                 GenericMenu.MenuFunction addBoolParamFunc = () =>
                 {
                     paramContainer.AddNewParam(new Parameter("new bool", false));
@@ -722,7 +722,7 @@ namespace CreativeSpore.SuperTilemapEditor
             reordList.drawHeaderCallback = (Rect rect) =>
             {
                 EditorGUI.LabelField(rect, "Parameters", EditorStyles.boldLabel);
-                Texture2D btnTexture = reordList.elementHeight == 0f ? EditorGUIUtility.FindTexture("winbtn_win_max_h") : EditorGUIUtility.FindTexture("winbtn_win_min_h");
+                var btnTexture = reordList.elementHeight == 0f ? EditorGUIUtility.FindTexture("winbtn_win_max_h") : EditorGUIUtility.FindTexture("winbtn_win_min_h");
                 if (GUI.Button(new Rect(rect.width - rect.height, rect.y, rect.height, rect.height), btnTexture, EditorStyles.label))
                 {
                     reordList.elementHeight = reordList.elementHeight == 0f ? EditorGUIUtility.singleLineHeight : 0f;
@@ -734,19 +734,19 @@ namespace CreativeSpore.SuperTilemapEditor
                 if (reordList.elementHeight == 0f)
                     return;
 
-                Parameter param = reordList.list[index] as Parameter;
+                var param = reordList.list[index] as Parameter;
                 if (index == 0)
                 {
                     s_maxLabelNameSize = 0f;
-                    foreach (Parameter p in paramContainer.ParameterList)
+                    foreach (var p in paramContainer.ParameterList)
                     {
                         s_maxLabelNameSize = Mathf.Max(s_maxLabelNameSize, EditorStyles.label.CalcSize(new GUIContent(p.name + ".")).x); //NOTE: adding '.' to make sure ending spaces are not skipped
                     }
                 }
-                Rect rLabel = new Rect(rect.x, rect.y, s_maxLabelNameSize, EditorGUIUtility.singleLineHeight);
+                var rLabel = new Rect(rect.x, rect.y, s_maxLabelNameSize, EditorGUIUtility.singleLineHeight);
                 if (index == reordList.index)
                 {
-                    string newName = EditorGUI.TextField(rLabel, param.name);
+                    var newName = EditorGUI.TextField(rLabel, param.name);
                     if (newName != param.name)
                     {
                         paramContainer.RenameParam(param.name, newName);
@@ -756,7 +756,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 {
                     EditorGUI.LabelField(rLabel, param.name);
                 }
-                Rect rParamValue = new Rect(rLabel.x + s_maxLabelNameSize, rLabel.y, rect.width - s_maxLabelNameSize, rLabel.height);
+                var rParamValue = new Rect(rLabel.x + s_maxLabelNameSize, rLabel.y, rect.width - s_maxLabelNameSize, rLabel.height);
                 if (param.GetParamType() == eParameterType.Bool)
                 {
                     param.SetValue(EditorGUI.Toggle(rParamValue, param.GetAsBool()));

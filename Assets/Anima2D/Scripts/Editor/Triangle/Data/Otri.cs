@@ -69,7 +69,7 @@ namespace TriangleNet.Data
             //this = tri.triangles[orient];
             // decode(ptr, otri);
 
-            int tmp = orient;
+            var tmp = orient;
             orient = triangle.neighbors[tmp].orient;
             triangle = triangle.neighbors[tmp].triangle;
         }
@@ -123,7 +123,7 @@ namespace TriangleNet.Data
             o2.orient = minus1Mod3[orient];
 
             //o2.SymSelf();
-            int tmp = o2.orient;
+            var tmp = o2.orient;
             o2.orient = o2.triangle.neighbors[tmp].orient;
             o2.triangle = o2.triangle.neighbors[tmp].triangle;
         }
@@ -137,7 +137,7 @@ namespace TriangleNet.Data
             orient = minus1Mod3[orient];
 
             //SymSelf();
-            int tmp = orient;
+            var tmp = orient;
             orient = triangle.neighbors[tmp].orient;
             triangle = triangle.neighbors[tmp].triangle;
         }
@@ -165,7 +165,7 @@ namespace TriangleNet.Data
         public void OprevSelf()
         {
             //SymSelf();
-            int tmp = orient;
+            var tmp = orient;
             orient = triangle.neighbors[tmp].orient;
             triangle = triangle.neighbors[tmp].triangle;
 
@@ -196,7 +196,7 @@ namespace TriangleNet.Data
         public void DnextSelf()
         {
             //SymSelf();
-            int tmp = orient;
+            var tmp = orient;
             orient = triangle.neighbors[tmp].orient;
             triangle = triangle.neighbors[tmp].triangle;
 
@@ -218,7 +218,7 @@ namespace TriangleNet.Data
             o2.orient = plus1Mod3[orient];
 
             //o2.SymSelf();
-            int tmp = o2.orient;
+            var tmp = o2.orient;
             o2.orient = o2.triangle.neighbors[tmp].orient;
             o2.triangle = o2.triangle.neighbors[tmp].triangle;
         }
@@ -232,7 +232,7 @@ namespace TriangleNet.Data
             orient = plus1Mod3[orient];
 
             //SymSelf();
-            int tmp = orient;
+            var tmp = orient;
             orient = triangle.neighbors[tmp].orient;
             triangle = triangle.neighbors[tmp].triangle;
         }
@@ -254,7 +254,7 @@ namespace TriangleNet.Data
             o2.orient = plus1Mod3[o2.orient];
 
             //o2.SymSelf();
-            int tmp = o2.orient;
+            var tmp = o2.orient;
             o2.orient = o2.triangle.neighbors[tmp].orient;
             o2.triangle = o2.triangle.neighbors[tmp].triangle;
         }
@@ -265,7 +265,7 @@ namespace TriangleNet.Data
         public void RnextSelf()
         {
             //SymSelf();
-            int tmp = orient;
+            var tmp = orient;
             orient = triangle.neighbors[tmp].orient;
             triangle = triangle.neighbors[tmp].triangle;
 
@@ -295,7 +295,7 @@ namespace TriangleNet.Data
             o2.orient = minus1Mod3[o2.orient];
 
             //o2.SymSelf();
-            int tmp = o2.orient;
+            var tmp = o2.orient;
             o2.orient = o2.triangle.neighbors[tmp].orient;
             o2.triangle = o2.triangle.neighbors[tmp].triangle;
         }
@@ -306,7 +306,7 @@ namespace TriangleNet.Data
         public void RprevSelf()
         {
             //SymSelf();
-            int tmp = orient;
+            var tmp = orient;
             orient = triangle.neighbors[tmp].orient;
             triangle = triangle.neighbors[tmp].triangle;
 

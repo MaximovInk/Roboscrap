@@ -4,25 +4,28 @@ namespace MaximovInk
 {
     public class BackgroundScroller : MonoBehaviour
     {
-        private Transform cam;
-        private Vector2 half_size;
-        private Vector2 cam_size_half;
+        public Transform target;
 
-        void Start () {
-            cam = Camera.main.transform;
-            half_size = GetComponent<SpriteRenderer>().bounds.size / 2;
-            cam_size_half = new Vector2(Camera.main.aspect * 2f * Camera.main.orthographicSize, 2f * Camera.main.orthographicSize)/2;
+        private Vector2 size = Vector2.one;
+
+        public Transform tl, tc, tr, ml, c, mr, bl, bc, br;
+
+        private void Start () {
+            size = c.GetComponent<SpriteRenderer>().bounds.size;
         }
-	
-        void Update () {
-            if (cam.position.x+cam_size_half.x > transform.position.x + half_size.x || cam.position.x - cam_size_half.x < transform.position.x - half_size.x)
-            {
-                transform.position = new Vector2(cam.transform.position.x,transform.position.y);
-            }
-            if (cam.position.y + cam_size_half.y > transform.position.y + half_size.y || cam.position.y - cam_size_half.y < transform.position.y - half_size.y)
-            {
-                transform.position = new Vector2(transform.position.x, cam.transform.position.y);
-            }
+
+        private void Update () {
+            
+            
+            c.transform.position = new Vector2(Mathf.Round(target.transform.position.x/size.x)*size.x,Mathf.Round(target.transform.position.y/size.y)*size.y);
+            tl.transform.position = (Vector2)c.transform.position + new Vector2(-size.x,size.y);
+            tc.transform.position = (Vector2)c.transform.position + new Vector2(0,size.y);
+            tr.transform.position = (Vector2)c.transform.position + new Vector2(size.x,size.y);
+            ml.transform.position = (Vector2)c.transform.position + new Vector2(-size.x,0);
+            mr.transform.position = (Vector2)c.transform.position + new Vector2(size.x,0);
+            bl.transform.position = (Vector2)c.transform.position + new Vector2(-size.x,-size.y);
+            bc.transform.position = (Vector2)c.transform.position + new Vector2(0,-size.y);
+            br.transform.position = (Vector2)c.transform.position + new Vector2(size.x,-size.y);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace CreativeSpore.SuperTilemapEditor
         [MenuItem("Assets/Create/SuperTilemapEditor/Brush/Brush47", priority = 50)]
         public static BrushFortySeven CreateAsset()
         {
-            BrushFortySeven brush = EditorUtils.CreateAssetInSelectedDirectory<BrushFortySeven>();
+            var brush = EditorUtils.CreateAssetInSelectedDirectory<BrushFortySeven>();
             return brush;
         }
 
@@ -30,7 +30,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     s_bgTexture.hideFlags = HideFlags.DontSave;
                     s_bgTexture.wrapMode = TextureWrapMode.Clamp;
                     s_bgTexture.filterMode = FilterMode.Point;
-                    int[] data = new int[]
+                    var data = new int[]
                     {
                         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                         1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1,
@@ -54,12 +54,12 @@ namespace CreativeSpore.SuperTilemapEditor
                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                         1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0,
                     };
-                    Color32[] colors = s_bgTexture.GetPixels32();
+                    var colors = s_bgTexture.GetPixels32();
                     Color32 cEmpty = new Color(0f, 0f, 0f, 0f);
                     Color32 cColor = new Color(.6f, 1f, 1f, 1f);
-                    for (int i = 0; i < data.Length; ++i)
+                    for (var i = 0; i < data.Length; ++i)
                     {
-                        int cIdx = (s_bgTexture.height - 1 - (i / s_bgTexture.width)) * s_bgTexture.width + (i % s_bgTexture.width);
+                        var cIdx = (s_bgTexture.height - 1 - (i / s_bgTexture.width)) * s_bgTexture.width + (i % s_bgTexture.width);
                         colors[cIdx] = (data[i] > 0) ? cColor : cEmpty;
                     }
                     s_bgTexture.SetPixels32(colors);

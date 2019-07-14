@@ -129,8 +129,8 @@ namespace Anima2D
 		{
 			get
 			{
-				float num = (float)this.m_Texture.width * 0.5f * this.m_Zoom;
-				float num2 = (float)this.m_Texture.height * 0.5f * this.m_Zoom;
+				var num = (float)this.m_Texture.width * 0.5f * this.m_Zoom;
+				var num2 = (float)this.m_Texture.height * 0.5f * this.m_Zoom;
 				return new Rect(-num, -num2, this.m_TextureViewRect.width + num * 2f, this.m_TextureViewRect.height + num2 * 2f);
 			}
 		}
@@ -138,12 +138,12 @@ namespace Anima2D
 		{
 			get
 			{
-				float num = this.m_TextureViewRect.width * 0.5f / this.GetMinZoom();
-				float num2 = this.m_TextureViewRect.height * 0.5f / this.GetMinZoom();
-				float left = -num;
-				float top = -num2;
-				float width = (float)this.m_Texture.width + num * 2f;
-				float height = (float)this.m_Texture.height + num2 * 2f;
+				var num = this.m_TextureViewRect.width * 0.5f / this.GetMinZoom();
+				var num2 = this.m_TextureViewRect.height * 0.5f / this.GetMinZoom();
+				var left = -num;
+				var top = -num2;
+				var width = (float)this.m_Texture.width + num * 2f;
+				var height = (float)this.m_Texture.height + num2 * 2f;
 				return new Rect(left, top, width, height);
 			}
 		}
@@ -164,7 +164,7 @@ namespace Anima2D
 		}
 		protected virtual void HandleZoom()
 		{
-			bool flag = Event.current.alt && Event.current.button == 1;
+			var flag = Event.current.alt && Event.current.button == 1;
 			if (flag)
 			{
 				EditorGUIUtility.AddCursorRect(this.m_TextureViewRect, MouseCursor.Zoom);
@@ -175,9 +175,9 @@ namespace Anima2D
 			}
 			if (Event.current.type == EventType.ScrollWheel || (Event.current.type == EventType.MouseDrag && Event.current.alt && Event.current.button == 1))
 			{
-				float zoomMultiplier = 1f - Event.current.delta.y * ((Event.current.type != EventType.ScrollWheel) ? -0.005f : 0.03f);
-				float wantedZoom = this.m_Zoom * zoomMultiplier;
-				float currentZoom = Mathf.Clamp(wantedZoom, this.GetMinZoom(), 10f);
+				var zoomMultiplier = 1f - Event.current.delta.y * ((Event.current.type != EventType.ScrollWheel) ? -0.005f : 0.03f);
+				var wantedZoom = this.m_Zoom * zoomMultiplier;
+				var currentZoom = Mathf.Clamp(wantedZoom, this.GetMinZoom(), 10f);
 				if (currentZoom != this.m_Zoom)
 				{
 					this.m_Zoom = currentZoom;
@@ -185,8 +185,8 @@ namespace Anima2D
 						zoomMultiplier /= wantedZoom / currentZoom;
 					
 					Vector3 textureHalfSize = new Vector2(m_Texture.width, m_Texture.height) * 0.5f;
-                    Vector3 mousePositionWorld = Handles.inverseMatrix.MultiplyPoint3x4(Event.current.mousePosition);
-                    Vector3 delta = (mousePositionWorld - textureHalfSize) * (zoomMultiplier - 1f);
+                    var mousePositionWorld = Handles.inverseMatrix.MultiplyPoint3x4(Event.current.mousePosition);
+                    var delta = (mousePositionWorld - textureHalfSize) * (zoomMultiplier - 1f);
 
                     m_ScrollPosition += (Vector2)Handles.matrix.MultiplyVector(delta);
 
@@ -196,7 +196,7 @@ namespace Anima2D
 		}
 		protected void HandlePanning()
 		{
-			bool flag = (!Event.current.alt && Event.current.button > 0) || (Event.current.alt && Event.current.button <= 0);
+			var flag = (!Event.current.alt && Event.current.button > 0) || (Event.current.alt && Event.current.button <= 0);
 			if (flag && GUIUtility.hotControl == 0)
 			{
 				EditorGUIUtility.AddCursorRect(this.m_TextureViewRect, MouseCursor.Pan);
@@ -233,21 +233,21 @@ namespace Anima2D
 
 		protected void DrawTexturespaceBackground()
 		{
-			float num = Mathf.Max(this.maxRect.width, this.maxRect.height);
-			Vector2 b = new Vector2(this.maxRect.xMin, this.maxRect.yMin);
-			float num2 = num * 0.5f;
-			float a = (!EditorGUIUtility.isProSkin) ? 0.08f : 0.15f;
-			float num3 = 8f;
+			var num = Mathf.Max(this.maxRect.width, this.maxRect.height);
+			var b = new Vector2(this.maxRect.xMin, this.maxRect.yMin);
+			var num2 = num * 0.5f;
+			var a = (!EditorGUIUtility.isProSkin) ? 0.08f : 0.15f;
+			var num3 = 8f;
 			BeginLines(new Color(0f, 0f, 0f, a));
-			for (float num4 = 0f; num4 <= num; num4 += num3)
+			for (var num4 = 0f; num4 <= num; num4 += num3)
 			{
-				float x = -num2 + num4 + b.x;
-				float y = num2 + num4 + b.y;
-				Vector2 p1 = new Vector2(x,y);
+				var x = -num2 + num4 + b.x;
+				var y = num2 + num4 + b.y;
+				var p1 = new Vector2(x,y);
 			
 				x = num2 + num4 + b.x;
 				y = -num2 + num4 + b.y;;
-				Vector2 p2 = new Vector2(x, y);
+				var p2 = new Vector2(x, y);
 				DrawLine(p1, p2);
 			}
 			EndLines();
@@ -258,13 +258,13 @@ namespace Anima2D
 		}
 		protected void DrawTexture()
 		{
-			int num = Mathf.Max(this.m_Texture.width, 1);
-			float num2 = Mathf.Min(this.m_MipLevel, (float)(m_Texture.mipmapCount - 1));
+			var num = Mathf.Max(this.m_Texture.width, 1);
+			var num2 = Mathf.Min(this.m_MipLevel, (float)(m_Texture.mipmapCount - 1));
 			//float mipMapBias = this.m_Texture.mipMapBias;
 			m_Texture.mipMapBias = (num2 - this.Log2((float)num / this.m_TextureRect.width));
 			//FilterMode filterMode = this.m_Texture.filterMode;
 			//m_Texture.filterMode = FilterMode.Point;
-			Rect r = m_TextureRect;
+			var r = m_TextureRect;
 			r.position -= m_ScrollPosition;
 
 			if (this.m_ShowAlpha)
@@ -295,15 +295,15 @@ namespace Anima2D
 		}
 		protected void HandleScrollbars()
 		{
-			Rect position = new Rect(this.m_TextureViewRect.xMin, this.m_TextureViewRect.yMax, this.m_TextureViewRect.width, 16f);
+			var position = new Rect(this.m_TextureViewRect.xMin, this.m_TextureViewRect.yMax, this.m_TextureViewRect.width, 16f);
 			this.m_ScrollPosition.x = GUI.HorizontalScrollbar(position, this.m_ScrollPosition.x, this.m_TextureViewRect.width, this.maxScrollRect.xMin, this.maxScrollRect.xMax);
-			Rect position2 = new Rect(this.m_TextureViewRect.xMax, this.m_TextureViewRect.yMin, 16f, this.m_TextureViewRect.height);
+			var position2 = new Rect(this.m_TextureViewRect.xMax, this.m_TextureViewRect.yMin, 16f, this.m_TextureViewRect.height);
 			this.m_ScrollPosition.y = GUI.VerticalScrollbar(position2, this.m_ScrollPosition.y, this.m_TextureViewRect.height, this.maxScrollRect.yMin, this.maxScrollRect.yMax);
 		}
 		protected void SetupHandlesMatrix()
 		{
-			Vector3 pos = new Vector3(this.m_TextureRect.x - m_ScrollPosition.x, this.m_TextureRect.yMax - m_ScrollPosition.y, 0f);
-			Vector3 s = new Vector3(this.m_Zoom, -this.m_Zoom, 1f);
+			var pos = new Vector3(this.m_TextureRect.x - m_ScrollPosition.x, this.m_TextureRect.yMax - m_ScrollPosition.y, 0f);
+			var s = new Vector3(this.m_Zoom, -this.m_Zoom, 1f);
 			Handles.matrix = Matrix4x4.TRS(pos, Quaternion.identity, s);
 		}
 		protected void DoAlphaZoomToolbarGUI()
@@ -313,7 +313,7 @@ namespace Anima2D
 			{
 				GUILayout.MaxWidth(64f)
 			});
-			int num = 1;
+			var num = 1;
 
 			if (this.m_Texture != null)
 			{

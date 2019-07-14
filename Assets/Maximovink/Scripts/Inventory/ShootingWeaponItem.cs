@@ -6,7 +6,6 @@ namespace MaximovInk
     public class ShootingWeaponItem : WeaponItem
     {
        
-       
     }
 
     public enum AmmoType

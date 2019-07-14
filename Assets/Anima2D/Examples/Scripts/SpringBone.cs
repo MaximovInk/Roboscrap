@@ -90,10 +90,10 @@ namespace UnityChan
 				trs.localRotation = Quaternion.identity * localRotation;
 			}
 
-			float sqrDt = Time.deltaTime * Time.deltaTime;
+			var sqrDt = Time.deltaTime * Time.deltaTime;
 
 			//stiffness
-			Vector3 force = trs.rotation * (Vector3.right * stiffnessForce) / sqrDt;
+			var force = trs.rotation * (Vector3.right * stiffnessForce) / sqrDt;
 
 			//drag
 			force += (prevTipPos - currTipPos) * dragForce / sqrDt;
@@ -101,7 +101,7 @@ namespace UnityChan
 			force += springForce / sqrDt;
 
 			//前フレームと値が同じにならないように
-			Vector3 temp = currTipPos;
+			var temp = currTipPos;
 
 			//verlet
 			currTipPos = (currTipPos - prevTipPos) + currTipPos + (force * sqrDt);
@@ -110,9 +110,9 @@ namespace UnityChan
 			currTipPos = ((currTipPos - trs.position).normalized * springLength) + trs.position;
 
 			//衝突判定
-			for (int i = 0; i < colliders.Length; i++) {
+			for (var i = 0; i < colliders.Length; i++) {
 				if (Vector3.Distance (currTipPos, colliders [i].transform.position) <= (radius + colliders [i].radius)) {
-					Vector3 normal = (currTipPos - colliders [i].transform.position).normalized;
+					var normal = (currTipPos - colliders [i].transform.position).normalized;
 					currTipPos = colliders [i].transform.position + (normal * (radius + colliders [i].radius));
 					currTipPos = ((currTipPos - trs.position).normalized * springLength) + trs.position;
 				}
@@ -123,12 +123,12 @@ namespace UnityChan
 			prevTipPos = temp;
 
 			//回転を適用；
-			Vector3 aimVector = trs.TransformDirection (Vector3.right);
-			Quaternion aimRotation = Quaternion.FromToRotation (aimVector, currTipPos - trs.position);
+			var aimVector = trs.TransformDirection (Vector3.right);
+			var aimRotation = Quaternion.FromToRotation (aimVector, currTipPos - trs.position);
 			//original
 			//trs.rotation = aimRotation * trs.rotation;
 			//Kobayahsi:Lerp with mixWeight
-			Quaternion secondaryRotation = aimRotation * trs.rotation;
+			var secondaryRotation = aimRotation * trs.rotation;
 			trs.rotation = Quaternion.Lerp (org.rotation, secondaryRotation, managerRef.dynamicRatio);
 		}
 	}

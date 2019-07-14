@@ -21,31 +21,31 @@ namespace Anima2D
 
 		public static UnityEngine.BoneWeight[] CalculateBbw(Vector2[] vertices, IndexedEdge[] edges, Vector2[] controlPoints, IndexedEdge[] controlPointEdges, int[] pins)
 		{
-			Vector2[] sampledEdges = SampleEdges(controlPoints,controlPointEdges,10);
+			var sampledEdges = SampleEdges(controlPoints,controlPointEdges,10);
 
-			List<Vector2> verticesAndSamplesList = new List<Vector2>(vertices.Length + sampledEdges.Length);
+			var verticesAndSamplesList = new List<Vector2>(vertices.Length + sampledEdges.Length);
 
 			verticesAndSamplesList.AddRange(vertices);
 			verticesAndSamplesList.AddRange(controlPoints);
 			verticesAndSamplesList.AddRange(sampledEdges);
 
-			List<IndexedEdge> edgesList = new List<IndexedEdge>(edges);
-			List<Hole> holes = new List<Hole>();
-			List<int> indicesList = new List<int>();
+			var edgesList = new List<IndexedEdge>(edges);
+			var holes = new List<Hole>();
+			var indicesList = new List<int>();
 
 			SpriteMeshUtils.Tessellate(verticesAndSamplesList,edgesList,holes,indicesList, 4f);
 
-			Vector2[] verticesAndSamples = verticesAndSamplesList.ToArray();
-			int[] indices = indicesList.ToArray();
+			var verticesAndSamples = verticesAndSamplesList.ToArray();
+			var indices = indicesList.ToArray();
 
-			UnityEngine.BoneWeight[] weights = new UnityEngine.BoneWeight[vertices.Length];
+			var weights = new UnityEngine.BoneWeight[vertices.Length];
 
-			GCHandle verticesHandle = GCHandle.Alloc(verticesAndSamples, GCHandleType.Pinned);
-			GCHandle indicesHandle = GCHandle.Alloc(indices, GCHandleType.Pinned);
-			GCHandle controlPointsHandle = GCHandle.Alloc(controlPoints, GCHandleType.Pinned);
-			GCHandle boneEdgesHandle = GCHandle.Alloc(controlPointEdges, GCHandleType.Pinned);
-			GCHandle pinsHandle = GCHandle.Alloc(pins, GCHandleType.Pinned);
-			GCHandle weightsHandle = GCHandle.Alloc(weights, GCHandleType.Pinned);
+			var verticesHandle = GCHandle.Alloc(verticesAndSamples, GCHandleType.Pinned);
+			var indicesHandle = GCHandle.Alloc(indices, GCHandleType.Pinned);
+			var controlPointsHandle = GCHandle.Alloc(controlPoints, GCHandleType.Pinned);
+			var boneEdgesHandle = GCHandle.Alloc(controlPointEdges, GCHandleType.Pinned);
+			var pinsHandle = GCHandle.Alloc(pins, GCHandleType.Pinned);
+			var weightsHandle = GCHandle.Alloc(weights, GCHandleType.Pinned);
 
 			Bbw(-1,
 				verticesHandle.AddrOfPinnedObject(), verticesAndSamples.Length, vertices.Length,
@@ -67,18 +67,18 @@ namespace Anima2D
 
 		static Vector2[] SampleEdges(Vector2[] controlPoints, IndexedEdge[] controlPointEdges, int samplesPerEdge)
 		{
-			List<Vector2> sampledVertices = new List<Vector2>();
+			var sampledVertices = new List<Vector2>();
 
-			for(int i = 0; i < controlPointEdges.Length; i++)
+			for(var i = 0; i < controlPointEdges.Length; i++)
 			{
-				IndexedEdge edge = controlPointEdges[i];
+				var edge = controlPointEdges[i];
 
-				Vector2 tip = controlPoints[edge.index1];
-				Vector2 tail = controlPoints[edge.index2];
+				var tip = controlPoints[edge.index1];
+				var tail = controlPoints[edge.index2];
 
-				for(int s=0; s < samplesPerEdge; s++)
+				for(var s=0; s < samplesPerEdge; s++)
 				{
-					float f = (s+1f)/(float)(samplesPerEdge+1f);
+					var f = (s+1f)/(float)(samplesPerEdge+1f);
 					sampledVertices.Add(f * tail + (1f-f)*tip);
 				}
 			}

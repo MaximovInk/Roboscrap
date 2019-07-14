@@ -22,18 +22,18 @@ namespace Anima2D
 				return;
 			}
 			
-			int currentFrame = AnimationWindowExtra.frame;
+			var currentFrame = AnimationWindowExtra.frame;
 			
 			AnimationWindowExtra.recording = true;
 			
-			int numFrames = (int)(AnimationWindowExtra.activeAnimationClip.length * AnimationWindowExtra.activeAnimationClip.frameRate);
+			var numFrames = (int)(AnimationWindowExtra.activeAnimationClip.length * AnimationWindowExtra.activeAnimationClip.frameRate);
 			
-			bool cancel = false;
+			var cancel = false;
 			
 			AnimationWindowExtra.frame = 1;
 			EditorUpdater.Update("", false);
 			
-			for(int i = 0; i <= numFrames; ++i)
+			for(var i = 0; i <= numFrames; ++i)
 			{
 				if(EditorUtility.DisplayCancelableProgressBar("Baking animation: " + AnimationWindowExtra.activeAnimationClip.name,
 				                                              "Frame " + i, (float)(i+1) / (float)(numFrames+1)))

@@ -12,7 +12,7 @@ namespace Anima2D
 			get {
 				if(m_CachedBone)
 				{
-					Color color = m_CachedBone.color;
+					var color = m_CachedBone.color;
 					color.a = 1f;
 					return color;
 				}

@@ -46,7 +46,7 @@ namespace Anima2D
 
 			EditorGUILayout.Space();
 
-			bool holeToggle = GUILayout.Toggle(tool == MeshTool.Hole,new GUIContent("Hole", "Create holes (H)"), EditorStyles.miniButton,GUILayout.Width(50f));
+			var holeToggle = GUILayout.Toggle(tool == MeshTool.Hole,new GUIContent("Hole", "Create holes (H)"), EditorStyles.miniButton,GUILayout.Width(50f));
 
 			if(holeToggle)
 			{

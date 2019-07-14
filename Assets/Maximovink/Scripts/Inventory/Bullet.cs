@@ -4,8 +4,8 @@ namespace MaximovInk
 {
     public class Bullet : MonoBehaviour
     {
-        public int value = 20;
-
+        public int Damage = 20;
+        public int TrashDamage = 1;
         private void Start()
         {
             Destroy(gameObject,10);
@@ -18,12 +18,12 @@ namespace MaximovInk
             
             if (creature != null)
             {
-                creature.Health -= value;
+                creature.Health -= Damage;
             }
 
             if (breakable != null)
             {
-                breakable.Attack(value/4);
+                breakable.Attack(TrashDamage);
                 
             }
             GameManager.Instance.MakeParticleAt(other.gameObject, transform.position);

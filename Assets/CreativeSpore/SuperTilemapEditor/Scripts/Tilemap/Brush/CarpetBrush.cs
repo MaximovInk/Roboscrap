@@ -27,10 +27,10 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             s_needsSubTiles = false;
             s_brushId = (int)((tileData & Tileset.k_TileDataMask_BrushId) >> 16);
-            bool autotiling_N = AutotileWith(tilemap, s_brushId, gridX, gridY + 1);
-            bool autotiling_E = AutotileWith(tilemap, s_brushId, gridX + 1, gridY);
-            bool autotiling_S = AutotileWith(tilemap, s_brushId, gridX, gridY - 1);
-            bool autotiling_W = AutotileWith(tilemap, s_brushId, gridX - 1, gridY);
+            var autotiling_N = AutotileWith(tilemap, s_brushId, gridX, gridY + 1);
+            var autotiling_E = AutotileWith(tilemap, s_brushId, gridX + 1, gridY);
+            var autotiling_S = AutotileWith(tilemap, s_brushId, gridX, gridY - 1);
+            var autotiling_W = AutotileWith(tilemap, s_brushId, gridX - 1, gridY);
             s_neighIdx = 0;
             if (autotiling_N) s_neighIdx |= 1;
             if (autotiling_E) s_neighIdx |= 2;
@@ -42,10 +42,10 @@ namespace CreativeSpore.SuperTilemapEditor
             
             // diagonals
             {
-                bool autotiling_NE = AutotileWith(tilemap, s_brushId, gridX + 1, gridY + 1);
-                bool autotiling_SE = AutotileWith(tilemap, s_brushId, gridX + 1, gridY - 1);
-                bool autotiling_SW = AutotileWith(tilemap, s_brushId, gridX - 1, gridY - 1);
-                bool autotiling_NW = AutotileWith(tilemap, s_brushId, gridX - 1, gridY + 1);
+                var autotiling_NE = AutotileWith(tilemap, s_brushId, gridX + 1, gridY + 1);
+                var autotiling_SE = AutotileWith(tilemap, s_brushId, gridX + 1, gridY - 1);
+                var autotiling_SW = AutotileWith(tilemap, s_brushId, gridX - 1, gridY - 1);
+                var autotiling_NW = AutotileWith(tilemap, s_brushId, gridX - 1, gridY + 1);
 
                 s_showDiagonal[0] = !autotiling_SW && autotiling_S && autotiling_W;
                 s_showDiagonal[1] = !autotiling_SE && autotiling_S && autotiling_E;
@@ -53,8 +53,8 @@ namespace CreativeSpore.SuperTilemapEditor
                 s_showDiagonal[3] = !autotiling_NE && autotiling_N && autotiling_E;
 
                 s_tileData = TileIds[s_neighIdx];
-                bool foundTrueDiagonal = false;
-                for (int i = 0; !s_needsSubTiles && i < s_showDiagonal.Length; ++i)
+                var foundTrueDiagonal = false;
+                for (var i = 0; !s_needsSubTiles && i < s_showDiagonal.Length; ++i)
                 {
                     if (s_showDiagonal[i])
                     {
@@ -75,7 +75,7 @@ namespace CreativeSpore.SuperTilemapEditor
             CalculateNeighbourData(tilemap, gridX, gridY, tileData);
 
 
-            uint brushTileData = RefreshLinkedBrush(tilemap, gridX, gridY, s_tileData);
+            var brushTileData = RefreshLinkedBrush(tilemap, gridX, gridY, s_tileData);
             // overwrite brush id
             brushTileData &= ~Tileset.k_TileDataMask_BrushId;
             brushTileData |= tileData & Tileset.k_TileDataMask_BrushId;   
@@ -134,7 +134,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     aSubTileData = new uint[] { TileIds[s_neighIdx], TileIds[s_neighIdx], TileIds[s_neighIdx], TileIds[s_neighIdx] };
                 }
 
-                for (int i = 0; i < s_showDiagonal.Length; ++i)
+                for (var i = 0; i < s_showDiagonal.Length; ++i)
                 {
                     aSubTileData[i] = RefreshLinkedBrush(tilemap, gridX, gridY, aSubTileData[i]);
                     if (s_showDiagonal[i])
@@ -143,7 +143,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     }
                     // Add animated tiles
                     {
-                        TilesetBrush brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(aSubTileData[i]));
+                        var brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(aSubTileData[i]));
                         if (brush && brush.IsAnimated())
                         {
                             TilemapChunk.RegisterAnimatedBrush(brush, i);
@@ -156,7 +156,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
             // Add animated tiles
             {
-                TilesetBrush brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(s_tileData));
+                var brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(s_tileData));
                 if (brush && brush.IsAnimated())
                 {
                     TilemapChunk.RegisterAnimatedBrush(brush);
@@ -169,26 +169,26 @@ namespace CreativeSpore.SuperTilemapEditor
         static List<Vector2> s_mergedColliderVertexList = new List<Vector2>();
         public override Vector2[] GetMergedSubtileColliderVertices(STETilemap tilemap, int gridX, int gridY, uint tileData)
         {
-            uint[] subTiles = GetSubtiles(tilemap, gridX, gridY, tileData);
+            var subTiles = GetSubtiles(tilemap, gridX, gridY, tileData);
             if (subTiles != null)
             {
                 s_mergedColliderVertexList.Clear();
-                for(int i = 0; i < subTiles.Length; ++i)
+                for(var i = 0; i < subTiles.Length; ++i)
                 {
-                    uint subTileData = subTiles[i];
-                    Tile tile = tilemap.Tileset.GetTile(Tileset.GetTileIdFromTileData(subTiles[i]));
+                    var subTileData = subTiles[i];
+                    var tile = tilemap.Tileset.GetTile(Tileset.GetTileIdFromTileData(subTiles[i]));
                     if(tile != null && tile.collData.type != eTileCollider.None)
                     {
-                        TileColliderData tileCollData = tile.collData;
+                        var tileCollData = tile.collData;
                         if ((subTileData & (Tileset.k_TileFlag_FlipH | Tileset.k_TileFlag_FlipV | Tileset.k_TileFlag_Rot90)) != 0)
                         {
                             tileCollData = tileCollData.Clone();
                             tileCollData.ApplyFlippingFlags(subTileData);
                         }
-                        Vector2[] vertices = tile.collData.GetVertices();
+                        var vertices = tile.collData.GetVertices();
                         if (vertices != null)
                         {
-                            for (int v = 0; v < vertices.Length; ++v)
+                            for (var v = 0; v < vertices.Length; ++v)
                             {
                                 Vector2 v0, v1;
                                 if (v < vertices.Length - 1)
@@ -205,7 +205,7 @@ namespace CreativeSpore.SuperTilemapEditor
                                 if(i == 0 || i == 2) //left side
                                 {
                                     if (v0.x >= .5f && v1.x >= .5f) continue;
-                                    float newY = v0.y + (.5f - v0.x) * (v1.y - v0.y) / (v1.x - v0.x);
+                                    var newY = v0.y + (.5f - v0.x) * (v1.y - v0.y) / (v1.x - v0.x);
                                     if (v0.x > .5f)
                                     {
                                         v0.y = newY;
@@ -220,7 +220,7 @@ namespace CreativeSpore.SuperTilemapEditor
                                 else // right side
                                 {
                                     if (v0.x <= .5f && v1.x <= .5f) continue;
-                                    float newY = v0.y + (.5f - v0.x) * (v1.y - v0.y) / (v1.x - v0.x);
+                                    var newY = v0.y + (.5f - v0.x) * (v1.y - v0.y) / (v1.x - v0.x);
                                     if (v0.x < .5f)
                                     {
                                         v0.y = newY;
@@ -236,7 +236,7 @@ namespace CreativeSpore.SuperTilemapEditor
                                 if (i == 0 || i == 1) //bottom side
                                 {
                                     if (v0.y >= .5f && v1.y >= .5f) continue;
-                                    float newX = v0.x + (.5f - v0.y) * (v1.x - v0.x) / (v1.y - v0.y);
+                                    var newX = v0.x + (.5f - v0.y) * (v1.x - v0.x) / (v1.y - v0.y);
                                     if (v0.y > .5f)
                                     {
                                         v0.x = newX;
@@ -251,7 +251,7 @@ namespace CreativeSpore.SuperTilemapEditor
                                 else // top side
                                 {
                                     if (v0.y <= .5f && v1.y <= .5f) continue;
-                                    float newX = v0.x + (.5f - v0.y) * (v1.x - v0.x) / (v1.y - v0.y);
+                                    var newX = v0.x + (.5f - v0.y) * (v1.x - v0.x) / (v1.y - v0.y);
                                     if (v0.y < .5f)
                                     {
                                         v0.x = newX;

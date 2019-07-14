@@ -183,7 +183,7 @@ namespace Anima2D
 
 			EditorExtra.InitInstantiatedPreviewRecursive(m_InstanceRoot);
 
-			List<Ik2D> ik2Ds = new List<Ik2D>();
+			var ik2Ds = new List<Ik2D>();
 			m_InstanceRoot.GetComponentsInChildren<Ik2D>(ik2Ds);
 			
 			IkUtils.UpdateAttachedIKs(ik2Ds);

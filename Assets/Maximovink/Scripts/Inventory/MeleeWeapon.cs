@@ -5,6 +5,8 @@ namespace MaximovInk
     public class MeleeWeapon : Weapon
     {
         public int Damage = 10;
+
+        public int TrashDamange = 1;
         
         /*public float TimeAttack = 2;
         private float timer = 0;

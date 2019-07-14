@@ -110,13 +110,13 @@ namespace TriangleNet.IO
                 stream.Dispose();
                 stream = null;
 
-                string header = "#!N" + this.iteration + Environment.NewLine;
+                var header = "#!N" + this.iteration + Environment.NewLine;
 
                 using (var gzFile = new FileStream(path, FileMode.Create))
                 {
                     using (var gzStream = new GZipStream(gzFile, CompressionMode.Compress, false))
                     {
-                        byte[] bytes = Encoding.UTF8.GetBytes(header);
+                        var bytes = Encoding.UTF8.GetBytes(header);
                         gzStream.Write(bytes, 0, bytes.Length);
 
                         // TODO: read with stream
@@ -168,7 +168,7 @@ namespace TriangleNet.IO
             // Number of segments.
             stream.WriteLine("{0}", mesh.subsegs.Count);
 
-            Osub subseg = default(Osub);
+            var subseg = default(Osub);
             subseg.orient = 0;
 
             foreach (var item in mesh.subsegs.Values)
@@ -234,7 +234,7 @@ namespace TriangleNet.IO
                 return true;
             }
 
-            int i = 0;
+            var i = 0;
             foreach (var v in mesh.Vertices)
             {
                 if (v.id != vertices[i++])
@@ -253,7 +253,7 @@ namespace TriangleNet.IO
                 vertices = new int[mesh.Vertices.Count];
             }
 
-            int i = 0;
+            var i = 0;
             foreach (var v in mesh.Vertices)
             {
                 vertices[i++] = v.id;

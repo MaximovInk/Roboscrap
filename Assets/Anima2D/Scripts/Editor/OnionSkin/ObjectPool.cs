@@ -74,7 +74,7 @@ namespace Anima2D.Pool
 
 		public T Get()
 		{
-			T l_instance = default(T);
+			var l_instance = default(T);
 			
 			if(availableObjects.Count == 0)
 			{
@@ -110,9 +110,9 @@ namespace Anima2D.Pool
 		{
 			ReturnAll();
 			
-			for (int i = 0; i < availableObjects.Count; i++)
+			for (var i = 0; i < availableObjects.Count; i++)
 			{
-				T l_obj = availableObjects[i];
+				var l_obj = availableObjects[i];
 
 				if(l_obj != null)
 				{

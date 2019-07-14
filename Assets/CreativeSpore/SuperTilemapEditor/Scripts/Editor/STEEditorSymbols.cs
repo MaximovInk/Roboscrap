@@ -27,8 +27,8 @@ namespace CreativeSpore.SuperTilemapEditor
         static STEEditorSymbols()
         {
             //Debug.Log("Running STEEditorSymbols ...");
-            string definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
-            List<string> allDefines = definesString.Split(';').ToList();
+            var definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+            var allDefines = definesString.Split(';').ToList();
             allDefines.AddRange(Symbols.Except(allDefines));
             PlayerSettings.SetScriptingDefineSymbolsForGroup(
                 EditorUserBuildSettings.selectedBuildTargetGroup,

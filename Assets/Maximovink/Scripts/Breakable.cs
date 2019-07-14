@@ -45,7 +45,7 @@ namespace MaximovInk
                 var generate = Random.Range(min, max);
 
 
-                for (int i = 0; i < generate; i++)
+                for (var i = 0; i < generate; i++)
                 {
                     var id = Random.Range(0, Resources.Length);
                     
@@ -53,6 +53,7 @@ namespace MaximovInk
                     item.count += 1;
                     item.condition = item.item.Unbreakable ? item.item.MaxCondition : Random.Range(item.item.MaxCondition/100,item.item.MaxCondition);
                     GameManager.Instance.mainInventory.AddItem(item);
+                    GameManager.Instance.TextMesh.gameObject.SetActive(false);
                 }
                 
                 gameObject.SetActive(false);
@@ -84,7 +85,7 @@ namespace MaximovInk
 
        protected override void OnLoad(int data)
        {
-           
+           base.OnLoad(data);
            
            hp = Mathf.Clamp((int)data,0,255);
            if (data == -1)

@@ -11,9 +11,9 @@ namespace Anima2D
 
 		public void UpdateGroup()
 		{
-			for (int i = 0; i < m_IkComponents.Count; i++)
+			for (var i = 0; i < m_IkComponents.Count; i++)
 			{
-				Ik2D ik = m_IkComponents[i];
+				var ik = m_IkComponents[i];
 
 				if(ik)
 				{

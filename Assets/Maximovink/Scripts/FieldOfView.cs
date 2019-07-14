@@ -59,18 +59,18 @@ public class FieldOfView : MonoBehaviour
 
     void FindVisibleTargets()
     {
-        Collider2D[] targets = Physics2D.OverlapCircleAll(transform.position, viewRadius, targetMask);
+        var targets = Physics2D.OverlapCircleAll(transform.position, viewRadius, targetMask);
 
         visibleTargets.Clear();
 
-        for (int i = 0; i < targets.Length; i++)
+        for (var i = 0; i < targets.Length; i++)
         {
-            Transform target = targets[i].transform;
+            var target = targets[i].transform;
             Vector2 dirToTarget = (target.position - transform.position).normalized;
 
             if (Vector2.Angle(transform.right, dirToTarget) < viewAngle / 2)
             {
-                float distToTarget = Vector3.Distance(transform.position, target.position);
+                var distToTarget = Vector3.Distance(transform.position, target.position);
                 if (!Physics2D.Raycast(transform.position, dirToTarget, distToTarget, obstacleMask))
                 {
                     visibleTargets.Add(target);
@@ -81,7 +81,7 @@ public class FieldOfView : MonoBehaviour
 
     public List<FieldOfView> GetChildsFow()
     {
-        List<FieldOfView> fows = new List<FieldOfView>();
+        var fows = new List<FieldOfView>();
         if (child != null)
         {
             fows.Add(child);
@@ -92,7 +92,7 @@ public class FieldOfView : MonoBehaviour
 
     public List<Transform> GetAllVisibleChilds()
     {
-        List<Transform> end = new List<Transform>();
+        var end = new List<Transform>();
         end.AddRange(visibleTargets);
         if (child != null)
         {
@@ -117,7 +117,7 @@ public class FieldOfView : MonoBehaviour
 
     ViewCastInfo ViewCast(float globalAngle)
     {
-        Vector3 dir = DirFromAngle(globalAngle, true);
+        var dir = DirFromAngle(globalAngle, true);
         RaycastHit2D hit;
         if (hit = Physics2D.Raycast(transform.position, dir, viewRadius, obstacleMask))
         {
@@ -128,17 +128,17 @@ public class FieldOfView : MonoBehaviour
 
     EdgeInfo FindEdge(ViewCastInfo minViewCast, ViewCastInfo maxViewCast)
     {
-        float minAngle = minViewCast.angle;
-        float maxAngle = maxViewCast.angle;
-        Vector2 minPoint = Vector2.zero;
-        Vector2 maxPoint = Vector2.zero;
+        var minAngle = minViewCast.angle;
+        var maxAngle = maxViewCast.angle;
+        var minPoint = Vector2.zero;
+        var maxPoint = Vector2.zero;
 
-        for (int i = 0; i < edgeResolveIterations; i++)
+        for (var i = 0; i < edgeResolveIterations; i++)
         {
-            float angle = (minAngle + maxAngle) / 2;
-            ViewCastInfo newViewCast = ViewCast(angle);
+            var angle = (minAngle + maxAngle) / 2;
+            var newViewCast = ViewCast(angle);
 
-            bool edgeDstThresoultExceeded = Mathf.Abs(minViewCast.dst - newViewCast.dst) > edgeDstThresoult;
+            var edgeDstThresoultExceeded = Mathf.Abs(minViewCast.dst - newViewCast.dst) > edgeDstThresoult;
 
             if (newViewCast.hit == minViewCast.hit && !edgeDstThresoultExceeded)
             {
@@ -156,24 +156,24 @@ public class FieldOfView : MonoBehaviour
 
     public void DrawFieldOfView()
     {
-        int stepCount = Mathf.RoundToInt(viewAngle * meshResolution);
-        float stepAngleSize = viewAngle / stepCount;
-        List<Vector3> viewPoints = new List<Vector3>();
-        ViewCastInfo oldViewCast = new ViewCastInfo();
-        for (int i = 0; i <= stepCount; i++)
+        var stepCount = Mathf.RoundToInt(viewAngle * meshResolution);
+        var stepAngleSize = viewAngle / stepCount;
+        var viewPoints = new List<Vector3>();
+        var oldViewCast = new ViewCastInfo();
+        for (var i = 0; i <= stepCount; i++)
         {
-            float angle = (-transform.eulerAngles.z - viewAngle/2 + stepAngleSize*i)+90;
+            var angle = (-transform.eulerAngles.z - viewAngle/2 + stepAngleSize*i)+90;
             // Debug.DrawLine(transform.position, transform.position + DirFromAngle(angle, true) * viewRadius,Color.red);
-            ViewCastInfo newViewCast = ViewCast(angle);
+            var newViewCast = ViewCast(angle);
 
             if (i > 0)
             {
-                bool edgeDstThresoultExceeded = Mathf.Abs(oldViewCast.dst - newViewCast.dst)> edgeDstThresoult;
+                var edgeDstThresoultExceeded = Mathf.Abs(oldViewCast.dst - newViewCast.dst)> edgeDstThresoult;
 
 
                 if (oldViewCast.hit != newViewCast.hit || (oldViewCast.hit && newViewCast.hit && edgeDstThresoultExceeded))
                 {
-                    EdgeInfo edge = FindEdge(oldViewCast, newViewCast);
+                    var edge = FindEdge(oldViewCast, newViewCast);
 
                     if (edge.pointA != Vector2.zero)
                     {
@@ -191,14 +191,14 @@ public class FieldOfView : MonoBehaviour
             oldViewCast = newViewCast;
         }
 
-        int vertexCount = viewPoints.Count + 1;
+        var vertexCount = viewPoints.Count + 1;
 
-        Vector3[] vertices = new Vector3[vertexCount];
-        int[] triangles = new int[(vertexCount-2)*3];
+        var vertices = new Vector3[vertexCount];
+        var triangles = new int[(vertexCount-2)*3];
 
         vertices[0] = Vector3.zero;
 
-        for (int i = 0; i < vertexCount-1; i++)
+        for (var i = 0; i < vertexCount-1; i++)
         {
             vertices[i + 1] = transform.InverseTransformPoint( viewPoints[i]);
 

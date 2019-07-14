@@ -35,9 +35,9 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void DoGUI(Vector2 position, Vector2 buttonSize, Color bgColor, Color outlineColor)
         {
-            Color savedColor = GUI.color;
-            int buttonNb = m_buttonGuiContentList.Count;
-            Rect rToolBar = new Rect(position.x, position.y, buttonNb * buttonSize.x, buttonSize.y);
+            var savedColor = GUI.color;
+            var buttonNb = m_buttonGuiContentList.Count;
+            var rToolBar = new Rect(position.x, position.y, buttonNb * buttonSize.x, buttonSize.y);
             GUILayout.BeginArea(rToolBar);
             HandlesEx.DrawRectWithOutline(new Rect(Vector2.zero, rToolBar.size), bgColor, outlineColor);
             GUILayout.BeginHorizontal();
@@ -45,9 +45,9 @@ namespace CreativeSpore.SuperTilemapEditor
             if (m_isHighlighted.Length != m_buttonGuiContentList.Count)
                 System.Array.Resize(ref m_isHighlighted, m_buttonGuiContentList.Count);
 
-            int buttonPadding = 4;
-            Rect rToolBtn = new Rect(buttonPadding, buttonPadding, rToolBar.size.y - 2 * buttonPadding, rToolBar.size.y - 2 * buttonPadding);
-            for (int idx = 0; idx < m_buttonGuiContentList.Count; ++idx )
+            var buttonPadding = 4;
+            var rToolBtn = new Rect(buttonPadding, buttonPadding, rToolBar.size.y - 2 * buttonPadding, rToolBar.size.y - 2 * buttonPadding);
+            for (var idx = 0; idx < m_buttonGuiContentList.Count; ++idx )
             {
                 _DoToolbarButton(rToolBtn, idx);
                 rToolBtn.x = rToolBtn.xMax + 2 * buttonPadding;
@@ -59,18 +59,18 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void TriggerButton(int idx)
         {
-            int prevIdx = m_selectedIdx;
+            var prevIdx = m_selectedIdx;
             m_selectedIdx = idx;
             if (OnToolSelected != null) OnToolSelected(this, m_selectedIdx, prevIdx);
         }
 
         private void _DoToolbarButton(Rect rToolBtn, int idx)
         {
-            int iconPadding = 6;
-            Rect rToolIcon = new Rect(rToolBtn.x + iconPadding, rToolBtn.y + iconPadding, rToolBtn.size.y - 2 * iconPadding, rToolBtn.size.y - 2 * iconPadding);
-            Color activeColor = new Color(1f, 1f, 1f, 0.8f);
-            Color disableColor = new Color(1f, 1f, 1f, 0.4f);
-            Color highlithColor = new Color(1f, 1f, 0f, 0.8f);
+            var iconPadding = 6;
+            var rToolIcon = new Rect(rToolBtn.x + iconPadding, rToolBtn.y + iconPadding, rToolBtn.size.y - 2 * iconPadding, rToolBtn.size.y - 2 * iconPadding);
+            var activeColor = new Color(1f, 1f, 1f, 0.8f);
+            var disableColor = new Color(1f, 1f, 1f, 0.4f);
+            var highlithColor = new Color(1f, 1f, 0f, 0.8f);
             if (m_isHighlighted[idx])
                 GUI.color = highlithColor;
             else

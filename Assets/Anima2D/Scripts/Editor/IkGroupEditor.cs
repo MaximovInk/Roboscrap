@@ -18,7 +18,7 @@ namespace Anima2D
 		
 		void SetupList()
 		{
-			SerializedProperty ikListProperty = serializedObject.FindProperty("m_IkComponents");
+			var ikListProperty = serializedObject.FindProperty("m_IkComponents");
 			
 			if(ikListProperty != null)
 			{
@@ -26,7 +26,7 @@ namespace Anima2D
 				
 				mList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) => {
 					
-					SerializedProperty boneProperty = mList.serializedProperty.GetArrayElementAtIndex(index);
+					var boneProperty = mList.serializedProperty.GetArrayElementAtIndex(index);
 					
 					rect.y += 1.5f;
 					

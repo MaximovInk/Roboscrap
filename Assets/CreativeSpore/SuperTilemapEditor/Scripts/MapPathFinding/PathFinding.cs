@@ -48,7 +48,7 @@ namespace CreativeSpore.SuperTilemapEditor.PathFindingLib
 
         public LinkedList<IPathNode> ComputePath(IPathNode startNode, IPathNode endNode, int maxDistance = int.MaxValue)
         {
-            FindingParams findingParams = new FindingParams()
+            var findingParams = new FindingParams()
             {
                 startNode = startNode,
                 endNode = endNode,
@@ -56,14 +56,14 @@ namespace CreativeSpore.SuperTilemapEditor.PathFindingLib
                 maxPathDistance = maxDistance,
             };
 
-            IEnumerator coroutine = ComputePathCoroutine(findingParams);
+            var coroutine = ComputePathCoroutine(findingParams);
             while (coroutine.MoveNext());
             return findingParams.computedPath;
         }
 
         public IEnumerator ComputePathAsync(IPathNode startNode, IPathNode endNode, int maxDistance = int.MaxValue)
         {
-            FindingParams findingParams = new FindingParams()
+            var findingParams = new FindingParams()
             {
                 startNode = startNode,
                 endNode = endNode,
@@ -100,8 +100,8 @@ namespace CreativeSpore.SuperTilemapEditor.PathFindingLib
 
                 //2) Repeat the following:
                 LinkedListNode<IPathNode> curNode;
-                int iterations = 0;
-                int iterChunkCounter = k_IterationsPerProcessChunk;
+                var iterations = 0;
+                var iterChunkCounter = k_IterationsPerProcessChunk;
                 do
                 {
                     ++iterations;
@@ -115,7 +115,7 @@ namespace CreativeSpore.SuperTilemapEditor.PathFindingLib
                     //a) Look for the lowest F cost square on the open list. We refer to this as the current square.
                     //curNode = m_vOpen.First(c => c.Score == m_vOpen.Min(c2 => c2.Score));
                     curNode = null;
-                    for (LinkedListNode<IPathNode> pathNode = m_openList.First; pathNode != null; pathNode = pathNode.Next)
+                    for (var pathNode = m_openList.First; pathNode != null; pathNode = pathNode.Next)
                     {
                         if (curNode == null || pathNode.Value.Score < curNode.Value.Score)
                         {
@@ -131,16 +131,16 @@ namespace CreativeSpore.SuperTilemapEditor.PathFindingLib
                     for (int i = 0, s = curNode.Value.GetNeighborCount(); i < s; ++i)
                     {
                         //If it is not walkable or if it is on the closed list, ignore it. Otherwise do the following.           
-                        IPathNode neigborNode = curNode.Value.GetNeighbor(i);
-                        float movingCost = curNode.Value.GetNeigborMovingCost(i);
-                        bool isNeighborNodePassable = movingCost != k_InfiniteCostValue && neigborNode.IsPassable();
+                        var neigborNode = curNode.Value.GetNeighbor(i);
+                        var movingCost = curNode.Value.GetNeigborMovingCost(i);
+                        var isNeighborNodePassable = movingCost != k_InfiniteCostValue && neigborNode.IsPassable();
                         if (
                             neigborNode.closeComputeId != m_computeId && // if closeList does not contains node
                             isNeighborNodePassable
                            ) 
                         {
-                            float newCost = curNode.Value.Cost + movingCost;
-                            int newDist = curNode.Value.Distance + 1;
+                            var newCost = curNode.Value.Cost + movingCost;
+                            var newDist = curNode.Value.Distance + 1;
                             //If it isn’t on the open list, add it to the open list. Make the current square the parent of this square. Record the F, G, and H costs of the square. 
                             if (neigborNode.openComputeId != m_computeId // if openList does not contains node
                                 && newDist <= findingParams.maxPathDistance // if distance is under limits

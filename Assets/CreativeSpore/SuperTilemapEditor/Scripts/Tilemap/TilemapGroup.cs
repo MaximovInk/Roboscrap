@@ -76,7 +76,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public void IterateTilemapWithAction(System.Action<STETilemap> action)
         {
-            for (int i = 0; i < m_tilemaps.Count; ++i)
+            for (var i = 0; i < m_tilemaps.Count; ++i)
                 if (action != null) action(m_tilemaps[i]);
         }
 
@@ -185,13 +185,13 @@ namespace CreativeSpore.SuperTilemapEditor
                     return GetDefaultTilemapForTileOrBrush(SelectedTilemap.Tileset.SelectedBrushId, m_dicBrushDefaultTilemap);
                 else if(SelectedTilemap.Tileset.TileSelection != null && SelectedTilemap.Tileset.TileSelection.selectionData.Count > 0)
                 {
-                    uint tileData = SelectedTilemap.Tileset.TileSelection.selectionData[0];
-                    int brushId = Tileset.GetBrushIdFromTileData(tileData);
+                    var tileData = SelectedTilemap.Tileset.TileSelection.selectionData[0];
+                    var brushId = Tileset.GetBrushIdFromTileData(tileData);
                     if (brushId != Tileset.k_BrushId_Default)
                         return GetDefaultTilemapForTileOrBrush(brushId, m_dicBrushDefaultTilemap);
                     else
                     {
-                        int tileId = Tileset.GetTileIdFromTileData(tileData);
+                        var tileId = Tileset.GetTileIdFromTileData(tileData);
                         if (tileId != Tileset.k_TileId_Empty)
                             return GetDefaultTilemapForTileOrBrush(tileId, m_dicTileDefaultTilemap);
                     }

@@ -37,10 +37,10 @@ namespace Anima2D
 		
 		public List<Vector2> uvs {
 			get {
-				int width = 1;
-				int height = 1;
+				var width = 1;
+				var height = 1;
 				SpriteMeshUtils.GetSpriteTextureSize(spriteMesh.sprite,ref width, ref height);
-				Vector2 t = new Vector2(1f/width,1f/height);
+				var t = new Vector2(1f/width,1f/height);
 				return m_TexVertices.ConvertAll( v => Vector2.Scale(v,t) );
 			}
 		}
@@ -214,24 +214,24 @@ namespace Anima2D
 
 		public string[] GetBoneNames(string noBoneText)
 		{
-			List<string> names = new List<string>(bindPoses.Count);
-			List<int> repetitions = new List<int>(bindPoses.Count);
+			var names = new List<string>(bindPoses.Count);
+			var repetitions = new List<int>(bindPoses.Count);
 			
 			names.Add(noBoneText);
 			repetitions.Add(0);
 			
-			foreach(BindInfo bindInfo in bindPoses)
+			foreach(var bindInfo in bindPoses)
 			{
-				List<string> repetedNames = names.Where( s => s == bindInfo.name ).ToList();
+				var repetedNames = names.Where( s => s == bindInfo.name ).ToList();
 				
 				names.Add(bindInfo.name);
 				repetitions.Add(repetedNames.Count);
 			}
 			
-			for (int i = 1; i < names.Count; i++)
+			for (var i = 1; i < names.Count; i++)
 			{
-				string name = names[i];
-				int count = repetitions[i] + 1;
+				var name = names[i];
+				var count = repetitions[i] + 1;
 				if(count > 1)
 				{
 					name += " (" + count.ToString() + ")";
@@ -244,7 +244,7 @@ namespace Anima2D
 		
 		protected override void DoOnAfterDeserialize()
 		{
-			for(int i = 0; i < nodes.Count; ++i)
+			for(var i = 0; i < nodes.Count; ++i)
 			{
 				nodes[i].index = i;
 			}
@@ -276,11 +276,11 @@ namespace Anima2D
 
 				EditorUtility.SetDirty(spriteMeshData);
 
-				string spriteAssetPath = AssetDatabase.GetAssetPath(spriteMesh.sprite);
+				var spriteAssetPath = AssetDatabase.GetAssetPath(spriteMesh.sprite);
 				SpriteMeshUtils.UpdateAssets(spriteMesh,spriteMeshData);
 				AssetDatabase.SaveAssets();
 				AssetDatabase.Refresh();
-				TextureImporter textureImporter = AssetImporter.GetAtPath(spriteAssetPath) as TextureImporter;
+				var textureImporter = AssetImporter.GetAtPath(spriteAssetPath) as TextureImporter;
 				textureImporter.userData = textureImporter.assetTimeStamp.ToString();
 				AssetDatabase.StartAssetEditing();
 				AssetDatabase.ImportAsset(spriteAssetPath);
@@ -326,12 +326,12 @@ namespace Anima2D
 		{
 			RegisterUndo(undoName);
 
-			foreach(Edge edge in edges)
+			foreach(var edge in edges)
 			{
 				DestroyObjectImmediate(edge);
 			}
 
-			foreach(Node node in nodes)
+			foreach(var node in nodes)
 			{
 				DestroyObjectImmediate(node);
 			}
@@ -405,7 +405,7 @@ namespace Anima2D
 		
 		public Node AddNode(Vector2 position, Edge edge)
 		{
-			Node node = Node.Create(nodes.Count);
+			var node = Node.Create(nodes.Count);
 			
 			nodes.Add(node);
 			
@@ -421,12 +421,12 @@ namespace Anima2D
 
 			if(blendshapes.Count > 0)
 			{
-				List<Vector3> frameVertices = new List<Vector3>(nodes.Count);
-				Vector3 vertex = ToVertex(position);
+				var frameVertices = new List<Vector3>(nodes.Count);
+				var vertex = ToVertex(position);
 
-				foreach(BlendShape blendShape in blendshapes)
+				foreach(var blendShape in blendshapes)
 				{
-					foreach(BlendShapeFrame frame in blendShape.frames)
+					foreach(var frame in blendShape.frames)
 					{
 						RegisterObjectUndo(frame, Undo.GetCurrentGroupName());
 
@@ -448,11 +448,11 @@ namespace Anima2D
 		
 		public void DeleteNode(Node node, bool triangulate = true)
 		{
-			List<Edge> l_edges = new List<Edge>();
+			var l_edges = new List<Edge>();
 			
-			for(int i = 0; i < edges.Count; i++)
+			for(var i = 0; i < edges.Count; i++)
 			{
-				Edge edge = edges[i];
+				var edge = edges[i];
 				if(edge.ContainsNode(node))
 				{
 					l_edges.Add(edge);
@@ -461,15 +461,15 @@ namespace Anima2D
 			
 			if(l_edges.Count == 2)
 			{
-				Node node1 = l_edges[0].node1 != node ? l_edges[0].node1 : l_edges[0].node2;
-				Node node2 = l_edges[1].node1 != node ? l_edges[1].node1 : l_edges[1].node2;
+				var node1 = l_edges[0].node1 != node ? l_edges[0].node1 : l_edges[0].node2;
+				var node2 = l_edges[1].node1 != node ? l_edges[1].node1 : l_edges[1].node2;
 				
 				edges.Remove(l_edges[0]);
 				edges.Remove(l_edges[1]);
 				
 				AddEdge(node1,node2);
 			}else{
-				foreach(Edge edge in l_edges)
+				foreach(var edge in l_edges)
 				{
 					edges.Remove(edge);
 				}
@@ -480,11 +480,11 @@ namespace Anima2D
 
 			if(blendshapes.Count > 0)
 			{
-				List<Vector3> frameVertices = new List<Vector3>(nodes.Count);
+				var frameVertices = new List<Vector3>(nodes.Count);
 
-				foreach(BlendShape blendShape in blendshapes)
+				foreach(var blendShape in blendshapes)
 				{
-					foreach(BlendShapeFrame frame in blendShape.frames)
+					foreach(var frame in blendShape.frames)
 					{
 						frameVertices.Clear();
 						frameVertices.AddRange(frame.vertices);
@@ -496,7 +496,7 @@ namespace Anima2D
 
 			nodes.Remove(node);
 			
-			for(int i = 0; i < nodes.Count; ++i)
+			for(var i = 0; i < nodes.Count; ++i)
 			{
 				nodes[i].index = i;
 			}
@@ -511,7 +511,7 @@ namespace Anima2D
 		
 		public void AddEdge(Node node1, Node node2)
 		{
-			Edge newEdge = Edge.Create(node1,node2);
+			var newEdge = Edge.Create(node1,node2);
 			
 			if(!edges.Contains(newEdge))
 			{
@@ -547,7 +547,7 @@ namespace Anima2D
 
 		public BlendShape CreateBlendshape(string name, string undoName = "")
 		{
-			BlendShape blendShape = BlendShape.Create(name);
+			var blendShape = BlendShape.Create(name);
 			blendShape.hideFlags = HideFlags.DontSave;
 
 			RegisterUndo(undoName);
@@ -572,7 +572,7 @@ namespace Anima2D
 
 				RegisterObjectUndo(blendshape, undoName);
 
-				foreach(BlendShapeFrame frame in blendshape.frames)
+				foreach(var frame in blendshape.frames)
 				{
 					DestroyObjectImmediate(frame);
 				}
@@ -590,7 +590,7 @@ namespace Anima2D
 			{
 				RegisterUndo(undoName);
 
-				foreach(Node node in _nodes)
+				foreach(var node in _nodes)
 				{
 					SetVertex( node, m_TexVertices[node.index] );
 				}
@@ -604,15 +604,15 @@ namespace Anima2D
 		{
 			DestroyBlendShapeCache("");
 
-			List<BlendShapeFrame> frameClones = new List<BlendShapeFrame>();
+			var frameClones = new List<BlendShapeFrame>();
 
-			foreach(BlendShape blendShape in spriteMeshData.blendshapes)
+			foreach(var blendShape in spriteMeshData.blendshapes)
 			{
 				frameClones.Clear();
 
-				foreach(BlendShapeFrame frame in blendShape.frames)
+				foreach(var frame in blendShape.frames)
 				{
-					BlendShapeFrame frameClone = ScriptableObject.CreateInstance<BlendShapeFrame>();
+					var frameClone = ScriptableObject.CreateInstance<BlendShapeFrame>();
 					frameClone.hideFlags = HideFlags.DontSave;
 
 					EditorUtility.CopySerialized(frame,frameClone);
@@ -620,7 +620,7 @@ namespace Anima2D
 					frameClones.Add(frameClone);
 				}
 
-				BlendShape blendShapeClone = CreateBlendshape(blendShape.name);
+				var blendShapeClone = CreateBlendshape(blendShape.name);
 
 				blendShapeClone.frames = frameClones.ToArray();
 			}
@@ -628,13 +628,13 @@ namespace Anima2D
 
 		void DestroyBlendShapeCache(string undoName)
 		{
-			foreach(BlendShape blendShape in blendshapes)
+			foreach(var blendShape in blendshapes)
 			{
 				if(blendShape)
 				{
 					RegisterObjectUndo(blendShape, undoName);
 
-					foreach(BlendShapeFrame frame in blendShape.frames)
+					foreach(var frame in blendShape.frames)
 					{
 						DestroyObjectImmediate(frame);
 					}
@@ -650,11 +650,11 @@ namespace Anima2D
 		{
 			if(spriteMesh)
 			{
-				foreach(BlendShape blendshape in blendshapes)
+				foreach(var blendshape in blendshapes)
 				{
-					BlendShape newBlendshape = SpriteMeshUtils.CreateBlendShape(spriteMesh,blendshape.name);
+					var newBlendshape = SpriteMeshUtils.CreateBlendShape(spriteMesh,blendshape.name);
 
-					foreach(BlendShapeFrame frame in blendshape.frames)
+					foreach(var frame in blendshape.frames)
 					{
 						SpriteMeshUtils.CreateBlendShapeFrame(newBlendshape,frame.weight,frame.vertices.ToArray());
 					}
@@ -666,7 +666,7 @@ namespace Anima2D
 		{
 			if(blendShape)
 			{
-				List<BlendShapeFrame> frames = blendShape.frames.ToList();
+				var frames = blendShape.frames.ToList();
 
 				frames.Sort( (a,b) => { return a.weight.CompareTo(b.weight); } );
 
@@ -685,7 +685,7 @@ namespace Anima2D
 				RegisterCreatedObjectUndo(frame, undoName);
 				RegisterObjectUndo(blendshape, undoName);
 
-				List<BlendShapeFrame> frames = new List<BlendShapeFrame>(blendshape.frames);
+				var frames = new List<BlendShapeFrame>(blendshape.frames);
 
 				frames.Add(frame);
 
@@ -706,7 +706,7 @@ namespace Anima2D
 			{
 				RegisterObjectUndo(blendShape,undoName);
 
-				List<BlendShapeFrame> frames = blendShape.frames.ToList();
+				var frames = blendShape.frames.ToList();
 
 				frames.Remove(blendShapeFrame);
 
@@ -731,7 +731,7 @@ namespace Anima2D
 
 				BlendShapeFrame other = null;
 
-				foreach(BlendShapeFrame f in selectedBlendshape.frames)
+				foreach(var f in selectedBlendshape.frames)
 				{
 					if(f != blendShapeFrame && f.weight == weight)
 					{
@@ -765,15 +765,15 @@ namespace Anima2D
 		{
 			Clear(undoName);
 			
-			float pixelsPerUnit = SpriteMeshUtils.GetSpritePixelsPerUnit(spriteMesh.sprite);
-			float factor =  pixelsPerUnit / spriteMesh.sprite.pixelsPerUnit;
-			Vector2 position = rect.position / factor;
-			Vector2 size = rect.size / factor;
+			var pixelsPerUnit = SpriteMeshUtils.GetSpritePixelsPerUnit(spriteMesh.sprite);
+			var factor =  pixelsPerUnit / spriteMesh.sprite.pixelsPerUnit;
+			var position = rect.position / factor;
+			var size = rect.size / factor;
 			
-			Rect l_rect = new Rect(position.x,position.y,size.x,size.y);
+			var l_rect = new Rect(position.x,position.y,size.x,size.y);
 			
-			Texture2D texture = SpriteUtility.GetSpriteTexture(spriteMesh.sprite,false);
-			Rect clampedRect = MathUtils.ClampRect(MathUtils.OrderMinMax(l_rect),new Rect(0f,0f,texture.width,texture.height));
+			var texture = SpriteUtility.GetSpriteTexture(spriteMesh.sprite,false);
+			var clampedRect = MathUtils.ClampRect(MathUtils.OrderMinMax(l_rect),new Rect(0f,0f,texture.width,texture.height));
 			
 			List<Vector2> l_texcoords;
 			List<IndexedEdge> l_indexedEdges;
@@ -795,9 +795,9 @@ namespace Anima2D
 		
 		bool ContainsVector(Vector2 vectorToFind, List<Vector2> list, float epsilon, out int index)
 		{
-			for (int i = 0; i < list.Count; i++)
+			for (var i = 0; i < list.Count; i++)
 			{
-				Vector2 v = list [i];
+				var v = list [i];
 				if ((v - vectorToFind).sqrMagnitude < epsilon)
 				{
 					index = i;
@@ -813,7 +813,7 @@ namespace Anima2D
 		{
 			if(spriteMeshInstance && bone)
 			{
-				List<Bone2D> bones = spriteMeshInstance.bones;
+				var bones = spriteMeshInstance.bones;
 				
 				if(bones.Contains(bone))
 				{
@@ -833,14 +833,14 @@ namespace Anima2D
 					selectedBindPose = null;
 				}
 				
-				int index = bindPoses.IndexOf(bindPose);
+				var index = bindPoses.IndexOf(bindPose);
 				
 				Unassign(bindPose);
 				bindPoses.Remove(bindPose);
 				
-				for(int i = 0; i < boneWeights.Count; i++)
+				for(var i = 0; i < boneWeights.Count; i++)
 				{
-					BoneWeight boneWeight = boneWeights[i];
+					var boneWeight = boneWeights[i];
 					boneWeight.DeleteBoneIndex(index);
 					SetBoneWeight(nodes[i],boneWeight);
 				}
@@ -858,9 +858,9 @@ namespace Anima2D
 		{
 			if(bindPose)
 			{
-				foreach(Node node in targetNodes)
+				foreach(var node in targetNodes)
 				{
-					BoneWeight boneWeight = GetBoneWeight(node);
+					var boneWeight = GetBoneWeight(node);
 					boneWeight.Unassign(bindPoses.IndexOf(bindPose));
 					SetBoneWeight(node,boneWeight);
 				}
@@ -871,7 +871,7 @@ namespace Anima2D
 		{
 			if(spriteMeshInstance && bone)
 			{
-				BindInfo bindInfo = new BindInfo();
+				var bindInfo = new BindInfo();
 				bindInfo.bindPose = bone.transform.worldToLocalMatrix * spriteMeshInstance.transform.localToWorldMatrix;
 				bindInfo.boneLength = bone.localLength;
 				bindInfo.path = BoneUtils.GetBonePath (bone);
@@ -895,7 +895,7 @@ namespace Anima2D
 			{
 				bindPoses.Clear();
 				
-				foreach(Bone2D bone in spriteMeshInstance.bones)
+				foreach(var bone in spriteMeshInstance.bones)
 				{
 					BindBone(bone);
 				}
@@ -909,7 +909,7 @@ namespace Anima2D
 		
 		public void CalculateAutomaticWeights(List<Node> targetNodes)
 		{
-			float pixelsPerUnit = SpriteMeshUtils.GetSpritePixelsPerUnit(spriteMesh.sprite);
+			var pixelsPerUnit = SpriteMeshUtils.GetSpritePixelsPerUnit(spriteMesh.sprite);
 			
 			if(nodes.Count <= 0)
 			{
@@ -926,25 +926,25 @@ namespace Anima2D
 			if(!spriteMesh)
 				return;
 
-			List<Vector2> controlPoints = new List<Vector2>();
-			List<IndexedEdge> controlPointEdges = new List<IndexedEdge>();
-			List<int> pins = new List<int>();
+			var controlPoints = new List<Vector2>();
+			var controlPointEdges = new List<IndexedEdge>();
+			var pins = new List<int>();
 			
-			foreach(BindInfo bindInfo in bindPoses)
+			foreach(var bindInfo in bindPoses)
 			{
-				Vector2 tip = SpriteMeshUtils.VertexToTexCoord(spriteMesh,pivotPoint,bindInfo.position,pixelsPerUnit);
-				Vector2 tail = SpriteMeshUtils.VertexToTexCoord(spriteMesh,pivotPoint,bindInfo.endPoint,pixelsPerUnit);
+				var tip = SpriteMeshUtils.VertexToTexCoord(spriteMesh,pivotPoint,bindInfo.position,pixelsPerUnit);
+				var tail = SpriteMeshUtils.VertexToTexCoord(spriteMesh,pivotPoint,bindInfo.endPoint,pixelsPerUnit);
 				
 				if(bindInfo.boneLength <= 0f)
 				{
-					int index = controlPoints.Count;
+					var index = controlPoints.Count;
 					controlPoints.Add(tip);
 					pins.Add(index);
 
 					continue;
 				}
 
-				int index1 = -1;
+				var index1 = -1;
 				
 				if(!ContainsVector(tip,controlPoints,0.01f, out index1))
 				{
@@ -952,7 +952,7 @@ namespace Anima2D
 					controlPoints.Add(tip);
 				}
 				
-				int index2 = -1;
+				var index2 = -1;
 				
 				if(!ContainsVector(tail,controlPoints,0.01f, out index2))
 				{
@@ -960,16 +960,16 @@ namespace Anima2D
 					controlPoints.Add(tail);
 				}
 				
-				IndexedEdge edge = new IndexedEdge(index1, index2);
+				var edge = new IndexedEdge(index1, index2);
 				controlPointEdges.Add(edge);
 				
 			}
 			
-			UnityEngine.BoneWeight[] boneWeights = BbwPlugin.CalculateBbw(m_TexVertices.ToArray(), indexedEdges.ToArray(), controlPoints.ToArray(), controlPointEdges.ToArray(), pins.ToArray());
+			var boneWeights = BbwPlugin.CalculateBbw(m_TexVertices.ToArray(), indexedEdges.ToArray(), controlPoints.ToArray(), controlPointEdges.ToArray(), pins.ToArray());
 			
-			foreach(Node node in targetNodes)
+			foreach(var node in targetNodes)
 			{
-				UnityEngine.BoneWeight unityBoneWeight = boneWeights[node.index];
+				var unityBoneWeight = boneWeights[node.index];
 				
 				SetBoneWeight(node,CreateBoneWeightFromUnityBoneWeight(unityBoneWeight));
 			}
@@ -979,7 +979,7 @@ namespace Anima2D
 
 		BoneWeight CreateBoneWeightFromUnityBoneWeight(UnityEngine.BoneWeight unityBoneWeight)
 		{
-			BoneWeight boneWeight = new BoneWeight();
+			var boneWeight = new BoneWeight();
 			
 			boneWeight.boneIndex0 = unityBoneWeight.boneIndex0;
 			boneWeight.boneIndex1 = unityBoneWeight.boneIndex1;
@@ -995,13 +995,13 @@ namespace Anima2D
 		
 		void FillBoneWeights(List<Node> targetNodes, float[,] weights)
 		{
-			List<float> l_weights = new List<float>();
+			var l_weights = new List<float>();
 			
-			foreach(Node node in targetNodes)
+			foreach(var node in targetNodes)
 			{
 				l_weights.Clear();
 				
-				for(int i = 0; i < bindPoses.Count; ++i)
+				for(var i = 0; i < bindPoses.Count; ++i)
 				{
 					l_weights.Add(weights[i,node.index]);
 				}
@@ -1012,10 +1012,10 @@ namespace Anima2D
 		
 		BoneWeight CreateBoneWeightFromWeights(List<float> weights)
 		{
-			BoneWeight boneWeight = new BoneWeight();
+			var boneWeight = new BoneWeight();
 			
-			float weight = 0f;
-			int index = -1;
+			var weight = 0f;
+			var index = -1;
 			
 			weight = weights.Max();
 			if(weight < 0.01f) weight = 0f;
@@ -1051,7 +1051,7 @@ namespace Anima2D
 			boneWeight.weight3 = weight;
 			boneWeight.boneIndex3 = index;
 			
-			float sum = boneWeight.weight0 + 
+			var sum = boneWeight.weight0 + 
 				boneWeight.weight1 +
 					boneWeight.weight2 +
 					boneWeight.weight3;
@@ -1069,16 +1069,16 @@ namespace Anima2D
 		
 		public void SmoothWeights(List<Node> targetNodes)
 		{
-			float[,] weights = new float[nodes.Count,bindPoses.Count];
+			var weights = new float[nodes.Count,bindPoses.Count];
 			Array.Clear(weights,0,weights.Length);
 			
-			List<int> usedIndices = new List<int>();
+			var usedIndices = new List<int>();
 			
-			for (int i = 0; i < nodes.Count; i++)
+			for (var i = 0; i < nodes.Count; i++)
 			{
 				usedIndices.Clear();
 				
-				BoneWeight weight = boneWeights[i];
+				var weight = boneWeights[i];
 				
 				if(weight.boneIndex0 >= 0)
 				{
@@ -1102,18 +1102,18 @@ namespace Anima2D
 				}
 			}
 			
-			float[] denominator = new float[nodes.Count];
-			float[,] smoothedWeights = new float[nodes.Count,bindPoses.Count]; 
+			var denominator = new float[nodes.Count];
+			var smoothedWeights = new float[nodes.Count,bindPoses.Count]; 
 			Array.Clear(smoothedWeights,0,smoothedWeights.Length);
 			
-			for (int i = 0; i < indices.Count / 3; ++i)
+			for (var i = 0; i < indices.Count / 3; ++i)
 			{
-				for (int j = 0; j < 3; ++j)
+				for (var j = 0; j < 3; ++j)
 				{
-					int j1 = (j + 1) % 3;
-					int j2 = (j + 2) % 3;
+					var j1 = (j + 1) % 3;
+					var j2 = (j + 2) % 3;
 					
-					for(int k = 0; k < bindPoses.Count; ++k)
+					for(var k = 0; k < bindPoses.Count; ++k)
 					{
 						smoothedWeights[indices[i*3 + j],k] += weights[indices[i*3 + j1],k] + weights[indices[i*3 + j2],k]; 
 					}
@@ -1122,19 +1122,19 @@ namespace Anima2D
 				}
 			}
 			
-			for (int i = 0; i < nodes.Count; ++i)
+			for (var i = 0; i < nodes.Count; ++i)
 			{
-				for (int j = 0; j < bindPoses.Count; ++j)
+				for (var j = 0; j < bindPoses.Count; ++j)
 				{
 					smoothedWeights[i,j] /= denominator[i];
 				}
 			}
 			
-			float[,] smoothedWeightsTransposed = new float[bindPoses.Count,nodes.Count]; 
+			var smoothedWeightsTransposed = new float[bindPoses.Count,nodes.Count]; 
 			
-			for (int i = 0; i < nodes.Count; ++i)
+			for (var i = 0; i < nodes.Count; ++i)
 			{
-				for (int j = 0; j < bindPoses.Count; ++j)
+				for (var j = 0; j < bindPoses.Count; ++j)
 				{
 					smoothedWeightsTransposed[j,i] = smoothedWeights[i,j];
 				}
@@ -1171,14 +1171,14 @@ namespace Anima2D
 
 		List<Vector3> ToVertices(List<Vector2> list)
 		{
-			float pixelsPerUnit = SpriteMeshUtils.GetSpritePixelsPerUnit(spriteMesh.sprite);
+			var pixelsPerUnit = SpriteMeshUtils.GetSpritePixelsPerUnit(spriteMesh.sprite);
 
 			return list.ConvertAll( v => ToVertex(v,pixelsPerUnit));
 		}
 
 		Vector3 ToVertex(Vector2 v)
 		{
-			float pixelsPerUnit = SpriteMeshUtils.GetSpritePixelsPerUnit(spriteMesh.sprite);
+			var pixelsPerUnit = SpriteMeshUtils.GetSpritePixelsPerUnit(spriteMesh.sprite);
 
 			return ToVertex(v,pixelsPerUnit);
 		}
@@ -1207,14 +1207,14 @@ namespace Anima2D
 		{
 			weight = Mathf.Clamp(weight, 0f, weight);
 
-			List<Vector2> result = new List<Vector2>(m_TexVertices.Count);
+			var result = new List<Vector2>(m_TexVertices.Count);
 
 			if(blendshape)
 			{
 				BlendShapeFrame prevFrame = null;
 				BlendShapeFrame nextFrame = null;
 
-				foreach(BlendShapeFrame frame in blendshape.frames)
+				foreach(var frame in blendshape.frames)
 				{
 					if(frame && frame.weight < weight)
 					{
@@ -1230,8 +1230,8 @@ namespace Anima2D
 				Vector3[] prevFrameVertices = null;
 				Vector3[] nextFrameVertices = null;
 
-				float prevWeight = 0f;
-				float nextWeight = 0f;
+				var prevWeight = 0f;
+				var nextWeight = 0f;
 
 				if(prevFrame)
 				{
@@ -1256,21 +1256,21 @@ namespace Anima2D
 					nextFrameVertices != null &&
 					prevFrameVertices.Length == nextFrameVertices.Length)
 				{
-					int count = prevFrameVertices.Length;
-					float pixelsPerUnit = SpriteMeshUtils.GetSpritePixelsPerUnit(spriteMesh.sprite);
+					var count = prevFrameVertices.Length;
+					var pixelsPerUnit = SpriteMeshUtils.GetSpritePixelsPerUnit(spriteMesh.sprite);
 
-					float t = 0f;
+					var t = 0f;
 
-					float weightDelta = (nextWeight - prevWeight);
+					var weightDelta = (nextWeight - prevWeight);
 
 					if(weightDelta > 0f)
 					{
 						t = (weight - prevWeight) / weightDelta;
 					}
 						
-					for(int i = 0; i < count; ++i)
+					for(var i = 0; i < count; ++i)
 					{
-						Vector3 v = Vector3.Lerp(prevFrameVertices[i],nextFrameVertices[i],t);
+						var v = Vector3.Lerp(prevFrameVertices[i],nextFrameVertices[i],t);
 
 						result.Add(SpriteMeshUtils.VertexToTexCoord(spriteMesh,pivotPoint,v,pixelsPerUnit));
 					}
@@ -1286,7 +1286,7 @@ namespace Anima2D
 
 			if(selectedBlendshape)
 			{
-				foreach(BlendShapeFrame f in selectedBlendshape.frames)
+				foreach(var f in selectedBlendshape.frames)
 				{
 					if(f && Mathf.Approximately(f.weight, blendShapeWeight))
 					{

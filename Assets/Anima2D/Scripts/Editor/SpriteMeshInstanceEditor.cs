@@ -72,7 +72,7 @@ namespace Anima2D
 
 		bool HasBindPoses()
 		{
-			bool hasBindPoses = false;
+			var hasBindPoses = false;
 			
 			if(m_SpriteMeshData && m_SpriteMeshData.bindPoses != null && m_SpriteMeshData.bindPoses.Length > 0)
 			{
@@ -86,15 +86,15 @@ namespace Anima2D
 		{
 			if(HasBindPoses() && m_BoneTransformsProperty.arraySize != m_SpriteMeshData.bindPoses.Length)
 			{
-				int oldSize = m_BoneTransformsProperty.arraySize;
+				var oldSize = m_BoneTransformsProperty.arraySize;
 
 				serializedObject.Update();
 
 				m_BoneTransformsProperty.arraySize = m_SpriteMeshData.bindPoses.Length;
 
-				for(int i = oldSize; i < m_BoneTransformsProperty.arraySize; ++i)
+				for(var i = oldSize; i < m_BoneTransformsProperty.arraySize; ++i)
 				{
-					SerializedProperty element = m_BoneTransformsProperty.GetArrayElementAtIndex(i);
+					var element = m_BoneTransformsProperty.GetArrayElementAtIndex(i);
 					element.objectReferenceValue = null;
 				}
 				
@@ -105,11 +105,11 @@ namespace Anima2D
 
 			mBoneList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) => {
 
-				SerializedProperty boneProperty = mBoneList.serializedProperty.GetArrayElementAtIndex(index);
+				var boneProperty = mBoneList.serializedProperty.GetArrayElementAtIndex(index);
 
 				rect.y += 1.5f;
 
-				float labelWidth = 0f;
+				var labelWidth = 0f;
 
 				if(HasBindPoses() && index < m_SpriteMeshData.bindPoses.Length)
 				{
@@ -123,7 +123,7 @@ namespace Anima2D
 
 				if(EditorGUI.EndChangeCheck())
 				{
-					Transform l_NewTransform = boneProperty.objectReferenceValue as Transform;
+					var l_NewTransform = boneProperty.objectReferenceValue as Transform;
 					if(l_NewTransform && !l_NewTransform.GetComponent<Bone2D>())
 					{
 						boneProperty.objectReferenceValue = null;
@@ -181,11 +181,11 @@ namespace Anima2D
 
 			if(!HasBindPoses())
 			{
-				List<Bone2D> bones = new List<Bone2D>();
+				var bones = new List<Bone2D>();
 
 				EditorGUI.BeginChangeCheck();
 
-				Transform root = EditorGUILayout.ObjectField("Set bones",null,typeof(Transform),true) as Transform;
+				var root = EditorGUILayout.ObjectField("Set bones",null,typeof(Transform),true) as Transform;
 
 				if(EditorGUI.EndChangeCheck())
 				{
@@ -198,7 +198,7 @@ namespace Anima2D
 
 					m_BoneTransformsProperty.arraySize = bones.Count;
 
-					for(int i = 0; i < bones.Count; ++i)
+					for(var i = 0; i < bones.Count; ++i)
 					{
 						m_BoneTransformsProperty.GetArrayElementAtIndex(i).objectReferenceValue = bones[i].transform;
 					}

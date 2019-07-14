@@ -22,7 +22,7 @@ namespace Anima2D
 		
 		void SetupList()
 		{
-			SerializedProperty poseListProperty = serializedObject.FindProperty("m_Poses");
+			var poseListProperty = serializedObject.FindProperty("m_Poses");
 			
 			if(poseListProperty != null)
 			{
@@ -30,7 +30,7 @@ namespace Anima2D
 				
 				mList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) => {
 					
-					SerializedProperty poseProperty = mList.serializedProperty.GetArrayElementAtIndex(index);
+					var poseProperty = mList.serializedProperty.GetArrayElementAtIndex(index);
 					
 					rect.y += 1.5f;
 
@@ -94,9 +94,9 @@ namespace Anima2D
 
 			if(m_DuplicatedPaths.Count > 0)
 			{
-				string helpString = "Warning: duplicated bone paths found.\nPlease use unique bone paths:\n\n";
+				var helpString = "Warning: duplicated bone paths found.\nPlease use unique bone paths:\n\n";
 
-				foreach(string path in m_DuplicatedPaths)
+				foreach(var path in m_DuplicatedPaths)
 				{
 					helpString += path + "\n";
 				}
@@ -111,11 +111,11 @@ namespace Anima2D
 		{
 			serializedObject.Update();
 
-			Pose newPose = ScriptableObjectUtility.CreateAssetWithSavePanel<Pose>("Create a pose asset","pose.asset","asset","Create a new pose");
+			var newPose = ScriptableObjectUtility.CreateAssetWithSavePanel<Pose>("Create a pose asset","pose.asset","asset","Create a new pose");
 			
 			mList.serializedProperty.arraySize += 1;
 			
-			SerializedProperty newElement = mList.serializedProperty.GetArrayElementAtIndex(mList.serializedProperty.arraySize-1);
+			var newElement = mList.serializedProperty.GetArrayElementAtIndex(mList.serializedProperty.arraySize-1);
 			
 			newElement.objectReferenceValue = newPose;
 
@@ -126,19 +126,19 @@ namespace Anima2D
 
 		List<string> GetDuplicatedPaths(Transform root)
 		{
-			List<string> paths = new List<string>(50);
-			List<string> duplicates = new List<string>(50);
-			List<Bone2D> bones = new List<Bone2D>(50);
+			var paths = new List<string>(50);
+			var duplicates = new List<string>(50);
+			var bones = new List<Bone2D>(50);
 
 			root.GetComponentsInChildren<Bone2D>(true,bones);
 
-			for (int i = 0; i < bones.Count; i++)
+			for (var i = 0; i < bones.Count; i++)
 			{
-				Bone2D bone = bones [i];
+				var bone = bones [i];
 				
 				if(bone)
 				{
-					string bonePath = BoneUtils.GetBonePath(root,bone);
+					var bonePath = BoneUtils.GetBonePath(root,bone);
 
 					if(paths.Contains(bonePath))
 					{

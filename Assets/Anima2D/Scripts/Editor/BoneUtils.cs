@@ -11,7 +11,7 @@ namespace Anima2D
 	{	
 		public static string GetUniqueBoneName(Bone2D root)
 		{
-			string boneName = "bone";
+			var boneName = "bone";
 			
 			Bone2D[] bones = null;
 			
@@ -26,7 +26,7 @@ namespace Anima2D
 
 		public static void DrawBoneCap(Bone2D bone)
 		{
-			Color color = bone.color * 0.25f;
+			var color = bone.color * 0.25f;
 			color.a = 1f;
 			DrawBoneCap(bone, color);
 		}
@@ -56,7 +56,7 @@ namespace Anima2D
 		
 		public static void DrawBoneBody(Vector3 position, Vector3 endPosition, float radius, Color color)
 		{
-			Vector3 distance = position - endPosition;
+			var distance = position - endPosition;
 			
 			if(distance.magnitude > radius && color.a > 0f)
 			{
@@ -104,9 +104,9 @@ namespace Anima2D
 
 		public static string GetPath(Transform root, Transform transform)
 		{
-			string path = "";
+			var path = "";
 
-			Transform current = transform;
+			var current = transform;
 			
 			if(root)
 			{
@@ -135,15 +135,15 @@ namespace Anima2D
 		{
 			Bone2D rootBone = null;
 
-			for (int i = 0; i < bones.Count; i++)
+			for (var i = 0; i < bones.Count; i++)
 			{
-				Bone2D bone = bones[i];
-				string path = paths[i];
+				var bone = bones[i];
+				var path = paths[i];
 
-				for (int j = 0; j < bones.Count; j++)
+				for (var j = 0; j < bones.Count; j++)
 				{
-					Bone2D other = bones [j];
-					string otherPath = paths[j];
+					var other = bones [j];
+					var otherPath = paths[j];
 
 					if(bone != other && !path.Equals(otherPath) && otherPath.Contains(path))
 					{
@@ -153,9 +153,9 @@ namespace Anima2D
 				}
 			}
 
-			for (int i = 0; i < bones.Count; i++)
+			for (var i = 0; i < bones.Count; i++)
 			{
-				Bone2D bone = bones[i];
+				var bone = bones[i];
 
 				if(bone.parentBone)
 				{
@@ -175,7 +175,7 @@ namespace Anima2D
 		{
 			if(!bone || !bone.child) return;
 
-			Vector3 l_childPosition = Vector3.zero;
+			var l_childPosition = Vector3.zero;
 
 			/*
 			if(recordObject)
@@ -188,7 +188,7 @@ namespace Anima2D
 
 			l_childPosition = bone.child.transform.position;
 
-			Quaternion l_deltaRotation = OrientToLocalPosition(bone,bone.child.transform.localPosition,freezeChildren,undoName,recordObject);
+			var l_deltaRotation = OrientToLocalPosition(bone,bone.child.transform.localPosition,freezeChildren,undoName,recordObject);
 
 			bone.child.transform.position = l_childPosition;
 			bone.child.transform.localRotation *= Quaternion.Inverse(l_deltaRotation);
@@ -198,12 +198,12 @@ namespace Anima2D
 
 		public static Quaternion OrientToLocalPosition(Bone2D bone, Vector3 localPosition, bool freezeChildren, string undoName, bool recordObject)
 		{
-			Quaternion l_deltaRotation = Quaternion.identity;
+			var l_deltaRotation = Quaternion.identity;
 
 			if(bone && localPosition.sqrMagnitude > 0f)
 			{
-				List<Vector3> l_childPositions = new List<Vector3>(bone.transform.childCount);
-				List<Transform> l_children = new List<Transform>(bone.transform.childCount);
+				var l_childPositions = new List<Vector3>(bone.transform.childCount);
+				var l_children = new List<Transform>(bone.transform.childCount);
 
 				if(freezeChildren)
 				{
@@ -231,9 +231,9 @@ namespace Anima2D
 					}	
 				}
 
-				Quaternion l_deltaInverseRotation = Quaternion.identity;
+				var l_deltaInverseRotation = Quaternion.identity;
 				
-				float angle = Mathf.Atan2(localPosition.y,localPosition.x) * Mathf.Rad2Deg;
+				var angle = Mathf.Atan2(localPosition.y,localPosition.x) * Mathf.Rad2Deg;
 				
 				if(recordObject)
 				{
@@ -248,9 +248,9 @@ namespace Anima2D
 				bone.transform.localRotation *= l_deltaRotation;
 				FixLocalEulerHint(bone.transform);
 
-				for (int i = 0; i < l_children.Count; i++)
+				for (var i = 0; i < l_children.Count; i++)
 				{
-					Transform l_child = l_children[i];
+					var l_child = l_children[i];
 					
 					l_child.position = l_childPositions[i];
 					l_child.localRotation *= l_deltaInverseRotation;
@@ -308,7 +308,7 @@ namespace Anima2D
 		{
 			InitializeReflection();
 			
-			object rotationOrder = GetRotationOrder(transform);
+			var rotationOrder = GetRotationOrder(transform);
 			
 			if(transform && s_GetLocalEulerAnglesMethod != null && rotationOrder != null)
 			{

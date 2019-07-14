@@ -139,7 +139,7 @@ namespace TriangleNet
         {
             get
             {
-                EdgeEnumerator e = new EdgeEnumerator(this);
+                var e = new EdgeEnumerator(this);
                 while (e.MoveNext())
                 {
                     yield return e.Current;
@@ -288,7 +288,7 @@ namespace TriangleNet
         /// <param name="input"></param>
         public void Triangulate(string inputFile)
         {
-            InputGeometry input = FileReader.Read(inputFile);
+            var input = FileReader.Read(inputFile);
 
             this.Triangulate(input);
         }
@@ -361,7 +361,7 @@ namespace TriangleNet
                 //dummytri.neighbors[2].triangle = dummytri;
 
                 // Carve out holes and concavities.
-                Carver c = new Carver(this);
+                var c = new Carver(this);
                 c.CarveHoles();
             }
             else
@@ -524,8 +524,8 @@ namespace TriangleNet
             }
             else if (num == NodeNumbering.CuthillMcKee)
             {
-                CuthillMcKee rcm = new CuthillMcKee();
-                int[] perm_inv = rcm.Renumber(this);
+                var rcm = new CuthillMcKee();
+                var perm_inv = rcm.Renumber(this);
 
                 // Permute the node indices.
                 foreach (var node in this.vertices.Values)
@@ -564,21 +564,21 @@ namespace TriangleNet
         /// <returns>The number of points on the hull.</returns>
         private int Delaunay()
         {
-            int hulledges = 0;
+            var hulledges = 0;
 
             if (behavior.Algorithm == TriangulationAlgorithm.Dwyer)
             {
-                Dwyer alg = new Dwyer();
+                var alg = new Dwyer();
                 hulledges = alg.Triangulate(this);
             }
             else if (behavior.Algorithm == TriangulationAlgorithm.SweepLine)
             {
-                SweepLine alg = new SweepLine();
+                var alg = new SweepLine();
                 hulledges = alg.Triangulate(this);
             }
             else
             {
-                Incremental alg = new Incremental();
+                var alg = new Incremental();
                 hulledges = alg.Triangulate(this);
             }
 
@@ -704,7 +704,7 @@ namespace TriangleNet
         /// <param name="data">The input data.</param>
         private void TransferNodes(InputGeometry data)
         {
-            List<Vertex> points = data.points;
+            var points = data.points;
 
             this.invertices = points.Count;
             this.mesh_dim = 2;
@@ -717,7 +717,7 @@ namespace TriangleNet
 
             this.nextras = points[0].attributes == null ? 0 : points[0].attributes.Length;
 
-            foreach (Vertex vertex in points)
+            foreach (var vertex in points)
             {
                 vertex.hash = this.hash_vtx++;
                 vertex.id = vertex.hash;
@@ -741,7 +741,7 @@ namespace TriangleNet
         /// </remarks>
         internal void MakeVertexMap()
         {
-            Otri tri = default(Otri);
+            var tri = default(Otri);
             Vertex triorg;
 
             foreach (var t in this.triangles.Values)
@@ -766,7 +766,7 @@ namespace TriangleNet
         /// <param name="newotri">Reference to the new triangle.</param>
         internal void MakeTriangle(ref Otri newotri)
         {
-            Triangle tri = new Triangle();
+            var tri = new Triangle();
             tri.hash = this.hash_tri++;
             tri.id = tri.hash;
 
@@ -782,7 +782,7 @@ namespace TriangleNet
         /// <param name="newsubseg">Reference to the new subseg.</param>
         internal void MakeSegment(ref Osub newsubseg)
         {
-            Segment seg = new Segment();
+            var seg = new Segment();
             seg.hash = this.hash_seg++;
 
             newsubseg.seg = seg;
@@ -847,21 +847,21 @@ namespace TriangleNet
         internal InsertVertexResult InsertVertex(Vertex newvertex, ref Otri searchtri,
             ref Osub splitseg, bool segmentflaws, bool triflaws)
         {
-            Otri horiz = default(Otri);
-            Otri top = default(Otri);
+            var horiz = default(Otri);
+            var top = default(Otri);
             Otri botleft = default(Otri), botright = default(Otri);
             Otri topleft = default(Otri), topright = default(Otri);
             Otri newbotleft = default(Otri), newbotright = default(Otri);
-            Otri newtopright = default(Otri);
+            var newtopright = default(Otri);
             Otri botlcasing = default(Otri), botrcasing = default(Otri);
             Otri toplcasing = default(Otri), toprcasing = default(Otri);
-            Otri testtri = default(Otri);
+            var testtri = default(Otri);
             Osub botlsubseg = default(Osub), botrsubseg = default(Osub);
             Osub toplsubseg = default(Osub), toprsubseg = default(Osub);
-            Osub brokensubseg = default(Osub);
-            Osub checksubseg = default(Osub);
-            Osub rightsubseg = default(Osub);
-            Osub newsubseg = default(Osub);
+            var brokensubseg = default(Osub);
+            var checksubseg = default(Osub);
+            var rightsubseg = default(Osub);
+            var newsubseg = default(Osub);
             BadSubseg encroached;
             //FlipStacker newflip;
             Vertex first;
@@ -1357,7 +1357,7 @@ namespace TriangleNet
                         // We're done. Return a triangle whose origin is the new vertex.
                         horiz.Lnext(ref searchtri);
 
-                        Otri recenttri = default(Otri);
+                        var recenttri = default(Otri);
                         horiz.Lnext(ref recenttri);
                         locator.Update(ref recenttri);
 
@@ -1381,8 +1381,8 @@ namespace TriangleNet
         /// subsegment and, if appropriate, its vertices.</param>
         internal void InsertSubseg(ref Otri tri, int subsegmark)
         {
-            Otri oppotri = default(Otri);
-            Osub newsubseg = default(Osub);
+            var oppotri = default(Otri);
+            var newsubseg = default(Osub);
             Vertex triorg, tridest;
 
             triorg = tri.Org();
@@ -1470,7 +1470,7 @@ namespace TriangleNet
         {
             Otri botleft = default(Otri), botright = default(Otri);
             Otri topleft = default(Otri), topright = default(Otri);
-            Otri top = default(Otri);
+            var top = default(Otri);
             Otri botlcasing = default(Otri), botrcasing = default(Otri);
             Otri toplcasing = default(Otri), toprcasing = default(Otri);
             Osub botlsubseg = default(Osub), botrsubseg = default(Osub);
@@ -1593,7 +1593,7 @@ namespace TriangleNet
         {
             Otri botleft = default(Otri), botright = default(Otri);
             Otri topleft = default(Otri), topright = default(Otri);
-            Otri top = default(Otri);
+            var top = default(Otri);
             Otri botlcasing = default(Otri), botrcasing = default(Otri);
             Otri toplcasing = default(Otri), toprcasing = default(Otri);
             Osub botlsubseg = default(Osub), botrsubseg = default(Osub);
@@ -1740,14 +1740,14 @@ namespace TriangleNet
         private void TriangulatePolygon(Otri firstedge, Otri lastedge,
                                 int edgecount, bool doflip, bool triflaws)
         {
-            Otri testtri = default(Otri);
-            Otri besttri = default(Otri);
-            Otri tempedge = default(Otri);
+            var testtri = default(Otri);
+            var besttri = default(Otri);
+            var tempedge = default(Otri);
             Vertex leftbasevertex, rightbasevertex;
             Vertex testvertex;
             Vertex bestvertex;
 
-            int bestnumber = 1;
+            var bestnumber = 1;
 
             // Identify the base vertices.
             leftbasevertex = lastedge.Apex();
@@ -1758,7 +1758,7 @@ namespace TriangleNet
             bestvertex = besttri.Dest();
             besttri.Copy(ref testtri);
 
-            for (int i = 2; i <= edgecount - 2; i++)
+            for (var i = 2; i <= edgecount - 2; i++)
             {
                 testtri.OnextSelf();
                 testvertex = testtri.Dest();
@@ -1816,9 +1816,9 @@ namespace TriangleNet
         /// </remarks>
         internal void DeleteVertex(ref Otri deltri)
         {
-            Otri countingtri = default(Otri);
+            var countingtri = default(Otri);
             Otri firstedge = default(Otri), lastedge = default(Otri);
-            Otri deltriright = default(Otri);
+            var deltriright = default(Otri);
             Otri lefttri = default(Otri), righttri = default(Otri);
             Otri leftcasing = default(Otri), rightcasing = default(Otri);
             Osub leftsubseg = default(Osub), rightsubseg = default(Osub);
@@ -1895,7 +1895,7 @@ namespace TriangleNet
 
             Otri botleft = default(Otri), botright = default(Otri), topright = default(Otri);
             Otri botlcasing = default(Otri), botrcasing = default(Otri), toprcasing = default(Otri);
-            Otri gluetri = default(Otri);
+            var gluetri = default(Otri);
             Osub botlsubseg = default(Osub), botrsubseg = default(Osub), toprsubseg = default(Osub);
             Vertex botvertex, rightvertex;
 
@@ -2002,7 +2002,7 @@ namespace TriangleNet
         /// </remarks>
         private FindDirectionResult FindDirection(ref Otri searchtri, Vertex searchpoint)
         {
-            Otri checktri = default(Otri);
+            var checktri = default(Otri);
             Vertex startvertex;
             Vertex leftvertex, rightvertex;
             double leftccw, rightccw;
@@ -2091,7 +2091,7 @@ namespace TriangleNet
         /// </remarks>
         private void SegmentIntersection(ref Otri splittri, ref Osub splitsubseg, Vertex endpoint2)
         {
-            Osub opposubseg = default(Osub);
+            var opposubseg = default(Osub);
             Vertex endpoint1;
             Vertex torg, tdest;
             Vertex leftvertex, rightvertex;
@@ -2134,7 +2134,7 @@ namespace TriangleNet
             newvertex.id = newvertex.hash;
 
             // Interpolate its attributes.
-            for (int i = 0; i < nextras; i++)
+            for (var i = 0; i < nextras; i++)
             {
                 newvertex.attributes[i] = torg.attributes[i] + split * (tdest.attributes[i] - torg.attributes[i]);
             }
@@ -2214,8 +2214,8 @@ namespace TriangleNet
         /// </remarks>
         private bool ScoutSegment(ref Otri searchtri, Vertex endpoint2, int newmark)
         {
-            Otri crosstri = default(Otri);
-            Osub crosssubseg = default(Osub);
+            var crosstri = default(Otri);
+            var crosssubseg = default(Osub);
             Vertex leftvertex, rightvertex;
             FindDirectionResult collinear;
 
@@ -2310,9 +2310,9 @@ namespace TriangleNet
         /// </remarks>
         private void DelaunayFixup(ref Otri fixuptri, bool leftside)
         {
-            Otri neartri = default(Otri);
-            Otri fartri = default(Otri);
-            Osub faredge = default(Osub);
+            var neartri = default(Otri);
+            var fartri = default(Otri);
+            var faredge = default(Osub);
             Vertex nearvertex, leftvertex, rightvertex, farvertex;
 
             fixuptri.Lnext(ref neartri);
@@ -2428,7 +2428,7 @@ namespace TriangleNet
         private void ConstrainedEdge(ref Otri starttri, Vertex endpoint2, int newmark)
         {
             Otri fixuptri = default(Otri), fixuptri2 = default(Otri);
-            Osub crosssubseg = default(Osub);
+            var crosssubseg = default(Osub);
             Vertex endpoint1;
             Vertex farvertex;
             double area;
@@ -2611,9 +2611,9 @@ namespace TriangleNet
         /// </summary>
         private void MarkHull()
         {
-            Otri hulltri = default(Otri);
-            Otri nexttri = default(Otri);
-            Otri starttri = default(Otri);
+            var hulltri = default(Otri);
+            var nexttri = default(Otri);
+            var starttri = default(Otri);
 
             // Find a triangle handle on the hull.
             hulltri.triangle = Mesh.dummytri;

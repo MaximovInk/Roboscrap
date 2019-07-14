@@ -48,13 +48,13 @@ namespace CreativeSpore.SuperTilemapEditor
         private float m_sumProbabilityFactor;
         public uint GetRandomTile()
         {
-            float randPercent = Random.value;
+            var randPercent = Random.value;
             //float sumProbabilityFactor = Mathf.Max(GetSumProbabilityFactor(), float.Epsilon); //commented to fix GC allocation
             if (m_sortedList == null || m_sortedList.Count == 0) InvalidateSortedList();
-            for (int i = 0; i < m_sortedList.Count; ++i)
+            for (var i = 0; i < m_sortedList.Count; ++i)
             {
-                RandomTileData randomTileData = m_sortedList[i];
-                float probability = randomTileData.probabilityFactor / m_sumProbabilityFactor;
+                var randomTileData = m_sortedList[i];
+                var probability = randomTileData.probabilityFactor / m_sumProbabilityFactor;
                 if (randPercent <= probability)
                 {
                     return randomTileData.tileData;
@@ -80,20 +80,20 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (RandomTileList.Count > 0)
             {
-                uint randomTileData = GetRandomTile();
+                var randomTileData = GetRandomTile();
                 if (RandomizeFlagMask != 0)
                 {
-                    uint flags = ((uint)Random.Range(0, 8) << 29) & RandomizeFlagMask;
+                    var flags = ((uint)Random.Range(0, 8) << 29) & RandomizeFlagMask;
                     randomTileData &= ~RandomizeFlagMask;
                     randomTileData |= flags;
                 }
-                uint brushTileData = RefreshLinkedBrush(tilemap, gridX, gridY, randomTileData);
+                var brushTileData = RefreshLinkedBrush(tilemap, gridX, gridY, randomTileData);
                 // overwrite flags
                 brushTileData &= ~Tileset.k_TileDataMask_Flags;
                 brushTileData |= randomTileData & Tileset.k_TileDataMask_Flags;
                 
 
-                TilesetBrush brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(brushTileData));
+                var brush = Tileset.FindBrush(Tileset.GetBrushIdFromTileData(brushTileData));
                 if (brush && brush.IsAnimated())
                 {
                     // Set the animated brush (overwriting the random brush for this tile)

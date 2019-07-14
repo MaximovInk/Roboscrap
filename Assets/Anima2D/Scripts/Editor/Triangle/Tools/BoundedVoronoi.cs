@@ -102,7 +102,7 @@ namespace TriangleNet.Tools
 
         private void ComputeCircumCenters()
         {
-            Otri tri = default(Otri);
+            var tri = default(Otri);
             double xi = 0, eta = 0;
             Point pt;
 
@@ -127,15 +127,15 @@ namespace TriangleNet.Tools
         /// </remarks>
         private void TagBlindTriangles()
         {
-            int blinded = 0;
+            var blinded = 0;
 
             Stack<Triangle> triangles;
             subsegMap = new Dictionary<int, Segment>();
 
-            Otri f = default(Otri);
-            Otri f0 = default(Otri);
-            Osub e = default(Osub);
-            Osub sub1 = default(Osub);
+            var f = default(Otri);
+            var f0 = default(Otri);
+            var e = default(Osub);
+            var sub1 = default(Osub);
 
             // Tag all triangles non-blind
             foreach (var t in mesh.triangles.Values)
@@ -218,12 +218,12 @@ namespace TriangleNet.Tools
         {
             Point c, pt;
 
-            Vertex torg = tri.Org();
-            Vertex tdest = tri.Dest();
-            Vertex tapex = tri.Apex();
+            var torg = tri.Org();
+            var tdest = tri.Dest();
+            var tapex = tri.Apex();
 
-            Vertex sorg = seg.Org();
-            Vertex sdest = seg.Dest();
+            var sorg = seg.Org();
+            var sdest = seg.Dest();
 
             c = this.points[tri.triangle.id];
 
@@ -247,21 +247,21 @@ namespace TriangleNet.Tools
 
         private void ConstructBvdCell(Vertex vertex)
         {
-            VoronoiRegion region = new VoronoiRegion(vertex);
+            var region = new VoronoiRegion(vertex);
             regions.Add(region);
 
-            Otri f = default(Otri);
-            Otri f_init = default(Otri);
-            Otri f_next = default(Otri);
-            Osub sf = default(Osub);
-            Osub sfn = default(Osub);
+            var f = default(Otri);
+            var f_init = default(Otri);
+            var f_next = default(Otri);
+            var sf = default(Osub);
+            var sfn = default(Osub);
 
             Point cc_f, cc_f_next, p;
 
-            int n = mesh.triangles.Count;
+            var n = mesh.triangles.Count;
 
             // Call P the polygon (cell) in construction
-            List<Point> vpoints = new List<Point>();
+            var vpoints = new List<Point>();
 
             // Call f_init a triangle incident to x
             vertex.tri.Copy(ref f_init);
@@ -367,23 +367,23 @@ namespace TriangleNet.Tools
 
         private void ConstructBoundaryBvdCell(Vertex vertex)
         {
-            VoronoiRegion region = new VoronoiRegion(vertex);
+            var region = new VoronoiRegion(vertex);
             regions.Add(region);
 
-            Otri f = default(Otri);
-            Otri f_init = default(Otri);
-            Otri f_next = default(Otri);
-            Otri f_prev = default(Otri);
-            Osub sf = default(Osub);
-            Osub sfn = default(Osub);
+            var f = default(Otri);
+            var f_init = default(Otri);
+            var f_next = default(Otri);
+            var f_prev = default(Otri);
+            var sf = default(Osub);
+            var sfn = default(Osub);
 
             Vertex torg, tdest, tapex, sorg, sdest;
             Point cc_f, cc_f_next, p;
 
-            int n = mesh.triangles.Count;
+            var n = mesh.triangles.Count;
 
             // Call P the polygon (cell) in construction
-            List<Point> vpoints = new List<Point>();
+            var vpoints = new List<Point>();
 
             // Call f_init a triangle incident to x
             vertex.tri.Copy(ref f_init);
@@ -505,7 +505,7 @@ namespace TriangleNet.Tools
                         // have to add the intersection with the segment.
 
                         // Center of f edge dest->apex
-                        Point bisec = new Point((tdest.X + tapex.X) / 2, (tdest.Y + tapex.Y) / 2);
+                        var bisec = new Point((tdest.X + tapex.X) / 2, (tdest.Y + tapex.Y) / 2);
 
                         // Find intersection of seg with line through f's bisector and circumcenter
                         if (SegmentsIntersect(sorg, sdest, bisec, cc_f, out p, false))
@@ -560,7 +560,7 @@ namespace TriangleNet.Tools
                             // have to add the intersection with the segment.
 
                             // Center of f_next edge org->dest
-                            Point bisec = new Point((torg.X + tdest.X) / 2, (torg.Y + tdest.Y) / 2);
+                            var bisec = new Point((torg.X + tdest.X) / 2, (torg.Y + tdest.Y) / 2);
 
                             // Find intersection of seg with line through f_next's bisector and circumcenter
                             if (SegmentsIntersect(sorg, sdest, bisec, cc_f_next, out p, false))

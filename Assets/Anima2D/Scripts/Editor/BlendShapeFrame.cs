@@ -13,7 +13,7 @@ namespace Anima2D
 
 		public static BlendShapeFrame Create(float weight, Vector3[] vertices)
 		{
-			BlendShapeFrame frame = ScriptableObject.CreateInstance<BlendShapeFrame>();
+			var frame = ScriptableObject.CreateInstance<BlendShapeFrame>();
 
 			frame.vertices = vertices;
 

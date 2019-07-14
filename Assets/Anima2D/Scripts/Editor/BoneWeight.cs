@@ -19,7 +19,7 @@ namespace Anima2D
 
 		public static BoneWeight Create()
 		{
-			BoneWeight boneWeight = new BoneWeight();
+			var boneWeight = new BoneWeight();
 			boneWeight.boneIndex0 = -1;
 			boneWeight.boneIndex1 = -1;
 			boneWeight.boneIndex2 = -1;
@@ -49,7 +49,7 @@ namespace Anima2D
 
 		public void SetBoneIndexWeight(int boneIndex, float weight, bool createInfluence = true, bool unassignIfWeightZero = false)
 		{
-			int weightIndex = GetWeightIndex(boneIndex);
+			var weightIndex = GetWeightIndex(boneIndex);
 
 			weight = Mathf.Clamp01(weight);
 
@@ -83,9 +83,9 @@ namespace Anima2D
 
 		public int GetMinWeightIndex()
 		{
-			List<int> boneIndexes = new List<int>() { boneIndex0, boneIndex1, boneIndex2, boneIndex3 };
+			var boneIndexes = new List<int>() { boneIndex0, boneIndex1, boneIndex2, boneIndex3 };
 
-			int weightIndex = boneIndexes.IndexOf(boneIndexes.Min());
+			var weightIndex = boneIndexes.IndexOf(boneIndexes.Min());
 
 			return weightIndex;
 		}
@@ -94,7 +94,7 @@ namespace Anima2D
 		{
 			if(boneIndex >= 0)
 			{
-				List<int> boneIndexes = new List<int>() { boneIndex0, boneIndex1, boneIndex2, boneIndex3 };
+				var boneIndexes = new List<int>() { boneIndex0, boneIndex1, boneIndex2, boneIndex3 };
 			
 				return boneIndexes.IndexOf(boneIndex);
 			}
@@ -104,8 +104,8 @@ namespace Anima2D
 
 		public void GetWeight(int weightIndex, out int boneIndex, out float weight)
 		{
-			List<int> boneIndexes = new List<int>() { boneIndex0, boneIndex1, boneIndex2, boneIndex3 };
-			List<float> boneWeights = new List<float>() { weight0, weight1, weight2, weight3 };
+			var boneIndexes = new List<int>() { boneIndex0, boneIndex1, boneIndex2, boneIndex3 };
+			var boneWeights = new List<float>() { weight0, weight1, weight2, weight3 };
 
 			boneIndex = boneIndexes[weightIndex];
 			weight = boneWeights[weightIndex];
@@ -168,14 +168,14 @@ namespace Anima2D
 		{
 			if(masterIndex >= 0 && masterIndex < 4)
 			{
-				float sum = 0f;
+				var sum = 0f;
 
-				float[] weights = new float[] { weight0, weight1, weight2, weight3 };
-				int[] indices = new int[] { boneIndex0, boneIndex1, boneIndex2, boneIndex3 };
+				var weights = new float[] { weight0, weight1, weight2, weight3 };
+				var indices = new int[] { boneIndex0, boneIndex1, boneIndex2, boneIndex3 };
 
-				int numValidIndices = 0;
+				var numValidIndices = 0;
 
-				for(int i = 0; i < 4; ++i)
+				for(var i = 0; i < 4; ++i)
 				{
 					if(indices[i] >= 0)
 					{
@@ -188,11 +188,11 @@ namespace Anima2D
 
 				}
 
-				float targetSum = 1f - weights[masterIndex];
+				var targetSum = 1f - weights[masterIndex];
 
 				if(numValidIndices > 0)
 				{
-					for(int i = 0; i < 4; ++i)
+					for(var i = 0; i < 4; ++i)
 					{
 						if(i != masterIndex && indices[i] >= 0)
 						{

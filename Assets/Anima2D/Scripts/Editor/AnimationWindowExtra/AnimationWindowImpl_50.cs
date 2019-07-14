@@ -50,7 +50,7 @@ namespace Anima2D
 				if(m_GetAllAnimationWindows != null)
 				{
 					var list = m_GetAllAnimationWindows.Invoke(null, null);
-					int numElements = (int)list.GetType().GetProperty("Count").GetValue(list, null);  
+					var numElements = (int)list.GetType().GetProperty("Count").GetValue(list, null);  
  
 					if(numElements > 0)
 					{

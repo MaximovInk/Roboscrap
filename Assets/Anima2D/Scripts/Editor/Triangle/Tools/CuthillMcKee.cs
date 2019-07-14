@@ -49,9 +49,9 @@ namespace TriangleNet.Tools
             bandwidth1 = matrix.Bandwidth();
 
             // Compute the RCM permutation.
-            int[] perm = GenerateRcm();
+            var perm = GenerateRcm();
 
-            int[] perm_inv = PermInverse(node_num, perm);
+            var perm_inv = PermInverse(node_num, perm);
 
             bandwidth2 = PermBandwidth(perm, perm_inv);
 
@@ -76,13 +76,13 @@ namespace TriangleNet.Tools
         /// </remarks>
         int PermBandwidth(int[] perm, int[] perm_inv)
         {
-            int[] adj_row = matrix.AdjacencyRow;
-            int[] adj = matrix.Adjacency;
+            var adj_row = matrix.AdjacencyRow;
+            var adj = matrix.Adjacency;
 
             int col, i, j;
 
-            int band_lo = 0;
-            int band_hi = 0;
+            var band_lo = 0;
+            var band_hi = 0;
 
             for (i = 0; i < node_num; i++)
             {
@@ -109,18 +109,18 @@ namespace TriangleNet.Tools
         /// </remarks>
         int[] GenerateRcm()
         {
-            int[] perm = new int[node_num];
+            var perm = new int[node_num];
 
             int i, num, root;
-            int iccsze = 0;
-            int level_num = 0;
+            var iccsze = 0;
+            var level_num = 0;
 
             /// Index vector for a level structure. The level structure is stored in the
             /// currently unused  spaces in the permutation vector PERM.
-            int[] level_row = new int[node_num + 1];
+            var level_row = new int[node_num + 1];
 
             /// Marks variables that have been numbered.
-            int[] mask = new int[node_num];
+            var mask = new int[node_num];
 
             for (i = 0; i < node_num; i++)
             {
@@ -183,8 +183,8 @@ namespace TriangleNet.Tools
         /// </remarks>
         void Rcm(int root, int[] mask, int[] perm, int offset, ref int iccsze)
         {
-            int[] adj_row = matrix.AdjacencyRow;
-            int[] adj = matrix.Adjacency;
+            var adj_row = matrix.AdjacencyRow;
+            var adj = matrix.Adjacency;
 
             int fnbr;
             int i, j, k, l;
@@ -194,7 +194,7 @@ namespace TriangleNet.Tools
 
             /// Workspace, int DEG[NODE_NUM], a temporary vector used to hold 
             /// the degree of the nodes in the section graph specified by mask and root.
-            int[] deg = new int[node_num];
+            var deg = new int[node_num];
 
             // Find the degrees of the nodes in the component specified by MASK and ROOT.
             Degree(root, mask, deg, ref iccsze, perm, offset);
@@ -337,8 +337,8 @@ namespace TriangleNet.Tools
         void FindRoot(ref int root, int[] mask, ref int level_num, int[] level_row, 
             int[] level, int offset)
         {
-            int[] adj_row = matrix.AdjacencyRow;
-            int[] adj = matrix.Adjacency;
+            var adj_row = matrix.AdjacencyRow;
+            var adj = matrix.Adjacency;
 
             int iccsze;
             int j, jstrt;
@@ -346,7 +346,7 @@ namespace TriangleNet.Tools
             int mindeg;
             int nghbor, ndeg;
             int node;
-            int level_num2 = 0;
+            var level_num2 = 0;
 
             // Determine the level structure rooted at ROOT.
             GetLevelSet(ref root, mask, ref level_num, level_row, level, offset);
@@ -450,8 +450,8 @@ namespace TriangleNet.Tools
         void GetLevelSet(ref int root, int[] mask, ref int level_num, int[] level_row, 
             int[] level, int offset)
         {
-            int[] adj_row = matrix.AdjacencyRow;
-            int[] adj = matrix.Adjacency;
+            var adj_row = matrix.AdjacencyRow;
+            var adj = matrix.Adjacency;
 
             int i, iccsze;
             int j, jstop, jstrt;
@@ -537,13 +537,13 @@ namespace TriangleNet.Tools
         /// </remarks>
         void Degree(int root, int[] mask, int[] deg, ref int iccsze, int[] ls, int offset)
         {
-            int[] adj_row = matrix.AdjacencyRow;
-            int[] adj = matrix.Adjacency;
+            var adj_row = matrix.AdjacencyRow;
+            var adj = matrix.Adjacency;
 
             int i, ideg;
             int j, jstop, jstrt;
             int lbegin, lvlend;
-            int lvsize = 1;
+            var lvsize = 1;
             int nghbr, node;
 
             // The sign of ADJ_ROW(I) is used to indicate if node I has been considered.
@@ -614,7 +614,7 @@ namespace TriangleNet.Tools
         /// <returns>The inverse permutation.</returns>
         int[] PermInverse(int n, int[] perm)
         {
-            int[] perm_inv = new int[node_num];
+            var perm_inv = new int[node_num];
 
             int i;
 

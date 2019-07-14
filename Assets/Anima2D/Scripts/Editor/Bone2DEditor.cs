@@ -35,7 +35,7 @@ namespace Anima2D
 		
 		override public void OnInspectorGUI()
 		{
-			bool childChanged = false;
+			var childChanged = false;
 			
 			serializedObject.Update();
 			
@@ -55,7 +55,7 @@ namespace Anima2D
 			
 			EditorGUI.BeginChangeCheck();
 			
-			Transform newChildTransform = EditorGUILayout.ObjectField(new GUIContent("Child"),childTransform,typeof(Transform),true) as Transform;
+			var newChildTransform = EditorGUILayout.ObjectField(new GUIContent("Child"),childTransform,typeof(Transform),true) as Transform;
 			
 			if(EditorGUI.EndChangeCheck())
 			{
@@ -87,13 +87,13 @@ namespace Anima2D
 			{
 				Tools.hidden = true;
 				
-				float size = HandleUtility.GetHandleSize(m_Bone.transform.position) / 5f;
+				var size = HandleUtility.GetHandleSize(m_Bone.transform.position) / 5f;
 				
-				Quaternion rotation = m_Bone.transform.rotation;
+				var rotation = m_Bone.transform.rotation;
 				
 				EditorGUI.BeginChangeCheck();
 				
-				Quaternion cameraRotation = Camera.current.transform.rotation;
+				var cameraRotation = Camera.current.transform.rotation;
 				
 				if(Event.current.type == EventType.Repaint)
 				{
@@ -101,7 +101,7 @@ namespace Anima2D
 				}
 					
 #if UNITY_5_6_OR_NEWER
-				Vector3 newPosition = Handles.FreeMoveHandle(m_Bone.transform.position, rotation, size, Vector3.zero, Handles.RectangleHandleCap);
+				var newPosition = Handles.FreeMoveHandle(m_Bone.transform.position, rotation, size, Vector3.zero, Handles.RectangleHandleCap);
 #else
 				Vector3 newPosition = Handles.FreeMoveHandle(m_Bone.transform.position, rotation, size, Vector3.zero, Handles.RectangleCap);
 #endif

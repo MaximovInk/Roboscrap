@@ -24,7 +24,7 @@ namespace Anima2D
 
 		public override void OnWindowGUI(Rect viewRect)
 		{
-			float xPos = Mathf.Max(200f + 5f + 5f, viewRect.width - 400f);
+			var xPos = Mathf.Max(200f + 5f + 5f, viewRect.width - 400f);
 
 			windowRect.position = new Vector2(xPos, viewRect.height - windowRect.height - 5f);
 			windowRect.size = new Vector2(viewRect.width - xPos - 5f, windowRect.size.y);
@@ -49,7 +49,7 @@ namespace Anima2D
 
 			EditorGUILayout.BeginVertical();
 
-			Rect rect = GUILayoutUtility.GetRect(10f, 32f);
+			var rect = GUILayoutUtility.GetRect(10f, 32f);
 
 			EditorGUILayout.EndVertical();
 
@@ -57,7 +57,7 @@ namespace Anima2D
 
 			if(windowRect.width > 32f)
 			{
-				List<IDopeElement> l_DopeElements = spriteMeshCache.selectedBlendshape.frames.ToList ().ConvertAll( f => (IDopeElement)BlendShapeFrameDopeElement.Create(f)  );
+				var l_DopeElements = spriteMeshCache.selectedBlendshape.frames.ToList ().ConvertAll( f => (IDopeElement)BlendShapeFrameDopeElement.Create(f)  );
 
 				m_TimeLine.dopeElements = l_DopeElements;
 				m_TimeLine.FrameRate = 1f;

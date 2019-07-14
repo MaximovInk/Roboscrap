@@ -13,7 +13,7 @@ namespace Anima2D
 
 		public static Edge Create(Node vertex1, Node vertex2)
 		{
-			Edge edge = ScriptableObject.CreateInstance<Edge>();
+			var edge = ScriptableObject.CreateInstance<Edge>();
 			edge.hideFlags = HideFlags.DontSave;
 			edge.node1 = vertex1;
 			edge.node2 = vertex2;
@@ -31,7 +31,7 @@ namespace Anima2D
 			if (obj == null || GetType() != obj.GetType()) 
 				return false;
 			
-			Edge p = (Edge)obj;
+			var p = (Edge)obj;
 			
 			return (node1 == p.node1) && (node2 == p.node2) || (node1 == p.node2) && (node2 == p.node1);
 		}

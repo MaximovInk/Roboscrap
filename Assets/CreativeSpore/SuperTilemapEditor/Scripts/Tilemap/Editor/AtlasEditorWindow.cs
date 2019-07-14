@@ -20,14 +20,14 @@ namespace CreativeSpore.SuperTilemapEditor
         [MenuItem("SuperTilemapEditor/Window/Atlas Editor Window")]
         public static void Display()
         {
-            AtlasEditorWindow wnd = (AtlasEditorWindow)EditorWindow.GetWindow(typeof(AtlasEditorWindow), false, "Atlas Editor", true);
+            var wnd = (AtlasEditorWindow)EditorWindow.GetWindow(typeof(AtlasEditorWindow), false, "Atlas Editor", true);
             wnd.minSize = new Vector2(337f, 314f);
         }
 
         private Vector2 m_scrollPos;
         void OnGUI()
         {
-            bool sliceTileset = false;
+            var sliceTileset = false;
             m_scrollPos = EditorGUILayout.BeginScrollView(m_scrollPos, GUIStyle.none, GUI.skin.verticalScrollbar);
             {
                 EditorGUILayout.Space();
@@ -88,7 +88,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     if (GUILayout.Button("Preview"))
                     {
                         m_previewTexture = BuildAtlas();
-                        AtlasPreviewWindow atlasPreviewWnd = EditorWindow.GetWindow<AtlasPreviewWindow>(true, "Atlas Preview", true);
+                        var atlasPreviewWnd = EditorWindow.GetWindow<AtlasPreviewWindow>(true, "Atlas Preview", true);
                         atlasPreviewWnd.Texture = m_previewTexture;
                         atlasPreviewWnd.TileSize = m_tileSize;
                         atlasPreviewWnd.Padding = m_padding;
@@ -97,9 +97,9 @@ namespace CreativeSpore.SuperTilemapEditor
                     }
                     if (GUILayout.Button("Apply Settings"))
                     {
-                        Texture2D outputAtlas = BuildAtlas();
-                        byte[] pngData = outputAtlas.EncodeToPNG();
-                        string atlasTexturePath = Application.dataPath + AssetDatabase.GetAssetPath(m_atlasTexture).Substring(6);
+                        var outputAtlas = BuildAtlas();
+                        var pngData = outputAtlas.EncodeToPNG();
+                        var atlasTexturePath = Application.dataPath + AssetDatabase.GetAssetPath(m_atlasTexture).Substring(6);
                         System.IO.File.WriteAllBytes(atlasTexturePath, pngData);
                         AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(m_atlasTexture));
                         Debug.Log("Saving atlas texture: " + atlasTexturePath);
@@ -133,7 +133,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 if (sliceTileset)
                 {
                     m_tileset.Slice();
-                    foreach (STETilemap tilemap in FindObjectsOfType<STETilemap>())
+                    foreach (var tilemap in FindObjectsOfType<STETilemap>())
                     {
                         if (tilemap.Tileset == m_tileset) tilemap.Refresh(true, false);
                     }
@@ -156,52 +156,52 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public static Texture2D BuildAtlas(Texture2D atlasTexture, int tilePadding, int tileExtrude, Vector2 tileSize, Vector2 sliceOffset, Vector2 slicePadding)
         {
-            int widthInTiles = Mathf.FloorToInt((atlasTexture.width - sliceOffset.x + slicePadding.x) / (tileSize.x + slicePadding.x)); //NOTE: "+ slicePadding.x" makes sure to count the last tile even if no padding pixels are added to the right
-            int heightInTiles = Mathf.FloorToInt((atlasTexture.height - sliceOffset.y + +slicePadding.y) / (tileSize.y + slicePadding.y));                      
-            List<Rect> rects = GenerateGridSpriteRectangles(atlasTexture, sliceOffset, tileSize, slicePadding);
+            var widthInTiles = Mathf.FloorToInt((atlasTexture.width - sliceOffset.x + slicePadding.x) / (tileSize.x + slicePadding.x)); //NOTE: "+ slicePadding.x" makes sure to count the last tile even if no padding pixels are added to the right
+            var heightInTiles = Mathf.FloorToInt((atlasTexture.height - sliceOffset.y + +slicePadding.y) / (tileSize.y + slicePadding.y));                      
+            var rects = GenerateGridSpriteRectangles(atlasTexture, sliceOffset, tileSize, slicePadding);
             return BuildAtlas(atlasTexture, tilePadding, tileExtrude, tileSize, widthInTiles, heightInTiles, rects);
         }
 
         public static Texture2D BuildAtlas(Texture2D atlasTexture, int tilePadding, int tileExtrude, Tileset tileset)
         {
-            int widthInTiles = tileset.Width;
-            int heightInTiles = tileset.Height;
-            Vector2 texselSizeInv = new Vector2(1f / tileset.AtlasTexture.texelSize.x, 1f / tileset.AtlasTexture.texelSize.y);
-            List<Rect> rects = tileset.Tiles.Select(x => new Rect( Vector2.Scale(x.uv.position, texselSizeInv), Vector2.Scale(x.uv.size, texselSizeInv))).ToList();
+            var widthInTiles = tileset.Width;
+            var heightInTiles = tileset.Height;
+            var texselSizeInv = new Vector2(1f / tileset.AtlasTexture.texelSize.x, 1f / tileset.AtlasTexture.texelSize.y);
+            var rects = tileset.Tiles.Select(x => new Rect( Vector2.Scale(x.uv.position, texselSizeInv), Vector2.Scale(x.uv.size, texselSizeInv))).ToList();
             return BuildAtlas(atlasTexture, tilePadding, tileExtrude, tileset.TilePxSize, widthInTiles, heightInTiles, rects);
         }
 
         public static Texture2D BuildAtlas(Texture2D atlasTexture, int tilePadding, int tileExtrude, Vector2 tileSize, int widthInTiles, int heightInTiles, List<Rect> rects)
         {
-            int padTileWidth = Mathf.RoundToInt(tileSize.x + tilePadding);
-            int padTileHeight = Mathf.RoundToInt(tileSize.y + tilePadding);
-            int width = widthInTiles * padTileWidth + tilePadding;
-            int height = heightInTiles * padTileHeight + tilePadding;
-            Texture2D output = new Texture2D(width, height, TextureFormat.ARGB32, false, false);
+            var padTileWidth = Mathf.RoundToInt(tileSize.x + tilePadding);
+            var padTileHeight = Mathf.RoundToInt(tileSize.y + tilePadding);
+            var width = widthInTiles * padTileWidth + tilePadding;
+            var height = heightInTiles * padTileHeight + tilePadding;
+            var output = new Texture2D(width, height, TextureFormat.ARGB32, false, false);
             output.filterMode = FilterMode.Point;
             output.SetPixels32(new Color32[width * height]);
             output.Apply();
             TilemapUtilsEditor.MakeTextureReadable(atlasTexture);
-            int offset = tilePadding - tileExtrude;
+            var offset = tilePadding - tileExtrude;
             for (int ty = 0, idx = 0; ty < heightInTiles; ++ty)
             {
-                for (int tx = 0; tx < widthInTiles; ++tx, ++idx)
+                for (var tx = 0; tx < widthInTiles; ++tx, ++idx)
                 {
                     if (idx >= rects.Count)
                         continue;
-                    Rect rect = rects[idx];
-                    int rx = Mathf.RoundToInt(rect.x);
-                    int ry = Mathf.RoundToInt(rect.y);
-                    int rw = Mathf.RoundToInt(rect.width);
-                    int rh = Mathf.RoundToInt(rect.height);
-                    Color[] srcTileColors = atlasTexture.GetPixels(rx, ry, rw, rh);
+                    var rect = rects[idx];
+                    var rx = Mathf.RoundToInt(rect.x);
+                    var ry = Mathf.RoundToInt(rect.y);
+                    var rw = Mathf.RoundToInt(rect.width);
+                    var rh = Mathf.RoundToInt(rect.height);
+                    var srcTileColors = atlasTexture.GetPixels(rx, ry, rw, rh);
 
-                    int dstX = tx * padTileWidth + tilePadding - offset;
-                    int dstY = output.height - (ty + 1) * padTileHeight + offset;//- tilePadding;
+                    var dstX = tx * padTileWidth + tilePadding - offset;
+                    var dstY = output.height - (ty + 1) * padTileHeight + offset;//- tilePadding;
                     output.SetPixels(dstX, dstY, rw, rh, srcTileColors);
                     //Extend border color to fill the padding area
                     Color[] paddingColors;
-                    for(int p = 0; p < tileExtrude; ++p)
+                    for(var p = 0; p < tileExtrude; ++p)
                     {
                         paddingColors = atlasTexture.GetPixels(rx, ry, rw, 1);
                         output.SetPixels(dstX, dstY - p - 1, rw, 1, paddingColors); // bottom padding
@@ -233,16 +233,16 @@ namespace CreativeSpore.SuperTilemapEditor
         //NOTE: Unlike UnityEditorInternal.InternalSpriteUtility.GenerateGridSpriteRectangles, this will take full transparent tiles into account
         public static List<Rect> GenerateGridSpriteRectangles(Texture2D texture, Vector2 offset, Vector2 size, Vector2 padding)
         {
-            List<Rect> rects = new List<Rect>();
+            var rects = new List<Rect>();
             if (texture != null)
             {
-                int uInc = Mathf.RoundToInt(size.x + padding.x);
-                int vInc = Mathf.RoundToInt(size.y + padding.y);
+                var uInc = Mathf.RoundToInt(size.x + padding.x);
+                var vInc = Mathf.RoundToInt(size.y + padding.y);
                 if (uInc > 0 && vInc > 0)
                 {
-                    for (int y = Mathf.RoundToInt(offset.y); y + size.y <= texture.height; y += vInc)
+                    for (var y = Mathf.RoundToInt(offset.y); y + size.y <= texture.height; y += vInc)
                     {
-                        for (int x = Mathf.RoundToInt(offset.x); x + size.x <= texture.width; x += uInc)
+                        for (var x = Mathf.RoundToInt(offset.x); x + size.x <= texture.width; x += uInc)
                         {
                             rects.Add(new Rect(x, texture.height - y - size.y, size.x, size.y));
                         }
@@ -275,10 +275,10 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if (!Texture) Close();
 
-            Event e = Event.current;
+            var e = Event.current;
 
-            Color emptyColor = new Color();
-            Color gridColor = new Color(0f, 1f, 1f, 0.5f);
+            var emptyColor = new Color();
+            var gridColor = new Color(0f, 1f, 1f, 0.5f);
             m_scrollPos = GUILayout.BeginScrollView(m_scrollPos);
             {
                 if (e.type == EventType.ScrollWheel)
@@ -294,13 +294,13 @@ namespace CreativeSpore.SuperTilemapEditor
                 }
                 GUILayoutUtility.GetRect(Texture.width * m_zoom, Texture.height * m_zoom);
                 GUI.DrawTexture(new Rect(0, 0, Texture.width * m_zoom, Texture.height * m_zoom), Texture);
-                Rect tileRect = new Rect(new Vector2(Extrude, Extrude), TileSize);
+                var tileRect = new Rect(new Vector2(Extrude, Extrude), TileSize);
                 for (; tileRect.yMax <= Texture.height; tileRect.y += TileSize.y + Padding)
                 {
                     tileRect.x = Extrude;
                     for (; tileRect.xMax <= Texture.width; tileRect.x += TileSize.x + Padding)
                     {
-                        Rect scaledRect = tileRect; scaledRect.position *= m_zoom; scaledRect.size *= m_zoom;
+                        var scaledRect = tileRect; scaledRect.position *= m_zoom; scaledRect.size *= m_zoom;
                         HandlesEx.DrawRectWithOutline(scaledRect, emptyColor, gridColor);
                     }
                 }

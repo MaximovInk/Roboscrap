@@ -160,15 +160,15 @@ namespace Anima2D
 
 			GUI.BeginGroup(rectArea);
 
-			Rect rect = new Rect(0f, 0f, rectArea.width, rectArea.height);
+			var rect = new Rect(0f, 0f, rectArea.width, rectArea.height);
 
 			m_HeaderRect = new Rect(0f, 0f, rectArea.width, 18f);
 
 			m_ContentRect = new Rect(0f, 18f, rectArea.width, rectArea.height - m_HeaderRect.height);
 
-			float playHeadPosX = m_TimeArea.TimeToPixel(Time, rectArea);
+			var playHeadPosX = m_TimeArea.TimeToPixel(Time, rectArea);
 
-			Rect playHeadRect = new Rect(playHeadPosX - styles.playhead.fixedWidth * 0.5f - 4f, 4f, styles.playhead.fixedWidth, styles.playhead.fixedHeight);
+			var playHeadRect = new Rect(playHeadPosX - styles.playhead.fixedWidth * 0.5f - 4f, 4f, styles.playhead.fixedWidth, styles.playhead.fixedHeight);
 
 			if(Event.current.type == EventType.MouseDown && rect.Contains(Event.current.mousePosition))
 			{
@@ -192,9 +192,9 @@ namespace Anima2D
 					
 					for (var i = dopeElements.GetEnumerator (); i.MoveNext ();)
 					{
-						IDopeElement element = i.Current;
+						var element = i.Current;
 
-						Rect position = GetDopeElementRect (element);
+						var position = GetDopeElementRect (element);
 
 						if (position.Contains (Event.current.mousePosition))
 						{
@@ -296,7 +296,7 @@ namespace Anima2D
 				return;
 			}
 				
-			Color color = GUI.color;
+			var color = GUI.color;
 
 			if (canEditDopeElements) {
 				GUI.color = Color.white;
@@ -304,11 +304,11 @@ namespace Anima2D
 				GUI.color = Color.gray;
 			}
 
-			foreach(IDopeElement dopeElement in m_DopeElements)
+			foreach(var dopeElement in m_DopeElements)
 			{
 				if(dopeElement != null)
 				{
-					Rect position = GetDopeElementRect(dopeElement);
+					var position = GetDopeElementRect(dopeElement);
 
 					GUI.DrawTexture(position, styles.defaultDopeKeyIcon.image, ScaleMode.ScaleToFit, true, 1f);
 				}
@@ -319,9 +319,9 @@ namespace Anima2D
 
 		Rect GetDopeElementRect(IDopeElement dopeElement)
 		{
-			Texture defaultDopeKeyIcon = styles.defaultDopeKeyIcon.image;
+			var defaultDopeKeyIcon = styles.defaultDopeKeyIcon.image;
 
-			float time = m_TimeArea.TimeToPixel( SnapToFrame(dopeElement.time), m_ContentRect);
+			var time = m_TimeArea.TimeToPixel( SnapToFrame(dopeElement.time), m_ContentRect);
 
 			return new Rect(time - (defaultDopeKeyIcon.width / 2), m_ContentRect.y, defaultDopeKeyIcon.width, defaultDopeKeyIcon.height);
 		}

@@ -20,7 +20,7 @@ namespace TriangleNet.IO
     {
         public Mesh Import(string filename)
         {
-            string ext = Path.GetExtension(filename);
+            var ext = Path.GetExtension(filename);
 
             if (ext == ".node" || ext == ".poly" || ext == ".ele")
             {
@@ -31,7 +31,7 @@ namespace TriangleNet.IO
 
                 if (geometry != null && triangles != null)
                 {
-                    Mesh mesh = new Mesh();
+                    var mesh = new Mesh();
                     mesh.Load(geometry, triangles);
 
                     return mesh;
@@ -49,7 +49,7 @@ namespace TriangleNet.IO
 
         public InputGeometry Read(string filename)
         {
-            string ext = Path.GetExtension(filename);
+            var ext = Path.GetExtension(filename);
 
             if (ext == ".node")
             {

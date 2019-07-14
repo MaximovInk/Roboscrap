@@ -20,7 +20,7 @@ namespace Anima2D
 
 		Vector2 GetWindowSize()
 		{
-			Vector2 size = Vector2.one;
+			var size = Vector2.one;
 
 			if(spriteMeshCache.mode == SpriteMeshEditorWindow.Mode.Mesh)
 			{
@@ -96,7 +96,7 @@ namespace Anima2D
 				
 				EditorGUI.BeginChangeCheck();
 				
-				Vector2 pivotPoint = EditorGUILayout.Vector2Field("Pivot",spriteMeshCache.pivotPoint);
+				var pivotPoint = EditorGUILayout.Vector2Field("Pivot",spriteMeshCache.pivotPoint);
 				
 				if(EditorGUI.EndChangeCheck())
 				{
@@ -114,7 +114,7 @@ namespace Anima2D
 
 			EditorGUI.BeginChangeCheck();
 			
-			string name = EditorGUILayout.TextField("Name",spriteMeshCache.selectedBindPose.name);
+			var name = EditorGUILayout.TextField("Name",spriteMeshCache.selectedBindPose.name);
 			
 			if(EditorGUI.EndChangeCheck())
 			{
@@ -129,7 +129,7 @@ namespace Anima2D
 
 				if(!string.IsNullOrEmpty(spriteMeshCache.selectedBindPose.path))
 				{
-					int index = spriteMeshCache.selectedBindPose.path.LastIndexOf("/");
+					var index = spriteMeshCache.selectedBindPose.path.LastIndexOf("/");
 
 					if(index < 0)
 					{
@@ -138,20 +138,20 @@ namespace Anima2D
 						index++;
 					}
 
-					foreach(BindInfo bindInfo in spriteMeshCache.bindPoses)
+					foreach(var bindInfo in spriteMeshCache.bindPoses)
 					{
 						if(!string.IsNullOrEmpty(bindInfo.path) && index < bindInfo.path.Length)
 						{
-							string pathPrefix = bindInfo.path;
-							string pathSuffix = "";
+							var pathPrefix = bindInfo.path;
+							var pathSuffix = "";
 
 							if(bindInfo.path.Contains('/'))
 							{
 								pathPrefix = bindInfo.path.Substring(0,index);
 
-								string tail = bindInfo.path.Substring(index);
+								var tail = bindInfo.path.Substring(index);
 
-								int index2 = tail.IndexOf("/");
+								var index2 = tail.IndexOf("/");
 
 								if(index2 > 0)
 								{
@@ -172,7 +172,7 @@ namespace Anima2D
 
 			EditorGUI.BeginChangeCheck();
 			
-			int zOrder = EditorGUILayout.IntField("Z-Order",spriteMeshCache.selectedBindPose.zOrder);
+			var zOrder = EditorGUILayout.IntField("Z-Order",spriteMeshCache.selectedBindPose.zOrder);
 			
 			if(EditorGUI.EndChangeCheck())
 			{
@@ -183,7 +183,7 @@ namespace Anima2D
 
 			EditorGUI.BeginChangeCheck();
 			
-			Color color = EditorGUILayout.ColorField("Color",spriteMeshCache.selectedBindPose.color);
+			var color = EditorGUILayout.ColorField("Color",spriteMeshCache.selectedBindPose.color);
 			
 			if(EditorGUI.EndChangeCheck())
 			{
@@ -196,15 +196,15 @@ namespace Anima2D
 		bool IsMixedBoneIndex(int weightIndex, out int boneIndex)
 		{
 			boneIndex = -1;
-			float weight = 0f;
+			var weight = 0f;
 
 			spriteMeshCache.GetBoneWeight(spriteMeshCache.nodes[spriteMeshCache.selection.First()]).GetWeight(weightIndex, out boneIndex, out weight);
 
-			List<Node> selectedNodes = spriteMeshCache.selectedNodes;
+			var selectedNodes = spriteMeshCache.selectedNodes;
 
-			foreach(Node node in selectedNodes)
+			foreach(var node in selectedNodes)
 			{
-				int l_boneIndex = -1;
+				var l_boneIndex = -1;
 				spriteMeshCache.GetBoneWeight(node).GetWeight(weightIndex, out l_boneIndex, out weight);
 
 				if(l_boneIndex != boneIndex)
@@ -220,27 +220,27 @@ namespace Anima2D
 		{
 			if(spriteMeshCache.selection.Count > 0)
 			{
-				string[] names = spriteMeshCache.GetBoneNames("Unassigned");
+				var names = spriteMeshCache.GetBoneNames("Unassigned");
 
-				BoneWeight boneWeight = BoneWeight.Create();
+				var boneWeight = BoneWeight.Create();
 
 				EditorGUI.BeginChangeCheck();
 
-				bool mixedBoneIndex0 = false;
-				bool mixedBoneIndex1 = false;
-				bool mixedBoneIndex2 = false;
-				bool mixedBoneIndex3 = false;
-				bool changedIndex0 = false;
-				bool changedIndex1 = false;
-				bool changedIndex2 = false;
-				bool changedIndex3 = false;
-				bool mixedWeight = false;
+				var mixedBoneIndex0 = false;
+				var mixedBoneIndex1 = false;
+				var mixedBoneIndex2 = false;
+				var mixedBoneIndex3 = false;
+				var changedIndex0 = false;
+				var changedIndex1 = false;
+				var changedIndex2 = false;
+				var changedIndex3 = false;
+				var mixedWeight = false;
 
 				if(spriteMeshCache.multiselection)
 				{
 					mixedWeight = true;
 
-					int boneIndex = -1;
+					var boneIndex = -1;
 					mixedBoneIndex0 = IsMixedBoneIndex(0,out boneIndex);
 					if(!mixedBoneIndex0) boneWeight.boneIndex0 = boneIndex;
 					mixedBoneIndex1 = IsMixedBoneIndex(1,out boneIndex);
@@ -278,11 +278,11 @@ namespace Anima2D
 
 					if(spriteMeshCache.multiselection)
 					{
-						List<Node> selectedNodes = spriteMeshCache.selectedNodes;
+						var selectedNodes = spriteMeshCache.selectedNodes;
 
-						foreach(Node node in selectedNodes)
+						foreach(var node in selectedNodes)
 						{
-							BoneWeight l_boneWeight = spriteMeshCache.GetBoneWeight(node);
+							var l_boneWeight = spriteMeshCache.GetBoneWeight(node);
 							
 							if(!mixedBoneIndex0 || changedIndex0) l_boneWeight.SetWeight(0,boneWeight.boneIndex0,l_boneWeight.weight0);
 							if(!mixedBoneIndex1 || changedIndex1) l_boneWeight.SetWeight(1,boneWeight.boneIndex1,l_boneWeight.weight1);
@@ -305,7 +305,7 @@ namespace Anima2D
 			EditorGUIUtility.labelWidth = 65f;
 			EditorGUIUtility.fieldWidth = 55f;
 
-			string name = spriteMeshCache.selectedBlendshape.name;
+			var name = spriteMeshCache.selectedBlendshape.name;
 
 			EditorGUI.BeginChangeCheck();
 

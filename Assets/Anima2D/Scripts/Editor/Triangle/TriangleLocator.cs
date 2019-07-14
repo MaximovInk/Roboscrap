@@ -108,8 +108,8 @@ namespace TriangleNet
         public LocateResult PreciseLocate(Point searchpoint, ref Otri searchtri,
                                         bool stopatsubsegment)
         {
-            Otri backtracktri = default(Otri);
-            Osub checkedge = default(Osub);
+            var backtracktri = default(Otri);
+            var checkedge = default(Osub);
             Vertex forg, fdest, fapex;
             double orgorient, destorient;
             bool moveleft;
@@ -250,7 +250,7 @@ namespace TriangleNet
         /// </remarks>
         public LocateResult Locate(Point searchpoint, ref Otri searchtri)
         {
-            Otri sampletri = default(Otri);
+            var sampletri = default(Otri);
             Vertex torg, tdest;
             double searchdist, dist;
             double ahead;
@@ -285,7 +285,7 @@ namespace TriangleNet
 
             // TODO: Improve sampling.
             sampler.Update(mesh);
-            int[] samples = sampler.GetSamples(mesh);
+            var samples = sampler.GetSamples(mesh);
 
             foreach (var key in samples)
             {

@@ -17,9 +17,9 @@ namespace Anima2D
 				return;
 			}
 			
-			List<Material> l_materialList = new List<Material>();
+			var l_materialList = new List<Material>();
 			
-			foreach(Material material in renderer.sharedMaterials)
+			foreach(var material in renderer.sharedMaterials)
 			{
 				Material materialInstance = null;
 				
@@ -42,7 +42,7 @@ namespace Anima2D
 		{
 			if(m_Materials != null)
 			{
-				foreach(Material material in m_Materials)
+				foreach(var material in m_Materials)
 				{
 					if(material)
 					{
@@ -56,7 +56,7 @@ namespace Anima2D
 		{
 			if(materials != null)
 			{
-				foreach(Material material in materials)
+				foreach(var material in materials)
 				{
 					if (material)
 					{
@@ -71,11 +71,11 @@ namespace Anima2D
 		{
 			if(materials != null)
 			{
-				foreach(Material material in materials)
+				foreach(var material in materials)
 				{
 					if (material)
 					{
-						Color color = material.color;
+						var color = material.color;
 						color.a = alpha;
 						material.color = color;
 					}

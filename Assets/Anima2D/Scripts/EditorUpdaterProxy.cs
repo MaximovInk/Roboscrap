@@ -20,7 +20,7 @@ namespace Anima2D
 					
 					if (!m_Instance)
 					{
-						GameObject l_instanceGO = new GameObject("EditorUpdaterProxy");
+						var l_instanceGO = new GameObject("EditorUpdaterProxy");
 						
 						m_Instance = l_instanceGO.AddComponent<EditorUpdaterProxy>();
 						

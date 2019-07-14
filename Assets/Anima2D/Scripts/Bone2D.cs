@@ -76,7 +76,7 @@ namespace Anima2D
 			{
 				if(child)
 				{
-					Vector3 childPosition = transform.InverseTransformPoint(child.transform.position);
+					var childPosition = transform.InverseTransformPoint(child.transform.position);
 					m_Length = Mathf.Clamp(childPosition.x,0f,childPosition.x);
 				}
 
@@ -101,7 +101,7 @@ namespace Anima2D
 		{
 			get
 			{
-				Transform parentTransform = transform.parent;
+				var parentTransform = transform.parent;
 
 				if(!m_ParentBone)
 				{
@@ -137,7 +137,7 @@ namespace Anima2D
 		{
 			get
 			{
-				Bone2D rootBone = this;
+				var rootBone = this;
 				
 				while(rootBone.parentBone)
 				{
@@ -152,7 +152,7 @@ namespace Anima2D
 		{
 			get
 			{
-				Bone2D chainRoot = this;
+				var chainRoot = this;
 				
 				while(chainRoot.parentBone && chainRoot.parentBone.child == chainRoot)
 				{
@@ -167,9 +167,9 @@ namespace Anima2D
 		{
 			get
 			{
-				Bone2D chainRoot = this;
+				var chainRoot = this;
 
-				int length = 1;
+				var length = 1;
 
 				while(chainRoot.parentBone && chainRoot.parentBone.child == chainRoot)
 				{
@@ -186,11 +186,11 @@ namespace Anima2D
 			if(!chainTip)
 				return null;
 			
-			Bone2D bone = chainTip;
+			var bone = chainTip;
 			
-			int chainLength = bone.chainLength;
+			var chainLength = bone.chainLength;
 			
-			for(int i = 0; i < chainLength && bone; ++i)
+			for(var i = 0; i < chainLength && bone; ++i)
 			{
 				if(i == index)
 				{

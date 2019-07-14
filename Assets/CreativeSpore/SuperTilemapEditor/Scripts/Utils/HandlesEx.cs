@@ -21,7 +21,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public static void DrawDotOutline(Transform transform, Vector3 position, float size, Color color, Color colorOutline)
         {
-            Rect rDot = new Rect(-size / (2 * transform.localScale.x), -size / (2 * transform.localScale.y), size / transform.localScale.x, size / transform.localScale.y);
+            var rDot = new Rect(-size / (2 * transform.localScale.x), -size / (2 * transform.localScale.y), size / transform.localScale.x, size / transform.localScale.y);
             Vector3[] rectVerts = { 
             transform.TransformPoint( position + new Vector3(rDot.x, rDot.y, 0)), 
 			transform.TransformPoint( position + new Vector3(rDot.x + rDot.width, rDot.y, 0)), 
@@ -55,7 +55,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public static void DrawDotOutline(Vector3 position, float size, Color color, Color colorOutline)
         {
-            Rect rDot = new Rect(-size / 2, -size / 2, size, size);
+            var rDot = new Rect(-size / 2, -size / 2, size, size);
             Vector3[] rectVerts = { 
             position + new Vector3(rDot.x, rDot.y, 0), 
 			position + new Vector3(rDot.x + rDot.width, rDot.y, 0), 
@@ -79,9 +79,9 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public static void DrawDottedPolyLine(Vector3[] points, float screenSpaceSize, Color color)
         {
-            Color savedColor = Handles.color;
+            var savedColor = Handles.color;
             Handles.color = color;
-            for (int i = 0; i < points.Length; ++i )
+            for (var i = 0; i < points.Length; ++i )
                 Handles.DrawDottedLine(points[i], points[(i + 1) % points.Length], screenSpaceSize);
             Handles.color = savedColor;
         }

@@ -14,9 +14,9 @@ namespace Anima2D
 		{
 			if(!rootBone) return;
 
-			for(int i = 0; i < solverPoses.Count; ++i)
+			for(var i = 0; i < solverPoses.Count; ++i)
 			{
-				SolverPose solverPose = solverPoses[i];
+				var solverPose = solverPoses[i];
 				
 				if(solverPose != null && solverPose.bone)
 				{
@@ -25,39 +25,39 @@ namespace Anima2D
 				}
 			}
 		
-			Vector3 localEndPosition = rootBone.transform.InverseTransformPoint(solverPoses[solverPoses.Count-1].bone.endPosition);
-			Vector3 localTargetPosition = rootBone.transform.InverseTransformPoint(targetPosition);
+			var localEndPosition = rootBone.transform.InverseTransformPoint(solverPoses[solverPoses.Count-1].bone.endPosition);
+			var localTargetPosition = rootBone.transform.InverseTransformPoint(targetPosition);
 			
 			damping = Mathf.Clamp01(damping);
 
-			float l_damping = 1f - Mathf.Lerp(0f,0.99f,damping);
+			var l_damping = 1f - Mathf.Lerp(0f,0.99f,damping);
 
-			for(int i = 0; i < iterations; ++i)
+			for(var i = 0; i < iterations; ++i)
 			{
-				for(int j = solverPoses.Count-1; j >= 0; --j)
+				for(var j = solverPoses.Count-1; j >= 0; --j)
 				{
-					SolverPose solverPose = solverPoses[j];
+					var solverPose = solverPoses[j];
 
-					Vector3 toTarget = localTargetPosition - solverPose.solverPosition;
-					Vector3 toEnd = localEndPosition - solverPose.solverPosition;
+					var toTarget = localTargetPosition - solverPose.solverPosition;
+					var toEnd = localEndPosition - solverPose.solverPosition;
 					toTarget.z = 0f;
 					toEnd.z = 0f;
 					
-					float localAngleDelta = MathUtils.SignedAngle(toEnd, toTarget, Vector3.forward);
+					var localAngleDelta = MathUtils.SignedAngle(toEnd, toTarget, Vector3.forward);
 
 					localAngleDelta *=  l_damping;
 
-					Quaternion localRotation = Quaternion.AngleAxis(localAngleDelta,Vector3.forward);
+					var localRotation = Quaternion.AngleAxis(localAngleDelta,Vector3.forward);
 					
 					solverPose.solverRotation = solverPose.solverRotation * localRotation;
 					
-					Vector3 pivotPosition = solverPose.solverPosition;
+					var pivotPosition = solverPose.solverPosition;
 
 					localEndPosition = RotatePositionFrom(localEndPosition,pivotPosition,localRotation);
 
-					for(int k = solverPoses.Count-1; k > j; --k)
+					for(var k = solverPoses.Count-1; k > j; --k)
 					{
-						SolverPose sp = solverPoses[k];
+						var sp = solverPoses[k];
 						sp.solverPosition = RotatePositionFrom(sp.solverPosition,pivotPosition,localRotation);
 					}
 
@@ -67,7 +67,7 @@ namespace Anima2D
 
 		Vector3 RotatePositionFrom(Vector3 position, Vector3 pivot, Quaternion rotation)
 		{
-			Vector3 v = position - pivot;
+			var v = position - pivot;
 			v = rotation * v;
 			return pivot + v;
 		}

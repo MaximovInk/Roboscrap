@@ -18,7 +18,7 @@ namespace MaximovInk
         private void FixedUpdate()
         {
             
-                Vector3 newPosition = camIk.position;
+                var newPosition = camIk.position;
                 newPosition.z = camIk.transform.position.z - Zoffset;
                 transform.position += player.position - lastPlayerPos;
                 transform.position = Vector3.Slerp(transform.position, newPosition, FollowSpeed * Time.deltaTime);

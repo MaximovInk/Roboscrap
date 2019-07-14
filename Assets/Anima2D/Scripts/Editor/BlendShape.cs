@@ -12,7 +12,7 @@ namespace Anima2D
 		
 		public static BlendShape Create(string name)
 		{
-			BlendShape blendShape = ScriptableObject.CreateInstance<BlendShape>();
+			var blendShape = ScriptableObject.CreateInstance<BlendShape>();
 			blendShape.name = name;
 			return blendShape;
 		}

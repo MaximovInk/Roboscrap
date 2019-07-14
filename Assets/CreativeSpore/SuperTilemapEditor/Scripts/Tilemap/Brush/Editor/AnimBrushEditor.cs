@@ -37,33 +37,33 @@ namespace CreativeSpore.SuperTilemapEditor
             };
             m_frameList.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) =>
             {
-                Rect rTile = rect; rTile.width = rTile.height = m_brush.Tileset.VisualTileSize.y;
-                uint tileData = m_brush.AnimFrames[index].tileId;
-                int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
+                var rTile = rect; rTile.width = rTile.height = m_brush.Tileset.VisualTileSize.y;
+                var tileData = m_brush.AnimFrames[index].tileId;
+                var tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
                 if (tileId != Tileset.k_TileId_Empty)
                 {
-                    Rect tileUV = m_brush.Tileset.Tiles[tileId].uv;
+                    var tileUV = m_brush.Tileset.Tiles[tileId].uv;
                     tileUV.position += m_brush.AnimFrames[index].UVOffset;
                     GUI.Box(new Rect(rTile.position - Vector2.one, rTile.size + 2 * Vector2.one), "");
                     TilesetEditor.DoGUIDrawTileFromTileData(rTile, tileData, m_brush.Tileset);
                 }
 
-                Rect rTileId = rect;
+                var rTileId = rect;
                 rTileId.x += rTile.width + 20; rTileId.width -= rTile.width + 20;
                 rTileId.height = rect.height / 2;
                 GUI.Label(rTileId, "Id(" + tileId + ")");
-                Vector2 uvOffset = m_brush.AnimFrames[index].UVOffset;
-                Vector2 UvPxOffset = new Vector2(uvOffset.x / m_brush.Tileset.AtlasTexture.texelSize.x, uvOffset.y / m_brush.Tileset.AtlasTexture.texelSize.y);
+                var uvOffset = m_brush.AnimFrames[index].UVOffset;
+                var UvPxOffset = new Vector2(uvOffset.x / m_brush.Tileset.AtlasTexture.texelSize.x, uvOffset.y / m_brush.Tileset.AtlasTexture.texelSize.y);
                 rTileId.y += rTileId.height;
                 GUI.Label(rTileId, "UVOffset(" + UvPxOffset.x + "," + UvPxOffset.y + ")");
 
-                int btnIdx = 0;
-                float btnSize = rect.height / 2;
-                for (int gy = 0; gy < 2; ++gy)
+                var btnIdx = 0;
+                var btnSize = rect.height / 2;
+                for (var gy = 0; gy < 2; ++gy)
                 {
-                    for (int gx = 0; gx < 3; ++gx, ++btnIdx)
+                    for (var gx = 0; gx < 3; ++gx, ++btnIdx)
                     {
-                        Rect btnRect = new Rect(rect.x + rect.width - (gx + 1) * btnSize, rect.y + gy * rect.height / 2f, btnSize, btnSize);
+                        var btnRect = new Rect(rect.x + rect.width - (gx + 1) * btnSize, rect.y + gy * rect.height / 2f, btnSize, btnSize);
                         switch (btnIdx)
                         {
                             case 0: if (GUI.Button(btnRect, "R")) uvOffset = Vector2.zero; break;
@@ -124,12 +124,12 @@ namespace CreativeSpore.SuperTilemapEditor
             base.OnInspectorGUI();
             if (!m_brush.Tileset) return;
 
-            Vector2 visualTileSize = m_brush.Tileset.VisualTileSize;
+            var visualTileSize = m_brush.Tileset.VisualTileSize;
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("AnimFPS"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("AnimDelay"));            
 
-            TileSelection tileSelection = ((TilesetBrush)target).Tileset.TileSelection;
+            var tileSelection = ((TilesetBrush)target).Tileset.TileSelection;
             if (tileSelection != null)
             {
                 if( GUILayout.Button("Add tile selection as animation frames") )
@@ -142,14 +142,14 @@ namespace CreativeSpore.SuperTilemapEditor
 
             // Draw animation
             GUILayoutUtility.GetRect(1f, 1f, GUILayout.Width(visualTileSize.x), GUILayout.Height(visualTileSize.y));
-            Rect rAnimFrame = GUILayoutUtility.GetLastRect();
-            uint tileData = m_brush.GetAnimTileData();
+            var rAnimFrame = GUILayoutUtility.GetLastRect();
+            var tileData = m_brush.GetAnimTileData();
             rAnimFrame.center = new Vector2(EditorGUIUtility.currentViewWidth / 2, rAnimFrame.center.y);
             GUI.Box(new Rect(rAnimFrame.position - Vector2.one, rAnimFrame.size + 2 * Vector2.one), "");
             TilesetEditor.DoGUIDrawTileFromTileData(rAnimFrame, tileData, m_brush.Tileset, m_brush.GetAnimUV());
 
             EditorGUILayout.Space();
-            uint brushTileData = m_frameList.index >= 0 ? m_brush.AnimFrames[m_frameList.index].tileId : Tileset.k_TileData_Empty;
+            var brushTileData = m_frameList.index >= 0 ? m_brush.AnimFrames[m_frameList.index].tileId : Tileset.k_TileData_Empty;
             brushTileData = BrushTileGridControl.DoTileDataPropertiesLayout(brushTileData, m_brush.Tileset, false);
             if (m_frameList.index >= 0)
             {

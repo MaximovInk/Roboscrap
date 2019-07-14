@@ -72,44 +72,44 @@ namespace Anima2D
 				s_StartPivot = GetNormalizedPivot(rect);
 			}
 
-			Vector3 scale = Vector3.one;
-			Quaternion inverseRotation = Quaternion.Inverse(rotation);
+			var scale = Vector3.one;
+			var inverseRotation = Quaternion.Inverse(rotation);
 
-			for (int i = 0; i <= 2; i++)
+			for (var i = 0; i <= 2; i++)
 			{
-				for (int j = 0; j <= 2; j++)
+				for (var j = 0; j <= 2; j++)
 				{
 					if (i != 1 || j != 1)
 					{
-						Vector3 startWorldPoint = GetRectPointInWorld(s_StartRect, s_StartPosition, rotation, i, j);
-						Vector3 currentWorldPoint = GetRectPointInWorld(s_CurrentRect, s_StartPosition, rotation, i, j);
-						Vector3 rectWorldPoint = GetRectPointInWorld(rect, position, rotation, i, j);
+						var startWorldPoint = GetRectPointInWorld(s_StartRect, s_StartPosition, rotation, i, j);
+						var currentWorldPoint = GetRectPointInWorld(s_CurrentRect, s_StartPosition, rotation, i, j);
+						var rectWorldPoint = GetRectPointInWorld(rect, position, rotation, i, j);
 
-						int controlID = GUIUtility.GetControlID("RectResizeHandles".GetHashCode(), FocusType.Passive);
+						var controlID = GUIUtility.GetControlID("RectResizeHandles".GetHashCode(), FocusType.Passive);
 
-						EventType eventType = Event.current.GetTypeForControl(controlID);
+						var eventType = Event.current.GetTypeForControl(controlID);
 
 						if (GUI.color.a > 0f || GUIUtility.hotControl == controlID)
 						{
 							EditorGUI.BeginChangeCheck();
-							Vector3 newPosition = Vector3.zero;
+							var newPosition = Vector3.zero;
 
-							MouseCursor cursor = MouseCursor.Arrow;
+							var cursor = MouseCursor.Arrow;
 						
 							if (i == 1 || j == 1)
 							{
-								Vector3 sideVector = (i != 1) ? (rotation * Vector3.up * rect.height) : (rotation * Vector3.right * rect.width);
-								Vector3 direction = (i != 1) ? (rotation * Vector3.right) : (rotation * Vector3.up);
+								var sideVector = (i != 1) ? (rotation * Vector3.up * rect.height) : (rotation * Vector3.right * rect.width);
+								var direction = (i != 1) ? (rotation * Vector3.right) : (rotation * Vector3.up);
 								newPosition = SideSlider(controlID, currentWorldPoint, sideVector, direction, null);
 
 								if(!Event.current.alt && eventType == EventType.Layout)
 								{
-									Vector3 normalized2 = sideVector.normalized;
+									var normalized2 = sideVector.normalized;
 
-									Vector3 p1 = rectWorldPoint + sideVector * 0.5f;
-									Vector3 p2 = rectWorldPoint - sideVector * 0.5f;
-									Vector3 offset = - normalized2 * HandleUtility.GetHandleSize(p1) / 20f;
-									Vector3 offset2 = normalized2 * HandleUtility.GetHandleSize(p2) / 20f;
+									var p1 = rectWorldPoint + sideVector * 0.5f;
+									var p2 = rectWorldPoint - sideVector * 0.5f;
+									var offset = - normalized2 * HandleUtility.GetHandleSize(p1) / 20f;
+									var offset2 = normalized2 * HandleUtility.GetHandleSize(p2) / 20f;
 
 									HandleUtility.AddControl(controlID, HandleUtility.DistanceToLine(p1 + offset, p2 + offset2));
 								}
@@ -127,8 +127,8 @@ namespace Anima2D
 									HandleUtility.AddControl(controlID, HandleUtility.DistanceToCircle(rectWorldPoint, HandleUtility.GetHandleSize(rectWorldPoint) / 20f));
 								}
 
-								Vector3 outwardsDir = rotation * Vector3.right * (float)(i - 1);
-								Vector3 outwardsDir2 = rotation * Vector3.up * (float)(j - 1);
+								var outwardsDir = rotation * Vector3.right * (float)(i - 1);
+								var outwardsDir2 = rotation * Vector3.up * (float)(j - 1);
 
 								cursor = GetScaleCursor(outwardsDir + outwardsDir2);
 							}
@@ -137,7 +137,7 @@ namespace Anima2D
 							{
 								if ((HandleUtility.nearestControl == controlID && GUIUtility.hotControl == 0) || GUIUtility.hotControl == controlID)
 								{
-									Rect cursorRect = new Rect(0,0, 20f, 20f);
+									var cursorRect = new Rect(0,0, 20f, 20f);
 
 									cursorRect.center = Event.current.mousePosition;
 									
@@ -147,20 +147,20 @@ namespace Anima2D
 
 							if (EditorGUI.EndChangeCheck())
 							{
-								Vector3 scalePivot = Vector3.zero;
-								Vector2 scalePivotLocal = Vector2.one;
+								var scalePivot = Vector3.zero;
+								var scalePivotLocal = Vector2.one;
 
-								bool alt = Event.current.alt;
-								bool actionKey = EditorGUI.actionKey;
-								bool shiftDown = Event.current.shift && !actionKey;
+								var alt = Event.current.alt;
+								var actionKey = EditorGUI.actionKey;
+								var shiftDown = Event.current.shift && !actionKey;
 								if (!alt)
 								{
 									scalePivot = GetRectPointInWorld(s_StartRect, s_StartPosition, rotation, 2 - i, 2 - j);
 									scalePivotLocal = inverseRotation * (scalePivot - s_StartPosition);
 								}
 
-								Vector3 localRectPoint = inverseRotation * (startWorldPoint - scalePivot);
-								Vector3 localNewPosition = inverseRotation * (newPosition - scalePivot);
+								var localRectPoint = inverseRotation * (startWorldPoint - scalePivot);
+								var localNewPosition = inverseRotation * (newPosition - scalePivot);
 
 								if (i != 1)
 								{
@@ -172,7 +172,7 @@ namespace Anima2D
 								}
 								if (shiftDown)
 								{
-									float d = (i != 1) ? scale.x : scale.y;
+									var d = (i != 1) ? scale.x : scale.y;
 									scale = Vector3.one * d;
 								}
 								if (actionKey && i == 1)
@@ -188,7 +188,7 @@ namespace Anima2D
 								}
 								if (shiftDown)
 								{
-									float d2 = (i != 1) ? scale.x : scale.y;
+									var d2 = (i != 1) ? scale.x : scale.y;
 									scale = Vector3.one * d2;
 								}
 								if (actionKey && i == 1)
@@ -225,7 +225,7 @@ namespace Anima2D
 									rect.position = Vector2.Scale(scale,s_StartRect.position);
 									rect.size = Vector2.Scale(scale,s_StartRect.size);
 									
-									Vector2 newPivot = new Vector2(s_CurrentRect.xMin + (s_CurrentRect.xMax - s_CurrentRect.xMin) * s_StartPivot.x,
+									var newPivot = new Vector2(s_CurrentRect.xMin + (s_CurrentRect.xMax - s_CurrentRect.xMin) * s_StartPivot.x,
 									                               s_CurrentRect.yMin + (s_CurrentRect.yMax - s_CurrentRect.yMin) * s_StartPivot.y);
 									
 									position =  s_StartPosition + rotation * newPivot;
@@ -240,8 +240,8 @@ namespace Anima2D
 
 		static Rect MoveHandlesGUI(Rect rect, ref Vector3 position, Quaternion rotation, bool anchorPivot = false)
 		{
-			int controlID = GUIUtility.GetControlID("RectMoveHandles".GetHashCode(), FocusType.Passive);
-			EventType eventType = Event.current.GetTypeForControl(controlID);
+			var controlID = GUIUtility.GetControlID("RectMoveHandles".GetHashCode(), FocusType.Passive);
+			var eventType = Event.current.GetTypeForControl(controlID);
 
 			if(eventType == EventType.MouseDown)
 			{
@@ -267,7 +267,7 @@ namespace Anima2D
 
 			if(eventType == EventType.Layout)
 			{
-				Vector2 mousePositionRectSpace = Vector2.zero;
+				var mousePositionRectSpace = Vector2.zero;
 
 				mousePositionRectSpace = Quaternion.Inverse(rotation) * (HandlesExtra.GUIToWorld(Event.current.mousePosition) - position);
 
@@ -284,7 +284,7 @@ namespace Anima2D
 				    GUIUtility.hotControl == 0) ||
 				   GUIUtility.hotControl == controlID)
 				{
-					Rect cursorRect = new Rect(0f,0f,20f,20f);
+					var cursorRect = new Rect(0f,0f,20f,20f);
 					cursorRect.center = Event.current.mousePosition;
 					EditorGUIUtility.AddCursorRect(cursorRect, MouseCursor.MoveArrow, controlID);
 				}
@@ -295,19 +295,19 @@ namespace Anima2D
 
 		static Quaternion RotationHandlesGUI(Rect rect, Vector3 pivot, Quaternion rotation)
 		{
-			Vector3 eulerAngles = rotation.eulerAngles;
-			for (int i = 0; i <= 2; i += 2)
+			var eulerAngles = rotation.eulerAngles;
+			for (var i = 0; i <= 2; i += 2)
 			{
-				for (int j = 0; j <= 2; j += 2)
+				for (var j = 0; j <= 2; j += 2)
 				{
-					Vector3 rectPointInWorld = GetRectPointInWorld(rect, pivot, rotation, i, j);
-					float handleSize = 0.05f * Handles.matrix.m00;
-					int controlID = GUIUtility.GetControlID("RectRotationHandles".GetHashCode(), FocusType.Passive);
+					var rectPointInWorld = GetRectPointInWorld(rect, pivot, rotation, i, j);
+					var handleSize = 0.05f * Handles.matrix.m00;
+					var controlID = GUIUtility.GetControlID("RectRotationHandles".GetHashCode(), FocusType.Passive);
 
 					EditorGUI.BeginChangeCheck();
-					Vector3 outwardsDir = rotation * Vector3.right * (float)(i - 1) * Mathf.Sign(rect.width);
-					Vector3 outwardsDir2 = rotation * Vector3.up * (float)(j - 1) * Mathf.Sign(rect.height);
-					float num = RotationSlider(controlID, rectPointInWorld, eulerAngles.z, pivot, rotation * Vector3.forward, outwardsDir, outwardsDir2, handleSize, null, Vector2.zero);
+					var outwardsDir = rotation * Vector3.right * (float)(i - 1) * Mathf.Sign(rect.width);
+					var outwardsDir2 = rotation * Vector3.up * (float)(j - 1) * Mathf.Sign(rect.height);
+					var num = RotationSlider(controlID, rectPointInWorld, eulerAngles.z, pivot, rotation * Vector3.forward, outwardsDir, outwardsDir2, handleSize, null, Vector2.zero);
 					if (EditorGUI.EndChangeCheck())
 					{
 						if (Event.current.shift)
@@ -329,14 +329,14 @@ namespace Anima2D
 				return;
 			}
 
-			Vector3[] corners = new Vector3[4];
-			for (int i = 0; i < 4; i++)
+			var corners = new Vector3[4];
+			for (var i = 0; i < 4; i++)
 			{
 				Vector3 point = GetLocalRectPoint(rect, i);
 				corners[i] = rotation * point + position;
 			}
 
-			Vector3[] points = new Vector3[]
+			var points = new Vector3[]
 			{
 				corners[0],
 				corners[1],
@@ -345,10 +345,10 @@ namespace Anima2D
 				corners[0]
 			};
 
-			Color l_color = Handles.color;
+			var l_color = Handles.color;
 			Handles.color = color;
 
-			Vector2 offset = new Vector2(1f, 1f);
+			var offset = new Vector2(1f, 1f);
 
 			if(!Camera.current)
 			{
@@ -373,11 +373,11 @@ namespace Anima2D
 				s_TempVectors = new Vector3[points.Length];
 			}
 
-			for (int i = 0; i < points.Length; i++)
+			for (var i = 0; i < points.Length; i++)
 			{
 				s_TempVectors[i] = (Vector3)HandlesExtra.GUIToWorld(HandleUtility.WorldToGUIPoint(points[i]) + screenOffset);
 			}
-			Color color = Handles.color;
+			var color = Handles.color;
 			Handles.color = lineColor;
 			DrawPolyLine(s_TempVectors);
 			Handles.color = color;
@@ -389,7 +389,7 @@ namespace Anima2D
 			{
 				return;
 			}
-			Color c = Handles.color;
+			var c = Handles.color;
 
 			HandlesExtra.ApplyWireMaterial();
 
@@ -397,7 +397,7 @@ namespace Anima2D
 			GL.MultMatrix (Handles.matrix);
 			GL.Begin (1);
 			GL.Color (c);
-			for (int i = 1; i < points.Length; i++)
+			for (var i = 1; i < points.Length; i++)
 			{
 				GL.Vertex (points [i]);
 				GL.Vertex (points [i - 1]);
@@ -408,8 +408,8 @@ namespace Anima2D
 
 		static Rect PivotHandleGUI(Rect rect, ref Vector3 position, Quaternion rotation)
 		{
-			int controlID = GUIUtility.GetControlID("RectPivotHandle".GetHashCode(), FocusType.Passive);
-			EventType eventType = Event.current.GetTypeForControl(controlID);
+			var controlID = GUIUtility.GetControlID("RectPivotHandle".GetHashCode(), FocusType.Passive);
+			var eventType = Event.current.GetTypeForControl(controlID);
 			
 			EditorGUI.BeginChangeCheck();
 
@@ -417,7 +417,7 @@ namespace Anima2D
 
 			if (EditorGUI.EndChangeCheck())
 			{
-				Vector3 pivotDelta = (newPosition - position);
+				var pivotDelta = (newPosition - position);
 				Vector2 pivotDeltaLocal = Quaternion.Inverse(rotation) * pivotDelta;
 				position = newPosition;
 				rect.position -= pivotDeltaLocal;
@@ -425,7 +425,7 @@ namespace Anima2D
 
 			if(eventType == EventType.Layout)
 			{
-				float radius = HandleUtility.GetHandleSize(position) / 2f;
+				var radius = HandleUtility.GetHandleSize(position) / 2f;
 
 				if(Camera.current)
 				{
@@ -439,7 +439,7 @@ namespace Anima2D
 			{
 				if ((HandleUtility.nearestControl == controlID && GUIUtility.hotControl == 0) || GUIUtility.hotControl == controlID)
 				{
-					Rect cursorRect = new Rect(0,0, 20f, 20f);
+					var cursorRect = new Rect(0,0, 20f, 20f);
 					cursorRect.center = Event.current.mousePosition;
 
 					EditorGUIUtility.AddCursorRect(cursorRect, MouseCursor.Arrow, controlID);
@@ -453,17 +453,17 @@ namespace Anima2D
 		{
 			dirA = Vector3.ProjectOnPlane(dirA, axis);
 			dirB = Vector3.ProjectOnPlane(dirB, axis);
-			float num = Vector3.Angle(dirA, dirB);
+			var num = Vector3.Angle(dirA, dirB);
 			return num * (float)((Vector3.Dot(axis, Vector3.Cross(dirA, dirB)) >= 0f) ? 1 : -1);
 		}
 
 		static float RotationSlider(int controlID, Vector3 cornerPos, float rotation, Vector3 pivot, Vector3 handleDir, Vector3 outwardsDir1, Vector3 outwardsDir2, float handleSize, HandlesExtra.CapFunction drawFunc, Vector2 snap)
 		{
-			EventType eventType = Event.current.GetTypeForControl(controlID);
+			var eventType = Event.current.GetTypeForControl(controlID);
 
-			Vector3 b = outwardsDir1 + outwardsDir2;
+			var b = outwardsDir1 + outwardsDir2;
 			Vector3 guiCornerPos = HandleUtility.WorldToGUIPoint(cornerPos);
-			Vector3 b2 = ((Vector3)HandleUtility.WorldToGUIPoint(cornerPos + b) - guiCornerPos).normalized * 15f;
+			var b2 = ((Vector3)HandleUtility.WorldToGUIPoint(cornerPos + b) - guiCornerPos).normalized * 15f;
 
 			cornerPos = HandlesExtra.GUIToWorld(guiCornerPos + b2);
 
@@ -480,7 +480,7 @@ namespace Anima2D
 			{
 				if((HandleUtility.nearestControl == controlID && GUIUtility.hotControl == 0) || GUIUtility.hotControl == controlID)
 				{
-					Rect cursorRect = new Rect(0, 0, 20f, 20f);
+					var cursorRect = new Rect(0, 0, 20f, 20f);
 					cursorRect.center = Event.current.mousePosition;
 					EditorGUIUtility.AddCursorRect(cursorRect, MouseCursor.RotateArrow, controlID);
 				}
@@ -500,7 +500,7 @@ namespace Anima2D
 
 		static MouseCursor GetScaleCursor(Vector2 direction)
 		{
-			float num = Mathf.Atan2(direction.x, direction.y) * 57.29578f;
+			var num = Mathf.Atan2(direction.x, direction.y) * 57.29578f;
 			if (num < 0f)
 			{
 				num = 360f + num;
