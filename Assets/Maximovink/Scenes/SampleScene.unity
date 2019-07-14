@@ -166,7 +166,7 @@ MonoBehaviour:
     thresoult: 0.001
     greatherThan: 0
   ChunkSize: 8
-  worldSize: 46000
+  worldSize: 5000
   iterationsDelay: 1
   NoiseScale: 2.34567
   TileScale: 15
