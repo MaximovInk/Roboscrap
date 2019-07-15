@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -35,14 +37,17 @@ namespace MaximovInk
         private List<LoadedChunk> _loadedChunks;
 
         public PrefabForPool[] prefabs;
-        
-        
+
+        public bool generateComplete;
+        private bool isLoaded;
 
         private const string path = "saves/null/map.json";
         
         private float offset => _chunkVisibality / 2 * ChunkSize * TileScale;
 
         private Map map;
+
+        public float generationProgress = 0;
         
         public Chunk GetChunkData(int x, int y)
         {
@@ -51,6 +56,7 @@ namespace MaximovInk
 
         private void Awake()
         {
+            
             if (instance != null && instance != this)
             {
                 Destroy(gameObject);
@@ -64,7 +70,17 @@ namespace MaximovInk
 
         private void Start()
         {
-            map = new Map {seed = Random.Range(0, 10000), chunks = new Chunk[worldSize, worldSize]};
+            Thread thread = new Thread(GenertateTerrain);
+            thread.Start();
+        }
+
+        private void GenertateTerrain()
+        {
+            var random = new System.Random();
+            map = new Map {seed = random.GetRandomFloat(0, 10000), chunks = new Chunk[worldSize, worldSize]};
+            
+            
+            
             for (var x = 0; x < worldSize; x++)
             {
                 for (var y = 0; y < worldSize; y++)
@@ -87,23 +103,39 @@ namespace MaximovInk
                                     (obj < RandomGroups[k].thresoult && !RandomGroups[k].greatherThan))
                                 {
 
-                                    var prefabIndex =  (byte)RandomGroups[k].index[Random.Range(0, RandomGroups[k].index.Length)];
+                                    var prefabIndex =  (byte)RandomGroups[k].index[random.Next(0, RandomGroups[k].index.Length)];
 
                                     //if(!TrashNearInChunk(i,j,map.chunks[x,y]))
                                     map.chunks[x, y].objects = map.chunks[x, y].objects.Add(new DataObject
-                                        {data = -1, prefab = prefabIndex, position = new Vector2(i*TileScale+Random.Range(-TileScale / 2.0f, TileScale / 2), j*TileScale+Random.Range(-TileScale / 2.0f, TileScale / 2))});
+                                    {
+                                        data = -1,
+                                        prefab = prefabIndex,
+                                        position = new Vector2(
+                                            i*TileScale+random.GetRandomFloat(-TileScale / 2.0f, TileScale / 2.0f),
+                                            j*TileScale+random.GetRandomFloat(-TileScale / 2.0f, TileScale / 2.0f))
+                                    });
                                     break;
 
                                 }
                             }
-                            
+
+                           
                         }
                     }
+                    generationProgress = (float)x/worldSize;
+                    //GameManager.Instance.LoadingSlider.value = generationProgress;
                 }
+             
             }
 
+            generateComplete = true;
             _loadedChunks = new List<LoadedChunk>(_chunkVisibality ^ 2);
+            //isLoaded = true;
 
+        }
+
+        public void OnEndGeneration()
+        {
             for (var x = 0; x < _chunkVisibality; x++)
             {
                 for (var y = 0; y < _chunkVisibality; y++)
@@ -112,8 +144,8 @@ namespace MaximovInk
                     go.transform.SetParent(transform);
 
 
-                   /* go.transform.localPosition = new Vector3(x * ChunkSize * TileScale - offset,
-                        y * ChunkSize * TileScale - offset);*/
+                    /* go.transform.localPosition = new Vector3(x * ChunkSize * TileScale - offset,
+                         y * ChunkSize * TileScale - offset);*/
 
                     _loadedChunks.Add(new LoadedChunk {target = go.transform, x = -1, y = -1,isFree = true});
                     go.name = "chunk";
@@ -121,6 +153,7 @@ namespace MaximovInk
                 }
             }
             UpdateChunksPos();
+            isLoaded = true;
         }
 
         private void UpdateChunksPos()
@@ -224,6 +257,10 @@ namespace MaximovInk
         
         private void Update()
         {
+            //Debug.Log(generationProgress);
+            if(!isLoaded)
+                return;
+            
             timer += Time.deltaTime;
 
             if (iterationsDelay < timer)

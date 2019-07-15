@@ -26,6 +26,10 @@ namespace MaximovInk
             return new Color32(a, r, g, b);
         }
 
+        public static float GetRandomFloat(this System.Random random,float minimum, float maximum)
+        { 
+            return (float)random.NextDouble() * (maximum - minimum) + minimum;
+        }
        
         public static T[] Add<T>(this T[] target, T item)
         {

@@ -91,16 +91,26 @@
                     LoadingSlider.value = progress;
                     loadingPercent = (int)(progress * 100);
                     LoadingText.text = LanguageManager.instance.GetValueByKey("_loading");
-                    if (loadingPercent == 100)
-                    {
-                        LoadingText.text = "Generation terrain";
-                    }
-
+                    
                     yield return null;
                 }
-                LoadingPanel.gameObject.SetActive(false);
+                //LoadingPanel.gameObject.SetActive(false);
             }
 
+            IEnumerator waitingFor()
+            {
+                while (!ChunkManager.instance.generateComplete)
+                {
+                    LoadingSlider.value = ChunkManager.instance.generationProgress;
+                    LoadingText.text = "Generation terrain " + (int) (ChunkManager.instance.generationProgress * 100) +
+                                       "%";
+                    yield return null;
+                }
+                LoadingPanel.SetActive(false);
+                ChunkManager.instance.OnEndGeneration();
+            }
+
+            
             private void OnLoadScene(Scene arg0, LoadSceneMode arg1)
             {
                 if (arg0.name != "Menu")
@@ -110,6 +120,7 @@
                     OpenInv.SetActive(true);
                     MainMenu.SetActive(false);
                     BlackBackground.SetActive(false);
+                    StartCoroutine(waitingFor());
                 }
                 else
                 {
@@ -122,8 +133,9 @@
                     WorkbenchPanel.SetActive(false);
                     InventoryPanel.SetActive(false);
                    RobotPartsPanel.SetActive(false);
+
                    //PauseMenu.SetActive(false);
-                   
+
                 }
             }
 
