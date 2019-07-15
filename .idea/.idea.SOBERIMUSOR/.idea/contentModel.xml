@@ -313,6 +313,10 @@
         </e>
         <e p="Maximovink" t="Include">
           <e p="Scripts" t="Include">
+            <e p="AI" t="Include">
+              <e p="NPC.cs" t="Include" />
+              <e p="PathfindingManager.cs" t="Include" />
+            </e>
             <e p="BackgroundScroller.cs" t="Include" />
             <e p="Breakable.cs" t="Include" />
             <e p="CameraFollow.cs" t="Include" />
@@ -344,6 +348,7 @@
               <e p="Workbench.cs" t="Include" />
             </e>
             <e p="LanguageManager.cs" t="Include" />
+            <e p="MiniMap.cs" t="Include" />
             <e p="PerlinTestPrefab.cs" t="Include" />
             <e p="Player.cs" t="Include" />
             <e p="RoboticParts" t="Include">
@@ -359,6 +364,7 @@
             </e>
             <e p="RobotPartEditor.cs" t="Include" />
             <e p="SavedPrefabBehaviour.cs" t="Include" />
+            <e p="SaveManager.cs" t="Include" />
             <e p="SelectableObject.cs" t="Include" />
             <e p="SettingsManager.cs" t="Include" />
             <e p="TranslatableText.cs" t="Include" />

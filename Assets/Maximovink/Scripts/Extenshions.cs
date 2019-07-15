@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -25,7 +26,7 @@ namespace MaximovInk
             var b = (byte)(color >> 0);
             return new Color32(a, r, g, b);
         }
-
+        
         public static float GetRandomFloat(this System.Random random,float minimum, float maximum)
         { 
             return (float)random.NextDouble() * (maximum - minimum) + minimum;
@@ -35,7 +36,6 @@ namespace MaximovInk
         {
             if (target == null)
             {
-                //TODO: Return null or throw ArgumentNullException;
                 return null;
             }
             var result = new T[target.Length + 1];

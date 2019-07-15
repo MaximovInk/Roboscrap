@@ -1,5 +1,6 @@
 
     using System.Collections;
+    using MaximovInk.AI;
     using UnityEngine;
     using UnityEngine.EventSystems;
     using UnityEngine.SceneManagement;
@@ -33,7 +34,7 @@
 
             public GameObject InventoryPanel, RobotPartsPanel,WorkbenchPanel,OpenWB,OpenInv,OpenRE;
 
-            public GameObject LoadingPanel,MainMenu,PauseMenu,BlackBackground;
+            public GameObject LoadingPanel,MainMenu,PauseMenu,LoadMenu,SaveMenu,BlackBackground;
             public Slider LoadingSlider;
             public Text LoadingText;
 
@@ -70,7 +71,7 @@
                 
                
             }
-            
+
             public void LoadScene(int index)
             {
                 StartCoroutine(nameof(LoadAsyncronously), index);
@@ -99,6 +100,7 @@
 
             IEnumerator waitingFor()
             {
+                ISPause = true;
                 while (!ChunkManager.instance.generateComplete)
                 {
                     LoadingSlider.value = ChunkManager.instance.generationProgress;
@@ -106,13 +108,31 @@
                                        "%";
                     yield return null;
                 }
-                LoadingPanel.SetActive(false);
                 ChunkManager.instance.OnEndGeneration();
+                PathfindingManager.instance.GenerateMap();
+                
+                while (!PathfindingManager.instance.generateComplete)
+                {
+                    LoadingSlider.value = PathfindingManager.instance.generationProgress;
+                    var progress = (int) (PathfindingManager.instance.generationProgress * 100);
+                    LoadingText.text = "Generation grid for ai " +progress +
+                                       "%";
+
+                    PathfindingManager.instance.generateComplete = progress == 100;
+                    
+                    yield return null;
+                }
+                
+                ISPause = false;
+                LoadingPanel.SetActive(false);
+                
             }
 
             
             private void OnLoadScene(Scene arg0, LoadSceneMode arg1)
             {
+                LoadMenu.SetActive(false);
+                SaveMenu.SetActive(false);
                 if (arg0.name != "Menu")
                 {
                     player = FindObjectOfType<Player>();
@@ -132,9 +152,9 @@
                     OpenWB.SetActive(false);
                     WorkbenchPanel.SetActive(false);
                     InventoryPanel.SetActive(false);
-                   RobotPartsPanel.SetActive(false);
-
-                   //PauseMenu.SetActive(false);
+                    RobotPartsPanel.SetActive(false);
+                    LoadingPanel.SetActive(false);
+                    //PauseMenu.SetActive(false);
 
                 }
             }
@@ -153,7 +173,7 @@
 
             public void Update()
             {
-                if (SceneManager.GetActiveScene().name != "Menu")
+                if (SceneManager.GetActiveScene().name != "Menu" && !ISPause)
                 {
                     if (Input.GetKeyDown(KeyCode.Escape))
                     {
@@ -230,6 +250,14 @@
                 Destroy(ps.gameObject, ps.main.startLifetime.constant);
                 
     
+            }
+            
+            public void CloseLoadSaveMenu()
+            {
+                LoadMenu.SetActive(false);
+                SaveMenu.SetActive(false);
+                PauseMenu.SetActive(SceneManager.GetActiveScene().name != "Menu");
+                MainMenu.SetActive(SceneManager.GetActiveScene().name == "Menu");
             }
         }
     }

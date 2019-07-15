@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MaximovInk.AI;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -41,17 +42,32 @@ namespace MaximovInk
         public bool generateComplete;
         private bool isLoaded;
 
+        public Chunk[,] GetChunks() => map.chunks;
+        
         private const string path = "saves/null/map.json";
         
         private float offset => _chunkVisibality / 2 * ChunkSize * TileScale;
 
-        private Map map;
+        public Map map { get; private set; }
 
         public float generationProgress = 0;
         
         public Chunk GetChunkData(int x, int y)
         {
            return map.chunks[x + map.chunks.GetLength(0) / 2, y + map.chunks.GetLength(1) / 2];
+        }
+
+        public bool UnitIsEmpty(int x, int y, int i, int j)
+        {
+            var chunk = map.chunks[x, y];
+            return chunk.objects.
+                       Cast<DataObject?>().
+                       FirstOrDefault(
+                           n => 
+                               n?.position.x-0.5f > i &&
+                                n?.position.x + 0.5f < i &&
+                                n?.position.y-0.5f > j && n?.position.y+0.5f < j) != null;
+
         }
 
         private void Awake()
@@ -64,7 +80,6 @@ namespace MaximovInk
             else
             {
                 instance = this;
-                DontDestroyOnLoad(instance);
             }
         }
 
@@ -130,7 +145,7 @@ namespace MaximovInk
 
             generateComplete = true;
             _loadedChunks = new List<LoadedChunk>(_chunkVisibality ^ 2);
-            //isLoaded = true;
+            
 
         }
 
@@ -154,6 +169,7 @@ namespace MaximovInk
             }
             UpdateChunksPos();
             isLoaded = true;
+            
         }
 
         private void UpdateChunksPos()
@@ -257,7 +273,6 @@ namespace MaximovInk
         
         private void Update()
         {
-            //Debug.Log(generationProgress);
             if(!isLoaded)
                 return;
             
@@ -313,6 +328,7 @@ namespace MaximovInk
             [Range(0,1)]
             public float thresoult;
             public bool greatherThan = true;
+            public Color mapColor;
         }
         
         [Serializable]

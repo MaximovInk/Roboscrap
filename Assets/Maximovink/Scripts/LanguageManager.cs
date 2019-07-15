@@ -87,8 +87,8 @@ namespace MaximovInk
             for (var i = 0; i < grid.GetLength(1); i++)
             {
                 keys[i] = grid[0, i];
-                russian[i] = grid[1, i];
-                english[i] = grid[2, i];
+                russian[i] = grid[2, i];
+                english[i] = grid[1, i];
             }
         }
 
