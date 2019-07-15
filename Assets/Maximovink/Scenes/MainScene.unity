@@ -160,14 +160,17 @@ MonoBehaviour:
   - index: 0100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e000000
     thresoult: 0.1
     greatherThan: 0
+    mapColor: {r: 0, g: 0, b: 0, a: 0}
   - index: 00000000
     thresoult: 0.6
     greatherThan: 1
+    mapColor: {r: 0, g: 0, b: 0, a: 0}
   - index: 0f00000010000000
     thresoult: 0.001
     greatherThan: 0
+    mapColor: {r: 0, g: 0, b: 0, a: 0}
   ChunkSize: 8
-  worldSize: 500
+  worldSize: 50
   iterationsDelay: 1
   NoiseScale: 2.34567
   TileScale: 15
@@ -263,7 +266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 1.9161689
+  m_Length: 1.9161693
   m_ChildTransform: {fileID: 1717803422}
   m_AttachedIK: {fileID: 766057714}
 --- !u!1 &83954032
@@ -405,7 +408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 1.9161687
+  m_Length: 1.9161689
   m_ChildTransform: {fileID: 1253820936}
   m_AttachedIK: {fileID: 797972790}
 --- !u!1 &122921481
@@ -663,7 +666,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 2.0849974
+  m_Length: 2.0849977
   m_ChildTransform: {fileID: 786673442}
   m_AttachedIK: {fileID: 725617447}
 --- !u!1 &149311808
@@ -858,7 +861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 1.9247427
+  m_Length: 1.924742
   m_ChildTransform: {fileID: 1940347307}
   m_AttachedIK: {fileID: 958044591}
 --- !u!1 &196782778
@@ -1000,7 +1003,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 1.8861731
+  m_Length: 1.8861699
   m_ChildTransform: {fileID: 2122223679}
   m_AttachedIK: {fileID: 1888636912}
 --- !u!1 &267943307
@@ -2420,7 +2423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 1.8861732
+  m_Length: 1.8861709
   m_ChildTransform: {fileID: 1809446654}
   m_AttachedIK: {fileID: 1639610251}
 --- !u!1 &663256030
@@ -2514,7 +2517,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 1.8245339
+  m_Length: 1.8245326
   m_ChildTransform: {fileID: 652217872}
   m_AttachedIK: {fileID: 1639610251}
 --- !u!1 &708088680
@@ -3169,7 +3172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 1.8861701
+  m_Length: 1.8861704
   m_ChildTransform: {fileID: 1282174069}
   m_AttachedIK: {fileID: 725617447}
 --- !u!1 &797972789
@@ -3521,7 +3524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 1.9247416
+  m_Length: 1.9247417
   m_ChildTransform: {fileID: 438797881}
   m_AttachedIK: {fileID: 995197766}
 --- !u!1 &850783817
@@ -5068,7 +5071,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 1.9247416
+  m_Length: 1.9247417
   m_ChildTransform: {fileID: 812520167}
   m_AttachedIK: {fileID: 797972790}
 --- !u!1 &1263584564
@@ -6244,7 +6247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 1.9161687
+  m_Length: 1.916169
   m_ChildTransform: {fileID: 841993787}
   m_AttachedIK: {fileID: 995197766}
 --- !u!1 &1639610249
@@ -6351,7 +6354,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 1.8245339
+  m_Length: 1.8245324
   m_ChildTransform: {fileID: 235230365}
   m_AttachedIK: {fileID: 1888636912}
 --- !u!1 &1654669850
@@ -6491,7 +6494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 1.9247427
+  m_Length: 1.924742
   m_ChildTransform: {fileID: 825258810}
   m_AttachedIK: {fileID: 766057714}
 --- !u!1 &1719456236
@@ -6878,7 +6881,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 1.9161689
+  m_Length: 1.9161693
   m_ChildTransform: {fileID: 180294606}
   m_AttachedIK: {fileID: 958044591}
 --- !u!1 &1809446653

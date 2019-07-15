@@ -16,12 +16,16 @@ namespace MaximovInk.AI
 
         public static PathfindingManager instance;
 
-        public float generationProgress => (float)threadsComplete / threadsCount;
+        public float generationProgress => (float)sectorsComplete / sectorsCount;
         public bool generateComplete;
 
-        private int threadsComplete;
+        private int sectorsCount , sectorsComplete;
 
         private int threadsCount = 6;
+        private int threadLimit;
+        
+        private Task[] threads;
+        private Task generationThread;
         
         private void Awake()
         {
@@ -37,67 +41,51 @@ namespace MaximovInk.AI
 
         public void GenerateMap()
         {
-            chunks = ChunkManager.instance.GetChunks();
+            chunks = ChunkManager.instance.map.chunks;
             worldSize = chunks.GetLength(0);
             size = ChunkManager.instance.ChunkSize * chunks.GetLength(0) * ChunkManager.instance.TileScale;
             tiles = new bool[size, size];
             chunkUnits = ChunkManager.instance.ChunkSize * ChunkManager.instance.TileScale / unit;
-            threadsCount = worldSize / unit;
-            // GenerateGrid();
-            Thread thread = new Thread(GenerateGrid);
-            thread.Start();
+            
+
+            sectorsCount = worldSize/unit;
+            threadsCount = 4;
+            generationThread = new Task(GenerateGrid);
+            generationThread.Start();
         }
 
         
         
         private void GenerateGrid()
         {   
-           /* for (int x = 0; x < chunks.GetLength(0); x++)
-            {
-                Parallel.For(0, chunks.GetLength(1), y =>
-                {
-                    for (int i = 0; i < chunkUnits; i++)
-                    {
-                        for (int j = 0; j < chunkUnits; j++)
-                        {
-                            tiles[x + i, y + j] = !ChunkManager.instance.UnitIsEmpty(x,y,i,j);
-                        }
-                    }
-                });
-                generationProgress = (float)x / chunks.GetLength(0);
-                       
-            }*/
-           var threads = new Thread[threadsCount];
+          
+           threads = new Task[threadsCount];
 
-           var partSize = worldSize / threads.Length;
+           var partSize = worldSize/unit / threads.Length;
 
            for (int iThread = 0; iThread < threads.Length; iThread++)
            {
                var g = iThread;
-               threads[iThread] = new Thread(() => { Generate(partSize * g, partSize * g + partSize);});
+               threads[iThread] = new Task(() => { Generate(partSize * g, partSize * g + partSize);});
                threads[iThread].Start();
                
            }
-           
-            
-             /*for (int x = 0; x < chunks.GetLength(0); x++)
+         
+
+        }
+
+        public void Clear()
+        {
+            for (int i = 0; i < threads.Length; i++)
             {
-                for (int y = 0; y < chunks.GetLength(1); y++)
-                {
-                    for (int i = 0; i < chunkUnits; i++)
-                    {
-                        for (int j = 0; j < chunkUnits; j++)
-                        {
-                            tiles[x + i, y + j] = !ChunkManager.instance.UnitIsEmpty(x,y,i,j);
-                        }
-                    }
-                    
-                }
+                threads[i].Dispose();
+            }
 
-                generationProgress = (float)x / chunks.GetLength(0);
-            }*/
-
-            //generateComplete = true;
+            threads = null;
+            generationThread.Dispose();
+            generationThread = null;
+            System.Runtime.GCSettings.LargeObjectHeapCompactionMode = System.Runtime.GCLargeObjectHeapCompactionMode.CompactOnce;
+            System.GC.Collect();
         }
 
         private void Generate(int startIndex , int endIndex)
@@ -110,16 +98,18 @@ namespace MaximovInk.AI
                     {
                         for (int j = 0; j < chunkUnits; j++)
                         {
-                            tiles[x + i*unit, y + j*unit] = !ChunkManager.instance.UnitIsEmpty(x,y,i,j);
+                            tiles[x + i, y + j] = !ChunkManager.instance.UnitIsEmpty(x,y,i*unit,j*unit);
                         }
                     }
                     
                 }
 
-                            
+                sectorsComplete++;       
             }
 
-            threadsComplete++;
+            
+           
+            
 
         }
         

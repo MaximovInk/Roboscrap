@@ -111,6 +111,8 @@
                 ChunkManager.instance.OnEndGeneration();
                 PathfindingManager.instance.GenerateMap();
                 
+                
+                
                 while (!PathfindingManager.instance.generateComplete)
                 {
                     LoadingSlider.value = PathfindingManager.instance.generationProgress;
@@ -122,7 +124,8 @@
                     
                     yield return null;
                 }
-                
+                ChunkManager.instance.Clear();
+                PathfindingManager.instance.Clear();
                 ISPause = false;
                 LoadingPanel.SetActive(false);
                 
@@ -154,7 +157,6 @@
                     InventoryPanel.SetActive(false);
                     RobotPartsPanel.SetActive(false);
                     LoadingPanel.SetActive(false);
-                    //PauseMenu.SetActive(false);
 
                 }
             }

@@ -51,6 +51,8 @@ namespace MaximovInk
         public Map map { get; private set; }
 
         public float generationProgress = 0;
+
+        private Thread generationThread;
         
         public Chunk GetChunkData(int x, int y)
         {
@@ -61,12 +63,13 @@ namespace MaximovInk
         {
             var chunk = map.chunks[x, y];
             return chunk.objects.
-                       Cast<DataObject?>().
-                       FirstOrDefault(
+                       First(
                            n => 
                                n?.position.x-0.5f > i &&
                                 n?.position.x + 0.5f < i &&
-                                n?.position.y-0.5f > j && n?.position.y+0.5f < j) != null;
+                                n?.position.y-0.5f > j &&
+                               n?.position.y+0.5f < j)
+                   != null;
 
         }
 
@@ -85,8 +88,14 @@ namespace MaximovInk
 
         private void Start()
         {
-            Thread thread = new Thread(GenertateTerrain);
-            thread.Start();
+            generationThread = new Thread(GenertateTerrain);
+            generationThread.Start();
+        }
+
+        public void Clear()
+        {
+            generationThread.Abort();
+            generationThread = null;
         }
 
         private void GenertateTerrain()
@@ -142,7 +151,8 @@ namespace MaximovInk
                 }
              
             }
-
+            System.Runtime.GCSettings.LargeObjectHeapCompactionMode = System.Runtime.GCLargeObjectHeapCompactionMode.CompactOnce;
+            GC.Collect();
             generateComplete = true;
             _loadedChunks = new List<LoadedChunk>(_chunkVisibality ^ 2);
             
@@ -315,7 +325,7 @@ namespace MaximovInk
             public DataObject[] objects;
         }
 
-        public struct DataObject
+        public class DataObject
         {
             public int data;
             public byte prefab;
