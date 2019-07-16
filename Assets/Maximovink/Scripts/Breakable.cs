@@ -1,5 +1,7 @@
+using System;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace MaximovInk
 {
@@ -9,36 +11,14 @@ namespace MaximovInk
         
        public Item[] Resources;
 
-       //public TextMesh textCondition;
-
        public int min = 10,max = 450;
 
-       public int maxHp = 255;
+       public int maxHp = 10;
        
-       /*private void Start()
-       {
-           var ht = Physics2D.OverlapBoxAll(transform.position, Vector2.one *10, 0);
-           var hts = ht.Where(n => n.GetComponentInParent<Trash>() && n.GetComponentInParent<Trash>().gameObject != gameObject).ToList();
-           if (hts.Count > 0)
-           {
-               Debug.Log("Destroy");
-              
-               Destroy(gameObject);
-           }
-           
-          
-       }*/
-       
-       
-
+ 
        public void Attack(int amount)
         {
             hp -= amount;
-            
-           // textCondition.gameObject.SetActive(true);
-
-           // textCondition.text = hp + " hp";
-            
             
             if (hp <= 0)
             {
@@ -55,7 +35,12 @@ namespace MaximovInk
                     GameManager.Instance.mainInventory.AddItem(item);
                     GameManager.Instance.TextMesh.gameObject.SetActive(false);
                 }
-                
+
+                hp = 0;
+                var list = Chunk.objects.ToList();
+                                                               
+                list.RemoveAt(ObjectId);
+                Chunk.objects = list.ToArray();
                 gameObject.SetActive(false);
             }
 
@@ -68,30 +53,29 @@ namespace MaximovInk
 
        public void UpdateInfo()
        {
-           //textCondition.gameObject.SetActive(hp < 255 && hp > 0);
-
-           //textCondition.text = hp + " hp";
-
            if (hp <= 0)
            {
                gameObject.SetActive(false);
            }
        }
 
-       protected override int OnSave()
+       public override object[] OnSave()
        {
-           return Mathf.Clamp(hp,0,255);
+           return new object[]{ Mathf.Clamp(hp,0,255) };
        }
 
-       protected override void OnLoad(int data)
+       public override void OnLoad(object[] data)
        {
            base.OnLoad(data);
            
-           hp = Mathf.Clamp((int)data,0,255);
-           if (data == -1)
+           
+           
+           if (data == null || data.Length == 0)
            {
                hp = maxHp;
            }
+           else
+            hp = Mathf.Clamp((int)data[0],0,255);
 
            UpdateInfo(); 
        }

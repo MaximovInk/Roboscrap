@@ -16,12 +16,12 @@ namespace MaximovInk
 
         private SpriteRenderer sp;
         
-        protected override void OnLoad(int data)
+        /*protected override void OnLoad(object[] data)
         {
             base.OnLoad(data);
-            var c = Extenshions.ToSingle((uint)data);
+            var c = (float)data[0];
             spriteRenderer.color = new Color(c,c,c);
             transform.localScale = Vector3.one*ChunkManager.instance.TileScale;
-        }
+        }*/
     }
 }

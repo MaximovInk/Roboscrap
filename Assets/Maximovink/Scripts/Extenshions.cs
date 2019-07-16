@@ -1,11 +1,13 @@
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace MaximovInk
 {
     public  static  class Extenshions
-    {
+    {        
+        public static readonly System.Random random = new System.Random();
         public static void Populate<T>(this T[] arr, T value ) {
             for ( var i = 0; i < arr.Length;i++ ) {
                 arr[i] = value;
@@ -31,7 +33,35 @@ namespace MaximovInk
         { 
             return (float)random.NextDouble() * (maximum - minimum) + minimum;
         }
-       
+
+        public static void MoveFromTo(string from, string to)
+        {
+
+            foreach (string dirPath in Directory.GetDirectories(from, "*",
+                 SearchOption.AllDirectories))
+                 Directory.CreateDirectory(dirPath.Replace(from, to));
+ 
+             foreach (string newPath in Directory.GetFiles(from, "*.*",
+                 SearchOption.AllDirectories))
+                 File.Copy(newPath, newPath.Replace(from, to), true);
+
+
+        }
+
+        public static void CleanDirectory(string path)
+        {
+            var di = new DirectoryInfo(path);
+
+            foreach (var file in di.GetFiles())
+            {
+                file.Delete(); 
+            }
+            foreach (var dir in di.GetDirectories())
+            {
+                dir.Delete(true); 
+            }
+        }
+
         public static T[] Add<T>(this T[] target, T item)
         {
             if (target == null)
@@ -62,6 +92,13 @@ namespace MaximovInk
                 default:
                     return "000";
             }
+        }
+        
+        public static string NormalizePath(string path)
+        {
+            return Path.GetFullPath(new Uri(path).LocalPath)
+                .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                .ToUpperInvariant();
         }
         
         [StructLayout(LayoutKind.Explicit)]

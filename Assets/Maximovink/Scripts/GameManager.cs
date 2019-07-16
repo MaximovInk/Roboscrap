@@ -43,7 +43,7 @@
                 get { return Time.timeScale == 0; }
                 set { Time.timeScale = value ? 0 : 1; PauseMenu.SetActive(value); BlackBackground.SetActive(ISPause); }
             }
-
+            
             public void SetTextMesh(string text)
             {
                 if(!TextMesh.gameObject.activeSelf)
@@ -74,16 +74,20 @@
 
             public void LoadScene(int index)
             {
+                
                 StartCoroutine(nameof(LoadAsyncronously), index);
             }
 
             public void Exit()
             {
-                Application.Quit();
+                //Application.Quit();
+                if (!Application.isEditor)
+                    System.Diagnostics.Process.GetCurrentProcess().Kill();
             }
 
             private IEnumerator LoadAsyncronously(int index)
             {
+                
                 LoadingPanel.gameObject.SetActive(true);
                 var operation = SceneManager.LoadSceneAsync(index);
                 while (!operation.isDone)
@@ -98,44 +102,13 @@
                 //LoadingPanel.gameObject.SetActive(false);
             }
 
-            IEnumerator waitingFor()
-            {
-                ISPause = true;
-                while (!ChunkManager.instance.generateComplete)
-                {
-                    LoadingSlider.value = ChunkManager.instance.generationProgress;
-                    LoadingText.text = "Generation terrain " + (int) (ChunkManager.instance.generationProgress * 100) +
-                                       "%";
-                    yield return null;
-                }
-                ChunkManager.instance.OnEndGeneration();
-                PathfindingManager.instance.GenerateMap();
-                
-                
-                
-                while (!PathfindingManager.instance.generateComplete)
-                {
-                    LoadingSlider.value = PathfindingManager.instance.generationProgress;
-                    var progress = (int) (PathfindingManager.instance.generationProgress * 100);
-                    LoadingText.text = "Generation grid for ai " +progress +
-                                       "%";
-
-                    PathfindingManager.instance.generateComplete = progress == 100;
-                    
-                    yield return null;
-                }
-                ChunkManager.instance.Clear();
-                PathfindingManager.instance.Clear();
-                ISPause = false;
-                LoadingPanel.SetActive(false);
-                
-            }
 
             
             private void OnLoadScene(Scene arg0, LoadSceneMode arg1)
             {
                 LoadMenu.SetActive(false);
                 SaveMenu.SetActive(false);
+                ISPause = false;
                 if (arg0.name != "Menu")
                 {
                     player = FindObjectOfType<Player>();
@@ -143,11 +116,11 @@
                     OpenInv.SetActive(true);
                     MainMenu.SetActive(false);
                     BlackBackground.SetActive(false);
-                    StartCoroutine(waitingFor());
+                    LoadingPanel.SetActive(false);
+                    MiniMap.instance.Init();
                 }
                 else
                 {
-                    ISPause = false;
                     BlackBackground.SetActive(true);
                     MainMenu.SetActive(true);
                     OpenRE.SetActive(false);

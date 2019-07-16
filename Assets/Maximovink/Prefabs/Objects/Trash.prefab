@@ -274,7 +274,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01688c9a9964cdfb066e79c05bd3790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectId: 0
   Resources:
   - {fileID: 11400000, guid: 0ca1fb2a449469742a0385a1cccbc205, type: 2}
   - {fileID: 11400000, guid: aad224a273d75af45b9d0f9882ca2c89, type: 2}
@@ -284,7 +283,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: aad224a273d75af45b9d0f9882ca2c89, type: 2}
   min: 10
   max: 450
-  maxHp: 255
+  maxHp: 10
 --- !u!212 &212918778439590228
 SpriteRenderer:
   m_ObjectHideFlags: 1

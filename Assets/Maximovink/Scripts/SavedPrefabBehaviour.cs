@@ -9,8 +9,7 @@ namespace MaximovInk
     {
         public ChunkManager.Chunk Chunk;
         public int ObjectId;
-
-        protected int loadedData;
+        protected object[] loadedData;
         
         private List<Entity> entites = new List<Entity>();
 
@@ -19,7 +18,7 @@ namespace MaximovInk
             entites = GetComponentsInChildren<Entity>().ToList();
         }
 
-        public void Load()
+       /* public void Load()
         {
             OnLoad(Chunk.objects[ObjectId].data);
         }
@@ -27,14 +26,14 @@ namespace MaximovInk
         public void Save()
         {
             Chunk.objects[ObjectId].data = OnSave();
-        }
+        }*/
 
-        protected virtual int OnSave()
+        public virtual object[] OnSave()
         {
             return loadedData;
         }
 
-        protected virtual void OnLoad(int data)
+        public virtual void OnLoad(object[] data)
         {
             loadedData = data;
 
