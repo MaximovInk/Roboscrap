@@ -37,6 +37,7 @@ namespace MaximovInk
         private float offset => _chunkVisibality / 2 * ChunkSize * TileScale;
 
         public Chunk playerChunk;
+        private Vector2Int chunk;
         
         public Vector2Int WorldToChunk(Vector2 pos) 
         {
@@ -51,7 +52,12 @@ namespace MaximovInk
         private void Update()
         {
             timer += Time.deltaTime;
-
+            
+            chunk = WorldToChunk(target.position);
+            var pc = _loadedChunks.FirstOrDefault(n => chunk.x == n.x && chunk.y == n.y);
+            if (pc != null)
+                playerChunk = pc;
+            
             if (iterationsDelay < timer)
             {
                 timer = 0;
@@ -59,10 +65,10 @@ namespace MaximovInk
                 {
                     lastPos = target.transform.position;
 
-                    var chunk = WorldToChunk(lastPos);
-                    if (lastChunk != chunk)
+                    var c = WorldToChunk(lastPos);
+                    if (lastChunk != c)
                     {
-                        lastChunk = chunk;
+                        lastChunk = c;
                         UpdateChunkPos();
                     }
                 }
@@ -99,7 +105,7 @@ namespace MaximovInk
 
                 }
             }
-            UpdateChunkPos();
+            //UpdateChunkPos();
         }
 
  
@@ -108,7 +114,7 @@ namespace MaximovInk
         {
             
             
-            var chunk = WorldToChunk(target.position);
+            
             
             foreach (var t in _loadedChunks)
             {
@@ -127,9 +133,7 @@ namespace MaximovInk
             TargetFreeChunkTo(chunk.x+1,chunk.y-1);
             TargetFreeChunkTo(chunk.x-1,chunk.y+1);
 
-            var pc = _loadedChunks.FirstOrDefault(n => chunk.x == n.x && chunk.y == n.y);
-            if (pc != null)
-                playerChunk = pc;
+            
         }
 
         public void TargetFreeChunkTo(int x, int y)
