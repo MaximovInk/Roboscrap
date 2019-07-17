@@ -347,7 +347,7 @@
               <e p="Workbench.cs" t="Include" />
             </e>
             <e p="LanguageManager.cs" t="Include" />
-            <e p="MiniMap.cs" t="Include" />
+            <e p="MapViewer.cs" t="Include" />
             <e p="PerlinTestPrefab.cs" t="Include" />
             <e p="Player.cs" t="Include" />
             <e p="RoboticParts" t="Include">

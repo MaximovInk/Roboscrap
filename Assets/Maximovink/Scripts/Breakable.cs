@@ -41,6 +41,7 @@ namespace MaximovInk
                                                                
                 list.RemoveAt(ObjectId);
                 Chunk.objects = list.ToArray();
+                ChunkManager.instance.SaveLoadedChunks();
                 gameObject.SetActive(false);
             }
 

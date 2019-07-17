@@ -39,6 +39,11 @@ namespace MaximovInk
 
         private void OnEnable()
         {
+            Load();
+        }
+
+        private void Load()
+        {
             for (var i = 0; i < items_parent.childCount; i++)
             {
                 Destroy(items_parent.GetChild(i).gameObject);
@@ -126,6 +131,9 @@ namespace MaximovInk
         {
             if(!selectedSlot.canCraft)
                 return;
+
+
+            var result = selectedSlot.item;
             
             var comp = RecipeDatabase.Recipes.First(n => n.result == selectedSlot.item).Components;
             
@@ -154,7 +162,11 @@ namespace MaximovInk
             }
 
             GameManager.Instance.mainInventory.AddItem(new ItemInstance{ item = selectedSlot.item, condition = selectedSlot.item.MaxCondition, count = 1});
-            DisplayInfo(selectedSlot);
+            
+            Load();
+            var sl = slots.FirstOrDefault(n => n.item == result);
+            sl.canCraft = CanCraft(sl.item);
+            DisplayInfo(sl);
         }
     }
 }

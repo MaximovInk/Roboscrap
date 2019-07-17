@@ -17,6 +17,5 @@ MonoBehaviour:
   Icon: {fileID: 21300008, guid: 477e2337b7ed9d548bc38afd251711f1, type: 3}
   DroppedSprite: {fileID: 0}
   Unbreakable: 0
-  MaxCondition: 0
+  MaxCondition: 1
   prefab: {fileID: 0}
-  damage: 0

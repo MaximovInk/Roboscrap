@@ -53,8 +53,7 @@
 
             public static int loadingPercent = 0;
             
-            public bool MouseIsFree => !EventSystem.current.IsPointerOverGameObject() /*&&
-            EventSystem.current.currentSelectedGameObject == null*/;
+            public bool MouseIsFree => !EventSystem.current.IsPointerOverGameObject();
             
             private void Awake()
             {
@@ -99,25 +98,40 @@
                     
                     yield return null;
                 }
-                //LoadingPanel.gameObject.SetActive(false);
             }
 
+            IEnumerator waitFor()
+            {
+                while (!ChunkManager.instance.LoadingComplete)
+                {
+                    LoadingText.text = "Please,stand by";
+                    yield return new WaitForSeconds(0.1f);
+                    LoadingText.text += ".";
+                    yield return new WaitForSeconds(0.1f);
+                    LoadingText.text += ".";
+                    yield return new WaitForSeconds(0.1f);
+                    LoadingText.text += ".";
+                    yield return new WaitForSeconds(0.1f);
+                }
+                LoadingPanel.SetActive(false);
+            }
 
-            
             private void OnLoadScene(Scene arg0, LoadSceneMode arg1)
             {
                 LoadMenu.SetActive(false);
                 SaveMenu.SetActive(false);
+                
                 ISPause = false;
                 if (arg0.name != "Menu")
                 {
                     player = FindObjectOfType<Player>();
+                    player.transform.position = new Vector3(SaveManager.instance.saveData.posX, SaveManager.instance.saveData.posY);
                     OpenRE.SetActive(true);
                     OpenInv.SetActive(true);
                     MainMenu.SetActive(false);
                     BlackBackground.SetActive(false);
-                    LoadingPanel.SetActive(false);
-                    MiniMap.instance.Init();
+                    MapViewer.instance.Init();
+                    StartCoroutine(waitFor());
                 }
                 else
                 {
@@ -130,7 +144,6 @@
                     InventoryPanel.SetActive(false);
                     RobotPartsPanel.SetActive(false);
                     LoadingPanel.SetActive(false);
-
                 }
             }
 

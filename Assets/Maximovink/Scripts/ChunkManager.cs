@@ -49,6 +49,9 @@ namespace MaximovInk
             return new Vector2(chunk.x*ChunkSize*TileScale-_chunkVisibality/2,chunk.y*ChunkSize*TileScale-_chunkVisibality/2);
         }
 
+        public bool LoadingComplete => sectors/9 > 0.9f;
+        private float sectors;
+        
         private void Update()
         {
             timer += Time.deltaTime;
@@ -87,6 +90,7 @@ namespace MaximovInk
             else
             {
                 instance = this;
+                timer = iterationsDelay++;
                 InitChunks();
             }
         }
@@ -105,17 +109,10 @@ namespace MaximovInk
 
                 }
             }
-            //UpdateChunkPos();
         }
-
- 
         
         public void UpdateChunkPos()
         {
-            
-            
-            
-            
             foreach (var t in _loadedChunks)
             {
                 t.isFree = IsFree(t, chunk);
@@ -138,54 +135,58 @@ namespace MaximovInk
 
         public void TargetFreeChunkTo(int x, int y)
         {
-            if (!_loadedChunks.Any(n => n.x == x && n.y == y))
+            if (_loadedChunks.Any(n => n.x == x && n.y == y))
+                return;
+
+            var free = _loadedChunks.FirstOrDefault(n => n.isFree);
+
+            for (var i = 0; i < free.instance.childCount; i++)
             {
-                var free = _loadedChunks.FirstOrDefault(n => n.isFree);
-                //Save(free);
-                
-                for (var i = 0; i < free.instance.childCount; i++)
-                {
-                    free.instance.GetChild(i).gameObject.SetActive(false);
-                }
-                
-
-                LoadDataTo(free,x,y);
-                free.instance.localPosition = new Vector3(x * ChunkSize*TileScale - offset, y * ChunkSize*TileScale - offset);
-                
-                for (var i = 0; i < free.objects.Length; i++)
-                {
-
-                    var freePrefab = prefabs[free.objects[i].prefab].instantiated
-                        .FirstOrDefault(n => n.gameObject.activeSelf == false && n.Chunk != free);
-                    
-                    if (freePrefab != null)
-                    {
-                        freePrefab.gameObject.SetActive(true);
-                        freePrefab.transform.SetParent(free.instance);
-                        freePrefab.transform.localPosition = new Vector2( free.objects[i].positionX , free.objects[i].positionY);
-                        freePrefab.Chunk = free;
-                        freePrefab.ObjectId = i;
-                        free.objects[i].target = freePrefab;
-                    }
-                    else
-                    {
-                        var newobj = Instantiate(
-                            prefabs[free.objects[i].prefab].prefab,
-                            (Vector2) free.instance.position +  new Vector2( free.objects[i].positionX , free.objects[i].positionY),
-                            Quaternion.identity,
-                            free.instance);
-
-                        prefabs[free.objects[i].prefab].instantiated =
-                            prefabs[free.objects[i].prefab].instantiated.Add(newobj);
-                        newobj.Chunk = free;
-                        newobj.ObjectId = i;
-                        free.objects[i].target = newobj;
-                    }
-                    free.objects[i].target.OnLoad(free.objects[i].data);
-
-                }
-                free.isFree = false;
+                free.instance.GetChild(i).gameObject.SetActive(false);
             }
+
+            LoadDataTo(free, x, y);
+            free.instance.localPosition =
+                new Vector3(x * ChunkSize * TileScale - offset, y * ChunkSize * TileScale - offset);
+
+            for (var i = 0; i < free.objects.Length; i++)
+            {
+                var freePrefab = prefabs[free.objects[i].Prefab].instantiated
+                    .FirstOrDefault(n => n.gameObject.activeSelf == false && n.Chunk != free);
+
+                if (freePrefab != null)
+                {
+                    freePrefab.gameObject.SetActive(true);
+                    freePrefab.transform.SetParent(free.instance);
+                    freePrefab.transform.localPosition =
+                        new Vector2(free.objects[i].PositionX, free.objects[i].PositionY);
+                    freePrefab.Chunk = free;
+                    freePrefab.ObjectId = i;
+                    free.objects[i].Target = freePrefab;
+                }
+                else
+                {
+                    var newobj = Instantiate(
+                        prefabs[free.objects[i].Prefab].prefab,
+                        (Vector2) free.instance.position +
+                        new Vector2(free.objects[i].PositionX, free.objects[i].PositionY),
+                        Quaternion.identity,
+                        free.instance);
+
+                    prefabs[free.objects[i].Prefab].instantiated =
+                        prefabs[free.objects[i].Prefab].instantiated.Add(newobj);
+                    newobj.Chunk = free;
+                    newobj.ObjectId = i;
+                    free.objects[i].Target = newobj;
+                }
+
+                free.objects[i].Target.OnLoad(free.objects[i].Data);
+
+            }
+            MapViewer.instance.InspectChunk(free);
+            free.isFree = false;
+            if (!LoadingComplete)
+                sectors++;
         }
 
         public DataObject[] generateRandom(int x, int y)
@@ -211,11 +212,11 @@ namespace MaximovInk
                         
                         objs = objs.Add(new DataObject
                         {
-                            data = new object[0],
-                            prefab = prefabIndex,
-                            positionX = 
+                            Data = new object[0],
+                            Prefab = prefabIndex,
+                            PositionX = 
                                 i * TileScale + Extenshions.random.GetRandomFloat(-TileScale / 2.0f, TileScale / 2.0f),
-                            positionY = 
+                            PositionY = 
                                 j * TileScale + Extenshions.random.GetRandomFloat(-TileScale / 2.0f, TileScale / 2.0f)
                         });
                         break;
@@ -229,15 +230,12 @@ namespace MaximovInk
         private void LoadDataTo(Chunk chunk,int x , int y)
         {
             var path = SaveManager.instance.GetTempPath() + "/chunks/";
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
+            SaveManager.instance.CheckTempFolder();
            
-            if(File.Exists(path+ x + "_" + y))
+            if(File.Exists(path+ x + "_" + y+".chnk"))
             {
 
-                using (var fs = new FileStream(path+ x + "_" + y,FileMode.Open))
+                using (var fs = new FileStream(path+ x + "_" + y+".chnk",FileMode.Open))
                 {
                     chunk.ReadData(MessagePackSerializer.Deserialize<Chunk>(fs));
                 }
@@ -262,17 +260,14 @@ namespace MaximovInk
         private void Save(Chunk chunk)
         {
             var path = SaveManager.instance.GetTempPath()+"/chunks/" ;
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
+            SaveManager.instance.CheckTempFolder();
 
             for (var i = 0; i < chunk.objects.Length; i++)
             {
-                if(chunk.objects[i] != null &&  chunk.objects[i].data != null && chunk.objects[i].target != null)
-                    chunk.objects[i].data = chunk.objects[i].target.OnSave();
+                if(chunk.objects[i] != null &&  chunk.objects[i].Data != null && chunk.objects[i].Target != null)
+                    chunk.objects[i].Data = chunk.objects[i].Target.OnSave();
             }
-            using (var fs = new FileStream(path+ chunk.x + "_" + chunk.y,FileMode.OpenOrCreate))
+            using (var fs = new FileStream(path+ chunk.x + "_" + chunk.y+".chnk",FileMode.OpenOrCreate))
             {
                 MessagePackSerializer.Serialize(fs, chunk);
             }
@@ -327,15 +322,15 @@ namespace MaximovInk
         [MessagePackObject]      
         public class DataObject
         {
-            [Key(0)] public float positionX { get; set; }
+            [Key(0)] public float PositionX { get; set; }
 
-            [Key(1)] public float positionY { get; set; }
+            [Key(1)] public float PositionY { get; set; }
 
-            [Key(2)] public object[] data { get; set; }
+            [Key(2)] public object[] Data { get; set; }
 
-            [Key(3)] public int prefab { get; set; }
+            [Key(3)] public int Prefab { get; set; }
 
-            [IgnoreMember] public SavedPrefabBehaviour target { get; set; }
+            [IgnoreMember] public SavedPrefabBehaviour Target { get; set; }
         }
         
         [Serializable]

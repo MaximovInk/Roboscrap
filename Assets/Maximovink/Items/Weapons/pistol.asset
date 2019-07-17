@@ -16,9 +16,6 @@ MonoBehaviour:
   Description: '-'
   Icon: {fileID: 21300002, guid: 477e2337b7ed9d548bc38afd251711f1, type: 3}
   DroppedSprite: {fileID: 0}
-  MaxCondition: 0
+  Unbreakable: 0
+  MaxCondition: 1
   prefab: {fileID: 114359154441212852, guid: 8cd0b8c2b3949174d9146fa38d9ed93b, type: 2}
-  maxAmmo: 10
-  AmmoType: 0
-  fireRate: 0
-  reloadingDelay: 0

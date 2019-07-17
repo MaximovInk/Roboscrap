@@ -20,6 +20,8 @@ namespace MaximovInk
         public class SaveData
         {
             [Key(0)] public int seed { get; set; } = 777;
+            [Key(1)] public float posX;
+            [Key(2)] public float posY;
         }
         
         public string CurrentSave = "NewGame";
@@ -49,16 +51,31 @@ namespace MaximovInk
             }
         }
 
-        public void Save()
-        {            
-            CurrentSave = fileName.text;
-            if (!Directory.Exists(GetSavePath()+"chunks"))
+        public void CheckTempFolder()
+        {
+            if (!Directory.Exists(GetTempPath()+"/chunks"))
+            {
+                Directory.CreateDirectory(GetTempPath()+"/chunks");
+            }
+        }
+
+        public void CheckSaveFolder()
+        {
+            if (!Directory.Exists(GetSavePath()+"/chunks"))
             {
                 Directory.CreateDirectory(GetSavePath()+"/chunks");
             }
+        }
+
+        public void Save()
+        {            
+            CurrentSave = fileName.text;
+            CheckSaveFolder();
 
             var path = GetSavePath() + "/data";
             ChunkManager.instance.SaveLoadedChunks();
+            saveData.posX = GameManager.Instance.player.transform.position.x;
+            saveData.posY = GameManager.Instance.player.transform.position.y;
             using (var fs = File.Open(path, FileMode.OpenOrCreate))
             {
                 MessagePackSerializer.Serialize(fs, saveData);
@@ -100,7 +117,7 @@ namespace MaximovInk
 
         public void LoadFile(string path)
         {
-            
+            CheckTempFolder();
             Extenshions.CleanDirectory(GetTempPath());
             CurrentSave = Path.GetFileName(path);
             if(Directory.Exists(GetSavePath()))
@@ -121,9 +138,10 @@ namespace MaximovInk
         public void NewGame()
         {
             saveData.seed = Extenshions.random.Next(0,1000000);
+            CheckTempFolder();
             Extenshions.CleanDirectory(GetTempPath());
-            LoadFile(GetSavePath());
 
+            GameManager.Instance.LoadScene(1);
         }
     }
 

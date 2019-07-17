@@ -36,3 +36,11 @@ MonoBehaviour:
     Components:
     - item: {fileID: 11400000, guid: e81b8249b0e28a94d9594c35edcf9b75, type: 2}
       count: 2
+  - result: {fileID: 11400000, guid: a28293dce3b6e934fba8988f72ab4986, type: 2}
+    Components:
+    - item: {fileID: 11400000, guid: e81b8249b0e28a94d9594c35edcf9b75, type: 2}
+      count: 1
+  - result: {fileID: 11400000, guid: 63dd54de69de5c346a4d6392f60eed9f, type: 2}
+    Components:
+    - item: {fileID: 11400000, guid: e81b8249b0e28a94d9594c35edcf9b75, type: 2}
+      count: 5
