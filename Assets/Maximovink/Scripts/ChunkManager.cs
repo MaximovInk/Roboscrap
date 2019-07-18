@@ -16,7 +16,7 @@ namespace MaximovInk
         
         public int ChunkSize = 32;
 
-        private const int _chunkVisibality = 4;
+        private const int _chunkVisibality = 5;
 
         public int worldSize = 2000;
 
@@ -91,8 +91,13 @@ namespace MaximovInk
             {
                 instance = this;
                 timer = iterationsDelay++;
-                InitChunks();
+                
             }
+        }
+
+        private void Start()
+        {
+            InitChunks();
         }
 
         private void InitChunks()
@@ -103,12 +108,46 @@ namespace MaximovInk
                 {
                     var go = new GameObject();
                     go.transform.SetParent(transform);
-                    _loadedChunks.Add(new Chunk {instance = go.transform, x = -1, y = -1,isFree = true, objects = generateRandom(-1,-1)});
-                    
-                    go.name = "chunk";
+                    _loadedChunks.Add(new Chunk {instance = go.transform, x = 0, y = 0,isFree = false, objects = generateRandom(0,0)});
+                    var ch = _loadedChunks.Last();
+                    for (var i = 0; i < ch.objects.Length; i++)
+                    {
+                        var freePrefab = prefabs[ch.objects[i].Prefab].instantiated
+                            .FirstOrDefault(n => n.gameObject.activeSelf == false && n.Chunk != ch);
 
+                        if (freePrefab != null)
+                        {
+                            freePrefab.gameObject.SetActive(true);
+                            freePrefab.transform.SetParent(ch.instance);
+                            freePrefab.transform.localPosition =
+                                new Vector2(ch.objects[i].PositionX, ch.objects[i].PositionY);
+                            freePrefab.Chunk = ch;
+                            freePrefab.ObjectId = i;
+                            ch.objects[i].Target = freePrefab;
+                        }
+                        else
+                        {
+                            var newobj = Instantiate(
+                                prefabs[ch.objects[i].Prefab].prefab,
+                                (Vector2) ch.instance.position +
+                                new Vector2(ch.objects[i].PositionX, ch.objects[i].PositionY),
+                                Quaternion.identity,
+                                ch.instance);
+
+                            prefabs[ch.objects[i].Prefab].instantiated =
+                                prefabs[ch.objects[i].Prefab].instantiated.Add(newobj);
+                            newobj.Chunk = ch;
+                            newobj.ObjectId = i;
+                            ch.objects[i].Target = newobj;
+                        }
+
+                        ch.objects[i].Target.OnLoad(ch.objects[i].Data);
+
+                    }
+                    go.name = "chunk";
                 }
             }
+
         }
         
         public void UpdateChunkPos()
@@ -140,11 +179,12 @@ namespace MaximovInk
 
             var free = _loadedChunks.FirstOrDefault(n => n.isFree);
 
+            Save(free);
+            
             for (var i = 0; i < free.instance.childCount; i++)
             {
                 free.instance.GetChild(i).gameObject.SetActive(false);
             }
-
             LoadDataTo(free, x, y);
             free.instance.localPosition =
                 new Vector3(x * ChunkSize * TileScale - offset, y * ChunkSize * TileScale - offset);
@@ -262,11 +302,15 @@ namespace MaximovInk
             var path = SaveManager.instance.GetTempPath()+"/chunks/" ;
             SaveManager.instance.CheckTempFolder();
 
+            if(chunk.objects != null)
+                chunk.objects = chunk.objects.Where(n => n.Target.gameObject.activeSelf).ToArray();
+            
             for (var i = 0; i < chunk.objects.Length; i++)
             {
                 if(chunk.objects[i] != null &&  chunk.objects[i].Data != null && chunk.objects[i].Target != null)
                     chunk.objects[i].Data = chunk.objects[i].Target.OnSave();
             }
+            
             using (var fs = new FileStream(path+ chunk.x + "_" + chunk.y+".chnk",FileMode.OpenOrCreate))
             {
                 MessagePackSerializer.Serialize(fs, chunk);

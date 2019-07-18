@@ -9,39 +9,48 @@ namespace MaximovInk
     {
         private int hp = 0;
         
-       public Item[] Resources;
+       public RandomResource[] Resources;
 
        public int min = 10,max = 450;
 
        public int maxHp = 10;
-       
- 
+        [Serializable]
+       public class RandomResource
+       {
+           public Item item;
+           [Range(0,1)]
+           public float chance;
+       }
+
        public void Attack(int amount)
         {
             hp -= amount;
             
             if (hp <= 0)
-            {
+            {                
                 var generate = Random.Range(min, max);
 
 
                 for (var i = 0; i < generate; i++)
                 {
-                    var id = Random.Range(0, Resources.Length);
+                    var shit = Resources.Where(n => n.chance > Random.Range(0.0f, 1.0f)).ToArray();
                     
-                    var item = new ItemInstance { item = Resources[id] };
-                    item.count += 1;
+                    if(shit.Length== 0)
+                        continue;
+                    
+                    var item = new ItemInstance
+                    {
+                        item = shit[Random.Range(0,shit.Length)].item, 
+                        count = 1
+                    };
                     item.condition = item.item.Unbreakable ? item.item.MaxCondition : Random.Range(item.item.MaxCondition/100,item.item.MaxCondition);
                     GameManager.Instance.mainInventory.AddItem(item);
+
                     GameManager.Instance.TextMesh.gameObject.SetActive(false);
                 }
 
                 hp = 0;
-                var list = Chunk.objects.ToList();
-                                                               
-                list.RemoveAt(ObjectId);
-                Chunk.objects = list.ToArray();
-                ChunkManager.instance.SaveLoadedChunks();
+                
                 gameObject.SetActive(false);
             }
 

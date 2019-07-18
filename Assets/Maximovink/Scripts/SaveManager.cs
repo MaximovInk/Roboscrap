@@ -19,9 +19,10 @@ namespace MaximovInk
         [MessagePackObject]
         public class SaveData
         {
-            [Key(0)] public int seed { get; set; } = 777;
+            [Key(0)] public int seed = 777;
             [Key(1)] public float posX;
             [Key(2)] public float posY;
+            [Key(3)] public bool firstStart = true;
         }
         
         public string CurrentSave = "NewGame";

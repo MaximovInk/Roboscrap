@@ -91,7 +91,6 @@ namespace MaximovInk
         public void Init()
         {
             pixel =  mapSize/ ((float)ChunkManager.instance.ChunkSize * ChunkManager.instance.TileScale);
-            //TODO : FIX BUG AND MAKE START ZONE FOR PLAYER!
         }
 
         public void ResetMap()
