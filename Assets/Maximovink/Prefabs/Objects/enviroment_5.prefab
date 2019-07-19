@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 60080393454039668}
   m_Layer: 9
   m_Name: Hit
-  m_TagString: Trash
+  m_TagString: Glass
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 114350925262960840}
   m_Layer: 2
   m_Name: enviroment_5
-  m_TagString: Metal
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -232,14 +232,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectId: 0
   Resources:
-  - {fileID: 11400000, guid: aad224a273d75af45b9d0f9882ca2c89, type: 2}
-  - {fileID: 11400000, guid: e81b8249b0e28a94d9594c35edcf9b75, type: 2}
-  - {fileID: 11400000, guid: 2a48a5d8d1b39744f9eb824411cd254d, type: 2}
-  - {fileID: 11400000, guid: ed235943447b5bd4587417ef4e945772, type: 2}
-  textCondition: {fileID: 102761663562351174}
+  - item: {fileID: 11400000, guid: aad224a273d75af45b9d0f9882ca2c89, type: 2}
+    chance: 0.1
+  - item: {fileID: 11400000, guid: 2a48a5d8d1b39744f9eb824411cd254d, type: 2}
+    chance: 0.01
+  - item: {fileID: 11400000, guid: ed235943447b5bd4587417ef4e945772, type: 2}
+    chance: 0.01
+  - item: {fileID: 11400000, guid: a28293dce3b6e934fba8988f72ab4986, type: 2}
+    chance: 0.01
+  - item: {fileID: 11400000, guid: e81b8249b0e28a94d9594c35edcf9b75, type: 2}
+    chance: 0.001
   min: 10
   max: 100
   maxHp: 100
+  BulletDestroy: 1
 --- !u!114 &114626872630383460
 MonoBehaviour:
   m_ObjectHideFlags: 1

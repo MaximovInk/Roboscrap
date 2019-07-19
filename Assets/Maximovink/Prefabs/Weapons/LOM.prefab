@@ -83,6 +83,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ik: {fileID: 0}
   Damage: 10
+  TrashDamange: 5
 --- !u!212 &212798390054219802
 SpriteRenderer:
   m_ObjectHideFlags: 1

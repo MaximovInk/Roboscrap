@@ -11,6 +11,22 @@ Prefab:
   m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1814947563014660}
   m_IsPrefabAsset: 1
+--- !u!1 &1160252980250098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4932965994907748}
+  - component: {fileID: 60571783092413592}
+  m_Layer: 9
+  m_Name: hit (1)
+  m_TagString: Metal
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1814947563014660
 GameObject:
   m_ObjectHideFlags: 0
@@ -37,12 +53,57 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1814947563014660}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5561657, y: -6.2867336, z: -7.346605}
+  m_LocalPosition: {x: -32.9, y: 11.1, z: 5.2855973}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4932965994907748}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4932965994907748
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1160252980250098}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4817028226094262}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &60571783092413592
+PolygonCollider2D:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1160252980250098}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 2.890047, y: -1.1448679}
+      - {x: 2.487917, y: 2.3143587}
+      - {x: -0.7978859, y: 3.646572}
+      - {x: -1.8573189, y: 2.1995735}
+      - {x: -2.8404694, y: -2.0406694}
+      - {x: -1.4815712, y: -3.1975088}
+      - {x: 0.32472992, y: -1.8287992}
 --- !u!60 &60922952468654316
 PolygonCollider2D:
   m_ObjectHideFlags: 1
@@ -85,8 +146,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectId: 0
-  Resources: []
-  textCondition: {fileID: 0}
+  Resources:
+  - item: {fileID: 11400000, guid: e81b8249b0e28a94d9594c35edcf9b75, type: 2}
+    chance: 0.5
+  - item: {fileID: 11400000, guid: 0ca1fb2a449469742a0385a1cccbc205, type: 2}
+    chance: 0.8
   min: 2
   max: 20
   maxHp: 50

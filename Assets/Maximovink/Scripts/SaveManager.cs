@@ -14,15 +14,15 @@ namespace MaximovInk
         public Transform loadButtonsParent, saveButtonsParent;
         public Button buttonPrefab;
 
+        public InputField seedName;
         public SaveData saveData = new SaveData { seed = 777 };
         
         [MessagePackObject]
         public class SaveData
         {
-            [Key(0)] public int seed = 777;
-            [Key(1)] public float posX;
-            [Key(2)] public float posY;
-            [Key(3)] public bool firstStart = true;
+            [Key(0)] public int seed { get; set; } = 777;
+            [Key(1)] public float posX { get; set; }
+            [Key(2)] public float posY { get; set; }
         }
         
         public string CurrentSave = "NewGame";
@@ -67,16 +67,19 @@ namespace MaximovInk
                 Directory.CreateDirectory(GetSavePath()+"/chunks");
             }
         }
-
+        
+        
+        
         public void Save()
         {            
             CurrentSave = fileName.text;
             CheckSaveFolder();
 
-            var path = GetSavePath() + "/data";
-            ChunkManager.instance.SaveLoadedChunks();
-            saveData.posX = GameManager.Instance.player.transform.position.x;
-            saveData.posY = GameManager.Instance.player.transform.position.y;
+            var path = GetTempPath() + "/data";
+            ChunkManager.Instance.SaveLoadedChunks();
+            var position = GameManager.Instance.player.transform.position;
+            saveData.posX = position.x;
+            saveData.posY = position.y;
             using (var fs = File.Open(path, FileMode.OpenOrCreate))
             {
                 MessagePackSerializer.Serialize(fs, saveData);
@@ -138,7 +141,7 @@ namespace MaximovInk
 
         public void NewGame()
         {
-            saveData.seed = Extenshions.random.Next(0,1000000);
+            saveData.seed = seedName.text == string.Empty ? Extenshions.random.Next(0, 1000000) : int.Parse(seedName.text);
             CheckTempFolder();
             Extenshions.CleanDirectory(GetTempPath());
 

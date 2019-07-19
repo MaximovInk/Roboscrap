@@ -294,7 +294,7 @@ MonoBehaviour:
     chance: 0.02
   min: 10
   max: 60
-  maxHp: 10
+  maxHp: 100
 --- !u!212 &212918778439590228
 SpriteRenderer:
   m_ObjectHideFlags: 1

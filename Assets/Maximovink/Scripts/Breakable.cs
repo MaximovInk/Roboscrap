@@ -22,6 +22,8 @@ namespace MaximovInk
            public float chance;
        }
 
+       public bool BulletDestroy = true;
+
        public void Attack(int amount)
         {
             hp -= amount;
@@ -52,6 +54,8 @@ namespace MaximovInk
                 hp = 0;
                 
                 gameObject.SetActive(false);
+                
+                ChunkManager.Instance.SaveLoadedChunks();
             }
 
             if (GetComponentInChildren<Renderer>().isVisible)

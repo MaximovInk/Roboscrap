@@ -215,22 +215,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ba577dd02691094caf07ea8036694e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RandomGroups:
-  - index: 0100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e000000
-    thresoult: 0.1
-    greatherThan: 0
+  randomGroups:
   - index: 00000000
     thresoult: 0.6
     greatherThan: 1
-  - index: 0f00000010000000
-    thresoult: 0.001
+  - index: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e000000
+    thresoult: 0.1
     greatherThan: 0
-  ChunkSize: 8
-  worldSize: 50
-  iterationsDelay: 1
-  NoiseScale: 2.34567
-  TileScale: 15
-  target: {fileID: 708088681}
+  chunkSize: 8
+  iterationsDelay: 0.1
+  noiseScale: 2.34567
+  tileScale: 15
   prefabs:
   - prefab: {fileID: 114924278214189276, guid: 8302c5a45a4819c4c93b701dcc2d5bcc, type: 2}
     instantiated: []
@@ -283,6 +278,7 @@ MonoBehaviour:
   - prefab: {fileID: 114655867645108994, guid: 0bb719af101b46d40bbe4c9ad5cea3cf, type: 2}
     instantiated: []
     mapColor: {r: 0.46178672, g: 0.05731578, b: 0.5283019, a: 1}
+  target: {fileID: 708088681}
 --- !u!1 &25613981
 GameObject:
   m_ObjectHideFlags: 0
@@ -4945,17 +4941,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6aaa2a90df6cea4da078c5c2fe96b6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Renderer: {fileID: 1440176236}
-  mapSize: 32
-  FullMap: {fileID: 883372201}
-  chunksParent: {fileID: 480848543}
-  chunkPrefab: {fileID: 114371322801113646, guid: 790c5c5efb9c7e14f8e87648d325df9a,
-    type: 2}
-  zoom: 1
   backgroundColor: {r: 0.43400002, g: 0.39832878, b: 0.33887672, a: 1}
+  playerColor: {r: 0, g: 0, b: 0, a: 1}
+  selectedColor: {r: 0.64, g: 0.8, b: 0.64270365, a: 1}
+  chunkSize: 24
   rectSize: 64
-  playerChunk: {r: 0, g: 0.9023998, b: 1, a: 1}
-  player: {r: 1, g: 1, b: 1, a: 1}
+  zoom: 1
+  radarZoom: 2
+  FullMap: {fileID: 883372201}
+  Minimap: {fileID: 1440176238}
+  SectorPrefab: {fileID: 114371322801113646, guid: 790c5c5efb9c7e14f8e87648d325df9a,
+    type: 2}
+  SectorsParent: {fileID: 480848543}
 --- !u!4 &1050051385
 Transform:
   m_ObjectHideFlags: 0
@@ -6046,7 +6043,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1440176238}
   - component: {fileID: 1440176237}
-  - component: {fileID: 1440176236}
+  - component: {fileID: 1440176239}
   m_Layer: 5
   m_Name: Minimap
   m_TagString: Untagged
@@ -6054,32 +6051,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1440176236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1440176235}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -98529514, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 0}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
 --- !u!222 &1440176237
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6105,6 +6076,17 @@ RectTransform:
   m_AnchoredPosition: {x: -0.000022888184, y: 0.000022888184}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1440176239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1440176235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -146154839, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1497385000
 GameObject:
   m_ObjectHideFlags: 0

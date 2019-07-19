@@ -150,7 +150,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectId: 0
   Resources:
-  - {fileID: 11400000, guid: e81b8249b0e28a94d9594c35edcf9b75, type: 2}
+  - item: {fileID: 11400000, guid: e81b8249b0e28a94d9594c35edcf9b75, type: 2}
+    chance: 0.5
   min: 50
   max: 200
   maxHp: 200

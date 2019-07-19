@@ -41,7 +41,7 @@
             public bool ISPause
             {
                 get { return Time.timeScale == 0; }
-                set { Time.timeScale = value ? 0 : 1; PauseMenu.SetActive(value); BlackBackground.SetActive(ISPause); }
+                set { Time.timeScale = value ? 0 : 1; PauseMenu.SetActive(value); BlackBackground.SetActive(value); }
             }
             
             public void SetTextMesh(string text)
@@ -71,6 +71,9 @@
                
             }
 
+           
+            
+            
             public void LoadScene(int index)
             {
                 
@@ -102,7 +105,7 @@
 
             IEnumerator waitFor()
             {
-                while (!ChunkManager.instance.LoadingComplete)
+                while (!ChunkManager.Instance.LoadingComplete)
                 {
                     LoadingText.text = "Please,stand by";
                     yield return new WaitForSeconds(0.1f);
@@ -223,15 +226,18 @@
 
             public void MakeParticleAt(GameObject go, Vector3 position)
             {
-                ParticleSystem ps = null;
+                ParticleSystem ps;
                 switch (go.tag.ToLower())
                 {
                     case "trash":
-                        ps = Instantiate(Instance.Trash, position,
+                        ps = Instantiate(Trash, position,
                             Quaternion.identity);
                         break;
+                    case "glass":
+                        ps = Instantiate(Glass, position, Quaternion.identity);
+                        break;
                     default:
-                        ps = Instantiate(Instance.Metal, position,
+                        ps = Instantiate(Metal, position,
                             Quaternion.identity);
                         break;
                 }

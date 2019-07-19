@@ -10,71 +10,66 @@ namespace MaximovInk
 {
     public class ChunkManager : MonoBehaviour
     {
-        public static ChunkManager instance;
+        public static ChunkManager Instance;
         
-        public PrefabRandomizeGroup[] RandomGroups;
+        public PrefabRandomizeGroup[] randomGroups;
         
-        public int ChunkSize = 32;
+        public int chunkSize = 32;
 
-        private const int _chunkVisibality = 5;
-
-        public int worldSize = 2000;
+        private const int ChunkVisibality = 4;
 
         public float iterationsDelay = 0.1f;
-        private float timer;
+        private float _timer;
 
-        public float NoiseScale = 1;
-        public int TileScale = 1;
-        
-        public Transform target;
-        private Vector3 lastPos;
-        private Vector2Int lastChunk;
+        public float noiseScale = 1;
+        public int tileScale = 1;
 
-        private readonly List<Chunk> _loadedChunks = new List<Chunk>();
+        public List<Chunk> _loadedChunks { get; } = new List<Chunk>();
 
         public PrefabForPool[] prefabs;
         
-        private float offset => _chunkVisibality / 2 * ChunkSize * TileScale;
+        private float Offset => ChunkVisibality / 2 * chunkSize * tileScale;
+        
+        public bool LoadingComplete => _sectors/9 > 0.9f;
+
+        public Transform target;
+        
+        private float _sectors;
+
+        private Vector2Int _centerChunk;
 
         public Chunk playerChunk;
-        private Vector2Int chunk;
-        
-        public Vector2Int WorldToChunk(Vector2 pos) 
+
+        private Vector2Int WorldToChunk(Vector2 pos)
         {
-            return Vector2Int.FloorToInt(new Vector2(pos.x/ChunkSize/TileScale+_chunkVisibality/2, pos.y/ChunkSize/TileScale+_chunkVisibality/2));
+            return Vector2Int.FloorToInt(new Vector2(pos.x/chunkSize/tileScale, pos.y/chunkSize/tileScale));
+        }
+
+        private Vector2Int WorldToChunkForLoadedChunks(Vector2 pos) 
+        {
+            return Vector2Int.FloorToInt(new Vector2(pos.x/chunkSize/tileScale+ChunkVisibality/2.0f, pos.y/chunkSize/tileScale+ChunkVisibality/2.0f));
         }
 
         public Vector2 ChunkToWorld(Vector2Int chunk)
         {
-            return new Vector2(chunk.x*ChunkSize*TileScale-_chunkVisibality/2,chunk.y*ChunkSize*TileScale-_chunkVisibality/2);
+            return new Vector2(chunk.x*chunkSize*tileScale-ChunkVisibality/2,chunk.y*chunkSize*tileScale-ChunkVisibality/2);
         }
 
-        public bool LoadingComplete => sectors/9 > 0.9f;
-        private float sectors;
+
         
         private void Update()
         {
-            timer += Time.deltaTime;
+            _timer += Time.deltaTime;
+            _centerChunk = WorldToChunkForLoadedChunks(target.position);
             
-            chunk = WorldToChunk(target.position);
-            var pc = _loadedChunks.FirstOrDefault(n => chunk.x == n.x && chunk.y == n.y);
+            var pc = _loadedChunks.FirstOrDefault(n => n.SaveData != null && _centerChunk.x == n.SaveData.X && _centerChunk.y == n.SaveData.Y);
             if (pc != null)
                 playerChunk = pc;
             
-            if (iterationsDelay < timer)
+            if (iterationsDelay < _timer)
             {
-                timer = 0;
-                if (target.transform.position != lastPos)
-                {
-                    lastPos = target.transform.position;
-
-                    var c = WorldToChunk(lastPos);
-                    if (lastChunk != c)
-                    {
-                        lastChunk = c;
-                        UpdateChunkPos();
-                    }
-                }
+                UpdateChunksPosition();
+                _timer = 0;
             }
 
         
@@ -83,284 +78,249 @@ namespace MaximovInk
         private void Awake()
         {
             
-            if (instance != null && instance != this)
+            if (Instance != null && Instance != this)
             {
                 Destroy(gameObject);
             }
             else
             {
-                instance = this;
-                timer = iterationsDelay++;
-                
+                Instance = this;
+                _timer = iterationsDelay+1;
             }
         }
 
         private void Start()
         {
-            InitChunks();
+            InitPool();
         }
 
-        private void InitChunks()
+        public void InitPool()
         {
-            for (var x = 0; x < _chunkVisibality; x++)
+            
+            _centerChunk = WorldToChunkForLoadedChunks(target.position);
+            
+            for (var x = 0; x < ChunkVisibality; x++)
             {
-                for (var y = 0; y < _chunkVisibality; y++)
+                for (var y = 0; y < ChunkVisibality; y++)
                 {
                     var go = new GameObject();
                     go.transform.SetParent(transform);
-                    _loadedChunks.Add(new Chunk {instance = go.transform, x = 0, y = 0,isFree = false, objects = generateRandom(0,0)});
-                    var ch = _loadedChunks.Last();
-                    for (var i = 0; i < ch.objects.Length; i++)
-                    {
-                        var freePrefab = prefabs[ch.objects[i].Prefab].instantiated
-                            .FirstOrDefault(n => n.gameObject.activeSelf == false && n.Chunk != ch);
-
-                        if (freePrefab != null)
-                        {
-                            freePrefab.gameObject.SetActive(true);
-                            freePrefab.transform.SetParent(ch.instance);
-                            freePrefab.transform.localPosition =
-                                new Vector2(ch.objects[i].PositionX, ch.objects[i].PositionY);
-                            freePrefab.Chunk = ch;
-                            freePrefab.ObjectId = i;
-                            ch.objects[i].Target = freePrefab;
-                        }
-                        else
-                        {
-                            var newobj = Instantiate(
-                                prefabs[ch.objects[i].Prefab].prefab,
-                                (Vector2) ch.instance.position +
-                                new Vector2(ch.objects[i].PositionX, ch.objects[i].PositionY),
-                                Quaternion.identity,
-                                ch.instance);
-
-                            prefabs[ch.objects[i].Prefab].instantiated =
-                                prefabs[ch.objects[i].Prefab].instantiated.Add(newobj);
-                            newobj.Chunk = ch;
-                            newobj.ObjectId = i;
-                            ch.objects[i].Target = newobj;
-                        }
-
-                        ch.objects[i].Target.OnLoad(ch.objects[i].Data);
-
-                    }
+                    _loadedChunks.Add(new Chunk {Instance = go.transform, IsFree = true, SaveData = new ChunkSaveData{X = 0, Y = 0 }});                   
                     go.name = "chunk";
                 }
             }
-
-        }
-        
-        public void UpdateChunkPos()
-        {
-            foreach (var t in _loadedChunks)
-            {
-                t.isFree = IsFree(t, chunk);
-
-                t.instance.gameObject.name = t.isFree ? "chunk" : "chunk [in use]";
-            }
-            
-            TargetFreeChunkTo(chunk.x,chunk.y);
-            TargetFreeChunkTo(chunk.x+1,chunk.y);
-            TargetFreeChunkTo(chunk.x-1,chunk.y);
-            TargetFreeChunkTo(chunk.x,chunk.y+1);
-            TargetFreeChunkTo(chunk.x,chunk.y-1);
-            TargetFreeChunkTo(chunk.x+1,chunk.y+1);
-            TargetFreeChunkTo(chunk.x-1,chunk.y-1);
-            TargetFreeChunkTo(chunk.x+1,chunk.y-1);
-            TargetFreeChunkTo(chunk.x-1,chunk.y+1);
-
-            
+              
+            MoveFreeChunkTo(_centerChunk.x,_centerChunk.y-1);
+            MoveFreeChunkTo(_centerChunk.x,_centerChunk.y+1);
+            MoveFreeChunkTo(_centerChunk.x,_centerChunk.y);
+            MoveFreeChunkTo(_centerChunk.x+1,_centerChunk.y-1);
+            MoveFreeChunkTo(_centerChunk.x+1,_centerChunk.y+1);
+            MoveFreeChunkTo(_centerChunk.x+1,_centerChunk.y);
+            MoveFreeChunkTo(_centerChunk.x-1,_centerChunk.y-1);
+            MoveFreeChunkTo(_centerChunk.x-1,_centerChunk.y+1);
+            MoveFreeChunkTo(_centerChunk.x-1,_centerChunk.y);
         }
 
-        public void TargetFreeChunkTo(int x, int y)
+        private void InstanceObjectsForChunk(Chunk ch)
         {
-            if (_loadedChunks.Any(n => n.x == x && n.y == y))
-                return;
-
-            var free = _loadedChunks.FirstOrDefault(n => n.isFree);
-
-            Save(free);
-            
-            for (var i = 0; i < free.instance.childCount; i++)
+            for (var i = 0; i < ch.SaveData.Objects.Length; i++)
             {
-                free.instance.GetChild(i).gameObject.SetActive(false);
-            }
-            LoadDataTo(free, x, y);
-            free.instance.localPosition =
-                new Vector3(x * ChunkSize * TileScale - offset, y * ChunkSize * TileScale - offset);
-
-            for (var i = 0; i < free.objects.Length; i++)
-            {
-                var freePrefab = prefabs[free.objects[i].Prefab].instantiated
-                    .FirstOrDefault(n => n.gameObject.activeSelf == false && n.Chunk != free);
+                var freePrefab = prefabs[ch.SaveData.Objects[i].Prefab].instantiated
+                    .FirstOrDefault(n => n.gameObject.activeSelf == false && n.Chunk != ch);
 
                 if (freePrefab != null)
                 {
                     freePrefab.gameObject.SetActive(true);
-                    freePrefab.transform.SetParent(free.instance);
+                    freePrefab.transform.SetParent(ch.Instance);
                     freePrefab.transform.localPosition =
-                        new Vector2(free.objects[i].PositionX, free.objects[i].PositionY);
-                    freePrefab.Chunk = free;
-                    freePrefab.ObjectId = i;
-                    free.objects[i].Target = freePrefab;
+                        new Vector2(ch.SaveData.Objects[i].PositionX, ch.SaveData.Objects[i].PositionY);
+                    freePrefab.Chunk = ch;
+                    ch.SaveData.Objects[i].Target = freePrefab;
                 }
                 else
                 {
                     var newobj = Instantiate(
-                        prefabs[free.objects[i].Prefab].prefab,
-                        (Vector2) free.instance.position +
-                        new Vector2(free.objects[i].PositionX, free.objects[i].PositionY),
+                        prefabs[ch.SaveData.Objects[i].Prefab].prefab,
+                        (Vector2) ch.Instance.position +
+                        new Vector2(ch.SaveData.Objects[i].PositionX, ch.SaveData.Objects[i].PositionY),
                         Quaternion.identity,
-                        free.instance);
+                        ch.Instance);
 
-                    prefabs[free.objects[i].Prefab].instantiated =
-                        prefabs[free.objects[i].Prefab].instantiated.Add(newobj);
-                    newobj.Chunk = free;
-                    newobj.ObjectId = i;
-                    free.objects[i].Target = newobj;
+                    prefabs[ch.SaveData.Objects[i].Prefab].instantiated =
+                        prefabs[ch.SaveData.Objects[i].Prefab].instantiated.Add(newobj);
+                    newobj.Chunk = ch;
+                    ch.SaveData.Objects[i].Target = newobj;
                 }
 
-                free.objects[i].Target.OnLoad(free.objects[i].Data);
+                ch.SaveData.Objects[i].Target.OnLoad(ch.SaveData.Objects[i].Data);
 
             }
-            MapViewer.instance.InspectChunk(free);
-            free.isFree = false;
-            if (!LoadingComplete)
-                sectors++;
         }
 
-        public DataObject[] generateRandom(int x, int y)
+        public ChunkSaveData LoadChunkData(int x , int y)
         {
+            var path = SaveManager.instance.GetTempPath() + "/chunks/";
+            SaveManager.instance.CheckTempFolder();
+
+            if (!File.Exists(path + x + "_" + y + ".chnk"))
+                return NewData(x, y);
             
-            var objs = new DataObject[0];
-            for (var i = 0; i < ChunkSize; i++)
+            using (var fs = new FileStream(path+ x + "_" + y+".chnk",FileMode.Open))
             {
-                for (var j = 0; j < ChunkSize; j++)
+                return MessagePackSerializer.Deserialize<ChunkSaveData>(fs);
+            }
+
+        }
+        
+        private static bool IsFree(Chunk chunk , Vector2Int center)
+        {
+            return !(
+                (chunk.SaveData.X == center.x || chunk.SaveData.X+1 == center.x || chunk.SaveData.X-1 == center.x) &&
+                (chunk.SaveData.Y == center.y || chunk.SaveData.Y+1 == center.y || chunk.SaveData.Y-1 == center.y)
+            );
+        }
+
+        
+        public void UpdateChunksPosition()
+        {
+            foreach (var t in _loadedChunks)
+            {
+                t.IsFree = IsFree(t, _centerChunk);
+
+                t.Instance.gameObject.name = t.IsFree ? "chunk" : "chunk [in use]";
+            }
+            
+            MoveFreeChunkTo(_centerChunk.x,_centerChunk.y-1);
+            MoveFreeChunkTo(_centerChunk.x,_centerChunk.y+1);
+            MoveFreeChunkTo(_centerChunk.x,_centerChunk.y);
+            MoveFreeChunkTo(_centerChunk.x+1,_centerChunk.y-1);
+            MoveFreeChunkTo(_centerChunk.x+1,_centerChunk.y+1);
+            MoveFreeChunkTo(_centerChunk.x+1,_centerChunk.y);
+            MoveFreeChunkTo(_centerChunk.x-1,_centerChunk.y-1);
+            MoveFreeChunkTo(_centerChunk.x-1,_centerChunk.y+1);
+            MoveFreeChunkTo(_centerChunk.x-1,_centerChunk.y);
+
+            
+        }
+
+        public void MoveFreeChunkTo(int x, int y)
+        {
+            if (_loadedChunks.Any(n => n.SaveData.X == x && n.SaveData.Y == y))
+                return;
+            
+            var free = _loadedChunks.FirstOrDefault(n => n.IsFree);
+            if(free.SaveData != null && LoadingComplete)
+                SaveChunkData(free.SaveData);
+            
+            for (var i = 0; i < free.Instance.childCount; i++)
+            {
+                free.Instance.GetChild(i).gameObject.SetActive(false);
+            }
+
+            free.SaveData = LoadChunkData(x, y);
+            
+            free.Instance.localPosition = new Vector3(x * chunkSize * tileScale - Offset, y * chunkSize * tileScale - Offset);
+
+            InstanceObjectsForChunk(free);
+            //MapViewer.instance.InspectChunk(free.SaveData);
+            free.IsFree = false;
+
+            if(!LoadingComplete)
+                _sectors++;
+        }
+
+        public ChunkSaveData NewData(int x, int y)
+        {
+            var objs = new DataObject[0];
+            for (var i = 0; i < chunkSize; i++)
+            {
+                for (var j = 0; j < chunkSize; j++)
                 {
-                    var obj = Mathf.PerlinNoise((x * (float) ChunkSize + i) / NoiseScale + SaveManager.instance.saveData.seed,
-                        (y * (float) ChunkSize + j) / NoiseScale + SaveManager.instance.saveData.seed);
+                    var obj = Mathf.PerlinNoise((x * (float) chunkSize + i) / noiseScale + SaveManager.instance.saveData.seed,
+                        (y * (float) chunkSize + j) / noiseScale + SaveManager.instance.saveData.seed);
                         
 
-                    foreach (var group in RandomGroups)
+                    foreach (var group in randomGroups)
                     {
                         if ((!(obj > group.thresoult) || !group.greatherThan) &&
                             (!(obj < group.thresoult) || group.greatherThan)) continue;
                            
-                        var prefabIndex = (byte) group.index[Extenshions.random.Next(0, group.index.Length)];
-
-                        
+                        var prefabIndex = (byte) group.index[Extenshions.random.Next(0, group.index.Length)];                        
                         
                         objs = objs.Add(new DataObject
                         {
                             Data = new object[0],
                             Prefab = prefabIndex,
                             PositionX = 
-                                i * TileScale + Extenshions.random.GetRandomFloat(-TileScale / 2.0f, TileScale / 2.0f),
+                                i * tileScale + Extenshions.random.GetRandomFloat(-tileScale / 2.0f, tileScale / 2.0f),
                             PositionY = 
-                                j * TileScale + Extenshions.random.GetRandomFloat(-TileScale / 2.0f, TileScale / 2.0f)
+                                j * tileScale + Extenshions.random.GetRandomFloat(-tileScale / 2.0f, tileScale / 2.0f)
                         });
                         break;
                     }
                 }
             }
-
-            return objs;
+            
+            return new ChunkSaveData{ X = x, Y = y , Objects = objs };
+            
         }
 
-        private void LoadDataTo(Chunk chunk,int x , int y)
+        public void SaveChunkData(ChunkSaveData chunkSaveData)
         {
-            var path = SaveManager.instance.GetTempPath() + "/chunks/";
+            
+            
+            var path = SaveManager.instance.GetTempPath()+"/chunks/" ;
             SaveManager.instance.CheckTempFolder();
-           
-            if(File.Exists(path+ x + "_" + y+".chnk"))
+
+            if(chunkSaveData.Objects == null)
+                chunkSaveData.Objects = new DataObject[0];
+            
+            chunkSaveData.Objects = chunkSaveData.Objects.Where(n => n.Target.gameObject.activeSelf).ToArray();
+            
+            for (var i = 0; i < chunkSaveData.Objects.Length; i++)
             {
-
-                using (var fs = new FileStream(path+ x + "_" + y+".chnk",FileMode.Open))
-                {
-                    chunk.ReadData(MessagePackSerializer.Deserialize<Chunk>(fs));
-                }
-                return;
+                if(chunkSaveData.Objects[i] != null &&  chunkSaveData.Objects[i].Data != null && chunkSaveData.Objects[i].Target != null)
+                    chunkSaveData.Objects[i].Data = chunkSaveData.Objects[i].Target.OnSave();
             }
-
-            var c = new Chunk {x = x, y = y, objects = generateRandom(x, y)};
-
-
-            chunk.ReadData(c);
-            Save(chunk);
+            
+            using (var fs = new FileStream(path+ chunkSaveData.X + "_" + chunkSaveData.Y+".chnk",FileMode.OpenOrCreate))
+            {
+                MessagePackSerializer.Serialize(fs, chunkSaveData);
+            }
         }
-
+        
         public void SaveLoadedChunks()
         {
             foreach (var chunk in _loadedChunks)
             {
-                Save(chunk);
+                SaveChunkData(chunk.SaveData);
             }
         }
 
-        private void Save(Chunk chunk)
+        public Vector2Int PlayerInsideChunk()
         {
-            var path = SaveManager.instance.GetTempPath()+"/chunks/" ;
-            SaveManager.instance.CheckTempFolder();
-
-            if(chunk.objects != null)
-                chunk.objects = chunk.objects.Where(n => n.Target.gameObject.activeSelf).ToArray();
-            
-            for (var i = 0; i < chunk.objects.Length; i++)
-            {
-                if(chunk.objects[i] != null &&  chunk.objects[i].Data != null && chunk.objects[i].Target != null)
-                    chunk.objects[i].Data = chunk.objects[i].Target.OnSave();
-            }
-            
-            using (var fs = new FileStream(path+ chunk.x + "_" + chunk.y+".chnk",FileMode.OpenOrCreate))
-            {
-                MessagePackSerializer.Serialize(fs, chunk);
-            }
-        }
-
-        private static bool IsFree(Chunk chunk , Vector2Int center)
-        {
-            return !(
-                (chunk.x == center.x || chunk.x+1 == center.x || chunk.x-1 == center.x) &&
-                (chunk.y == center.y || chunk.y+1 == center.y || chunk.y-1 == center.y)
-            );
-        }
-
-        public Vector2Int WorldToPosInsideChunk(Vector2 pos)
-        {
-            var chunk_pos = WorldToChunk(pos);
-            var chunk = _loadedChunks.FirstOrDefault(n => n.x == chunk_pos.x && n.y == chunk_pos.y);
-            if (chunk != null)
-            {
-                var inside = pos - (Vector2)chunk.instance.position;
-                return Vector2Int.FloorToInt(new Vector2(inside.x, inside.y));
-                
-            }
-            return Vector2Int.zero;
+            var inside = GameManager.Instance.player.transform.position - playerChunk.Instance.position;
+            return Vector2Int.FloorToInt(new Vector2(inside.x, inside.y));
         }
 
         [MessagePackObject]
+        public class ChunkSaveData
+        {
+            [Key(0)] public DataObject[] Objects { get; set; }
+
+            [Key(1)] public  int X { get; set; }
+
+            [Key(2)] public int Y { get; set; }
+        }
+        
         public class Chunk
         {
-            [IgnoreMember]
-            [NonSerialized]
-            public Transform instance;
+            public Transform Instance;
 
-            [Key(0)] public   DataObject[] objects { get; set; }
+            public ChunkSaveData SaveData;
 
-            [Key(1)] public  int x { get; set; }
+            public bool IsFree;
 
-            [Key(2)] public int y { get; set; }
-
-            [IgnoreMember] public bool isFree { get; set; }
-
-            public void ReadData(Chunk chunk)
-            {
-                objects = chunk.objects;
-                x = chunk.x;
-                y = chunk.y;
-            }
-            
-            
         }
         
         [MessagePackObject]      

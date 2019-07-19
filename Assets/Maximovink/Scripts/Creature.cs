@@ -23,12 +23,12 @@ namespace MaximovInk
         public RobotM_P ll3;
         public RobotM_P Cam;
 
+        public int defaultDamage = 1;
 
         public GameObject left_armIk;
         public GameObject right_armIk;
         public Bone2D right_armBone;
 
-        public float speedCamX = 0.2f, speedCamY = 0.5f;
         public float camMin = 5, camMax = 10;
 
         public Transform camIK;
@@ -73,27 +73,13 @@ namespace MaximovInk
         }
 
         private int health = 100;
-
-        public int Damage = 1;
-
         public float Speed = 10;
         public float SpeedFactor = 2;
-        public float Attack_KD = 0.5f;
-        protected float lastKD;
         protected Vector2 move;
         protected bool run;
         public bool LockMove { get; set; }
 
-        public bool facing_right
-        {
-            get { return fac_right; }
-            set
-            {
-                if (fac_right != value) Flip();
-            }
-        }
-
-        private bool fac_right = true;
+        public bool facing_right { get; private set; } = true;
 
         public float AttackDistance;
 
@@ -105,7 +91,7 @@ namespace MaximovInk
 
         internal void Flip()
         {
-            fac_right = !fac_right;
+            facing_right = !facing_right;
 
             transform.localScale =
                 new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
@@ -141,7 +127,7 @@ namespace MaximovInk
 
                 if (breakable != null)
                 {
-                    breakable.Attack(5);
+                    breakable.Attack(defaultDamage);
                 }
 
                 GameManager.Instance.MakeParticleAt(hit.collider.gameObject, hit.point);

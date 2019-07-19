@@ -185,7 +185,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectId: 0
-  Resources: []
+  Resources:
+  - item: {fileID: 11400000, guid: 0ca1fb2a449469742a0385a1cccbc205, type: 2}
+    chance: 0.1
+  - item: {fileID: 11400000, guid: e81b8249b0e28a94d9594c35edcf9b75, type: 2}
+    chance: 0.3
+  - item: {fileID: 11400000, guid: 2a48a5d8d1b39744f9eb824411cd254d, type: 2}
+    chance: 0.01
+  - item: {fileID: 11400000, guid: ed235943447b5bd4587417ef4e945772, type: 2}
+    chance: 0.001
+  - item: {fileID: 11400000, guid: a28293dce3b6e934fba8988f72ab4986, type: 2}
+    chance: 0.01
+  - item: {fileID: 11400000, guid: aad224a273d75af45b9d0f9882ca2c89, type: 2}
+    chance: 0.1
   min: 10
   max: 450
   maxHp: 255

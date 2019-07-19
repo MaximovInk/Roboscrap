@@ -33,7 +33,17 @@ namespace MaximovInk
         { 
             return (float)random.NextDouble() * (maximum - minimum) + minimum;
         }
-
+        
+        public static Texture2D ToTexture2D(this Texture texture)
+        {
+            return Texture2D.CreateExternalTexture(
+                texture.width,
+                texture.height,
+                TextureFormat.RGB24,
+                false, false,
+                texture.GetNativeTexturePtr());
+        }
+        
         public static void MoveFromTo(string from, string to)
         {
 

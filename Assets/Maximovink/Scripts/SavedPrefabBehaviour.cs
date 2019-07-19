@@ -8,7 +8,6 @@ namespace MaximovInk
     public class SavedPrefabBehaviour : MonoBehaviour
     {
         public ChunkManager.Chunk Chunk;
-        public int ObjectId;
         protected object[] loadedData;
         
         private List<Entity> entites = new List<Entity>();
@@ -17,16 +16,6 @@ namespace MaximovInk
         {
             entites = GetComponentsInChildren<Entity>().ToList();
         }
-
-       /* public void Load()
-        {
-            OnLoad(Chunk.objects[ObjectId].data);
-        }
-
-        public void Save()
-        {
-            Chunk.objects[ObjectId].data = OnSave();
-        }*/
 
         public virtual object[] OnSave()
         {

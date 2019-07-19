@@ -15,7 +15,7 @@ namespace MaximovInk
         {
             var creature = other.GetComponent<Creature>();
             var breakable = other.GetComponentInParent<Breakable>();
-            
+
             if (creature != null)
             {
                 creature.Health -= Damage;
@@ -23,6 +23,8 @@ namespace MaximovInk
 
             if (breakable != null)
             {
+                if (!breakable.BulletDestroy)
+                    return;
                 breakable.Attack(TrashDamage);
                 
             }
