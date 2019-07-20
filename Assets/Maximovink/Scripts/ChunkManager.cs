@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 using MessagePack;
 using UnityEngine;
 
@@ -12,17 +11,24 @@ namespace MaximovInk
     {
         public static ChunkManager Instance;
         
-        public PrefabRandomizeGroup[] randomGroups;
+        public PrefabRandomizeGroup[] tilesGroups;
+
+        public PrefabRandomizeGroup[] structuresGroups;
         
-        public int chunkSize = 32;
+
+        public int chunkSize = 8;
+
+        public int structsInChunksMax = 4;
 
         private const int ChunkVisibality = 4;
 
         public float iterationsDelay = 0.1f;
         private float _timer;
-
-        public float noiseScale = 1;
-        public int tileScale = 1;
+        [Header("Structures")]
+        public float structuresScale = 5.6789f;
+        [Header("Alone objects")]
+        public float noiseScale = 2.34567f;
+        public int tileScale = 15;
 
         public List<Chunk> _loadedChunks { get; } = new List<Chunk>();
 
@@ -86,6 +92,26 @@ namespace MaximovInk
             {
                 Instance = this;
                 _timer = iterationsDelay+1;
+                foreach (var tileGroup in tilesGroups)
+                {
+                    foreach (var prefab in tileGroup.index)
+                    {
+                        if (prefabs[prefab].getColorFromGroup)
+                        {
+                            prefabs[prefab].mapColor = tileGroup.mapColor;
+                        }
+                    }
+                }
+                foreach (var structuresGroup in structuresGroups)
+                {
+                    foreach (var prefab in structuresGroup.index)
+                    {
+                        if (prefabs[prefab].getColorFromGroup)
+                        {
+                            prefabs[prefab].mapColor = structuresGroup.mapColor;
+                        }
+                    }
+                }
             }
         }
 
@@ -232,37 +258,65 @@ namespace MaximovInk
         public ChunkSaveData NewData(int x, int y)
         {
             var objs = new DataObject[0];
+
+            var structure = Mathf.PerlinNoise(
+                (x * (float) chunkSize ) / structuresScale + SaveManager.instance.saveData.seed,
+                (y * (float) chunkSize ) / structuresScale + SaveManager.instance.saveData.seed);
+
+            var structs = structuresGroups.Where(n =>
+                n.thresoult < structure && n.greatherThan ||
+                n.thresoult > structure && !n.greatherThan).ToArray();
+
+            if (structs.Length > 0)
+            {
+                var group = structs[UnityEngine.Random.Range(0, structs.Length)];
+                var prefabIndex = (byte) group.index[UnityEngine.Random.Range(0, group.index.Length)];
+                objs = objs.Add(new DataObject
+                {
+                    Data = new object[0],
+                    Prefab = prefabIndex,
+                    PositionX =
+                        UnityEngine.Random.Range(-chunkSize*tileScale / 2.0f, chunkSize*tileScale / 2.0f),
+                    PositionY =
+                        UnityEngine.Random.Range(-chunkSize*tileScale / 2.0f, chunkSize*tileScale / 2.0f)
+                });
+            }
+
+
+
             for (var i = 0; i < chunkSize; i++)
             {
                 for (var j = 0; j < chunkSize; j++)
                 {
-                    var obj = Mathf.PerlinNoise((x * (float) chunkSize + i) / noiseScale + SaveManager.instance.saveData.seed,
-                        (y * (float) chunkSize + j) / noiseScale + SaveManager.instance.saveData.seed);
-                        
+                    var obj = Mathf.PerlinNoise(
+                        (x * (float) chunkSize * tileScale + i) / noiseScale + SaveManager.instance.saveData.seed,
+                        (y * (float) chunkSize * tileScale + j) / noiseScale + SaveManager.instance.saveData.seed);
 
-                    foreach (var group in randomGroups)
+                    var prefabs = tilesGroups.Where(n =>
+                        n.thresoult < obj && n.greatherThan ||
+                        n.thresoult > obj && !n.greatherThan).ToArray();
+
+                    if (prefabs.Length > 0)
                     {
-                        if ((!(obj > group.thresoult) || !group.greatherThan) &&
-                            (!(obj < group.thresoult) || group.greatherThan)) continue;
-                           
-                        var prefabIndex = (byte) group.index[Extenshions.random.Next(0, group.index.Length)];                        
-                        
+                        var group = prefabs[UnityEngine.Random.Range(0, prefabs.Length)];
+                        var prefabIndex = (byte) group.index[UnityEngine.Random.Range(0, group.index.Length)];
                         objs = objs.Add(new DataObject
                         {
                             Data = new object[0],
                             Prefab = prefabIndex,
-                            PositionX = 
+                            PositionX =
                                 i * tileScale + Extenshions.random.GetRandomFloat(-tileScale / 2.0f, tileScale / 2.0f),
-                            PositionY = 
+                            PositionY =
                                 j * tileScale + Extenshions.random.GetRandomFloat(-tileScale / 2.0f, tileScale / 2.0f)
                         });
-                        break;
+
                     }
+
                 }
             }
-            
-            return new ChunkSaveData{ X = x, Y = y , Objects = objs };
-            
+
+            return new ChunkSaveData {X = x, Y = y, Objects = objs};
+
         }
 
         public void SaveChunkData(ChunkSaveData chunkSaveData)
@@ -344,6 +398,7 @@ namespace MaximovInk
             [Range(0,1)]
             public float thresoult;
             public bool greatherThan = true;
+            public Color mapColor = Color.white;
         }
         
         [Serializable]
@@ -353,6 +408,7 @@ namespace MaximovInk
             [HideInInspector]
             public SavedPrefabBehaviour[] instantiated;
 
+            public bool getColorFromGroup = true;
             public Color mapColor = Color.white;
         }
         

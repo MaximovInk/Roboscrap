@@ -32,12 +32,13 @@ namespace MaximovInk
         {
             QualitySettings.vSyncCount = PlayerPrefs.GetInt("vsync");
             QualitySettings.antiAliasing = PlayerPrefs.GetInt("aa");
+            LanguageManager.instance.isEnglish = PlayerPrefs.GetInt("lang",0) == 0;
         }
 
         public void ChangeLanguage()
         {
             LanguageManager.instance.isEnglish = !LanguageManager.instance.isEnglish;
-            
+            PlayerPrefs.SetInt("lang",LanguageManager.instance.isEnglish ? 0 : 1);
             Display();
         }
 

@@ -182,7 +182,6 @@ namespace MaximovInk
         {
             SaveManager.instance.CheckTempFolder();
             var files = Directory.EnumerateFiles(SaveManager.instance.GetTempPath()+ "/chunks", "*.chnk").ToList();
-            Debug.Log(files.Count);
             foreach (var file in files)
             {
                 using (var fs = new FileStream(file,FileMode.Open))

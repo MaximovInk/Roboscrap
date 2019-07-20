@@ -11,7 +11,7 @@ namespace MaximovInk
         protected object[] loadedData;
         
         private List<Entity> entites = new List<Entity>();
-
+        
         private void Awake()
         {
             entites = GetComponentsInChildren<Entity>().ToList();

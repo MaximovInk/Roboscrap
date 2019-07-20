@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.81818175, g: 0.8787879, b: 1, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -6486,7 +6486,7 @@ MonoBehaviour:
   Trash: {fileID: 198856456209897872, guid: 1e0e126ead45abd44a3598ee75ad6fde, type: 2}
   Metal: {fileID: 198422356168120908, guid: 352ac20f632add7448483021e6e439ba, type: 2}
   Wood: {fileID: 0}
-  Glass: {fileID: 0}
+  Glass: {fileID: 198717282246457020, guid: 35e6dd4e787ceb74ba7f7ace4a8fdf10, type: 2}
   mainInventory: {fileID: 361711521}
   partsEditor: {fileID: 0}
   tooltip: {fileID: 288938973}
