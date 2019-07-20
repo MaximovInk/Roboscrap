@@ -314,7 +314,14 @@
         <e p="Maximovink" t="Include">
           <e p="Scripts" t="Include">
             <e p="AI" t="Include">
+              <e p="Editor" t="Include">
+                <e p="FieldOfViewEditor.cs" t="Include" />
+              </e>
+              <e p="FieldOfView.cs" t="Include" />
+              <e p="Heap.cs" t="Include" />
               <e p="NPC.cs" t="Include" />
+              <e p="NPCManager.cs" t="Include" />
+              <e p="NPCSpawner.cs" t="Include" />
             </e>
             <e p="BackgroundScroller.cs" t="Include" />
             <e p="Breakable.cs" t="Include" />

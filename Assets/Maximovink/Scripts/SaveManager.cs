@@ -54,6 +54,10 @@ namespace MaximovInk
 
         public void CheckTempFolder()
         {
+            if (!Directory.Exists(GetTempPath()+"/npcs"))
+            {
+                Directory.CreateDirectory(GetTempPath()+"/npcs");
+            }
             if (!Directory.Exists(GetTempPath()+"/chunks"))
             {
                 Directory.CreateDirectory(GetTempPath()+"/chunks");
@@ -65,6 +69,10 @@ namespace MaximovInk
             if (!Directory.Exists(GetSavePath()+"/chunks"))
             {
                 Directory.CreateDirectory(GetSavePath()+"/chunks");
+            }
+            if (!Directory.Exists(GetSavePath()+"/npcs"))
+            {
+                Directory.CreateDirectory(GetSavePath()+"/npcs");
             }
         }
         
@@ -148,6 +156,4 @@ namespace MaximovInk
             GameManager.Instance.LoadScene(1);
         }
     }
-
-    
 }

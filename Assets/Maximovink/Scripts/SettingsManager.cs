@@ -8,7 +8,7 @@ namespace MaximovInk
     {
         public Text Antialising, Vsync , Language;
 
-        private void Awake()
+        private void Start()
         {
             Load();
         }
@@ -18,14 +18,6 @@ namespace MaximovInk
             Vsync.text = LanguageManager.instance.GetValueByKey("_vsync");
             Antialising.text = LanguageManager.instance.GetValueByKey("_aa");
             Language.text = LanguageManager.instance.GetValueByKey("_language");
-
-            /* Antialising.text = "AntiAliasing: " + QualitySettings.antiAliasing + "x";
-             Vsync.text = "Vsync: " + (
-                              QualitySettings.vSyncCount == 0 ? "Off" :
-                              QualitySettings.vSyncCount == 1 ? "60fps" :
-                              QualitySettings.vSyncCount == 2 ? "30fps" :
-                              QualitySettings.vSyncCount.ToString());
-             Language.text = "Language :" + (LanguageManager.instance.isEnglish ? "English" : "Russian");*/
         }
 
         public void Load()

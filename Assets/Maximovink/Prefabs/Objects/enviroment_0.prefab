@@ -19,9 +19,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4497846846062482}
-  m_Layer: 2
+  - component: {fileID: 60668308589686700}
+  m_Layer: 9
   m_Name: hit
-  m_TagString: Untagged
+  m_TagString: Metal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -65,13 +66,46 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1917020115872898}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.12, y: 27.68, z: 18.446915}
+  m_LocalPosition: {x: 18.296526, y: -2.5313811, z: -3.5029385}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4497846846062482}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &60668308589686700
+PolygonCollider2D:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1120115407660210}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 4.8523464, y: 2.3315587}
+      - {x: 1.2721996, y: 2.880624}
+      - {x: -4.6265097, y: 2.7678537}
+      - {x: -6.0289326, y: 1.9264152}
+      - {x: -5.327135, y: -0.7337897}
+      - {x: -1.5960865, y: -1.5071955}
+      - {x: 4.6500835, y: -1.4484532}
+      - {x: 5.7073536, y: 0.047234535}
+      - {x: 5.916088, y: 1.7759593}
 --- !u!60 &60866210761651072
 PolygonCollider2D:
   m_ObjectHideFlags: 1
@@ -114,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca227a6a840af6c43a343d562c32faed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectId: 0
+  isHigh: 1
 --- !u!114 &114417811050053664
 MonoBehaviour:
   m_ObjectHideFlags: 1

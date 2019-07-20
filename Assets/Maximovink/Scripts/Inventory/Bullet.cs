@@ -23,8 +23,6 @@ namespace MaximovInk
 
             if (breakable != null)
             {
-                if (!breakable.BulletDestroy)
-                    return;
                 breakable.Attack(TrashDamage);
                 
             }

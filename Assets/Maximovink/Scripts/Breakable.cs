@@ -22,8 +22,6 @@ namespace MaximovInk
            public float chance;
        }
 
-       public bool BulletDestroy = true;
-
        public void Attack(int amount)
         {
             hp -= amount;

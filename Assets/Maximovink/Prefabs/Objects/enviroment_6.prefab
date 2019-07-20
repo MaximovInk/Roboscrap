@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 60158062531179678}
   m_Layer: 9
   m_Name: hit
-  m_TagString: Untagged
+  m_TagString: Trash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -53,7 +53,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1701191306080464}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.24, y: 8.65, z: 4.322928}
+  m_LocalPosition: {x: 19.313251, y: 6.2980847, z: 2.6141615}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4998762634246884}
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01688c9a9964cdfb066e79c05bd3790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectId: 0
+  isHigh: 1
   Resources:
   - item: {fileID: 11400000, guid: 0ca1fb2a449469742a0385a1cccbc205, type: 2}
     chance: 0.2

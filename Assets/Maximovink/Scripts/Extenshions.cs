@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using MaximovInk.AI;
 using UnityEngine;
 
 namespace MaximovInk
@@ -28,7 +29,18 @@ namespace MaximovInk
             var b = (byte)(color >> 0);
             return new Color32(a, r, g, b);
         }
-        
+
+        public static bool FractionsEnemy(NPC_Group a, NPC_Group b)
+        {
+            if (a == NPC_Group.Agro || b == NPC_Group.Agro)
+                return true;
+
+            if (a == NPC_Group.Cpu || b == NPC_Group.Cpu)
+                return false;
+
+            return a != b;
+        }
+
         public static float GetRandomFloat(this System.Random random,float minimum, float maximum)
         { 
             return (float)random.NextDouble() * (maximum - minimum) + minimum;
