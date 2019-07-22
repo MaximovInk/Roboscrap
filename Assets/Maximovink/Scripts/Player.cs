@@ -379,14 +379,15 @@ namespace MaximovInk
         {
             var selectable = other.GetComponent<SelectableObject>();
             
+            if (other.GetComponentInParent<WorkbenchStation>() != null)
+            {
+                workbench = true;
+                GameManager.Instance.WorkbenchChanged(true);
+            }
             
             if (selectable != null)
             {
-                if (selectable is WorkbenchStation)
-                {
-                    workbench = true;
-                    GameManager.Instance.WorkbenchChanged(true);
-                }
+                
                 selectable.OnShow();
             }
         }
@@ -395,15 +396,15 @@ namespace MaximovInk
         {
             var selectable = other.GetComponent<SelectableObject>();
 
-           
+            if (other.GetComponentInParent<WorkbenchStation>() != null)
+            {
+                workbench = false;
+                GameManager.Instance.WorkbenchChanged(false);
+            }
 
             if (selectable != null)
             { 
-                if (selectable is WorkbenchStation)
-                {
-                    workbench = false;
-                    GameManager.Instance.WorkbenchChanged(false);
-                }
+               
                 selectable.OnHide();
             }
         }

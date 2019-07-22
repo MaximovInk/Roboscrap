@@ -29,7 +29,10 @@ namespace MaximovInk
         [Header("Alone objects")]
         public float noiseScale = 2.34567f;
         public int tileScale = 15;
-
+public int rawResolution => chunkSize * tileScale;
+[Space] 
+        public LayerMask obstaclesMask;
+        
         public List<Chunk> _loadedChunks { get; } = new List<Chunk>();
 
         public PrefabForPool[] prefabs;
@@ -46,6 +49,9 @@ namespace MaximovInk
 
         public Chunk playerChunk;
 
+        public Transform rawGenerationTransform;
+        private Chunk rawGenerationChunk;
+        
         private Vector2Int WorldToChunk(Vector2 pos)
         {
             return Vector2Int.FloorToInt(new Vector2(pos.x/chunkSize/tileScale, pos.y/chunkSize/tileScale));
@@ -112,6 +118,8 @@ namespace MaximovInk
                         }
                     }
                 }
+
+                rawGenerationChunk = new Chunk { Instance =  rawGenerationTransform };
             }
         }
 
@@ -145,6 +153,50 @@ namespace MaximovInk
             MoveFreeChunkTo(_centerChunk.x-1,_centerChunk.y-1);
             MoveFreeChunkTo(_centerChunk.x-1,_centerChunk.y+1);
             MoveFreeChunkTo(_centerChunk.x-1,_centerChunk.y);
+        }
+
+        public bool[,] GetRawData(int x, int y)
+        {
+            var ch = _loadedChunks.FirstOrDefault(n => n.SaveData.X == x && n.SaveData.Y == y);
+
+            var rawData = new bool[rawResolution, rawResolution];
+            
+            if (ch != null)
+            {
+                for (int ix = 0; ix < rawResolution; ix++)
+                {
+                    for (int iy = 0; iy < rawResolution; iy++)
+                    {
+                        rawData[ix, iy] =
+                            Physics2D.OverlapBox( ch.Instance.transform.position + new Vector3(ix,iy), Vector2.one, 0, obstaclesMask  );
+                    }                    
+                }
+            }
+            else
+            {
+                rawGenerationChunk.Instance.gameObject.SetActive(true);
+                
+                rawGenerationChunk.SaveData = LoadChunkData(x, y);
+                InstanceObjectsForChunk(rawGenerationChunk);
+                
+                for (var i = 0; i < rawGenerationChunk.Instance.childCount; i++)
+                {
+                    rawGenerationChunk.Instance.GetChild(i).gameObject.SetActive(false);
+                }
+                
+                for (int ix = 0; ix < rawResolution; ix++)
+                {
+                    for (int iy = 0; iy < rawResolution; iy++)
+                    {
+                        rawData[ix, iy] =
+                            Physics2D.OverlapBox( rawGenerationChunk.Instance.transform.position + new Vector3(ix,iy), Vector2.one, 0, obstaclesMask  );
+                    }                    
+                }
+                
+                rawGenerationChunk.Instance.gameObject.SetActive(false);
+            }
+
+            return rawData;
         }
 
         private void InstanceObjectsForChunk(Chunk ch)
@@ -198,6 +250,8 @@ namespace MaximovInk
 
         }
         
+        
+        
         private static bool IsFree(Chunk chunk , Vector2Int center)
         {
             return !(
@@ -249,8 +303,10 @@ namespace MaximovInk
 
             InstanceObjectsForChunk(free);
             //MapViewer.instance.InspectChunk(free.SaveData);
+
             free.IsFree = false;
 
+            
             if(!LoadingComplete)
                 _sectors++;
         }
@@ -260,8 +316,8 @@ namespace MaximovInk
             var objs = new DataObject[0];
 
             var structure = Mathf.PerlinNoise(
-                (x * (float) chunkSize ) / structuresScale + SaveManager.instance.saveData.seed,
-                (y * (float) chunkSize ) / structuresScale + SaveManager.instance.saveData.seed);
+                x * (float) chunkSize  / structuresScale + SaveManager.instance.saveData.seed,
+                y * (float) chunkSize  / structuresScale + SaveManager.instance.saveData.seed);
 
             var structs = structuresGroups.Where(n =>
                 n.thresoult < structure && n.greatherThan ||
@@ -300,14 +356,18 @@ namespace MaximovInk
                     {
                         var group = prefabs[UnityEngine.Random.Range(0, prefabs.Length)];
                         var prefabIndex = (byte) group.index[UnityEngine.Random.Range(0, group.index.Length)];
+                        var objx = Mathf.Clamp(i * tileScale + Extenshions.random.GetRandomFloat(-tileScale / 2.0f, tileScale / 2.0f),0,chunkSize*tileScale);
+                        var objy = Mathf.Clamp(j * tileScale + Extenshions.random.GetRandomFloat(-tileScale / 2.0f, tileScale / 2.0f),0,chunkSize*tileScale);
+                        
+                        
                         objs = objs.Add(new DataObject
                         {
                             Data = new object[0],
                             Prefab = prefabIndex,
                             PositionX =
-                                i * tileScale + Extenshions.random.GetRandomFloat(-tileScale / 2.0f, tileScale / 2.0f),
+                                objx,
                             PositionY =
-                                j * tileScale + Extenshions.random.GetRandomFloat(-tileScale / 2.0f, tileScale / 2.0f)
+                                objy
                         });
 
                     }
