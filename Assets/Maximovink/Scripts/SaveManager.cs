@@ -84,7 +84,7 @@ namespace MaximovInk
             CheckSaveFolder();
 
             var path = GetTempPath() + "/data";
-            ChunkManager.Instance.SaveLoadedChunks();
+            //ChunkManager.Instance.SaveLoadedChunks();
             var position = GameManager.Instance.player.transform.position;
             saveData.posX = position.x;
             saveData.posY = position.y;

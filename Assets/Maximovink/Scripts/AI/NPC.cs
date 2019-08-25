@@ -18,7 +18,7 @@ namespace MaximovInk.AI
 
         public void Init()
         {
-            pixel =  chunkResolution/ ((float)ChunkManager.Instance.chunkSize * ChunkManager.Instance.tileScale);
+            
         }
 
         public class NPC_Behaviour
@@ -33,23 +33,8 @@ namespace MaximovInk.AI
                 
             }
         }
-        
-        
-        
-        
-        public bool[,] ReadDataFromChunk(ChunkManager.ChunkSaveData data)
-        {
-            bool[,] generated = new bool[chunkResolution,chunkResolution];
-            
-            if (data.Objects != null)
-                foreach (var obj in data.Objects)
-                {
-                    generated[(int) (obj.PositionX * pixel), (int) (obj.PositionY * pixel)] = true;
-                }
-
-            return generated;
-        }
-
+       
+     
      
     }
 

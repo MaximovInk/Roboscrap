@@ -16,12 +16,6 @@ namespace MaximovInk.AI
             {
                 _timer = 0;
 
-                var pos = ChunkManager.Instance.WorldToChunk(transform.position);
-
-                var d = ChunkManager.Instance.LoadChunkData(pos.x, pos.y);
-                ChunkManager.Instance.SaveChunkData(d);
-
-                MapViewer.instance.InspectChunk(ChunkManager.Instance.LoadChunkData(pos.x,pos.y));
             }
         }
     }
