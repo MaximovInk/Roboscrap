@@ -321,6 +321,7 @@
               <e p="NPC.cs" t="Include" />
               <e p="NPCManager.cs" t="Include" />
               <e p="NPCSpawner.cs" t="Include" />
+              <e p="ResearcherWorld.cs" t="Include" />
             </e>
             <e p="BackgroundScroller.cs" t="Include" />
             <e p="Breakable.cs" t="Include" />

@@ -51,13 +51,8 @@ public int rawResolution => chunkSize * tileScale;
 
         public Transform rawGenerationTransform;
         private Chunk rawGenerationChunk;
-        
-        private Vector2Int WorldToChunk(Vector2 pos)
-        {
-            return Vector2Int.FloorToInt(new Vector2(pos.x/chunkSize/tileScale, pos.y/chunkSize/tileScale));
-        }
 
-        private Vector2Int WorldToChunkForLoadedChunks(Vector2 pos) 
+        public Vector2Int WorldToChunk(Vector2 pos) 
         {
             return Vector2Int.FloorToInt(new Vector2(pos.x/chunkSize/tileScale+ChunkVisibality/2.0f, pos.y/chunkSize/tileScale+ChunkVisibality/2.0f));
         }
@@ -72,7 +67,7 @@ public int rawResolution => chunkSize * tileScale;
         private void Update()
         {
             _timer += Time.deltaTime;
-            _centerChunk = WorldToChunkForLoadedChunks(target.position);
+            _centerChunk = WorldToChunk(target.position);
             
             var pc = _loadedChunks.FirstOrDefault(n => n.SaveData != null && _centerChunk.x == n.SaveData.X && _centerChunk.y == n.SaveData.Y);
             if (pc != null)
@@ -131,7 +126,7 @@ public int rawResolution => chunkSize * tileScale;
         public void InitPool()
         {
             
-            _centerChunk = WorldToChunkForLoadedChunks(target.position);
+            _centerChunk = WorldToChunk(target.position);
             
             for (var x = 0; x < ChunkVisibality; x++)
             {
@@ -156,7 +151,7 @@ public int rawResolution => chunkSize * tileScale;
         }
 
         public bool[,] GetRawData(int x, int y)
-        {
+        {            
             var ch = _loadedChunks.FirstOrDefault(n => n.SaveData.X == x && n.SaveData.Y == y);
 
             var rawData = new bool[rawResolution, rawResolution];
@@ -178,12 +173,8 @@ public int rawResolution => chunkSize * tileScale;
                 
                 rawGenerationChunk.SaveData = LoadChunkData(x, y);
                 InstanceObjectsForChunk(rawGenerationChunk);
-                
-                for (var i = 0; i < rawGenerationChunk.Instance.childCount; i++)
-                {
-                    rawGenerationChunk.Instance.GetChild(i).gameObject.SetActive(false);
-                }
-                
+                rawGenerationChunk.Instance.localPosition = new Vector3(-999999,-999999);
+              
                 for (int ix = 0; ix < rawResolution; ix++)
                 {
                     for (int iy = 0; iy < rawResolution; iy++)
@@ -191,6 +182,11 @@ public int rawResolution => chunkSize * tileScale;
                         rawData[ix, iy] =
                             Physics2D.OverlapBox( rawGenerationChunk.Instance.transform.position + new Vector3(ix,iy), Vector2.one, 0, obstaclesMask  );
                     }                    
+                }
+                
+                for (var i = 0; i < rawGenerationChunk.Instance.childCount; i++)
+                {
+                    rawGenerationChunk.Instance.GetChild(i).gameObject.SetActive(false);
                 }
                 
                 rawGenerationChunk.Instance.gameObject.SetActive(false);
@@ -237,6 +233,11 @@ public int rawResolution => chunkSize * tileScale;
 
         public ChunkSaveData LoadChunkData(int x , int y)
         {
+            if (_loadedChunks.Any(n => n.SaveData.X == x && n.SaveData.Y == y))
+            {
+                return _loadedChunks.First(n => n.SaveData.X == x && n.SaveData.Y == y).SaveData;
+            }
+
             var path = SaveManager.instance.GetTempPath() + "/chunks/";
             SaveManager.instance.CheckTempFolder();
 
