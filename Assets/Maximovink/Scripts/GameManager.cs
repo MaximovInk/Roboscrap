@@ -105,7 +105,7 @@
 
             IEnumerator waitFor()
             {
-                /*while (!ChunkManager.Instance.LoadingComplete)
+                while (!ChunkManager.Instance.LoadingComplete)
                 {
                     LoadingText.text = "Please,stand by";
                     yield return new WaitForSeconds(0.1f);
@@ -116,10 +116,7 @@
                     LoadingText.text += ".";
                     yield return new WaitForSeconds(0.1f);
                 }
-                
-                LoadingPanel.SetActive(false);*/
                 LoadingPanel.SetActive(false);
-                yield return null;
             }
 
             private void OnLoadScene(Scene arg0, LoadSceneMode arg1)
@@ -136,6 +133,7 @@
                     OpenInv.SetActive(true);
                     MainMenu.SetActive(false);
                     BlackBackground.SetActive(false);
+                    MapViewer.instance.Init();
                     StartCoroutine(waitFor());
                 }
                 else

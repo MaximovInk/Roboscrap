@@ -7,7 +7,7 @@ namespace MaximovInk
 {
     public class SavedPrefabBehaviour : MonoBehaviour
     {
-        //public ChunkManager.Chunk Chunk;
+        public ChunkManager.Chunk Chunk;
         protected object[] loadedData;
         
         private List<Entity> entites = new List<Entity>();

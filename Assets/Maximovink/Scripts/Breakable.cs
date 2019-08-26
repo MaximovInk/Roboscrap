@@ -53,7 +53,7 @@ namespace MaximovInk
                 
                 gameObject.SetActive(false);
                 
-                //ChunkManager.Instance.SaveLoadedChunks();
+                ChunkManager.Instance.SaveLoadedChunks();
             }
 
             if (GetComponentInChildren<Renderer>().isVisible)
