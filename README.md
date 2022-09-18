@@ -8,6 +8,11 @@
 - E - Взаимодействовать с объектом
 - F - Подобрать предмет
 
+# Screenshots:
+[![изображение](https://user-images.githubusercontent.com/38013889/190930481-bb2ebfab-a662-4969-bf49-1e5284a709d1.png)](https://i.imgur.com/bW81vOn.mp4)
+[![изображение](https://user-images.githubusercontent.com/38013889/190930486-9a029bc6-55d5-4d99-b029-5bb04603bc10.png)](https://i.imgur.com/ZUKR9tR.mp4)
+
+
 **Лог:**
 
 **Version 0.1.2**
